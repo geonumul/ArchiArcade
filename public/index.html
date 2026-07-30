@@ -7,7 +7,10 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>설계실 오락실 — ARCHI ARCADE</title>
+<title>ARCHI ARCADE</title>
+<!-- 이 페이지는 Next 라우트가 아니라 정적 파일이라 app/icon.svg 가 자동으로 붙지 않는다.
+     그래서 메인 화면만 파비콘이 비어 있었다 — 직접 걸어 준다. -->
+<link rel="icon" type="image/svg+xml" href="/icon.svg">
 <!-- window.storage 를 서버(/api/kv)에 연결한다. 아래 인라인 스크립트보다 먼저 실행돼야 한다. -->
 <script src="/arcade-bridge.js"></script>
 <!-- 로딩 표시·선택창 — 원본 <style> 은 그대로 두고 새 규칙만 따로 싣는다. -->
