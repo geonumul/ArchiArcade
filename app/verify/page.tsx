@@ -1,7 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { MAJORS } from "@/lib/majors";
+import { majorFor } from "@/lib/i18n/school";
+import { Cabinet } from "@/components/Cabinet";
+import { Picker } from "@/components/Picker";
+import { useSchoolLang, withLang } from "@/components/useSchoolLang";
 
 interface Badge {
   schoolDomain: string;
@@ -13,6 +18,8 @@ interface Badge {
 type Step = "form" | "code" | "done";
 
 export default function VerifyPage() {
+  const { lang, t } = useSchoolLang();
+
   const [step, setStep] = useState<Step>("form");
   const [email, setEmail] = useState("");
   const [major, setMajor] = useState<string>(MAJORS[0].code);
@@ -29,6 +36,7 @@ export default function VerifyPage() {
       .then((d: { badge: Badge | null }) => {
         if (d.badge) {
           setBadge(d.badge);
+          setMajor(d.badge.major);
           setStep("done");
         }
       })
@@ -46,18 +54,18 @@ export default function VerifyPage() {
       });
       const d = await res.json();
       if (!res.ok) {
-        setErr(d.error ?? "요청에 실패했어요");
+        setErr(d.error ?? t.errNet);
         return;
       }
       setSchool(d.school);
       setDevCode(d.devCode ?? null);
       setStep("code");
     } catch {
-      setErr("네트워크 오류");
+      setErr(t.errNet);
     } finally {
       setBusy(false);
     }
-  }, [email, major]);
+  }, [email, major, t]);
 
   const confirm = useCallback(async () => {
     setErr("");
@@ -70,17 +78,17 @@ export default function VerifyPage() {
       });
       const d = await res.json();
       if (!res.ok) {
-        setErr(d.error ?? "인증에 실패했어요");
+        setErr(d.error ?? t.errNet);
         return;
       }
       setBadge(d.badge);
       setStep("done");
     } catch {
-      setErr("네트워크 오류");
+      setErr(t.errNet);
     } finally {
       setBusy(false);
     }
-  }, [email, code, major]);
+  }, [email, code, major, t]);
 
   const reset = useCallback(async () => {
     await fetch("/api/verify/me", { method: "DELETE" });
@@ -90,109 +98,100 @@ export default function VerifyPage() {
     setDevCode(null);
   }, []);
 
-  const majorLabel = (c: string) => MAJORS.find((m) => m.code === c)?.ko ?? c;
+  const majorOpts = MAJORS.map((m) => ({ value: m.code as string, main: majorFor(m.code, lang, MAJORS) }));
+
+  const title = step === "code" ? t.vCodeTitle : step === "done" ? `✓ ${t.vDone}` : t.vTitle;
 
   return (
-    <main className="aa-shell">
-      <header className="aa-bar">
-        <span className="aa-brand">STUDENT BADGE</span>
-        <a className="aa-lang" href="/" style={{ textDecoration: "none", textAlign: "center" }}>
-          ← HOME
-        </a>
-      </header>
-
-      {err && <p className="aa-err">{err}</p>}
-
+    <Cabinet title={title} hudRight="BADGE">
       {step === "form" && (
-        <section className="aa-panel">
-          <h1 className="aa-title">학교 인증</h1>
-          <p className="aa-note">
-            학교 메일로 인증하면 뱃지가 붙고, 학교별 순위와 우리 학교 커뮤니티에 참여할 수 있어요.
-            <br />
-            가입은 필요 없습니다.
-          </p>
+        <>
+          <div className="note">{t.vIntro}</div>
 
-          <label className="aa-note">학교 메일</label>
-          <input
-            className="aa-in"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="예: hong@hongik.ac.kr"
-            autoComplete="email"
-          />
+          <div className="field">
+            <label htmlFor="vEmail">{t.vEmail}</label>
+            <input
+              id="vEmail"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="hong@hongik.ac.kr"
+              autoComplete="email"
+              inputMode="email"
+            />
+          </div>
 
-          <label className="aa-note">학과</label>
-          <select className="aa-lang" value={major} onChange={(e) => setMajor(e.target.value)}>
-            {MAJORS.map((m) => (
-              <option key={m.code} value={m.code}>
-                {m.ko}
-              </option>
-            ))}
-          </select>
+          <div className="field">
+            <label>{t.vMajor}</label>
+            <Picker value={major} options={majorOpts} onChange={setMajor} label={t.vMajor} />
+          </div>
 
-          <button className="aa-btn aa-btn-primary" disabled={busy || !email} onClick={request}>
-            인증 코드 받기 ▶
+          <div className="err">{err}</div>
+          <button className="btn kr" disabled={busy || !email.includes("@")} onClick={request}>
+            {t.vSend}
           </button>
-          <p className="aa-note" style={{ fontSize: 11 }}>
-            이메일은 학교 확인에만 쓰이고, 광고 메일은 보내지 않습니다.
-          </p>
-        </section>
+          <div className="note">{t.vPrivacy}</div>
+        </>
       )}
 
       {step === "code" && (
-        <section className="aa-panel">
-          <h1 className="aa-title">코드 입력</h1>
-          <p className="aa-note">
-            {school?.name} 확인됨
-            <br />
-            {email} 로 6자리 코드를 보냈어요 (10분 안에 입력)
-          </p>
+        <>
+          <div className="note">{t.vCodeSent(school?.name ?? "", email)}</div>
 
           {devCode && (
-            <p className="aa-full">
-              개발 모드 — 메일 발송이 꺼져 있어 코드를 여기 표시합니다: {devCode}
-            </p>
+            <div className="note" style={{ color: "var(--yellow)" }}>
+              {t.vDevCode} — <b>{devCode}</b>
+            </div>
           )}
 
-          <input
-            className="aa-in"
-            value={code}
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            placeholder="000000"
-            inputMode="numeric"
-            style={{ textAlign: "center", fontSize: 22, letterSpacing: 6 }}
-          />
+          <div className="field">
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              placeholder="000000"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              style={{ textAlign: "center", fontSize: 24, letterSpacing: 8 }}
+            />
+          </div>
 
-          <button className="aa-btn aa-btn-primary" disabled={busy || code.length !== 6} onClick={confirm}>
-            인증하기 ▶
+          <div className="err">{err}</div>
+          <button className="btn kr" disabled={busy || code.length !== 6} onClick={confirm}>
+            {t.vConfirm}
           </button>
-          <button className="aa-btn" onClick={() => setStep("form")}>
-            ← 주소 다시 입력
+          <button className="btn kr gray" onClick={() => setStep("form")}>
+            {t.vRetry}
           </button>
-        </section>
+        </>
       )}
 
       {step === "done" && badge && (
-        <section className="aa-panel">
-          <h1 className="aa-title">✓ 인증 완료</h1>
-          <div className="aa-res" style={{ display: "block", textAlign: "center" }}>
-            <div style={{ fontSize: 18 }}>{badge.schoolName}</div>
-            <div className="aa-note" style={{ marginTop: 6 }}>
-              {majorLabel(badge.major)}
-            </div>
+        <>
+          <div className="scoreboard">
+            <span className="lbl">SCHOOL</span>
+            <span className="val">{badge.schoolName}</span>
+            <br />
+            <span className="lbl">MAJOR</span>
+            <span className="val">{majorFor(badge.major, lang, MAJORS)}</span>
           </div>
-          <p className="aa-note">
-            이제 이 브라우저에서 뱃지가 유지됩니다. 학교별 순위 집계에도 반영돼요.
-          </p>
-          <a className="aa-btn aa-btn-primary" href="/" style={{ textDecoration: "none", textAlign: "center" }}>
-            게임하러 가기 ▶
-          </a>
-          <button className="aa-btn" onClick={reset}>
-            뱃지 해제
+
+          <div className="note">{t.vDoneNote}</div>
+          <div className="err">{err}</div>
+
+          <Link className="btn kr" href={withLang("/alumni", lang)}>
+            {t.aTitle} ▶
+          </Link>
+          <Link className="btn kr gray" href={withLang("/schools", lang)}>
+            {t.sTitle} ▶
+          </Link>
+          <Link className="btn kr gray" href={withLang("/", lang)}>
+            {t.vPlay}
+          </Link>
+          <button className="btn kr gray" onClick={reset}>
+            {t.vUnbadge}
           </button>
-        </section>
+        </>
       )}
-    </main>
+    </Cabinet>
   );
 }

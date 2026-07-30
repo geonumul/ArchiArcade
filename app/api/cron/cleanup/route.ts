@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { store } from "@/lib/store";
+import { prisma } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -23,5 +24,16 @@ export async function GET(req: Request) {
     }
   }
   const removed = await store().purgeExpiredRooms();
-  return NextResponse.json({ ok: true, removed });
+
+  // 원본 SPA 가 쓰는 키-값 저장소도 같이 걷는다. 이쪽은 조회할 때 지우는 경로가
+  // 없어서(만료면 404 로만 답한다) 크론이 유일한 청소 수단이다.
+  let kvRemoved = 0;
+  if (prisma) {
+    const r = await prisma.kv
+      .deleteMany({ where: { expiresAt: { lt: new Date() } } })
+      .catch(() => null);
+    kvRemoved = r?.count ?? 0;
+  }
+
+  return NextResponse.json({ ok: true, removed, kvRemoved });
 }

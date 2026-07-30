@@ -60,7 +60,7 @@ export async function POST(req: Request) {
   // 성공했으면 코드는 즉시 폐기한다 — 재사용을 막는다.
   await prisma.verifyCode.delete({ where: { email } }).catch(() => undefined);
 
-  await prisma.studentVerification.upsert({
+  const record = await prisma.studentVerification.upsert({
     where: { email },
     create: {
       email,
@@ -78,6 +78,8 @@ export async function POST(req: Request) {
     schoolName: school.name,
     country: school.country,
     major,
+    // 동문 디렉터리에서 본인 항목을 찾기 위한 열쇠. 이메일 대신 이것만 쿠키에 담는다.
+    vid: record.id,
   };
   const jar = await cookies();
   jar.set(BADGE_COOKIE, await signBadge(badge), badgeCookieOptions);
