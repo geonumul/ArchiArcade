@@ -3936,22 +3936,20 @@ function bgmSchedule(){
   }
 }
 function bgmStart(){
-  if(BGM.playing||!SND.on) return;
+  if(!SND.on) return;
   try{
     audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
   }catch(e){ return; }
 
-  /* 재생이 풀린 뒤에 첫 음 시각을 잡아야 한다. resume() 은 비동기라,
-     기다리지 않고 예약하면 위에서 말한 "과거 예약" 이 그대로 벌어진다. */
-  const begin=()=>{
-    if(BGM.playing) return;
-    BGM.playing=true; BGM.next=audioCtx.currentTime+.08; BGM.step=0; BGM.bar=0;
-    BGM.timer=setInterval(bgmSchedule,60);
-  };
-  if(audioCtx.state==="suspended"){
-    const p=audioCtx.resume();
-    if(p&&p.then) p.then(begin,begin); else begin();
-  }else begin();
+  /* 정지 상태면 풀어 준다. 결과를 기다리지 않는 이유가 있다 - 사파리(특히 iOS)는
+     resume() 이 돌려주는 약속이 끝내 안 풀리는 경우가 있어서, 그걸 기다리면
+     노래가 영영 시작되지 않는다. 그래서 바로 예약을 시작하고, 시계가 늦게 돌기
+     시작하면 아래 스케줄러가 스스로 다시 맞춘다. */
+  if(audioCtx.state==="suspended"){ try{ audioCtx.resume(); }catch(e){} }
+
+  if(BGM.playing) return;
+  BGM.playing=true; BGM.next=audioCtx.currentTime+.08; BGM.step=0; BGM.bar=0;
+  BGM.timer=setInterval(bgmSchedule,60);
 }
 function bgmStop(){ BGM.playing=false; if(BGM.timer){clearInterval(BGM.timer);BGM.timer=null;} }
 
@@ -3977,12 +3975,19 @@ $("volSlider").addEventListener("input",()=>{
 // 기본은 소리 켬. 다만 브라우저는 사용자 조작 없이 오디오를 시작하지 못하게 막으므로,
 // 첫 클릭·터치·키 입력에서 한 번만 붙잡아 시작한다. 그 전에는 조용한 게 정상이다.
 (function(){
-  const EV=["pointerdown","keydown","touchstart"];
-  const once=()=>{
-    EV.forEach(ev=>document.removeEventListener(ev,once));
-    if(SND.on) bgmStart();               // 컨텍스트 생성·재생 해제는 bgmStart 가 맡는다
+  /* touchend 와 click 까지 듣는 이유: 모바일 사파리는 touchstart/pointerdown 만으로는
+     오디오를 풀어 주지 않는 경우가 있다. 손을 뗀 시점까지 잡아야 확실하다. */
+  const EV=["pointerdown","touchend","click","keydown"];
+  const kick=()=>{
+    if(!SND.on) return;
+    bgmStart();                          // 컨텍스트 생성·재생 해제는 bgmStart 가 맡는다
+    /* 한 번으로 안 풀리는 브라우저가 있다. 실제로 running 이 되기 전까지는
+       듣기를 멈추지 않는다 - 한 번 시도하고 손을 떼면 모바일에서 영영 조용해진다. */
+    if(audioCtx&&audioCtx.state==="running"){
+      EV.forEach(ev=>document.removeEventListener(ev,kick));
+    }
   };
-  EV.forEach(ev=>document.addEventListener(ev,once,{passive:true}));
+  EV.forEach(ev=>document.addEventListener(ev,kick,{passive:true}));
 })();
 document.addEventListener("visibilitychange",()=>{ if(document.hidden) bgmStop(); else if(SND.on) bgmStart(); });
 
