@@ -150,6 +150,11 @@ model StudentVerification {
   directoryOptIn Boolean @default(false)
   /// 디렉터리에 노출할 정보. 동의했을 때만 의미가 있다.
   displayName    String?
+  /// "student"(재학) | "alumni"(졸업). 학교 인증은 재학생이 먼저 하므로 재학이 기본이다.
+  /// 졸업연도로 유추하지 않고 따로 두는 이유는, 재학생도 졸업 예정연도를 적을 수 있고
+  /// 그 둘을 같은 값으로 섞으면 목록에서 재학생이 졸업생으로 보이기 때문이다.
+  status         String  @default("student")
+  /// 졸업했으면 졸업연도, 재학 중이면 졸업 예정연도. 비워 둘 수 있다.
   gradYear       Int?
   company        String?
 

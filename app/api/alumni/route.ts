@@ -22,6 +22,13 @@ const MAX_ROWS = 200;
 const NAME_MAX = 24;
 const COMPANY_MAX = 40;
 
+/// 재학인지 졸업인지. 학교 인증을 하는 시점에는 대개 재학생이라 그쪽이 기본이다.
+const STATUSES = ["student", "alumni"] as const;
+type Status = (typeof STATUSES)[number];
+function isStatus(v: unknown): v is Status {
+  return typeof v === "string" && (STATUSES as readonly string[]).includes(v);
+}
+
 function clean(v: unknown, max: number): string | null {
   if (typeof v !== "string") return null;
   // 제어문자를 걷어내고 공백을 줄인다 — 목록 한 줄을 깨뜨리는 입력을 막는다.
@@ -48,22 +55,25 @@ export async function GET(req: Request) {
   const prisma = db();
   const url = new URL(req.url);
   const major = url.searchParams.get("major");
+  const status = url.searchParams.get("status");
 
   const rows = await prisma.studentVerification.findMany({
     where: {
       schoolDomain: badge.schoolDomain,
       directoryOptIn: true,
       ...(major && isMajor(major) ? { major } : {}),
+      ...(isStatus(status) ? { status } : {}),
     },
-    select: { id: true, displayName: true, major: true, gradYear: true, company: true },
-    orderBy: [{ gradYear: "desc" }, { verifiedAt: "desc" }],
+    select: { id: true, displayName: true, major: true, status: true, gradYear: true, company: true },
+    // 재학생을 먼저 올린다 — 같은 학교에서 지금 마주칠 수 있는 사람이 먼저 보이는 게 낫다.
+    orderBy: [{ status: "asc" }, { gradYear: "desc" }, { verifiedAt: "desc" }],
     take: MAX_ROWS,
   });
 
   const me = badge.vid
     ? await prisma.studentVerification.findUnique({
         where: { id: badge.vid },
-        select: { directoryOptIn: true, displayName: true, gradYear: true, company: true },
+        select: { directoryOptIn: true, displayName: true, status: true, gradYear: true, company: true },
       })
     : null;
 
@@ -75,11 +85,12 @@ export async function GET(req: Request) {
       // 언어에 맞춰 붙이므로, 여기서 한국어를 박아 두면 9개 언어가 깨진다.
       displayName: r.displayName,
       major: r.major,
+      status: r.status,
       gradYear: r.gradYear,
       company: r.company,
       mine: r.id === badge.vid,
     })),
-    me: me ?? { directoryOptIn: false, displayName: null, gradYear: null, company: null },
+    me: me ?? { directoryOptIn: false, displayName: null, status: "student", gradYear: null, company: null },
     // 쿠키가 vid 이전에 발급됐으면 설정을 저장할 수 없다.
     canEdit: Boolean(badge.vid),
   });
@@ -111,7 +122,13 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { optIn?: unknown; displayName?: unknown; gradYear?: unknown; company?: unknown };
+  let body: {
+    optIn?: unknown;
+    displayName?: unknown;
+    status?: unknown;
+    gradYear?: unknown;
+    company?: unknown;
+  };
   try {
     body = await req.json();
   } catch {
@@ -121,13 +138,17 @@ export async function POST(req: Request) {
   const optIn = body.optIn === true;
   const displayName = clean(body.displayName, NAME_MAX);
   const company = clean(body.company, COMPANY_MAX);
+  // 값이 이상하면 거절하지 않고 재학으로 둔다 — 상태 하나 때문에 저장이 막히면
+  // 취업해서 고치러 온 사람이 아무것도 못 바꾸게 된다.
+  const status: Status = isStatus(body.status) ? body.status : "student";
 
+  // 재학 중이면 졸업연도를 묻지 않는다(화면에서 칸 자체가 사라진다). 예전에 졸업연도를
+  // 적어 둔 사람이 다시 재학으로 바꾸면 그 값도 같이 비워, 목록에 남은 연도가 어긋나지 않게 한다.
   let gradYear: number | null = null;
-  if (body.gradYear !== null && body.gradYear !== undefined && body.gradYear !== "") {
+  if (status === "alumni" && body.gradYear !== null && body.gradYear !== undefined && body.gradYear !== "") {
     const n = Number(body.gradYear);
-    // 앞뒤로 넉넉히 잡되, 목록 정렬을 망가뜨리는 값은 받지 않는다.
     if (!Number.isInteger(n) || n < 1950 || n > new Date().getFullYear() + 10) {
-      return NextResponse.json({ error: "졸업연도를 확인해주세요" }, { status: 400 });
+      return NextResponse.json({ error: "졸업연도를 확인해주세요", field: "gradYear" }, { status: 400 });
     }
     gradYear = n;
   }
@@ -136,8 +157,9 @@ export async function POST(req: Request) {
   const updated = await prisma.studentVerification
     .update({
       where: { id: badge.vid },
-      data: { directoryOptIn: optIn, displayName, gradYear, company },
-      select: { directoryOptIn: true, displayName: true, gradYear: true, company: true },
+      // 언제든 다시 저장해 덮어쓸 수 있다 — 졸업하거나 이직할 때마다 고치는 것이 정상이다.
+      data: { directoryOptIn: optIn, displayName, status, gradYear, company },
+      select: { directoryOptIn: true, displayName: true, status: true, gradYear: true, company: true },
     })
     .catch(() => null);
 
