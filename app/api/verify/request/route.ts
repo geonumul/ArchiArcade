@@ -10,6 +10,16 @@ export const dynamic = "force-dynamic";
 
 const CODE_TTL_MIN = 10;
 
+/**
+ * 코드를 화면에 띄우는 것은 개발 환경에서만 허용한다.
+ *
+ * 이 판단을 MAIL_ENABLED(=RESEND_API_KEY 유무)에만 맡기면, 키를 넣지 않은 채 배포한
+ * 순간 인증이 무의미해진다. 아무나 남의 학교 주소를 적고 화면에 뜬 번호를 그대로
+ * 입력해 그 학교 뱃지를 받을 수 있기 때문이다 — 실제로 그 상태로 배포돼 있었다.
+ */
+const IS_PROD = process.env.NODE_ENV === "production";
+const CAN_SHOW_CODE = !IS_PROD && !MAIL_ENABLED;
+
 function makeCode(): string {
   // 6자리 숫자. 앞자리가 0이어도 되도록 문자열로 다룬다.
   return String(crypto.randomInt(0, 1_000_000)).padStart(6, "0");
@@ -18,6 +28,15 @@ function makeCode(): string {
 export async function POST(req: Request) {
   if (!hasDatabase) {
     return NextResponse.json({ error: "인증 기능은 DATABASE_URL 설정 후 사용할 수 있어요" }, { status: 503 });
+  }
+
+  // 메일을 보낼 수 없는 프로덕션에서는 인증을 아예 닫는다. 코드를 화면에 띄워
+  // 우회시키는 것보다, 기능이 잠시 닫혀 있는 편이 낫다.
+  if (IS_PROD && !MAIL_ENABLED) {
+    return NextResponse.json(
+      { error: "학교 인증은 메일 발송 준비가 끝나면 열립니다. 조금만 기다려주세요", mailNotReady: true },
+      { status: 503 }
+    );
   }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
@@ -86,8 +105,8 @@ export async function POST(req: Request) {
     ok: true,
     school: { name: school.name, country: school.country },
     mailSent: mail.sent,
-    // 메일 발송이 꺼진 개발 환경에서만 코드를 돌려준다. 키가 있으면 절대 노출하지 않는다.
-    devCode: MAIL_ENABLED ? undefined : mail.devCode,
+    // 로컬 개발에서만 코드를 돌려준다. 프로덕션은 위에서 이미 막혀 여기 닿지 않는다.
+    devCode: CAN_SHOW_CODE ? mail.devCode : undefined,
     expiresInMin: CODE_TTL_MIN,
   });
 }

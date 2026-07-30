@@ -613,6 +613,7 @@ body.ov-open{overflow:hidden;}
         <button class="au-tab" id="tabRegister">가입하기</button>
       </div>
       <div class="field" id="auNameF"><label id="auNameL">닉네임 (2~8자)</label><input id="auName" maxlength="8" autocomplete="off"></div>
+      <div class="field hidden" id="auEmailF"><label id="auEmailL">이메일</label><input id="auEmail" maxlength="254" type="email" inputmode="email" autocomplete="email" placeholder="archiarcade@snu.ac.kr"></div>
       <div class="field pw-field" id="auPinF"><label id="auPinL">비밀번호</label><input id="auPin" maxlength="64" type="password"><button class="pw-eye" id="pwEye" tabindex="-1">👁</button></div>
       <div class="field pw-field hidden" id="auPw2F"><label id="auPw2L">비밀번호 확인</label><input id="auPw2" maxlength="64" type="password"></div>
       <div class="pw-meter hidden" id="auMeter"><i></i><i></i><i></i><span id="auMeterT"></span></div>
@@ -621,9 +622,26 @@ body.ov-open{overflow:hidden;}
         <button class="btn kr" id="btnLogin">로그인</button>
         <button class="btn kr hidden" id="btnRegister">가입하기</button>
       </div>
+      <button class="btn kr gray" id="btnForgot" style="font-size:13px">비밀번호를 잊었어요</button>
       <div class="scoreboard hidden" id="auCard"></div>
+      <div class="note hidden" id="auSchoolHint"></div>
+      <button class="btn kr hidden" id="btnGoVerify">학교 인증하러 가기 ▶</button>
       <button class="btn kr gray hidden" id="btnLogout">로그아웃</button>
       <button class="btn kr gray" id="btnAuBack">← 오락실로</button>
+    </div>
+
+    <!-- ── 비밀번호 찾기 ── -->
+    <div class="stack hidden" id="vForgot">
+      <div class="logo" id="fgTitle" style="font-size:22px">비밀번호 찾기</div>
+      <div class="note" id="fgDesc">가입할 때 쓴 이메일로 6자리 코드를 보냅니다.</div>
+      <div class="field" id="fgEmailF"><label id="fgEmailL">이메일</label><input id="fgEmail" maxlength="254" type="email" inputmode="email" autocomplete="email"></div>
+      <div class="field hidden" id="fgCodeF"><label id="fgCodeL">인증 코드 (6자리)</label><input id="fgCode" maxlength="6" inputmode="numeric" autocomplete="one-time-code" style="text-align:center;letter-spacing:8px;font-size:22px"></div>
+      <div class="field pw-field hidden" id="fgPwF"><label id="fgPwL">새 비밀번호 (8자+, 영문+숫자)</label><input id="fgPw" maxlength="64" type="password"></div>
+      <div class="note hidden" id="fgDev"></div>
+      <div class="err" id="fgErr"></div>
+      <button class="btn kr" id="btnFgSend">코드 받기 ▶</button>
+      <button class="btn kr hidden" id="btnFgConfirm">비밀번호 바꾸기 ▶</button>
+      <button class="btn kr gray" id="btnFgBack">← 돌아가기</button>
     </div>
 
     <!-- ── 관리자 (OP ROOM) ── -->
@@ -1520,7 +1538,7 @@ const APP_VER="1.7.0";
 const ROOM_TTL=24*3600*1000;            // 방 유효기간 24시간
 const $ = id => document.getElementById(id);
 const uid = Math.random().toString(36).slice(2,10);
-const VIEWS = ["vArcade","vTitle","vHostSetup","vHostLobby","vJoin","vWait","vQuiz","vEnd","vSuggest","vReport","vAuth","vAdmin"];
+const VIEWS = ["vArcade","vTitle","vHostSetup","vHostLobby","vJoin","vWait","vQuiz","vEnd","vSuggest","vReport","vAuth","vForgot","vAdmin"];
 
 /* ── 보안 헬퍼 ── */
 // XSS 방지: 사용자 입력이 화면에 표시되기 전 이스케이프
@@ -2684,21 +2702,42 @@ function pwScore(p){
   if(cls>=3) s++;
   return Math.min(s,3);
 }
+/* ═══ 계정은 서버에 둔다 ═══
+   원본은 비밀번호 해시를 브라우저에서 만들어 공용 저장소에 넣었는데, 그 저장소는
+   누구나 읽을 수 있어 남의 닉네임만 알면 해시를 그대로 받아 갈 수 있었다. 이제
+   가입·로그인·전적은 전부 /api/auth/* 를 거치고, 브라우저는 해시를 만들지도
+   보관하지도 않는다. 세션은 httpOnly 쿠키라 스크립트가 훔칠 수도 없다. */
+async function authPost(path,body){
+  try{
+    const r=await fetch(path,{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(body||{})
+    });
+    let d=null; try{ d=await r.json(); }catch(e){}
+    return {ok:r.ok,status:r.status,d:d||{}};
+  }catch(e){ return {ok:false,status:0,d:{}}; }
+}
+/* 서버가 준 사용자 정보를 원본이 쓰던 USER 모양으로 맞춘다 — 화면 코드는 그대로 둔다. */
+function setUser(u,schoolEmail){
+  USER = u ? {
+    name:u.name, email:u.email||"", verified:!!u.verified,
+    schoolEmail: schoolEmail || (USER&&USER.schoolEmail) || null,
+    prof:{plays:u.plays||0, minor:u.minorPicks||0}
+  } : null;
+}
+
 async function doRegister(){
-  const n=clean($("auName").value), p=$("auPin").value, p2=$("auPw2").value;
+  const n=clean($("auName").value), em=$("auEmail").value.trim(), p=$("auPin").value, p2=$("auPw2").value;
   if(!validName(n)){ $("auErr").textContent=UI[LANG].auErrName; return; }
+  if(!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(em)){ $("auErr").textContent=UI[LANG].auErrEmail; return; }
   if(!validPw(p)){ $("auErr").textContent=UI[LANG].auErrPw8; return; }
   if(p!==p2){ $("auErr").textContent=UI[LANG].auErrPw2; return; }
-  if(n.toLowerCase()==="admin"){ $("auErr").textContent=UI[LANG].auErrDup; return; }
   $("auErr").textContent="...";
-  const exists=await sGet(uKey(n));
-  if(exists){ $("auErr").textContent=UI[LANG].auErrDup; return; }
-  const salt=randHex(16);
-  const ph=await pbkdf2(p,salt,PBK_IT);
-  const prof={v:2,ph,salt,it:PBK_IT,plays:0,minor:0,created:Date.now()};
-  const ok=await sSet(uKey(n),JSON.stringify(prof));
-  if(!ok){ $("auErr").textContent=UI[LANG].auErrNet; return; }
-  USER={name:n,prof}; sfxClear(); $("auErr").textContent=""; updateAuthUI(); refreshDock();
+  const r=await authPost("/api/auth/register",{name:n,email:em,pw:p,locale:LANG});
+  if(!r.ok){ $("auErr").textContent=r.d.error||UI[LANG].auErrNet; return; }
+  setUser(r.d.user, r.d.schoolEmail);
+  sfxClear(); $("auErr").textContent=""; $("auPin").value=""; $("auPw2").value="";
+  updateAuthUI(); refreshDock();
 }
 async function doLogin(){
   const n=clean($("auName").value), p=$("auPin").value;
@@ -2712,23 +2751,18 @@ async function doLogin(){
     else $("auErr").textContent=UI[LANG].auErrPw;
     return;
   }
-  const raw=await sGet(uKey(n));
-  if(!raw){ $("auErr").textContent=UI[LANG].auErrNo; return; }
-  let prof; try{ prof=JSON.parse(raw); }catch(e){ $("auErr").textContent=UI[LANG].auErrNet; return; }
-  let pass=false;
-  if(prof.v===2){
-    pass = (await pbkdf2(p,prof.salt,prof.it||PBK_IT))===prof.ph;
-  }else{
-    pass = (await hashPw("user::"+p))===prof.ph;
-    if(pass){ /* 레거시 계정 자동 강화 */
-      const salt=randHex(16);
-      prof={...prof,v:2,salt,it:PBK_IT,ph:await pbkdf2(p,salt,PBK_IT)};
-      sSet(uKey(n),JSON.stringify(prof));
-    }
-  }
-  if(!pass){ $("auErr").textContent=UI[LANG].auErrPw; return; }
-  USER={name:n,prof}; sfxClear(); $("auErr").textContent=""; updateAuthUI(); refreshDock();
+  const r=await authPost("/api/auth/login",{name:n,pw:p});
+  if(!r.ok){ $("auErr").textContent=r.d.error||UI[LANG].auErrNet; return; }
+  setUser(r.d.user);
+  sfxClear(); $("auErr").textContent=""; $("auPin").value="";
+  updateAuthUI(); refreshDock();
 }
+
+/* 새로고침해도 로그인이 유지되게, 쿠키로 본인을 물어본다. */
+(async()=>{
+  const r=await fetch("/api/auth/me",{cache:"no-store"}).then(x=>x.json()).catch(()=>null);
+  if(r&&r.user){ setUser(r.user); updateAuthUI(); refreshDock(); }
+})();
 function updateAuthUI(){
   const u=UI[LANG];
   const logged=!!USER;
@@ -2751,16 +2785,70 @@ function updateAuthUI(){
 $("authBtn").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI(); });
 $("btnLogin").addEventListener("click",doLogin);
 $("btnRegister").addEventListener("click",doRegister);
-$("btnLogout").addEventListener("click",()=>{ USER=null; sfxNext(); updateAuthUI(); refreshDock(); });
+$("btnLogout").addEventListener("click",async()=>{
+  sfxNext();
+  // 쿠키는 서버만 지울 수 있다(httpOnly). 실패해도 화면에서는 로그아웃시킨다.
+  await fetch("/api/auth/logout",{method:"POST"}).catch(()=>undefined);
+  USER=null; updateAuthUI(); refreshDock();
+});
+
+/* ═══ 비밀번호 찾기 ═══ */
+function showForgot(){
+  sfxNext();
+  $("fgEmail").value = (USER&&USER.email) || "";
+  $("fgCode").value=""; $("fgPw").value="";
+  $("fgCodeF").classList.add("hidden"); $("fgPwF").classList.add("hidden");
+  $("fgDev").classList.add("hidden"); $("fgErr").textContent="";
+  $("btnFgSend").classList.remove("hidden"); $("btnFgConfirm").classList.add("hidden");
+  $("hudM").textContent="PASSWORD"; show("vForgot");
+}
+$("btnForgot").addEventListener("click",showForgot);
+$("btnFgBack").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI(); });
+$("fgCode").addEventListener("input",()=>{ $("fgCode").value=$("fgCode").value.replace(/\D/g,"").slice(0,6); });
+
+$("btnFgSend").addEventListener("click",async()=>{
+  const em=$("fgEmail").value.trim();
+  if(!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(em)){ $("fgErr").textContent=UI[LANG].auErrEmail; return; }
+  $("fgErr").textContent="...";
+  const r=await authPost("/api/auth/reset/request",{email:em});
+  if(!r.ok){ $("fgErr").textContent=(r.d.mailNotReady?UI[LANG].fgMailSoon:r.d.error)||UI[LANG].auErrNet; return; }
+  $("fgErr").textContent="";
+  // 가입된 주소인지는 알려주지 않는다 — 어느 쪽이든 같은 화면으로 넘어간다.
+  $("fgCodeF").classList.remove("hidden"); $("fgPwF").classList.remove("hidden");
+  $("btnFgSend").classList.add("hidden"); $("btnFgConfirm").classList.remove("hidden");
+  if(r.d.devCode){ $("fgDev").classList.remove("hidden"); $("fgDev").textContent=UI[LANG].fgDev+" "+r.d.devCode; }
+  sfxNext();
+});
+
+$("btnFgConfirm").addEventListener("click",async()=>{
+  const em=$("fgEmail").value.trim(), c=$("fgCode").value, p=$("fgPw").value;
+  if(c.length!==6){ $("fgErr").textContent=UI[LANG].fgErrCode; return; }
+  if(!validPw(p)){ $("fgErr").textContent=UI[LANG].auErrPw8; return; }
+  $("fgErr").textContent="...";
+  const r=await authPost("/api/auth/reset/confirm",{email:em,code:c,pw:p});
+  if(!r.ok){ $("fgErr").textContent=r.d.error||UI[LANG].auErrNet; return; }
+  sfxClear();
+  $("auName").value=r.d.name||""; $("auPin").value="";
+  $("hudM").textContent="PLAYER CARD"; show("vAuth"); setAuthMode("login"); updateAuthUI();
+  $("auErr").textContent=UI[LANG].fgDone;
+});
 $("btnAuBack").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="ARCHI ARCADE"; show("vArcade"); });
 
 const _showEnd=showEnd;
 showEnd=function(){
   _showEnd();
   if(USER){
+    /* 전적은 서버가 더한다. 예전처럼 브라우저가 계산해 통째로 저장하면 남이 내
+       전적을 덮어쓸 수 있었다. 화면은 낙관적으로 먼저 올리고, 서버 값이 오면 맞춘다. */
     USER.prof.plays=(USER.prof.plays||0)+1;
     USER.prof.minor=(USER.prof.minor||0)+minorCount;
-    sSet(uKey(USER.name),JSON.stringify(USER.prof));
+    const mine=minorCount;
+    authPost("/api/auth/profile",{minor:mine}).then(r=>{
+      if(r.ok&&typeof r.d.plays==="number"){
+        USER.prof.plays=r.d.plays; USER.prof.minor=r.d.minorPicks||0;
+        updateAuthUI(); refreshDock();
+      }
+    });
     $("rankBox").innerHTML += '<br><span style="color:var(--green);font-size:13px">'+UI[LANG].endSaved(esc(titleFor(USER.prof.plays)))+'</span>';
     updateAuthUI(); refreshDock();
   }
@@ -3136,9 +3224,12 @@ function setAuthMode(m){
   $("tabLogin").classList.toggle("cur",m==="login");
   $("tabRegister").classList.toggle("cur",m==="register");
   $("auPw2F").classList.toggle("hidden",m!=="register");
+  $("auEmailF").classList.toggle("hidden",m!=="register");
   $("auMeter").classList.toggle("hidden",m!=="register");
   $("btnLogin").classList.toggle("hidden",m!=="login");
   $("btnRegister").classList.toggle("hidden",m!=="register");
+  // 비밀번호 찾기는 로그인 탭에서만 의미가 있다.
+  $("btnForgot").classList.toggle("hidden",m!=="login");
   $("auErr").textContent="";
 }
 $("tabLogin").addEventListener("click",()=>{ sfxNext(); setAuthMode("login"); });
@@ -3160,9 +3251,29 @@ updateAuthUI=function(){
   _updateAuthTabs();
   const logged=!!USER;
   $("auTabs").classList.toggle("hidden",logged);
-  if(logged){ $("auPw2F").classList.add("hidden"); $("auMeter").classList.add("hidden"); }
+  if(logged){
+    $("auPw2F").classList.add("hidden");
+    $("auEmailF").classList.add("hidden");
+    $("auMeter").classList.add("hidden");
+    $("btnForgot").classList.add("hidden");
+  }
   else setAuthMode(AUTH_MODE);
+  renderSchoolHint();
 };
+
+/* 학교 메일로 가입했으면 인증으로 이어 준다 — 주소를 다시 적게 하지 않는다. */
+function renderSchoolHint(){
+  const u=UI[LANG];
+  const show = !!(USER && USER.schoolEmail && !USER.verified);
+  const hint=$("auSchoolHint"), btn=$("btnGoVerify");
+  hint.classList.toggle("hidden",!show);
+  btn.classList.toggle("hidden",!show);
+  if(show){
+    hint.textContent = u.auSchoolHint ? u.auSchoolHint(USER.schoolEmail.name) : USER.schoolEmail.name;
+    btn.textContent = u.auGoVerify || "학교 인증하러 가기 ▶";
+  }
+}
+$("btnGoVerify").addEventListener("click",()=>{ sfxNext(); location.href="/verify?lang="+encodeURIComponent(LANG); });
 
 
 /* ═══ 신규 기능 i18n (8개 언어) + 문화별 커뮤니티 노출 순서 ═══ */
@@ -3751,6 +3862,127 @@ $("exitYes").addEventListener("click",async()=>{
 
 
 
+
+/* ═══ 계정 이메일 · 비밀번호 찾기 문구 (9개 언어) ═══ */
+(function(){
+  const T={
+    ko:{auEmail:'이메일 (비밀번호 찾기에 씁니다)',auErrEmail:'이메일 형식을 확인해주세요',
+        auDesc:'닉네임·이메일·비밀번호로 전적과 칭호가 저장됩니다.<br>로그인 없이도 모든 게임을 즐길 수 있어요.',
+        hint:s=>s+' 메일이네요! 학교 인증하면 뱃지와 학교 순위에 참여할 수 있어요.',
+        goVerify:'학교 인증하러 가기 ▶',forgot:'비밀번호를 잊었어요',
+        fgTitle:'비밀번호 찾기',fgDesc:'가입할 때 쓴 이메일로 6자리 코드를 보냅니다.',
+        fgEmail:'이메일',fgCode:'인증 코드 (6자리)',fgPw:'새 비밀번호 (8자+, 영문+숫자)',
+        fgSend:'코드 받기 ▶',fgConfirm:'비밀번호 바꾸기 ▶',fgBack:'← 돌아가기',
+        fgDev:'개발 모드 — 코드:',fgErrCode:'6자리를 입력해주세요',
+        fgDone:'비밀번호를 바꿨어요. 새 비밀번호로 로그인해주세요',
+        fgMailSoon:'비밀번호 찾기는 메일 발송 준비가 끝나면 열립니다'},
+    en:{auEmail:'EMAIL (used to recover your password)',auErrEmail:'Check the email format',
+        auDesc:'Nickname, email and password keep your record and title.<br>You can play everything without an account.',
+        hint:s=>'That is a '+s+' address! Verify it for a badge and the school ranking.',
+        goVerify:'VERIFY YOUR SCHOOL ▶',forgot:'I forgot my password',
+        fgTitle:'RESET PASSWORD',fgDesc:'We send a 6-digit code to the email you signed up with.',
+        fgEmail:'EMAIL',fgCode:'CODE (6 digits)',fgPw:'NEW PASSWORD (8+, letters + numbers)',
+        fgSend:'SEND CODE ▶',fgConfirm:'CHANGE PASSWORD ▶',fgBack:'← BACK',
+        fgDev:'Dev mode — code:',fgErrCode:'Enter all 6 digits',
+        fgDone:'Password changed. Log in with the new one.',
+        fgMailSoon:'Password reset opens once email sending is ready'},
+    zh:{auEmail:'邮箱（用于找回密码）',auErrEmail:'请检查邮箱格式',
+        auDesc:'用昵称、邮箱和密码保存战绩与称号。<br>不登录也能玩所有游戏。',
+        hint:s=>'这是'+s+'的邮箱！认证后可获得徽章并参与学校排名。',
+        goVerify:'去认证学校 ▶',forgot:'忘记密码了',
+        fgTitle:'找回密码',fgDesc:'我们会向注册邮箱发送6位验证码。',
+        fgEmail:'邮箱',fgCode:'验证码（6位）',fgPw:'新密码（8位以上，字母+数字）',
+        fgSend:'获取验证码 ▶',fgConfirm:'修改密码 ▶',fgBack:'← 返回',
+        fgDev:'开发模式 — 验证码：',fgErrCode:'请输入6位数字',
+        fgDone:'密码已修改，请用新密码登录。',
+        fgMailSoon:'找回密码将在邮件发送准备就绪后开放'},
+    tw:{auEmail:'信箱（用於找回密碼）',auErrEmail:'請檢查信箱格式',
+        auDesc:'用暱稱、信箱和密碼保存戰績與稱號。<br>不登入也能玩所有遊戲。',
+        hint:s=>'這是'+s+'的信箱！認證後可取得徽章並參與學校排名。',
+        goVerify:'前往認證學校 ▶',forgot:'忘記密碼了',
+        fgTitle:'找回密碼',fgDesc:'我們會向註冊信箱寄送6位驗證碼。',
+        fgEmail:'信箱',fgCode:'驗證碼（6位）',fgPw:'新密碼（8位以上，字母+數字）',
+        fgSend:'取得驗證碼 ▶',fgConfirm:'修改密碼 ▶',fgBack:'← 返回',
+        fgDev:'開發模式 — 驗證碼：',fgErrCode:'請輸入6位數字',
+        fgDone:'密碼已修改，請用新密碼登入。',
+        fgMailSoon:'找回密碼將在郵件寄送準備就緒後開放'},
+    ja:{auEmail:'メール（パスワード再設定に使います）',auErrEmail:'メールの形式を確認してください',
+        auDesc:'ニックネーム・メール・パスワードで戦績と称号を保存します。<br>ログインなしでも全部遊べます。',
+        hint:s=>s+'のメールですね！認証するとバッジと学校ランキングに参加できます。',
+        goVerify:'学校を認証する ▶',forgot:'パスワードを忘れました',
+        fgTitle:'パスワード再設定',fgDesc:'登録したメールに6桁のコードを送ります。',
+        fgEmail:'メール',fgCode:'コード（6桁）',fgPw:'新しいパスワード（8文字以上・英字+数字）',
+        fgSend:'コードを受け取る ▶',fgConfirm:'パスワードを変更 ▶',fgBack:'← 戻る',
+        fgDev:'開発モード — コード：',fgErrCode:'6桁を入力してください',
+        fgDone:'パスワードを変更しました。新しいパスワードでログインしてください。',
+        fgMailSoon:'パスワード再設定はメール送信の準備が整い次第オープンします'},
+    fr:{auEmail:'E-MAIL (pour récupérer votre mot de passe)',auErrEmail:"Vérifiez le format de l'e-mail",
+        auDesc:'Pseudo, e-mail et mot de passe conservent votre score et votre titre.<br>Tout est jouable sans compte.',
+        hint:s=>"C'est une adresse "+s+" ! Vérifiez-la pour un badge et le classement.",
+        goVerify:'VÉRIFIER VOTRE ÉCOLE ▶',forgot:"J'ai oublié mon mot de passe",
+        fgTitle:'RÉINITIALISER',fgDesc:"Nous envoyons un code à 6 chiffres à l'e-mail d'inscription.",
+        fgEmail:'E-MAIL',fgCode:'CODE (6 chiffres)',fgPw:'NOUVEAU MOT DE PASSE (8+, lettres + chiffres)',
+        fgSend:'RECEVOIR LE CODE ▶',fgConfirm:'CHANGER ▶',fgBack:'← RETOUR',
+        fgDev:'Mode dev — code :',fgErrCode:'Saisissez les 6 chiffres',
+        fgDone:'Mot de passe changé. Connectez-vous avec le nouveau.',
+        fgMailSoon:"La réinitialisation ouvrira dès que l'envoi d'e-mails sera prêt"},
+    it:{auEmail:'E-MAIL (per recuperare la password)',auErrEmail:"Controlla il formato dell'e-mail",
+        auDesc:'Nickname, e-mail e password conservano record e titolo.<br>Puoi giocare a tutto senza account.',
+        hint:s=>"È un indirizzo "+s+"! Verificalo per il badge e la classifica.",
+        goVerify:'VERIFICA LA TUA SCUOLA ▶',forgot:'Ho dimenticato la password',
+        fgTitle:'REIMPOSTA PASSWORD',fgDesc:"Inviamo un codice a 6 cifre all'e-mail di registrazione.",
+        fgEmail:'E-MAIL',fgCode:'CODICE (6 cifre)',fgPw:'NUOVA PASSWORD (8+, lettere + numeri)',
+        fgSend:'RICEVI IL CODICE ▶',fgConfirm:'CAMBIA PASSWORD ▶',fgBack:'← INDIETRO',
+        fgDev:'Modalità dev — codice:',fgErrCode:'Inserisci tutte le 6 cifre',
+        fgDone:'Password cambiata. Accedi con quella nuova.',
+        fgMailSoon:"Il reimpostare aprirà appena l'invio e-mail sarà pronto"},
+    de:{auEmail:'E-MAIL (für die Passwort-Wiederherstellung)',auErrEmail:'Bitte E-Mail-Format prüfen',
+        auDesc:'Nickname, E-Mail und Passwort sichern Statistik und Titel.<br>Alles ist auch ohne Konto spielbar.',
+        hint:s=>'Das ist eine '+s+'-Adresse! Verifiziere sie für Abzeichen und Rangliste.',
+        goVerify:'HOCHSCHULE VERIFIZIEREN ▶',forgot:'Passwort vergessen',
+        fgTitle:'PASSWORT ZURÜCKSETZEN',fgDesc:'Wir senden einen 6-stelligen Code an die Anmelde-E-Mail.',
+        fgEmail:'E-MAIL',fgCode:'CODE (6 Stellen)',fgPw:'NEUES PASSWORT (8+, Buchstaben + Zahlen)',
+        fgSend:'CODE ANFORDERN ▶',fgConfirm:'PASSWORT ÄNDERN ▶',fgBack:'← ZURÜCK',
+        fgDev:'Dev-Modus — Code:',fgErrCode:'Bitte alle 6 Stellen eingeben',
+        fgDone:'Passwort geändert. Melde dich mit dem neuen an.',
+        fgMailSoon:'Das Zurücksetzen öffnet, sobald der E-Mail-Versand bereit ist'},
+    es:{auEmail:'CORREO (para recuperar la contraseña)',auErrEmail:'Revisa el formato del correo',
+        auDesc:'Apodo, correo y contraseña guardan tu historial y título.<br>Puedes jugar a todo sin cuenta.',
+        hint:s=>'¡Es una dirección de '+s+'! Verifícala para la insignia y el ranking.',
+        goVerify:'VERIFICAR TU ESCUELA ▶',forgot:'Olvidé mi contraseña',
+        fgTitle:'RESTABLECER CONTRASEÑA',fgDesc:'Enviamos un código de 6 dígitos al correo de registro.',
+        fgEmail:'CORREO',fgCode:'CÓDIGO (6 dígitos)',fgPw:'NUEVA CONTRASEÑA (8+, letras + números)',
+        fgSend:'RECIBIR CÓDIGO ▶',fgConfirm:'CAMBIAR CONTRASEÑA ▶',fgBack:'← ATRÁS',
+        fgDev:'Modo dev — código:',fgErrCode:'Introduce los 6 dígitos',
+        fgDone:'Contraseña cambiada. Entra con la nueva.',
+        fgMailSoon:'El restablecimiento se abrirá cuando el envío de correo esté listo'}
+  };
+
+  Object.keys(T).forEach(c=>{
+    if(!UI[c]) return;
+    const t=T[c];
+    Object.assign(UI[c],{
+      auEmailL:t.auEmail, auErrEmail:t.auErrEmail, auDesc:t.auDesc,
+      auSchoolHint:t.hint, auGoVerify:t.goVerify, btnForgot:t.forgot,
+      fgTitle:t.fgTitle, fgDesc:t.fgDesc, fgEmailL:t.fgEmail, fgCodeL:t.fgCode, fgPwL:t.fgPw,
+      btnFgSend:t.fgSend, btnFgConfirm:t.fgConfirm, btnFgBack:t.fgBack,
+      fgDev:t.fgDev, fgErrCode:t.fgErrCode, fgDone:t.fgDone, fgMailSoon:t.fgMailSoon
+    });
+  });
+
+  const prev=applyLang;
+  applyLang=function(){
+    prev();
+    const u=UI[LANG]; if(!u) return;
+    const set=(id,v)=>{ const e=$(id); if(e&&v) e.textContent=v; };
+    set("auEmailL",u.auEmailL); set("btnForgot",u.btnForgot);
+    set("fgTitle",u.fgTitle); set("fgEmailL",u.fgEmailL); set("fgCodeL",u.fgCodeL); set("fgPwL",u.fgPwL);
+    set("btnFgSend",u.btnFgSend); set("btnFgConfirm",u.btnFgConfirm); set("btnFgBack",u.btnFgBack);
+    const fd=$("fgDesc"); if(fd&&u.fgDesc) fd.innerHTML=u.fgDesc;
+    renderSchoolHint();
+  };
+  applyLang();
+})();
 </script>
 <!-- 로딩 표시와 선택창. 원본 인라인 스크립트가 만든 UI/applyLang 을 이어받는다. -->
 <script src="/arcade-ui.js"></script>

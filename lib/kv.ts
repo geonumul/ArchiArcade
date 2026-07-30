@@ -29,8 +29,13 @@ const KEY_RULES: RegExp[] = [
   /^archbal-bank-v[0-9]{1,3}$/,
   // 방: abg2-1234-st / abg2-1234-j-<uid>-<name> / abg2-1234-v3g0-<uid>-a
   /^abg2-[A-Za-z0-9]{1,12}-[A-Za-z0-9%._~-]{1,180}$/,
-  // 회원: abg-user-<nickname>
-  /^abg-user-[^\s/?#]{1,64}$/,
+
+  // 회원(abg-user-<닉네임>)은 의도적으로 빼 두었다.
+  //
+  // 원본은 비밀번호 해시·salt·반복횟수를 이 키에 담아 공용 저장소에 넣었고, 이 API 는
+  // 누구에게나 열려 있으므로 남의 닉네임만 알면 그 해시를 그대로 받아 오프라인에서
+  // 대입 공격을 할 수 있었다. 계정은 서버(/api/auth/*)로 옮겼고, 이 키는 다시
+  // 허용하지 않는다 — 허용하는 순간 같은 구멍이 다시 열린다.
 ];
 
 export function isAllowedKey(key: string): boolean {

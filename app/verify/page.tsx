@@ -41,6 +41,14 @@ export default function VerifyPage() {
         }
       })
       .catch(() => undefined);
+
+    // 로그인해 있으면 가입할 때 쓴 주소를 미리 채운다 — 같은 주소를 두 번 적게 하지 않는다.
+    fetch("/api/auth/me", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { user?: { email?: string | null } | null }) => {
+        if (d.user?.email) setEmail((cur) => cur || d.user!.email!);
+      })
+      .catch(() => undefined);
   }, []);
 
   const request = useCallback(async () => {
@@ -54,7 +62,8 @@ export default function VerifyPage() {
       });
       const d = await res.json();
       if (!res.ok) {
-        setErr(d.error ?? t.errNet);
+        // 서버 문구는 한국어라, 화면이 아는 상황이면 현재 언어로 바꿔 보여 준다.
+        setErr(d.mailNotReady ? t.vMailSoon : (d.error ?? t.errNet));
         return;
       }
       setSchool(d.school);
@@ -115,7 +124,7 @@ export default function VerifyPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="hong@hongik.ac.kr"
+              placeholder="archiarcade@snu.ac.kr"
               autoComplete="email"
               inputMode="email"
             />

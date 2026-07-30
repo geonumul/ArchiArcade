@@ -12,22 +12,40 @@ export const MAIL_ENABLED = Boolean(API_KEY);
 
 export interface MailResult {
   sent: boolean;
-  /// 발송이 꺼져 있을 때만 채워진다. 개발 중 코드를 확인하는 용도이며
-  /// 프로덕션에서는 절대 응답에 실어 보내지 않는다.
+  /**
+   * 발송이 꺼져 있을 때만 채워진다. 개발 중 코드를 확인하는 용도다.
+   *
+   * 이 값을 응답에 실을지는 호출하는 쪽이 판단한다 — /api/verify/request 는
+   * 로컬 개발에서만 내보내고, 프로덕션에서는 메일을 못 보내면 인증 자체를 닫는다.
+   * 여기서 채워졌다는 것만으로 안전하다고 보면 안 된다.
+   */
   devCode?: string;
 }
 
 export async function sendVerificationCode(to: string, code: string, schoolName: string): Promise<MailResult> {
-  const subject = "ARCHI ARCADE 학교 인증 코드";
-  const text = [
+  return send(to, "ARCHI ARCADE 학교 인증 코드", [
     `인증 코드: ${code}`,
     "",
     `${schoolName} 소속으로 인증합니다.`,
     "코드는 10분 뒤 만료됩니다.",
     "",
     "본인이 요청하지 않았다면 이 메일은 무시하셔도 됩니다.",
-  ].join("\n");
+  ].join("\n"), code);
+}
 
+/// 비밀번호 재설정 코드. 계정 이름을 함께 적어, 남의 계정 메일을 받았을 때 알아챌 수 있게 한다.
+export async function sendPasswordResetCode(to: string, code: string, name: string): Promise<MailResult> {
+  return send(to, "ARCHI ARCADE 비밀번호 재설정 코드", [
+    `재설정 코드: ${code}`,
+    "",
+    `계정: ${name}`,
+    "코드는 10분 뒤 만료됩니다.",
+    "",
+    "본인이 요청하지 않았다면 비밀번호는 그대로 두시고 이 메일을 무시하세요.",
+  ].join("\n"), code);
+}
+
+async function send(to: string, subject: string, text: string, code: string): Promise<MailResult> {
   if (!API_KEY) {
     console.log(`[mailer] 발송 비활성 — to=${to} code=${code}`);
     return { sent: false, devCode: code };

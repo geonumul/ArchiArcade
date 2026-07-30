@@ -24,6 +24,7 @@ export interface SchoolStrings {
   vMajor: string;
   vSend: string;
   vPrivacy: string;
+  vMailSoon: string;
   vCodeTitle: string;
   vCodeSent: (school: string, email: string) => string;
   vDevCode: string;
@@ -72,6 +73,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "학과",
     vSend: "인증 코드 받기 ▶",
     vPrivacy: "이메일은 학교 확인에만 쓰고, 광고 메일은 보내지 않습니다.",
+    vMailSoon: "학교 인증은 메일 발송 준비가 끝나면 열립니다. 조금만 기다려주세요",
     vCodeTitle: "코드 입력",
     vCodeSent: (s, e) => `${s} 확인됨 · ${e} 로 6자리 코드를 보냈어요 (10분 안에 입력)`,
     vDevCode: "개발 모드 — 메일 발송이 꺼져 있어 코드를 여기 표시합니다",
@@ -117,6 +119,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "MAJOR",
     vSend: "SEND CODE ▶",
     vPrivacy: "Your email is used only to confirm your school. No marketing mail.",
+    vMailSoon: "School verification opens once email sending is ready. Hang tight.",
     vCodeTitle: "ENTER CODE",
     vCodeSent: (s, e) => `${s} confirmed · a 6-digit code was sent to ${e} (valid 10 minutes)`,
     vDevCode: "Dev mode — mail sending is off, so the code is shown here",
@@ -162,6 +165,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "专业",
     vSend: "获取验证码 ▶",
     vPrivacy: "邮箱只用于确认学校，不会发送广告邮件。",
+    vMailSoon: "学校认证将在邮件发送准备就绪后开放，请稍等。",
     vCodeTitle: "输入验证码",
     vCodeSent: (s, e) => `已确认 ${s} · 6位验证码已发送至 ${e}（10分钟内有效）`,
     vDevCode: "开发模式 — 邮件发送已关闭，验证码显示在此",
@@ -207,6 +211,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "系所",
     vSend: "取得驗證碼 ▶",
     vPrivacy: "信箱只用於確認學校，不會寄送廣告信。",
+    vMailSoon: "學校認證將在郵件寄送準備就緒後開放，請稍等。",
     vCodeTitle: "輸入驗證碼",
     vCodeSent: (s, e) => `已確認 ${s} · 6位驗證碼已寄至 ${e}（10分鐘內有效）`,
     vDevCode: "開發模式 — 郵件寄送已關閉，驗證碼顯示於此",
@@ -252,6 +257,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "学科",
     vSend: "認証コードを受け取る ▶",
     vPrivacy: "メールは学校の確認だけに使い、広告メールは送りません。",
+    vMailSoon: "学校認証はメール送信の準備が整い次第オープンします。少しお待ちください。",
     vCodeTitle: "コード入力",
     vCodeSent: (s, e) => `${s} を確認 · ${e} に6桁のコードを送りました（10分以内に入力）`,
     vDevCode: "開発モード — メール送信が無効なのでコードをここに表示します",
@@ -297,6 +303,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "FILIÈRE",
     vSend: "RECEVOIR LE CODE ▶",
     vPrivacy: "Votre e-mail sert uniquement à confirmer votre école. Aucun message publicitaire.",
+    vMailSoon: "La vérification ouvrira dès que l'envoi d'e-mails sera prêt. Un peu de patience.",
     vCodeTitle: "SAISIR LE CODE",
     vCodeSent: (s, e) => `${s} confirmée · un code à 6 chiffres a été envoyé à ${e} (valable 10 minutes)`,
     vDevCode: "Mode dev — l'envoi d'e-mails est désactivé, le code est affiché ici",
@@ -342,6 +349,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "CORSO DI LAUREA",
     vSend: "RICEVI IL CODICE ▶",
     vPrivacy: "L'e-mail serve solo a confermare la scuola. Nessuna mail pubblicitaria.",
+    vMailSoon: "La verifica aprirà appena l'invio e-mail sarà pronto. Un attimo di pazienza.",
     vCodeTitle: "INSERISCI IL CODICE",
     vCodeSent: (s, e) => `${s} confermata · codice a 6 cifre inviato a ${e} (valido 10 minuti)`,
     vDevCode: "Modalità dev — l'invio e-mail è disattivato, il codice è mostrato qui",
@@ -387,6 +395,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "STUDIENGANG",
     vSend: "CODE ANFORDERN ▶",
     vPrivacy: "Die E-Mail dient nur der Bestätigung der Hochschule. Keine Werbemails.",
+    vMailSoon: "Die Verifizierung öffnet, sobald der E-Mail-Versand bereit ist. Einen Moment noch.",
     vCodeTitle: "CODE EINGEBEN",
     vCodeSent: (s, e) => `${s} bestätigt · 6-stelliger Code an ${e} gesendet (10 Minuten gültig)`,
     vDevCode: "Dev-Modus — E-Mail-Versand ist aus, der Code steht hier",
@@ -432,6 +441,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vMajor: "CARRERA",
     vSend: "RECIBIR CÓDIGO ▶",
     vPrivacy: "El correo solo se usa para confirmar tu escuela. No enviamos publicidad.",
+    vMailSoon: "La verificación se abrirá cuando el envío de correo esté listo. Un momento.",
     vCodeTitle: "INTRODUCE EL CÓDIGO",
     vCodeSent: (s, e) => `${s} confirmada · se envió un código de 6 dígitos a ${e} (válido 10 minutos)`,
     vDevCode: "Modo dev — el envío de correo está apagado, el código se muestra aquí",

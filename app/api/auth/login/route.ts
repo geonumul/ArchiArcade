@@ -58,7 +58,14 @@ export async function POST(req: Request) {
 
   const profile = await prisma.profile.findUnique({ where: { userId: user.id } });
   return NextResponse.json({
-    user: { name: user.name, locale: user.locale, plays: profile?.plays ?? 0, minorPicks: profile?.minorPicks ?? 0 },
+    user: {
+      name: user.name,
+      email: user.email,
+      verified: Boolean(user.emailVerifiedAt),
+      locale: user.locale,
+      plays: profile?.plays ?? 0,
+      minorPicks: profile?.minorPicks ?? 0,
+    },
     upgraded: Boolean(upgradedHash),
   });
 }

@@ -18,6 +18,11 @@ model User {
   id        String   @id @default(cuid())
   name      String   @unique
   pwHash    String
+  /// 비밀번호 찾기의 유일한 통로. 이것이 없으면 계정을 되돌릴 방법이 없다.
+  /// 기존 계정에는 값이 없을 수 있어 옵셔널이지만, 새 가입에서는 반드시 받는다.
+  email           String?   @unique
+  /// 메일로 소유를 확인한 시각. 학교 메일이면 이 시점에 학생 뱃지도 함께 발급된다.
+  emailVerifiedAt DateTime?
   locale    String   @default("ko")
   createdAt DateTime @default(now())
 
@@ -25,6 +30,16 @@ model User {
   memberships  OrgMember[]
   applications JobApplication[]
   hostedRooms  Room[]
+}
+
+/// 비밀번호 재설정 코드. 원문 대신 해시만 두고 만료·시도 횟수로 무차별 대입을 막는다
+/// — VerifyCode 와 같은 방식이지만 용도가 달라 섞지 않는다.
+model PasswordReset {
+  email     String   @id
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
 }
 
 model Profile {
