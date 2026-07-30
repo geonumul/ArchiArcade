@@ -41,6 +41,14 @@ export default function VerifyPage() {
         }
       })
       .catch(() => undefined);
+
+    // 로그인해 있으면 가입할 때 쓴 주소를 미리 채운다 — 같은 주소를 두 번 적게 하지 않는다.
+    fetch("/api/auth/me", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { user?: { email?: string | null } | null }) => {
+        if (d.user?.email) setEmail((cur) => cur || d.user!.email!);
+      })
+      .catch(() => undefined);
   }, []);
 
   const request = useCallback(async () => {

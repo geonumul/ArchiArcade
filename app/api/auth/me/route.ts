@@ -27,6 +27,9 @@ export async function GET() {
   return NextResponse.json({
     user: {
       name: user.name,
+      // 화면이 학교 인증 주소를 미리 채우는 데 쓴다. 본인에게만 나가는 응답이다.
+      email: user.email,
+      verified: Boolean(user.emailVerifiedAt),
       locale: user.locale,
       plays: user.profile?.plays ?? 0,
       minorPicks: user.profile?.minorPicks ?? 0,
