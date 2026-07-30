@@ -73,6 +73,15 @@ export async function POST(req: Request) {
 
   const mail = await sendVerificationCode(email, code, school.name);
 
+  // 보낼 수 있어야 하는데 실패했다면 그대로 알린다. "보냈다"고 해놓고 오지 않으면
+  // 사용자는 스팸함만 뒤지다 포기한다 — 발송 도메인 인증 전에는 실제로 이 상태가 된다.
+  if (MAIL_ENABLED && !mail.sent) {
+    return NextResponse.json(
+      { error: "지금은 인증 메일을 보낼 수 없어요. 잠시 후 다시 시도해주세요", mailFailed: true },
+      { status: 502 }
+    );
+  }
+
   return NextResponse.json({
     ok: true,
     school: { name: school.name, country: school.country },

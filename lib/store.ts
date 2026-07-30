@@ -67,7 +67,15 @@ export interface Store {
   /// 최근 활동 중인 방들의 참가자 합계 — 서비스 전체 안전장치용.
   activePlayers(): Promise<number>;
 
-  addVote(input: { questionIdx: number; choice: "a" | "b"; lang: string; roomCode?: string | null }): Promise<void>;
+  addVote(input: {
+    questionIdx: number;
+    choice: "a" | "b";
+    lang: string;
+    roomCode?: string | null;
+    /// 인증된 학생의 표에만 채워진다 — 학교별 순위와 검증된 응답 집계의 근거.
+    schoolDomain?: string | null;
+    major?: string | null;
+  }): Promise<void>;
   tallyVotes(questionIdx: number): Promise<VoteTally>;
 
   listPosts(board: string, limit?: number): Promise<PostRecord[]>;
@@ -319,13 +327,22 @@ class PrismaStore implements Store {
     return res.count;
   }
 
-  async addVote(input: { questionIdx: number; choice: "a" | "b"; lang: string; roomCode?: string | null }) {
+  async addVote(input: {
+    questionIdx: number;
+    choice: "a" | "b";
+    lang: string;
+    roomCode?: string | null;
+    schoolDomain?: string | null;
+    major?: string | null;
+  }) {
     await prisma!.vote.create({
       data: {
         questionIdx: input.questionIdx,
         choice: input.choice,
         lang: input.lang,
         roomCode: input.roomCode ?? null,
+        schoolDomain: input.schoolDomain ?? null,
+        major: input.major ?? null,
       },
     });
   }

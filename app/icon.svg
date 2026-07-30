@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" shape-rendering="crispEdges">
+  <!-- 파비콘은 16px 로도 읽혀야 하므로 형태를 최대한 단순하게 잡는다.
+       원본의 픽셀 아트 문법을 따라 곡선 없이 사각형만 쓰고, 색도 CSS 변수와 같은 값을 쓴다.
+       (--bg #14162b, --border #e8e6f0, 강조 노랑 #ffd93d) -->
+  <rect width="32" height="32" fill="#14162b"/>
+
+  <!-- 건물 실루엣: 낮은 동 + 높은 동. 작게 줄여도 스카이라인으로 읽힌다. -->
+  <rect x="4"  y="14" width="10" height="14" fill="#ffd93d"/>
+  <rect x="16" y="6"  width="12" height="22" fill="#ffd93d"/>
+
+  <!-- 창문 — 밤샘하는 설계실답게 몇 칸만 켜 둔다. -->
+  <rect x="6"  y="17" width="2" height="2" fill="#14162b"/>
+  <rect x="10" y="17" width="2" height="2" fill="#14162b"/>
+  <rect x="6"  y="21" width="2" height="2" fill="#14162b"/>
+  <rect x="10" y="21" width="2" height="2" fill="#14162b"/>
+
+  <rect x="18" y="9"  width="2" height="2" fill="#14162b"/>
+  <rect x="22" y="9"  width="2" height="2" fill="#14162b"/>
+  <rect x="18" y="13" width="2" height="2" fill="#14162b"/>
+  <rect x="24" y="13" width="2" height="2" fill="#14162b"/>
+  <rect x="22" y="17" width="2" height="2" fill="#14162b"/>
+  <rect x="18" y="21" width="2" height="2" fill="#14162b"/>
+  <rect x="24" y="21" width="2" height="2" fill="#14162b"/>
+
+  <!-- 바닥선 -->
+  <rect x="2" y="28" width="28" height="2" fill="#e8e6f0"/>
+</svg>
