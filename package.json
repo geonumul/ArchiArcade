@@ -10,6 +10,7 @@
     "lint": "next lint",
     "verify:banks": "node scripts/verify-banks.mjs",
     "verify:icon": "node scripts/verify-icon.mjs",
+    "verify:preview": "node scripts/verify-preview.mjs",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",

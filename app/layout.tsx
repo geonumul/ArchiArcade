@@ -10,14 +10,18 @@ export const metadata: Metadata = {
   },
   description:
     "밤샘하는 건축학도를 위한 온라인 오락실 — 9개 언어로 즐기는 건축학과 밸런스게임.",
-  metadataBase: new URL("https://archiarcade.com"),
+  // archiarcade.com 은 www 로 넘긴다. 미리보기 크롤러가 리다이렉트에서 그림을 놓치는
+  // 일이 있어, 실제로 200 을 주는 주소를 그대로 쓴다.
+  metadataBase: new URL("https://www.archiarcade.com"),
   openGraph: {
     title: "ARCHIARCADE",
     description: "밤샘하는 건축학도를 위한 온라인 오락실",
-    url: "https://archiarcade.com",
+    url: "https://www.archiarcade.com",
     siteName: "ARCHIARCADE",
     locale: "ko_KR",
     type: "website",
+    // 그림 자체는 app/opengraph-image.tsx 가 만든다. 여기서 따로 지정하지 않으면
+    // Next 가 그 파일을 찾아 자동으로 붙인다.
   },
 };
 
