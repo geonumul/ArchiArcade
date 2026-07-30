@@ -112,3 +112,24 @@
 }
 .aa-pick-op.cur i { color: #5a4a00; }
 .aa-pick-op:focus-visible { outline: 3px solid var(--blue, #4fc4ff); outline-offset: 2px; }
+
+/* ── 체크박스 한 줄 ──────────────────────────────────────────
+   원본 페이지(방 설정)와 학교 페이지(동문 공개 설정)가 같이 쓴다.
+   두 곳이 이 파일 하나를 링크하므로 여기 한 번만 둔다. */
+.checkrow {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.7;
+  cursor: pointer;
+}
+.checkrow input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-top: 2px;
+  accent-color: var(--yellow, #ffd93d);
+}
