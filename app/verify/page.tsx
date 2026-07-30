@@ -149,7 +149,7 @@ export default function VerifyPage() {
 
           {devCode && (
             <div className="note" style={{ color: "var(--yellow)" }}>
-              {t.vDevCode} — <b>{devCode}</b>
+              {t.vDevCode} - <b>{devCode}</b>
             </div>
           )}
 

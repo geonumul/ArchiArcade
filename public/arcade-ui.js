@@ -20,7 +20,7 @@
   var STR = {
     ko: {
       loading: "서버와 연결 중...",
-      roomFull: "방이 가득 찼어요 — 호스트에게 인원을 늘려달라고 해보세요",
+      roomFull: "방이 가득 찼어요 - 호스트에게 인원을 늘려달라고 해보세요",
       qnLabel: "문항 수",
       qnOpts: ["10문항 (짧고 굵게)", "20문항 (기본)", "30문항 (풀코스)"],
       capLabel: "최대 인원",
@@ -28,7 +28,7 @@
     },
     en: {
       loading: "Connecting to the server...",
-      roomFull: "Room is full — ask the host to raise the limit",
+      roomFull: "Room is full - ask the host to raise the limit",
       qnLabel: "NUMBER OF QUESTIONS",
       qnOpts: ["10 (short)", "20 (default)", "30 (full course)"],
       capLabel: "MAX PLAYERS",
@@ -36,7 +36,7 @@
     },
     zh: {
       loading: "正在连接服务器...",
-      roomFull: "房间已满 — 让房主调高人数上限吧",
+      roomFull: "房间已满 - 让房主调高人数上限吧",
       qnLabel: "题目数量",
       qnOpts: ["10题 (速战)", "20题 (默认)", "30题 (全程)"],
       capLabel: "人数上限",
@@ -44,7 +44,7 @@
     },
     tw: {
       loading: "正在連線伺服器...",
-      roomFull: "房間已滿 — 請房主調高人數上限",
+      roomFull: "房間已滿 - 請房主調高人數上限",
       qnLabel: "題目數量",
       qnOpts: ["10題 (速戰)", "20題 (預設)", "30題 (全程)"],
       capLabel: "人數上限",
@@ -52,7 +52,7 @@
     },
     ja: {
       loading: "サーバーに接続中...",
-      roomFull: "ルームが満員です — ホストに上限を上げてもらいましょう",
+      roomFull: "ルームが満員です - ホストに上限を上げてもらいましょう",
       qnLabel: "問題数",
       qnOpts: ["10問 (短期決戦)", "20問 (標準)", "30問 (フルコース)"],
       capLabel: "最大人数",
@@ -60,7 +60,7 @@
     },
     fr: {
       loading: "Connexion au serveur...",
-      roomFull: "Salle pleine — demandez à l'hôte d'augmenter la limite",
+      roomFull: "Salle pleine - demandez à l'hôte d'augmenter la limite",
       qnLabel: "NOMBRE DE QUESTIONS",
       qnOpts: ["10 (court)", "20 (par défaut)", "30 (complet)"],
       capLabel: "JOUEURS MAX",
@@ -68,7 +68,7 @@
     },
     it: {
       loading: "Connessione al server...",
-      roomFull: "Stanza piena — chiedi all'host di alzare il limite",
+      roomFull: "Stanza piena - chiedi all'host di alzare il limite",
       qnLabel: "NUMERO DI DOMANDE",
       qnOpts: ["10 (breve)", "20 (predefinito)", "30 (completo)"],
       capLabel: "GIOCATORI MAX",
@@ -76,7 +76,7 @@
     },
     de: {
       loading: "Verbindung zum Server...",
-      roomFull: "Raum ist voll — bitte die Host-Person, das Limit zu erhöhen",
+      roomFull: "Raum ist voll - bitte die Host-Person, das Limit zu erhöhen",
       qnLabel: "ANZAHL DER FRAGEN",
       qnOpts: ["10 (kurz)", "20 (Standard)", "30 (komplett)"],
       capLabel: "MAX. SPIELENDE",
@@ -84,7 +84,7 @@
     },
     es: {
       loading: "Conectando con el servidor...",
-      roomFull: "La sala está llena — pide al anfitrión que suba el límite",
+      roomFull: "La sala está llena - pide al anfitrión que suba el límite",
       qnLabel: "NÚMERO DE PREGUNTAS",
       qnOpts: ["10 (corta)", "20 (por defecto)", "30 (completa)"],
       capLabel: "JUGADORES MÁX.",

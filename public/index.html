@@ -13,22 +13,22 @@
      아무것도 안 떴다 — 아래를 직접 걸어 준다.
      주소는 절대 경로여야 한다. 크롤러는 상대 경로를 못 따라온다. -->
 <link rel="icon" type="image/svg+xml" href="/icon.svg">
-<meta name="description" content="밤샘하는 건축학도를 위한 온라인 오락실 — 9개 언어로 즐기는 건축학과 밸런스게임.">
+<meta name="description" content="밤샘하는 건축학도를 위한 온라인 오락실 - 9개 언어로 즐기는 건축학과 밸런스게임.">
 <link rel="canonical" href="https://www.archiarcade.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ARCHIARCADE">
 <meta property="og:title" content="ARCHIARCADE">
-<meta property="og:description" content="밤샘하는 건축학도를 위한 온라인 오락실 — 9개 언어로 즐기는 건축학과 밸런스게임.">
+<meta property="og:description" content="밤샘하는 건축학도를 위한 온라인 오락실 - 9개 언어로 즐기는 건축학과 밸런스게임.">
 <meta property="og:url" content="https://www.archiarcade.com/">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://www.archiarcade.com/opengraph-image">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="ARCHIARCADE — 건축학도를 위한 온라인 오락실">
+<meta property="og:image:alt" content="ARCHIARCADE - 건축학도를 위한 온라인 오락실">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ARCHIARCADE">
-<meta name="twitter:description" content="밤샘하는 건축학도를 위한 온라인 오락실 — 9개 언어로 즐기는 건축학과 밸런스게임.">
+<meta name="twitter:description" content="밤샘하는 건축학도를 위한 온라인 오락실 - 9개 언어로 즐기는 건축학과 밸런스게임.">
 <meta name="twitter:image" content="https://www.archiarcade.com/opengraph-image">
 <!-- window.storage 를 서버(/api/kv)에 연결한다. 아래 인라인 스크립트보다 먼저 실행돼야 한다. -->
 <script src="/arcade-bridge.js"></script>
@@ -648,6 +648,10 @@ body.ov-open{overflow:hidden;}
       <div class="scoreboard hidden" id="auCard"></div>
       <div class="note hidden" id="auSchoolHint"></div>
       <button class="btn kr hidden" id="btnGoVerify">학교 인증하러 가기 ▶</button>
+      <!-- 로그인한 사람만. 비밀번호는 메일로 온 코드를 확인한 뒤에 바뀐다. -->
+      <button class="btn kr gray hidden" id="btnChangePw">비밀번호 바꾸기</button>
+      <!-- 서버가 관리자라고 확인해 줄 때만 보인다. -->
+      <button class="btn kr gray hidden" id="btnOpenAdmin">OP ROOM ▶</button>
       <button class="btn kr gray hidden" id="btnLogout">로그아웃</button>
       <button class="btn kr gray" id="btnAuBack">← 오락실로</button>
     </div>
@@ -670,9 +674,9 @@ body.ov-open{overflow:hidden;}
     <div class="stack hidden" id="vAdmin">
       <div class="logo" style="font-size:22px">OP ROOM</div>
       <div class="scoreboard" id="admStats">로딩 중...</div>
-      <div class="note">게임 신청 보드 관리 — [X]로 개별 삭제</div>
+      <div class="note">게임 신청 보드 관리 - [X]로 개별 삭제</div>
       <div class="playerlist" id="admIdeas" style="max-height:150px"></div>
-      <div class="note">질문 공작소 관리 — [X]로 개별 삭제</div>
+      <div class="note">질문 공작소 관리 - [X]로 개별 삭제</div>
       <div class="playerlist" id="admBugs" style="max-height:150px"></div>
       <button class="btn kr gray" id="btnAdmBack">← 오락실로</button>
     </div>
@@ -693,17 +697,21 @@ body.ov-open{overflow:hidden;}
     <div class="stack hidden" id="vReport">
       <div class="logo" style="font-size:22px">질문 공작소</div>
       <div class="note">질문이 더 재밌어지도록 함께 만들어주세요.<br>밸런스 붕괴 신고 / 새 질문 제안 / 개선 아이디어 뭐든 좋습니다.</div>
-      <div class="field"><label>제보 유형</label>
+      <div class="field" id="bgTypeF"><label>제보 유형</label>
         <select id="bgType">
           <option value="밸런스붕괴">⚖️ 밸런스 붕괴 신고 (한쪽이 너무 유리함)</option>
           <option value="새질문">💡 새 질문 제안</option>
           <option value="개선">✨ 이런 식이면 더 재밌겠다</option>
         </select>
       </div>
-      <div class="field"><label>닉네임</label><input id="bgName" maxlength="8" placeholder="예: 공작소장"></div>
-      <div class="field"><label>내용</label><input id="bgText" maxlength="80" placeholder="예: 이 질문은 A가 압승이라 노잼이에요"></div>
+      <div class="field" id="bgNameF"><label>닉네임</label><input id="bgName" maxlength="8" placeholder="예: 공작소장"></div>
+      <div class="field" id="bgTextF"><label>내용</label><input id="bgText" maxlength="80" placeholder="예: 이 질문은 A가 압승이라 노잼이에요"></div>
       <div class="err" id="bgErr"></div>
       <button class="btn kr" id="btnPostBug">제보 넣기</button>
+      <!-- 로그인해야 제보할 수 있다. 안 했으면 위 입력칸 대신 이 안내가 보인다. -->
+      <div class="note hidden" id="bgNeedLogin"></div>
+      <button class="btn kr hidden" id="btnBgLogin">로그인하러 가기 ▶</button>
+      <div class="note" id="bgListHead"></div>
       <div class="playerlist" id="bugList" style="max-height:220px">불러오는 중...</div>
       <button class="btn kr gray" id="btnBgBack">← 오락실로</button>
     </div>
@@ -761,7 +769,7 @@ body.ov-open{overflow:hidden;}
 
     <!-- ── 호스트: 대기실 ── -->
     <div class="stack hidden" id="vHostLobby">
-      <div class="note" id="ntShare">참가자에게 알려주세요 — 방 코드 & 비밀번호</div>
+      <div class="note" id="ntShare">참가자에게 알려주세요 - 방 코드 & 비밀번호</div>
       <div class="roomcode" id="lobbyCode">----</div>
       <div class="note">PW <b id="lobbyPw" style="color:var(--yellow)"></b> · TIME <b id="lobbyTm" style="color:var(--yellow)"></b>s · Q<b id="lobbyQn" style="color:var(--yellow)">20</b></div>
       <div class="playerlist" id="lobbyPlayers">참가자 대기 중...</div>
@@ -816,7 +824,7 @@ body.ov-open{overflow:hidden;}
       </div>
       <div class="choices" id="choicesBox">
         <button class="choice p1" id="optA"><span class="key">A</span><span id="optAText"></span></button>
-        <div class="vs-line">— V S —</div>
+        <div class="vs-line">- V S -</div>
         <button class="choice p2" id="optB"><span class="key">B</span><span id="optBText"></span></button>
       </div>
       <div class="result" id="resultBox">
@@ -875,7 +883,7 @@ body.ov-open{overflow:hidden;}
      <div class="dock-body" id="dockUser">게스트 모드로 플레이 중.<br>로그인하면 전적과 칭호가 저장됩니다.</div>
    </div>
  </aside>
- <footer class="site-foot">© 2026 설계실 오락실 — ARCHI ARCADE · v1.5 · FONTS: GALMURI + PRESS START 2P (SIL OFL)</footer>
+ <footer class="site-foot">© 2026 설계실 오락실 - ARCHI ARCADE · v1.5 · FONTS: GALMURI + PRESS START 2P (SIL OFL)</footer>
 </div>
 
 <div class="ov hidden" id="ovGames">
@@ -1546,7 +1554,7 @@ const QBANK_JA=[
 /* ═══ 유럽 1티어(EFIGS) 언어팩 — FR/IT/DE/ES ═══ */
 const QBANK_FR=[{q:"La veille du rendu, l'un des deux arrive forcément :",a:"Tous tes fichiers de travail disparaissent",b:"Le traceur tombe en panne le matin du rendu"},{q:"Une seule arme jusqu'au diplôme :",a:"Dessin à la main uniquement, à vie",b:"Maquettes uniquement (dispensé de plans)"},{q:"Au jury, le plus dur à supporter :",a:"20 minutes de critique point par point",b:"3 minutes de silence... puis « Suivant »"},{q:"Le prix de la nuit blanche, choisis :",a:"Une semaine de nuits blanches et un 18/20",b:"Rentrer à l'heure chaque jour et un 10/20"},{q:"Un seul matériau pour toute ta carrière :",a:"Tout en verre (vie de mur-rideau)",b:"Tout en béton brut"},{q:"Ta relation avec l'atelier :",a:"Y vivre carrément (duvet fourni)",b:"Interdiction d'y entrer à vie (travail à la maison)"},{q:"Transporter la maquette finale :",a:"Métro bondé aux heures de pointe",b:"30 min à pied sous l'orage (parapluie dans une main)"},{q:"Choisis ta malédiction :",a:"Oublier tous les raccourcis CAO (souris seulement)",b:"Tous les PSD reçus ont les calques fusionnés"},{q:"Méthode de maquette, un seul choix :",a:"100 maquettes d'étude",b:"UNE seule maquette finale, aucune erreur permise"},{q:"Ton style est verrouillé à vie :",a:"Courbes interdites (angles droits seulement)",b:"Droites interdites (tout en courbes)"},{q:"Le destin de ton projet de diplôme :",a:"Il est vraiment construit (aucune modification)",b:"Il reste à jamais sur le papier"},{q:"Un seul outil 3D pour la vie :",a:"SketchUp uniquement",b:"Rhino uniquement"},{q:"Choisis ta pédagogie :",a:"Voyage d'étude chaque semaine (compte rendu à rendre)",b:"Zéro visite, 4 ans de théorie pure"},{q:"Ton directeur d'atelier :",a:"Adorable mais te fait tout refaire chaque semaine",b:"Zéro retour, indifférent à tout ce que tu rends"},{q:"Un équipement gratuit à vie :",a:"Imprimante 3D illimitée",b:"Découpe laser illimitée"},{q:"Un seul sujet de projet à vie :",a:"Tours de grande hauteur uniquement",b:"Maisons individuelles uniquement"},{q:"Lendemain de nuit blanche, le moins pire :",a:"Interro de structure à 8 h",b:"Jury à 9 h pile, tu passes en premier"},{q:"Ta croix avec la colle, choisis :",a:"La colle à bois ne part jamais de tes mains",b:"Découper le polystyrène sans cutter"},{q:"Ton avenir d'architecte :",a:"Célèbre dans le monde entier mais fauché à vie",b:"Inconnu de tous mais riche"},{q:"4 h du matin à l'atelier, ton état :",a:"Envie soudaine de tout renverser le concept",b:"Le concept tient mais la main ne suit plus"},{q:"Première phrase du jury, la plus effrayante :",a:"« J'ai déjà vu ça quelque part, non ? »",b:"« Euh... c'est quoi, ça ? »"},{q:"Une odeur à supporter à vie :",a:"Calque + marqueurs",b:"Colle en bombe"},{q:"Un seul matériau de maquette à vie :",a:"Carton plume uniquement",b:"Balsa uniquement"},{q:"Une seule échelle pour toujours :",a:"1:500 uniquement (que du volume)",b:"1:20 uniquement (enfer du détail)"},{q:"Tu n'excelles qu'en un seul :",a:"Dieu du plan (coupes catastrophiques)",b:"Dieu de la coupe (plans catastrophiques)"},{q:"Deviens maître d'une seule chose :",a:"Maître des diagrammes",b:"Maître du rendu"},{q:"À finir en une journée :",a:"Portfolio de 40 pages",b:"Maquette finale au 1:50"},{q:"Le retour de jury le plus désespérant :",a:"« À refaire. »",b:"« Hmm...... (silence) Bon, continue comme ça. »"},{q:"Ton rôle en projet de groupe :",a:"Responsable CAO/plans à vie",b:"Responsable maquette à vie"},{q:"Panneaux récupérés à l'imprimerie, le moins pire :",a:"Couleurs complètement différentes de l'écran",b:"Pages dans le désordre"},{q:"Choisis ta place à l'atelier :",a:"Coin fenêtre (soleil, mais glacial l'hiver)",b:"Face à la porte (tout le monde voit ton écran)"},{q:"L'habitude du voisin, la plus pénible :",a:"Ronflements pendant la nuit blanche",b:"Appels téléphoniques à l'aube"},{q:"Un stage se présente !",a:"Agence célèbre, non payé, un an",b:"Petite agence de quartier, payé, un an"},{q:"Tu perds une chose à vie :",a:"Écrire les cartouches à la main",b:"Calculer les cotes de tête"},{q:"Une confusion maudite à vie :",a:"Emprise au sol et COS toujours mélangés",b:"Le nord du plan toujours introuvable"},{q:"Une seule structure pour la vie :",a:"Poteaux-poutres uniquement",b:"Murs porteurs uniquement"},{q:"Le seul détail que tu dessineras à vie :",a:"Détail d'escalier uniquement",b:"Détail de salle de bain uniquement"},{q:"Choisis la fin de ton jury :",a:"Idée brillante mais présentation ratée",b:"Idée banale mais présentation triomphale"},{q:"En voyage d'étude, une seule option :",a:"Photos uniquement (croquis interdits)",b:"Croquis uniquement (photos interdites)"},{q:"Ton style de maquette à vie :",a:"Maquettes blanches immaculées",b:"Maquettes matériaux et couleurs"},{q:"Composition du groupe :",a:"Même équipe pendant 4 ans (qu'on s'aime ou pas)",b:"Tirage au sort complet chaque semestre"},{q:"Ta maladie chronique de conception :",a:"Bon concept mais incapable de le développer",b:"Bon développement mais concept ennuyeux"},{q:"1 h avant le rendu, il reste :",a:"3 rendus 3D",b:"Coter tous les plans"},{q:"Ton avenir est scellé :",a:"Master recherche garanti",b:"Agence directe garantie"},{q:"Ton bâtiment se construit à condition :",a:"Nom de l'architecte non divulgué",b:"Ton nom reste mais honoraires à zéro"},{q:"Un seul métier à vie :",a:"Concours uniquement",b:"Intérieur uniquement"},{q:"Tes plans sont maudits :",a:"Tout le texte passe en Comic Sans",b:"Toutes les épaisseurs de trait deviennent identiques"},{q:"Un mois de vacances, choisis :",a:"Un mois sur un chantier",b:"Un mois d'heures sup en agence"},{q:"Une règle absurde s'impose à tes projets :",a:"Nombre de poteaux toujours impair",b:"Toutes les fenêtres carrées"},{q:"Défi des 100, tu choisis :",a:"Calquer 100 plans de maîtres",b:"100 maquettes de volumétrie"},{q:"La malédiction de ta présentation :",a:"Toutes les polices s'affichent cassées",b:"Toutes les images en basse résolution"},{q:"Un seul carburant de nuit blanche :",a:"Boissons énergisantes illimitées (café interdit)",b:"Café illimité (énergisantes interdites)"},{q:"Ta nourriture a disparu du frigo de l'atelier...",a:"Tu connais le coupable mais ne peux rien dire",b:"Tu ne sauras jamais qui c'est"},{q:"Mode de rendu à vie :",a:"Jury oral à vie (tremblements)",b:"Rendu écrit à vie (une ligne de retour)"},{q:"Accident pendant le transport de maquette !",a:"Le toit s'envole (le corps est intact)",b:"Le RDC est écrasé (le toit est intact)"},{q:"La malédiction de ton fichier CAO :",a:"Tout est dessiné sur le calque 0",b:"Tous les blocs sont décomposés"},{q:"Vivre sans un logiciel à vie :",a:"Sans Photoshop",b:"Sans Illustrator"},{q:"Le sujet le plus dur :",a:"Maison de 3 m de large",b:"Gymnase sans poteaux"},{q:"Choisis ton binôme de nuit blanche :",a:"Le bavard (drôle mais rien n'avance)",b:"Le silencieux (seul mais concentré)"},{q:"Tu gagnes un pouvoir :",a:"Proportions parfaites en 3 s sur tout croquis",b:"Mémoriser le plan de tout bâtiment vu une fois"},{q:"Le destin de ton portfolio :",a:"Design moche mais contenu solide",b:"Design stylé mais contenu vide"},{q:"Résultat de ton concours :",a:"Recalé mais commentaires détaillés",b:"Mentionné mais aucun commentaire"},{q:"Ton environnement de travail à vie :",a:"1 écran + fauteuil haut de gamme",b:"3 écrans + banc en bois"},{q:"Un dîner avec :",a:"Le Corbusier",b:"Zaha Hadid"},{q:"Un ticket de machine à remonter le temps :",a:"Chantier du Panthéon",b:"Chantier des Pyramides"},{q:"Une nuit dans une maison culte :",a:"La Maison sur la cascade (ASMR de chute d'eau)",b:"La Villa Savoye (modernisme pur)"},{q:"Apprendre auprès d'un maître :",a:"Mies van der Rohe",b:"Frank Lloyd Wright"},{q:"Une seule esthétique à vie :",a:"Minimalisme (Less is more)",b:"Maximalisme (Less is bore)"},{q:"Un seul matériau structurel à vie :",a:"Bois uniquement",b:"Acier uniquement"},{q:"La maison de ta vie :",a:"Vieille maison de village (charme, mais glaciale l'hiver)",b:"Appartement neuf (pratique mais sans âme)"},{q:"Participer à un projet national :",a:"Concevoir un monument futuriste pour le Grand Paris",b:"Restaurer Notre-Dame"},{q:"Un mois de voyage d'architecture :",a:"L'Europe (du classique au contemporain)",b:"Le Japon (pays du détail et de la finition)"},{q:"Posséder un chef-d'œuvre :",a:"L'Église de la Lumière",b:"La Maison Farnsworth"},{q:"Habitat extrême, choisis :",a:"Penthouse en très grande hauteur (peur de la panne d'ascenseur)",b:"Bunker souterrain confortable (sans fenêtre)"},{q:"Un seul style à défendre à vie :",a:"Brutalisme",b:"Baroque"},{q:"Un seul programme à vie :",a:"Musées et galeries uniquement",b:"Architecture religieuse uniquement"},{q:"Le style gravé dans ta main :",a:"Les courbes fluides de Zaha",b:"Les lignes parfaites de Mies"},{q:"Un seul type d'expert à vie :",a:"Concepteur de ponts",b:"Concepteur de tours"},{q:"Choisis un pouvoir mystique :",a:"Parler aux bâtisseurs des Sept Merveilles",b:"Voir l'architecture dans 100 ans"},{q:"Un chef-d'œuvre de lumière, un seul :",a:"La chapelle de Ronchamp",b:"Le musée Kimbell"},{q:"Ta gloire d'architecte :",a:"Le monument emblématique de ta ville",b:"Un chef-d'œuvre caché quelque part dans le monde"},{q:"Un seul métier à vie :",a:"Réhabilitation et reconversion uniquement",b:"Neuf uniquement"},{q:"Hériter d'une paire de mains :",a:"Les mains froissantes de Gehry",b:"Les mains à ossatures de Calatrava"},{q:"L'héritage de l'architecte :",a:"1 bâtiment qui dure 100 ans",b:"100 bâtiments qui durent 10 ans"},{q:"Terrain extrême, choisis :",a:"30 m² en plein centre de Paris",b:"3 hectares au fond de la montagne"},{q:"Un grand prix mondial :",a:"Le Pritzker (Nobel de l'architecture)",b:"Le Lion d'or de la Biennale de Venise"},{q:"Un lieu t'est interdit à vie :",a:"Toutes les cathédrales d'Europe",b:"Tous les observatoires de gratte-ciel"},{q:"L'identité de ton agence :",a:"Atelier solo (libre mais précaire)",b:"Associé d'une grande agence (stable mais corporate)"},{q:"Ta façon de voyager :",a:"Cocher les monuments célèbres au pas de course",b:"Flâner dans les ruelles et l'architecture ordinaire"},{q:"Un seul toit à vie :",a:"Toit-terrasse végétalisé (enfer d'entretien)",b:"Toit à deux pentes (avec combles)"},{q:"Ton goût spatial :",a:"5 m sous plafond (facture de chauffage explosive)",b:"2,2 m cosy (un peu oppressant)"},{q:"Ton goût de fenêtre :",a:"Baie vitrée du sol au plafond (rideaux obligatoires)",b:"Plein de petites fenêtres (la lumière comme un tableau)"},{q:"Ton goût d'escalier :",a:"Escalier hélicoïdal (beau mais enfer du déménagement)",b:"Escalier droit (pratique mais ennuyeux)"},{q:"Une seule saison à vie :",a:"Été éternel (clim à fond à l'atelier)",b:"Hiver éternel (la colle sèche vite)"},{q:"La malédiction du déplacement :",a:"Escaliers uniquement à vie (ascenseur interdit)",b:"Ascenseur uniquement à vie (escaliers interdits)"},{q:"Un outil s'incarne en toi :",a:"Ta main droite devient un kutch",b:"Ta main gauche devient un cutter"},{q:"Un seul en-cas de nuit blanche :",a:"Nouilles instantanées + sandwich de supérette",b:"Kebab livré (30 min d'attente)"},{q:"Le goûter de l'atelier est verrouillé :",a:"Bonbons illimités",b:"Chips illimitées"},{q:"Seul dans l'ascenseur avec ton prof !",a:"Tu lances la conversation sur le projet",b:"Silence parfait jusqu'au rez-de-chaussée"},{q:"Personne devant ton panneau...",a:"Tu hèles toi-même les passants",b:"Tu tiens bon en silence"},{q:"Le prof semble s'endormir pendant ton jury !",a:"Tu hausses la voix",b:"Tu écourtes discrètement"},{q:"Un camarade arrive avec un concept proche du tien !",a:"Tu en parles tout de suite pour clarifier",b:"Tu changes ton concept"},{q:"Ton voisin de nuit blanche se met à pleurer...",a:"Tu lui tends une barre chocolatée sans un mot",b:"Tu pleures avec lui"},{q:"10 min avant le rendu, 5 personnes avant toi au traceur !",a:"Tu supplies pour passer devant",b:"Tu acceptes ton destin et fais la queue"},{q:"Le prof secoue ta maquette dans tous les sens !",a:"Tu dis « Attention, s'il vous plaît »",b:"Tu pries pour qu'elle ne casse pas"},{q:"Tu trouves un portefeuille. Il est à l'atelier rival...",a:"Tu le rends immédiatement (évidemment)",b:"Tu le rends en te faisant bien mousser"},{q:"« Des questions ? » Silence, 5 secondes...",a:"Tu poses n'importe quoi pour briser le silence",b:"Tu fixes le sol (croiser son regard = fin)"},{q:"Tout refaire ou continuer, rendu dans 3 jours !",a:"Tu renverses tout (sans regret)",b:"Tu mises tout sur le développement"},{q:"Pendant la présentation : « euh... c'est-à-dire... »",a:"Tu dis honnêtement « un instant » et te ressaisis",b:"Tu enchaînes n'importe quoi et tentes le coup"},{q:"Un ami trouve ton projet « un peu banal »...",a:"Tu l'admets et demandes conseil",b:"Tu prêches 3 minutes l'esthétique de la banalité"},{q:"Coupure de courant totale à l'atelier, à l'aube !",a:"Lampe du téléphone et tu continues",b:"C'est le destin, tu rentres"},{q:"Le prof adore la maquette d'étude que tu avais jetée !",a:"Tu avoues « en fait je l'avais jetée »",b:"Tu déclares « c'est mon vrai projet » et la ressuscites"},{q:"Au jury public, un invité demande : « Pourquoi ? »",a:"Tu fonces avec ta logique préparée",b:"« Excellente question ! » pour gagner du temps"},{q:"Un seul matériau de façade à vie :",a:"Brique rouge uniquement",b:"Panneaux métalliques uniquement"},{q:"Un dîner avec un maître français :",a:"Jean Nouvel",b:"Christian de Portzamparc"},{q:"Une seule visite d'étude possible :",a:"Le Mont-Saint-Michel",b:"La Sainte-Chapelle"},{q:"La langue de tes panneaux est verrouillée :",a:"Tout en anglais (classe, mais gare aux fautes)",b:"Tout en français (honnête, mais casse-tête typographique)"},{q:"La malédiction du plan-masse, choisis :",a:"Dessiner 1000 arbres à la main",b:"Refaire tout le plan de stationnement"},{q:"Ton temps de présentation à vie :",a:"3 minutes (enfer de la compression)",b:"30 minutes (enfer du silence)"},{q:"Photo de maquette, renonce à un :",a:"Sans éclairage (lampe de téléphone seulement)",b:"Sans retouche (rendu tel quel)"},{q:"Trahison de l'ordi avant le rendu, le moins pire :",a:"Mise à jour forcée du système",b:"Découvrir que la sauvegarde auto était désactivée"},{q:"L'erreur repérée par le prof, la moins douloureuse :",a:"Une faute d'orthographe en plein milieu du panneau",b:"Une erreur d'échelle sur la coupe"},{q:"Ton outil de croquis à vie :",a:"Calque + feutre uniquement",b:"iPad uniquement"},{q:"Ta carrière de concours :",a:"UN grand prix (tout le reste recalé)",b:"Dix mentions (aucun grand prix)"},{q:"Choisis ta chaise d'atelier :",a:"Moelleuse mais grince au moindre mouvement",b:"Dure comme la pierre mais silencieuse"},{q:"Une contrainte te suit à vie :",a:"Orientation sud interdite",b:"Ouvertures limitées à 20 %"},{q:"La poisse du jour de visite, choisis :",a:"Pluie battante toute la journée",b:"Fermé à l'arrivée"},{q:"Le nom de ta future agence :",a:"Ton propre nom (Agence Untel)",b:"Un mot abstrait stylé (à expliquer toute ta vie)"},{q:"Le style du sujet :",a:"100 pages d'analyse + liberté totale",b:"Zéro analyse + cahier des charges étouffant"},{q:"Choisis ton terrain :",a:"Pente à 30 degrés",b:"Triangle aigu minuscule"},{q:"Format de jury à vie :",a:"Jury public en amphi devant toute l'école",b:"Huis clos en tête-à-tête avec le prof"},{q:"Petite malédiction de dessin :",a:"Les courbes de niveau jamais tout à fait raccord",b:"L'échelle graphique toujours oubliée"},{q:"La bande-son de la nuit blanche est imposée :",a:"Lo-fi forcé 24 h/24",b:"Silence absolu forcé (écouteurs interdits)"},{q:"Le destin de ton portfolio :",a:"Figé dans la plaquette de l'école (non modifiable)",b:"Scellé à jamais (personne ne le voit)"},{q:"Ton stand aux diplômes :",a:"Entrée en or (foule et vacarme)",b:"Coin tranquille (calme mais désert)"},{q:"Un cours de maître, un seul :",a:"La conférence mitraillette de Rem Koolhaas",b:"L'atelier silencieux de Peter Zumthor"},{q:"Échange de capacités, choisis :",a:"Cœur de verre + mains de génie",b:"Cœur d'acier + mains ordinaires"},{q:"Petite malédiction d'impression :",a:"Tout sort réduit de 1 %",b:"Toutes les marges légèrement de travers"},{q:"Une seule asso étudiante :",a:"Club de visites d'architecture",b:"Club de menuiserie"},{q:"Ton premier chantier :",a:"Rénovation d'une maison",b:"Tour de grande hauteur"},{q:"Sujet du studio de dernière année :",a:"Plan directeur à l'échelle urbaine",b:"Prototype de détail à l'échelle 1"},{q:"Petite malédiction CAO :",a:"Lignes de cote invisibles à l'écran",b:"Tous les styles de texte corrompus"},{q:"Une vidéo à voir 100 fois :",a:"Un documentaire d'architecture",b:"La scène de la ville qui se plie dans Inception"},{q:"Un seul mode de représentation à vie :",a:"Axonométrie uniquement",b:"Perspective à un point uniquement"},{q:"Le job d'été :",a:"Porter des briques un mois",b:"Plier 1000 plans A1"},{q:"La malédiction des affaires :",a:"Tu perds sans cesse ton kutch",b:"Tes mines cassent sans cesse"},{q:"Un seul type d'implantation à vie :",a:"Plans à cour uniquement",b:"Plans sur pilotis uniquement"},{q:"Le dilemme du toit :",a:"Toit-terrasse (angoisse de fuite à vie)",b:"Toit en pente (combles sauna à vie)"},{q:"Vérification réglementaire à vie :",a:"Ensoleillement uniquement",b:"Distances d'évacuation uniquement"},{q:"Ton langage de conception à vie :",a:"Les 5 points de Le Corbusier uniquement",b:"L'espace universel de Mies uniquement"},{q:"Choisis ta muse de conception :",a:"Tes rêves étranges de chaque nuit",b:"Les gens observés dans le métro"},{q:"Un seul compliment du prof, pour la vie :",a:"« Belle main » (le geste reconnu)",b:"« Belle pensée » (le concept reconnu)"},{q:"Le destin de ton bâtiment :",a:"Célèbre grâce à un surnom moqueur du public",b:"Sans surnom, respecté en silence"},{q:"Veille du rendu, un cheat code :",a:"Arrêter le temps 3 h (toi seul bouges)",b:"Invoquer un camarade (assistant 3 h)"}];
 const QBANK_IT=[{q:"La notte prima della consegna, una delle due è certa:",a:"Tutti i file di lavoro spariscono",b:"Il plotter si rompe la mattina della consegna"},{q:"Una sola arma fino alla laurea:",a:"Solo disegno a mano, per sempre",b:"Solo plastici (esonerato dalle tavole)"},{q:"In revisione, cosa è più duro da reggere?",a:"20 minuti di critiche punto per punto",b:"3 minuti di silenzio... poi «Il prossimo»"},{q:"Il prezzo della nottata, scegli:",a:"Una settimana di notti in bianco e un 30",b:"Uscire in orario ogni giorno e un 20"},{q:"Un solo materiale per tutta la carriera:",a:"Tutto vetro (vita da facciata continua)",b:"Tutto cemento a vista"},{q:"Il tuo rapporto con l'aula studio:",a:"Viverci direttamente (sacco a pelo incluso)",b:"Divieto d'ingresso a vita (si lavora da casa)"},{q:"Trasportare il plastico finale:",a:"Metro strapiena in ora di punta",b:"30 min a piedi sotto il temporale (ombrello in una mano)"},{q:"Scegli la tua maledizione:",a:"Dimenticare tutte le scorciatoie CAD (solo mouse)",b:"Tutti i PSD ricevuti hanno i livelli uniti"},{q:"Metodo di plastico, uno solo:",a:"100 plastici di studio",b:"UN solo plastico finale, zero errori ammessi"},{q:"Il tuo stile è bloccato a vita:",a:"Curve vietate (solo angoli retti)",b:"Rette vietate (tutto curve)"},{q:"Il destino della tua tesi:",a:"Viene davvero costruita (nessuna modifica)",b:"Resta per sempre sulla carta"},{q:"Un solo strumento 3D per la vita:",a:"Solo SketchUp",b:"Solo Rhino"},{q:"Scegli la didattica:",a:"Sopralluogo ogni settimana (relazione da consegnare)",b:"Zero visite, 4 anni di sola teoria"},{q:"Il tuo relatore:",a:"Affettuoso ma ti fa rifare tutto ogni settimana",b:"Zero feedback, indifferente a qualunque consegna"},{q:"Un'attrezzatura gratis a vita:",a:"Stampante 3D illimitata",b:"Taglio laser illimitato"},{q:"Un solo tema di progetto a vita:",a:"Solo grattacieli",b:"Solo case unifamiliari"},{q:"Il mattino dopo la nottata, il meno peggio:",a:"Compito di scienza delle costruzioni alle 8",b:"Revisione alle 9 in punto, tocchi per primo"},{q:"La tua croce con la colla, scegli:",a:"La vinilica non va più via dalle mani",b:"Tagliare il polistirene senza taglierino"},{q:"Il tuo futuro da architetto:",a:"Famoso nel mondo ma squattrinato a vita",b:"Sconosciuto a tutti ma ricco"},{q:"Le 4 di notte in aula studio, il tuo stato:",a:"Voglia improvvisa di ribaltare tutto il concept",b:"Il concept regge ma la mano non va"},{q:"La prima frase in revisione, la più temibile:",a:"«Questo l'ho già visto da qualche parte, no?»",b:"«Ehm... cos'è questo?»"},{q:"Un odore da sopportare a vita:",a:"Carta da lucido + pennarelli",b:"Colla spray"},{q:"Un solo materiale per plastici a vita:",a:"Solo polistirene",b:"Solo balsa"},{q:"Una sola scala per sempre:",a:"Solo 1:500 (solo volumi)",b:"Solo 1:20 (inferno del dettaglio)"},{q:"Eccelli in uno solo:",a:"Dio della pianta (sezioni disastrose)",b:"Dio della sezione (piante disastrose)"},{q:"Diventa maestro di una cosa sola:",a:"Maestro dei diagrammi",b:"Maestro dei render"},{q:"Da finire in un giorno:",a:"Portfolio di 40 pagine",b:"Plastico finale in 1:50"},{q:"Il feedback più disperante del prof:",a:"«Da rifare.»",b:"«Mmm...... (silenzio) Vabbè, vai avanti così.»"},{q:"Il tuo ruolo nel gruppo:",a:"Responsabile CAD/tavole a vita",b:"Responsabile plastici a vita"},{q:"Tavole ritirate in copisteria, il meno peggio:",a:"Colori completamente diversi dallo schermo",b:"Pagine in ordine sbagliato"},{q:"Scegli il tuo posto in aula studio:",a:"Angolo finestra (sole, ma gelido d'inverno)",b:"Davanti alla porta (tutti vedono il tuo schermo)"},{q:"L'abitudine del vicino, la più molesta:",a:"Russare durante la nottata",b:"Telefonate all'alba"},{q:"Arriva un tirocinio!",a:"Studio famoso, non pagato, un anno",b:"Piccolo studio di quartiere, pagato, un anno"},{q:"Perdi una cosa per sempre:",a:"Scrivere le tavole a mano",b:"Calcolare le quote a mente"},{q:"Una confusione maledetta a vita:",a:"Superficie coperta e indice sempre confusi",b:"Il nord della tavola sempre introvabile"},{q:"Una sola struttura per la vita:",a:"Solo telaio",b:"Solo setti portanti"},{q:"L'unico dettaglio che disegnerai a vita:",a:"Solo dettaglio scala",b:"Solo dettaglio bagno"},{q:"Scegli il finale della revisione:",a:"Idea geniale ma presentazione disastrosa",b:"Idea banale ma presentazione trionfale"},{q:"In sopralluogo, una sola opzione:",a:"Solo foto (schizzi vietati)",b:"Solo schizzi (foto vietate)"},{q:"Il tuo stile di plastico a vita:",a:"Solo plastici bianchi immacolati",b:"Solo plastici con materiali e colori"},{q:"Composizione del gruppo:",a:"Stessa squadra per 4 anni (nel bene e nel male)",b:"Sorteggio totale ogni semestre"},{q:"La tua malattia cronica di progetto:",a:"Ottimo concept ma incapace di svilupparlo",b:"Ottimo sviluppo ma concept noioso"},{q:"1 ora alla consegna, resta da fare:",a:"3 render",b:"Quotare tutte le tavole"},{q:"Il tuo futuro è deciso:",a:"Magistrale garantita",b:"Studio subito, garantito"},{q:"Il tuo edificio si costruisce a condizione:",a:"Nome del progettista segreto",b:"Il nome resta ma parcella a zero"},{q:"Un solo mestiere a vita:",a:"Solo concorsi",b:"Solo interni"},{q:"Le tue tavole sono maledette:",a:"Tutti i testi diventano Comic Sans",b:"Tutti gli spessori di linea diventano uguali"},{q:"Un mese d'estate, scegli:",a:"Un mese in cantiere",b:"Un mese di straordinari in studio"},{q:"Una regola assurda sui tuoi progetti:",a:"Numero di pilastri sempre dispari",b:"Tutte le finestre quadrate"},{q:"Sfida dei 100, scegli:",a:"Ricalcare 100 tavole dei maestri",b:"100 plastici di volumetria"},{q:"La maledizione della presentazione:",a:"Tutti i font si vedono corrotti",b:"Tutte le immagini a bassa risoluzione"},{q:"Un solo carburante da nottata:",a:"Energy drink illimitati (caffè vietato)",b:"Caffè illimitato (energy drink vietati)"},{q:"Il tuo cibo è sparito dal frigo dell'aula...",a:"Sai chi è stato ma non puoi dirlo",b:"Non saprai mai chi è stato"},{q:"Modalità di consegna a vita:",a:"Revisione orale a vita (tremarella)",b:"Consegna scritta a vita (feedback di una riga)"},{q:"Incidente trasportando il plastico!",a:"Vola via il tetto (il corpo è intatto)",b:"Si schiaccia il piano terra (il tetto è intatto)"},{q:"La maledizione del tuo file CAD:",a:"Tutto disegnato sul layer 0",b:"Tutti i blocchi esplosi"},{q:"Vivere senza un software a vita:",a:"Senza Photoshop",b:"Senza Illustrator"},{q:"Il tema più difficile:",a:"Casa larga 3 metri",b:"Palestra senza pilastri"},{q:"Scegli il compagno di nottata:",a:"Il chiacchierone (divertente ma non si avanza)",b:"Il silenzioso (solitario ma concentrato)"},{q:"Ottieni un potere:",a:"Proporzioni perfette in 3 secondi su ogni schizzo",b:"Memorizzare la pianta di ogni edificio visto una volta"},{q:"Il destino del tuo portfolio:",a:"Grafica brutta ma contenuti solidi",b:"Grafica cool ma contenuti vuoti"},{q:"Risultato del concorso:",a:"Escluso ma con giudizi dettagliati",b:"Menzionato ma senza alcun giudizio"},{q:"Il tuo ambiente di lavoro a vita:",a:"1 monitor + poltrona di lusso",b:"3 monitor + panca di legno"},{q:"Una cena con:",a:"Le Corbusier",b:"Zaha Hadid"},{q:"Un biglietto per la macchina del tempo:",a:"Cantiere del Pantheon",b:"Cantiere delle Piramidi"},{q:"Una notte in una casa-capolavoro:",a:"Casa sulla cascata (ASMR di cascata)",b:"Villa Savoye (modernismo puro)"},{q:"Impara da un maestro:",a:"Mies van der Rohe",b:"Frank Lloyd Wright"},{q:"Una sola estetica per la vita:",a:"Minimalismo (Less is more)",b:"Massimalismo (Less is bore)"},{q:"Un solo materiale strutturale a vita:",a:"Solo legno",b:"Solo acciaio"},{q:"La casa della tua vita:",a:"Casale di paese (fascino, ma gelido d'inverno)",b:"Appartamento nuovo (comodo ma tutto uguale)"},{q:"Partecipa a un progetto nazionale:",a:"Progettare un landmark futuristico",b:"Restaurare il Colosseo"},{q:"Un mese di viaggio d'architettura:",a:"L'Europa (dal classico al contemporaneo)",b:"Il Giappone (paese del dettaglio e delle finiture)"},{q:"Possiedi un capolavoro:",a:"La Chiesa della Luce",b:"Casa Farnsworth"},{q:"Abitare estremo, scegli:",a:"Attico in un supergrattacielo (terrore del guasto ascensore)",b:"Bunker sotterraneo confortevole (senza finestre)"},{q:"Un solo stile da difendere a vita:",a:"Brutalismo",b:"Barocco"},{q:"Un solo programma a vita:",a:"Solo musei e gallerie",b:"Solo architettura religiosa"},{q:"Lo stile inciso nella tua mano:",a:"Le curve fluide di Zaha",b:"Le linee perfette di Mies"},{q:"Un solo tipo di esperto a vita:",a:"Progettista di ponti",b:"Progettista di torri"},{q:"Scegli un potere mistico:",a:"Parlare con i costruttori delle Sette Meraviglie",b:"Vedere l'architettura tra 100 anni"},{q:"Un capolavoro di luce, uno solo:",a:"La cappella di Ronchamp",b:"Il museo Kimbell"},{q:"La tua gloria di progettista:",a:"Il landmark della tua città",b:"Un capolavoro nascosto chissà dove nel mondo"},{q:"Un solo mestiere a vita:",a:"Solo recupero e riuso",b:"Solo nuove costruzioni"},{q:"Eredita un paio di mani:",a:"Le mani accartoccianti di Gehry",b:"Le mani a scheletro di Calatrava"},{q:"L'eredità dell'architetto:",a:"1 edificio che dura 100 anni",b:"100 edifici che durano 10 anni"},{q:"Lotto estremo, scegli:",a:"30 m² nel pieno centro di Roma",b:"3 ettari in mezzo alla montagna"},{q:"Un gran premio mondiale:",a:"Il Pritzker (Nobel dell'architettura)",b:"Il Leone d'oro della Biennale di Venezia"},{q:"Un luogo ti è vietato a vita:",a:"Tutte le cattedrali d'Europa",b:"Tutti i belvedere dei grattacieli"},{q:"L'identità del tuo studio:",a:"Atelier da solo (libero ma precario)",b:"Socio di un grande studio (stabile ma vita aziendale)"},{q:"Il tuo modo di viaggiare:",a:"Spuntare i monumenti famosi di corsa",b:"Vagare tra vicoli e architettura quotidiana"},{q:"Un solo tetto per la vita:",a:"Tetto giardino (inferno di manutenzione)",b:"Tetto a falde (con sottotetto)"},{q:"Il tuo gusto spaziale:",a:"5 m di altezza, ariosità (bolletta esplosiva)",b:"2,2 m accogliente (un po' opprimente)"},{q:"Il tuo gusto di finestre:",a:"Vetrata a tutta altezza (tende obbligatorie)",b:"Tante finestrelle (la luce come un quadro)"},{q:"Il tuo gusto di scale:",a:"Scala a chiocciola (bella ma inferno del trasloco)",b:"Scala dritta (pratica ma noiosa)"},{q:"Una sola stagione per sempre:",a:"Estate eterna (aria condizionata a palla in aula)",b:"Inverno eterno (la colla asciuga in fretta)"},{q:"La maledizione degli spostamenti:",a:"Solo scale a vita (ascensore vietato)",b:"Solo ascensore a vita (scale vietate)"},{q:"Uno strumento si incarna in te:",a:"La mano destra diventa uno scalimetro",b:"La mano sinistra diventa un taglierino"},{q:"Un solo spuntino da nottata:",a:"Noodles istantanei + panino del distributore",b:"Pizza a domicilio (30 min d'attesa)"},{q:"Lo snack dell'aula studio è bloccato:",a:"Caramelle gommose illimitate",b:"Patatine illimitate"},{q:"Da solo in ascensore col prof!",a:"Attacchi tu il discorso sul progetto",b:"Silenzio perfetto fino al piano terra"},{q:"Nessuno davanti alla tua tavola...",a:"Fai tu stesso da imbonitore",b:"Resisti in silenzio"},{q:"Il prof sembra addormentarsi in revisione!",a:"Alzi la voce",b:"Accorci di nascosto"},{q:"Un collega arriva con un concept simile al tuo!",a:"Ne parli subito per chiarire",b:"Cambi tu il concept"},{q:"Il vicino di nottata scoppia a piangere...",a:"Gli porgi una barretta in silenzio",b:"Piangi con lui"},{q:"10 min alla consegna, 5 in coda al plotter!",a:"Supplichi per passare avanti",b:"Accetti il destino e ti metti in fila"},{q:"Il prof afferra il tuo plastico e lo scuote!",a:"Dici «Attenzione, per favore»",b:"Preghi solo che non si rompa"},{q:"Trovi un portafoglio. È del laboratorio rivale...",a:"Lo restituisci subito (ovvio)",b:"Lo restituisci facendotelo pesare ben bene"},{q:"«Domande?» Silenzio, 5 secondi...",a:"Chiedi qualsiasi cosa per rompere il silenzio",b:"Fissi il pavimento (incrociare lo sguardo = fine)"},{q:"Rifare tutto o proseguire, consegna tra 3 giorni!",a:"Ribalti tutto (senza rimpianti)",b:"Punti tutto sullo sviluppo"},{q:"Durante la presentazione: «ehm... cioè...»",a:"Dici onestamente «un attimo» e ti ricomponi",b:"Prosegui a ruota libera e te la giochi"},{q:"Un amico trova il tuo progetto «un po' banale»...",a:"Lo ammetti e chiedi consiglio",b:"Predichi 3 minuti l'estetica della banalità"},{q:"Blackout totale in aula studio all'alba!",a:"Torcia del telefono e si continua",b:"È il destino, si torna a casa"},{q:"Il prof loda il plastico di studio che avevi buttato!",a:"Confessi «veramente l'avevo buttato»",b:"Dichiari «quello è il mio vero progetto» e lo resusciti"},{q:"Alla revisione pubblica un esterno chiede: «Perché?»",a:"Sfondi con la logica preparata",b:"«Ottima domanda!» per guadagnare tempo"},{q:"Un solo materiale di facciata a vita:",a:"Solo mattone rosso",b:"Solo pannelli metallici"},{q:"Una cena con un maestro italiano:",a:"Renzo Piano",b:"Aldo Rossi"},{q:"Un solo sopralluogo possibile:",a:"Villa Adriana",b:"Il Duomo di Milano"},{q:"La lingua delle tue tavole è bloccata:",a:"Tutto in inglese (fa figo, ma occhio ai refusi)",b:"Tutto in italiano (onesto, ma che font uso?)"},{q:"La maledizione della planimetria, scegli:",a:"Disegnare 1000 alberi a mano",b:"Rifare tutto lo schema parcheggi"},{q:"Il tuo tempo di presentazione a vita:",a:"3 minuti (inferno della sintesi)",b:"30 minuti (inferno del silenzio)"},{q:"Foto del plastico, rinuncia a uno:",a:"Niente luci (solo torcia del telefono)",b:"Niente ritocco (si consegna com'è)"},{q:"Tradimento del PC prima della consegna, il meno peggio:",a:"Parte l'aggiornamento forzato del sistema",b:"Scopri che il salvataggio automatico era spento"},{q:"L'errore scovato dal prof, il meno doloroso:",a:"Un refuso in pieno centro della tavola",b:"Un errore di scala sulla sezione"},{q:"Il tuo strumento di schizzo a vita:",a:"Solo lucido + penna",b:"Solo iPad"},{q:"La tua carriera nei concorsi:",a:"UN primo premio (tutto il resto escluso)",b:"Dieci menzioni (nessun primo premio)"},{q:"Scegli la sedia dell'aula studio:",a:"Morbida ma cigola a ogni movimento",b:"Dura come il marmo ma silenziosa"},{q:"Un vincolo ti segue a vita:",a:"Esposizione a sud vietata",b:"Aperture limitate al 20%"},{q:"La sfortuna del giorno di sopralluogo, scegli:",a:"Diluvio tutto il giorno",b:"Chiuso all'arrivo"},{q:"Il nome del tuo futuro studio:",a:"Il tuo nome e basta (Studio Tal dei Tali)",b:"Una parola astratta figa (da spiegare a vita)"},{q:"Lo stile del bando:",a:"100 pagine di analisi + libertà totale",b:"Zero analisi + requisiti fittissimi"},{q:"Scegli il tuo lotto:",a:"Pendenza al 30%",b:"Triangolo acutissimo e minuscolo"},{q:"Formato di revisione a vita:",a:"Revisione pubblica in aula magna davanti a tutti",b:"A porte chiuse, tu e il prof"},{q:"Piccola maledizione del disegno:",a:"Le curve di livello mai perfettamente allineate",b:"La scala grafica sempre dimenticata"},{q:"La colonna sonora della nottata è imposta:",a:"Lo-fi forzato 24 ore su 24",b:"Silenzio assoluto forzato (auricolari vietati)"},{q:"Il destino del tuo portfolio:",a:"Immortalato nella brochure della facoltà (immodificabile)",b:"Sigillato per sempre (nessuno lo vede)"},{q:"Il tuo stand alla mostra di laurea:",a:"Posto d'oro all'ingresso (folla e baccano)",b:"Angolino tranquillo (quiete ma deserto)"},{q:"Una lezione di un maestro, una sola:",a:"La conferenza mitragliata di Rem Koolhaas",b:"Il laboratorio silenzioso di Peter Zumthor"},{q:"Scambio di capacità, scegli:",a:"Cuore di vetro + mani da genio",b:"Cuore d'acciaio + mani ordinarie"},{q:"Piccola maledizione di stampa:",a:"Tutto esce ridotto dell'1%",b:"Tutti i margini leggermente storti"},{q:"Una sola associazione studentesca:",a:"Club di visite d'architettura",b:"Club di falegnameria"},{q:"Il tuo primo cantiere:",a:"Ristrutturazione di una casa",b:"Supergrattacielo"},{q:"Tema del laboratorio dell'ultimo anno:",a:"Masterplan a scala urbana",b:"Mockup di dettaglio in scala 1:1"},{q:"Piccola maledizione CAD:",a:"Linee di quota invisibili a schermo",b:"Tutti gli stili di testo corrotti"},{q:"Un video da vedere 100 volte:",a:"Un documentario d'architettura",b:"La scena della città che si piega in Inception"},{q:"Un solo modo di rappresentare a vita:",a:"Solo assonometria",b:"Solo prospettiva centrale"},{q:"Il lavoretto estivo:",a:"Portare mattoni per un mese",b:"Piegare 1000 tavole A1"},{q:"La maledizione degli oggetti:",a:"Perdi in continuazione lo scalimetro",b:"Le mine si spezzano in continuazione"},{q:"Un solo tipo di impianto a vita:",a:"Solo schemi a corte",b:"Solo schemi su pilotis"},{q:"Il dilemma del tetto:",a:"Tetto piano (ansia da infiltrazioni a vita)",b:"Tetto a falde (sottotetto sauna a vita)"},{q:"Verifica normativa a vita:",a:"Solo soleggiamento",b:"Solo distanze di fuga"},{q:"Il tuo linguaggio di progetto a vita:",a:"Solo i 5 punti di Le Corbusier",b:"Solo lo spazio universale di Mies"},{q:"Scegli la tua musa progettuale:",a:"I sogni strani di ogni notte",b:"Le persone osservate in metropolitana"},{q:"Un solo complimento del prof, per la vita:",a:"«Che bella mano» (riconosciuto il gesto)",b:"«Che bella testa» (riconosciuto il concept)"},{q:"Il destino del tuo edificio:",a:"Famoso per un soprannome buffo dato dai cittadini",b:"Senza soprannome, rispettato in silenzio"},{q:"Vigilia della consegna, un trucco:",a:"Fermare il tempo per 3 ore (solo tu ti muovi)",b:"Evocare un collega (assistente per 3 ore)"}];
-const QBANK_DE=[{q:"Die Nacht vor der Abgabe — eines passiert garantiert:",a:"Alle Arbeitsdateien sind weg",b:"Der Plotter streikt am Abgabemorgen"},{q:"Nur eine Waffe bis zum Abschluss:",a:"Nur Handzeichnung, lebenslang",b:"Nur Modelle (von Plänen befreit)"},{q:"In der Kritik — was ist schwerer auszuhalten?",a:"20 Minuten Punkt-für-Punkt-Verriss",b:"3 Minuten Schweigen... dann „Der Nächste“"},{q:"Der Preis der Nachtschicht, wähle:",a:"Eine Woche durchmachen und eine 1,0",b:"Jeden Tag pünktlich gehen und eine 3,0"},{q:"Ein Material für die ganze Karriere:",a:"Alles Glas (Curtain-Wall-Leben)",b:"Alles Sichtbeton"},{q:"Dein Verhältnis zum Zeichensaal:",a:"Gleich dort einziehen (Schlafsack inklusive)",b:"Lebenslanges Hausverbot (nur Homeoffice)"},{q:"Transport des finalen Modells:",a:"Volle U-Bahn im Berufsverkehr",b:"30 Minuten zu Fuß im Platzregen (Schirm in einer Hand)"},{q:"Wähl deinen Fluch:",a:"Alle CAD-Shortcuts vergessen (nur Maus)",b:"Jede erhaltene PSD hat vereinte Ebenen"},{q:"Modellbau-Methode, nur eine:",a:"100 Arbeitsmodelle",b:"EIN finales Modell, kein Fehler erlaubt"},{q:"Dein Stil ist lebenslang fixiert:",a:"Kurven verboten (nur rechte Winkel)",b:"Geraden verboten (alles Freiform)"},{q:"Das Schicksal deiner Thesis:",a:"Sie wird wirklich gebaut (keine Änderung möglich)",b:"Sie bleibt für immer auf dem Papier"},{q:"Nur ein 3D-Tool fürs Leben:",a:"Nur SketchUp",b:"Nur Rhino"},{q:"Wähl die Lehrmethode:",a:"Jede Woche Exkursion (mit Bericht)",b:"Null Exkursionen, 4 Jahre reine Theorie"},{q:"Dein Betreuer:",a:"Herzlich, lässt dich aber wöchentlich alles umwerfen",b:"Null Feedback, egal was du abgibst"},{q:"Ein Gerät lebenslang gratis:",a:"3D-Drucker unbegrenzt",b:"Lasercutter unbegrenzt"},{q:"Ein Entwurfsthema fürs Leben:",a:"Nur Hochhäuser",b:"Nur Einfamilienhäuser"},{q:"Der Morgen nach der Nachtschicht — was ist weniger schlimm?",a:"Statik-Test um 8 Uhr",b:"Kritik um Punkt 9, du bist als Erster dran"},{q:"Dein Kreuz mit dem Kleber, wähle:",a:"Holzleim geht nie wieder von den Händen",b:"Styropor schneiden ohne Cutter"},{q:"Deine Zukunft als Architekt:",a:"Weltberühmt, aber lebenslang pleite",b:"Völlig unbekannt, aber reich"},{q:"4 Uhr morgens im Zeichensaal, dein Zustand:",a:"Plötzlich das ganze Konzept umwerfen wollen",b:"Konzept steht, aber die Hand bewegt sich nicht"},{q:"Der erste Satz in der Kritik — welcher ist gruseliger?",a:"„Das hab ich doch schon mal irgendwo gesehen?“",b:"„Hm... was ist das denn?“"},{q:"Ein Geruch für den Rest des Lebens:",a:"Transparentpapier + Marker",b:"Sprühkleber"},{q:"Nur ein Modellbaumaterial lebenslang:",a:"Nur Finnpappe",b:"Nur Balsa"},{q:"Nur ein Maßstab für immer:",a:"Nur 1:500 (nur Baumasse)",b:"Nur 1:20 (Detailhölle)"},{q:"Du bist nur in einem brillant:",a:"Grundriss-Gott (Schnitte katastrophal)",b:"Schnitt-Gott (Grundrisse katastrophal)"},{q:"Werde Meister in genau einer Sache:",a:"Diagramm-Meister",b:"Rendering-Meister"},{q:"An einem Tag zu schaffen:",a:"40-seitiges Portfolio",b:"Finales Modell in 1:50"},{q:"Das hoffnungsloseste Prof-Feedback:",a:"„Nochmal.“",b:"„Hmm...... (Schweigen) Na gut, mach mal weiter so.“"},{q:"Deine Rolle in der Gruppenarbeit:",a:"Lebenslang CAD/Pläne",b:"Lebenslang Modellbau"},{q:"Pläne vom Copyshop — was ist weniger schlimm?",a:"Farben völlig anders als am Bildschirm",b:"Seiten in falscher Reihenfolge"},{q:"Wähl deinen Platz im Zeichensaal:",a:"Fensterecke (Sonne, aber eiskalt im Winter)",b:"Direkt an der Tür (alle sehen deinen Bildschirm)"},{q:"Die Angewohnheit des Sitznachbarn — was nervt mehr?",a:"Schnarchen in der Nachtschicht",b:"Telefonate im Morgengrauen"},{q:"Ein Praktikum winkt!",a:"Berühmtes Atelier, unbezahlt, ein Jahr",b:"Kleines Büro um die Ecke, bezahlt, ein Jahr"},{q:"Du verlierst eines für immer:",a:"Planbeschriftung von Hand",b:"Maße im Kopf rechnen"},{q:"Ein Verwechslungsfluch fürs Leben:",a:"GRZ und GFZ immer durcheinander",b:"Norden im Plan nie zu finden"},{q:"Nur ein Tragwerk fürs Leben:",a:"Nur Skelettbau",b:"Nur Wandbau"},{q:"Das einzige Detail, das du je zeichnest:",a:"Nur Treppendetail",b:"Nur Baddetail"},{q:"Wähl das Ende deiner Kritik:",a:"Geniale Idee, aber Präsentation vergeigt",b:"Banale Idee, aber Präsentation triumphal"},{q:"Auf Exkursion nur eine Option:",a:"Nur Fotos (Skizzen verboten)",b:"Nur Skizzen (Fotos verboten)"},{q:"Dein Modellstil fürs Leben:",a:"Nur makellos weiße Modelle",b:"Nur Material- und Farbmodelle"},{q:"Zusammensetzung der Gruppe:",a:"4 Jahre dasselbe Team (ob man sich mag oder nicht)",b:"Jedes Semester komplett ausgelost"},{q:"Deine chronische Entwurfskrankheit:",a:"Starkes Konzept, aber keine Entwicklung",b:"Starke Entwicklung, aber ödes Konzept"},{q:"1 Stunde vor Abgabe fehlen noch:",a:"3 Renderings",b:"Alle Pläne bemaßen"},{q:"Deine Zukunft steht fest:",a:"Master garantiert",b:"Direkt ins Büro, garantiert"},{q:"Dein Gebäude wird gebaut — unter einer Bedingung:",a:"Name des Entwerfers bleibt geheim",b:"Name bleibt, aber Honorar gleich null"},{q:"Nur ein Beruf fürs Leben:",a:"Nur Wettbewerbe",b:"Nur Innenausbau"},{q:"Deine Pläne sind verflucht:",a:"Alle Texte werden zu Comic Sans",b:"Alle Linienstärken werden identisch"},{q:"Ein Monat Sommer, wähle:",a:"Ein Monat auf der Baustelle",b:"Ein Monat Überstunden im Büro"},{q:"Eine absurde Regel für deine Entwürfe:",a:"Stützenzahl immer ungerade",b:"Alle Fenster quadratisch"},{q:"100er-Challenge — was nimmst du?",a:"100 Meisterpläne durchpausen",b:"100 Massenmodelle bauen"},{q:"Der Fluch deiner Präsentation:",a:"Alle Schriften werden kaputt angezeigt",b:"Alle Bilder in Matschauflösung"},{q:"Nur ein Nachtschicht-Treibstoff:",a:"Energydrinks unbegrenzt (Kaffee verboten)",b:"Kaffee unbegrenzt (Energydrinks verboten)"},{q:"Dein Essen ist aus dem Saal-Kühlschrank verschwunden...",a:"Du kennst den Täter, darfst aber nichts sagen",b:"Du erfährst nie, wer es war"},{q:"Abgabeform fürs Leben:",a:"Lebenslang mündliche Kritik (Zittern)",b:"Lebenslang schriftlich (eine Zeile Feedback)"},{q:"Unfall beim Modelltransport!",a:"Das Dach fliegt weg (Korpus heil)",b:"Das Erdgeschoss ist zerquetscht (Dach heil)"},{q:"Der Fluch deiner CAD-Datei:",a:"Alles liegt auf Layer 0",b:"Alle Blöcke sind aufgelöst"},{q:"Ein Programm fehlt dir lebenslang:",a:"Ohne Photoshop leben",b:"Ohne Illustrator leben"},{q:"Die härtere Aufgabe:",a:"3 Meter schmales Haus",b:"Stützenfreie Großsporthalle"},{q:"Wähl deinen Nachtschicht-Partner:",a:"Der Quassler (lustig, aber nichts geht voran)",b:"Der Stille (einsam, aber konzentriert)"},{q:"Du erhältst eine Fähigkeit:",a:"Perfekte Proportionen in 3 Sekunden bei jeder Skizze",b:"Jeden Grundriss nach einmal Sehen auswendig"},{q:"Das Schicksal deines Portfolios:",a:"Hässliches Layout, aber starker Inhalt",b:"Schickes Layout, aber gähnende Leere"},{q:"Dein Wettbewerbsergebnis:",a:"Ausgeschieden, aber mit ausführlichem Juryurteil",b:"Anerkennung, aber null Kommentar"},{q:"Deine Arbeitsumgebung fürs Leben:",a:"1 Monitor + Luxusstuhl",b:"3 Monitore + Holzbank"},{q:"Ein Abendessen mit:",a:"Le Corbusier",b:"Zaha Hadid"},{q:"Ein Zeitmaschinen-Ticket:",a:"Baustelle des Pantheons",b:"Baustelle der Pyramiden"},{q:"Eine Nacht in einem Meisterhaus:",a:"Fallingwater (Wasserfall-ASMR)",b:"Villa Savoye (pure Moderne)"},{q:"Lerne bei einem Meister:",a:"Mies van der Rohe",b:"Frank Lloyd Wright"},{q:"Eine Ästhetik fürs Leben:",a:"Minimalismus (Less is more)",b:"Maximalismus (Less is bore)"},{q:"Nur ein Tragwerksmaterial fürs Leben:",a:"Nur Holzbau",b:"Nur Stahlbau"},{q:"Das Haus deines Lebens:",a:"Altbau (Charme und hohe Decken, im Winter eiskalt)",b:"Neubau (bequem, aber austauschbar)"},{q:"Ein nationales Projekt:",a:"Ein futuristisches Wahrzeichen entwerfen",b:"Ein Baudenkmal originalgetreu sanieren"},{q:"Ein Monat Architekturreise:",a:"Europa (von der Klassik bis heute)",b:"Japan (Land der Details und Fügungen)"},{q:"Besitze ein Meisterwerk:",a:"Die Kirche des Lichts",b:"Das Farnsworth House"},{q:"Extremes Wohnen, wähle:",a:"Penthouse im Superhochhaus (Angst vor Aufzugsausfall)",b:"Komfortabler Bunker unter der Erde (ohne Fenster)"},{q:"Nur ein Stil, den du lebenslang vertrittst:",a:"Brutalismus",b:"Barock"},{q:"Nur eine Bauaufgabe fürs Leben:",a:"Nur Museen und Galerien",b:"Nur Sakralbauten"},{q:"Der Stil, der sich in deine Hand gräbt:",a:"Zahas fließende Kurven",b:"Mies' perfekte Geraden"},{q:"Nur eine Expertise fürs Leben:",a:"Brückenentwerfer",b:"Turmentwerfer"},{q:"Wähl eine mystische Kraft:",a:"Mit den Erbauern der Sieben Weltwunder sprechen",b:"Die Architektur in 100 Jahren vorab sehen"},{q:"Ein Meisterwerk des Lichts, nur eines:",a:"Die Kapelle von Ronchamp",b:"Das Kimbell Art Museum"},{q:"Dein Ruhm als Entwerfer:",a:"Das Wahrzeichen deiner Heimatstadt",b:"Ein verstecktes Meisterwerk irgendwo auf der Welt"},{q:"Nur ein Beruf fürs Leben:",a:"Nur Umbau und Bauen im Bestand",b:"Nur Neubau"},{q:"Erbe ein Paar Hände:",a:"Gehrys knüllende Hände",b:"Calatravas Skeletthände"},{q:"Das Erbe des Architekten:",a:"1 Gebäude, das 100 Jahre hält",b:"100 Gebäude, die 10 Jahre halten"},{q:"Extremes Grundstück, wähle:",a:"30 m² mitten in Berlin",b:"3 Hektar tief in den Bergen"},{q:"Ein Weltpreis:",a:"Der Pritzker (Nobelpreis der Architektur)",b:"Der Goldene Löwe der Venedig-Biennale"},{q:"Ein Ort bleibt dir lebenslang verwehrt:",a:"Alle Kathedralen Europas",b:"Alle Hochhaus-Aussichtsplattformen"},{q:"Die Identität deines Büros:",a:"Solo-Atelier (frei, aber prekär)",b:"Partner im Großbüro (sicher, aber Konzernleben)"},{q:"Deine Art zu reisen:",a:"Berühmte Bauten im Schnelldurchlauf abhaken",b:"Durch Gassen und Alltagsarchitektur schlendern"},{q:"Nur ein Dach fürs Leben:",a:"Dachgarten (Wartungshölle)",b:"Satteldach (mit Dachboden)"},{q:"Dein Raumgeschmack:",a:"5 m Deckenhöhe, Weite (Heizkosten-Explosion)",b:"2,2 m Gemütlichkeit (leicht beengt)"},{q:"Dein Fenstergeschmack:",a:"Raumhohe Verglasung (Vorhänge Pflicht)",b:"Viele kleine Fenster (Licht wie gerahmte Bilder)"},{q:"Dein Treppengeschmack:",a:"Wendeltreppe (schön, aber Umzugshölle)",b:"Gerade Treppe (praktisch, aber öde)"},{q:"Nur eine Jahreszeit für immer:",a:"Ewiger Sommer (Klimaanlage im Saal auf Anschlag)",b:"Ewiger Winter (der Leim trocknet schnell)"},{q:"Der Fortbewegungsfluch:",a:"Lebenslang nur Treppen (Aufzug verboten)",b:"Lebenslang nur Aufzug (Treppen verboten)"},{q:"Ein Werkzeug fährt in dich:",a:"Deine rechte Hand wird zum Dreikantmaßstab",b:"Deine linke Hand wird zum Cuttermesser"},{q:"Nur ein Nachtschicht-Snack:",a:"Instantnudeln + Brötchen vom Späti",b:"Döner geliefert (30 Minuten Wartezeit)"},{q:"Der Saal-Snack ist festgelegt:",a:"Gummibärchen unbegrenzt",b:"Chips unbegrenzt"},{q:"Allein mit dem Prof im Aufzug!",a:"Du sprichst zuerst über den Entwurf",b:"Perfektes Schweigen bis ins Erdgeschoss"},{q:"Niemand vor deinem Plan...",a:"Du machst selbst den Marktschreier",b:"Du harrst still aus"},{q:"Der Prof scheint in deiner Kritik einzunicken!",a:"Du wirst lauter",b:"Du kürzt heimlich ab"},{q:"Ein Kommilitone bringt fast dein Konzept mit!",a:"Du sprichst es sofort an und klärst es",b:"Du änderst dein Konzept"},{q:"Dein Nachtschicht-Nachbar fängt an zu weinen...",a:"Du reichst wortlos einen Schokoriegel",b:"Du weinst mit"},{q:"10 Minuten vor Abgabe, 5 Leute vorm Plotter!",a:"Du bettelst dich nach vorn",b:"Du fügst dich dem Schicksal und stellst dich an"},{q:"Der Prof packt dein Modell und schüttelt es!",a:"Du sagst „Vorsicht, bitte“",b:"Du betest nur, dass nichts bricht"},{q:"Du findest ein Portemonnaie. Es gehört dem Rivalen-Studio...",a:"Du gibst es sofort zurück (klar)",b:"Du gibst es zurück und lässt es dir groß anrechnen"},{q:"„Fragen?“ Stille, 5 Sekunden...",a:"Du fragst irgendwas, um die Stille zu brechen",b:"Du starrst auf den Boden (Blickkontakt = Ende)"},{q:"Alles neu oder weitermachen — Abgabe in 3 Tagen!",a:"Du wirfst alles um (ohne Reue)",b:"Du setzt alles auf die Weiterentwicklung"},{q:"Mitten im Vortrag: „ähm... also...“",a:"Du sagst ehrlich „Moment bitte“ und sortierst dich",b:"Du redest einfach weiter und riskierst es"},{q:"Ein Freund findet deinen Entwurf „etwas bieder“...",a:"Du gibst es zu und bittest um Rat",b:"Du predigst 3 Minuten die Ästhetik des Gewöhnlichen"},{q:"Totaler Stromausfall im Saal, im Morgengrauen!",a:"Handylampe an und weitermachen",b:"Das ist Schicksal — ab nach Hause"},{q:"Der Prof lobt das Arbeitsmodell, das du weggeworfen hattest!",a:"Du gestehst: „Das hatte ich eigentlich weggeworfen“",b:"Du erklärst: „Das ist mein wahrer Entwurf“ und lässt es auferstehen"},{q:"In der öffentlichen Kritik fragt ein Gast: „Warum?“",a:"Du gehst mit vorbereiteter Logik in die Offensive",b:"„Gute Frage!“ — erstmal Zeit schinden"},{q:"Nur ein Fassadenmaterial fürs Leben:",a:"Nur roter Backstein",b:"Nur Metallpaneele"},{q:"Ein Abendessen mit einem deutschen Meister:",a:"Frei Otto",b:"Gottfried Böhm"},{q:"Nur eine Exkursion möglich:",a:"Der Kölner Dom",b:"Das Bauhaus Dessau"},{q:"Die Sprache deiner Pläne ist festgelegt:",a:"Alles Englisch (wirkt schick, Tippfehlergefahr)",b:"Alles Deutsch (ehrlich, aber welche Schrift?)"},{q:"Der Lageplan-Fluch, wähle:",a:"1000 Baumsymbole von Hand zeichnen",b:"Die komplette Stellplatzplanung neu machen"},{q:"Deine Vortragszeit, lebenslang fixiert:",a:"3 Minuten (Kompressionshölle)",b:"30 Minuten (Schweigehölle)"},{q:"Modellfoto — verzichte auf eines:",a:"Kein Licht-Equipment (nur Handylampe)",b:"Keine Nachbearbeitung (wie geschossen abgeben)"},{q:"PC-Verrat vor der Abgabe — was ist weniger schlimm?",a:"Zwangsupdate startet",b:"Autospeichern war die ganze Zeit aus"},{q:"Der vom Prof entdeckte Fehler — was schmerzt weniger?",a:"Tippfehler mitten auf dem Plan",b:"Maßstabsfehler im Schnitt"},{q:"Dein Skizzenwerkzeug fürs Leben:",a:"Nur Transparentpapier + Stift",b:"Nur iPad"},{q:"Deine Wettbewerbskarriere:",a:"EIN erster Preis (alles andere ausgeschieden)",b:"Zehn Anerkennungen (kein erster Preis)"},{q:"Wähl deinen Saalstuhl:",a:"Weich, aber quietscht bei jeder Bewegung",b:"Bretthart, aber lautlos"},{q:"Eine Auflage verfolgt dich lebenslang:",a:"Südausrichtung verboten",b:"Öffnungsanteil auf 20 % begrenzt"},{q:"Das Pech am Exkursionstag, wähle:",a:"Dauerregen den ganzen Tag",b:"Bei Ankunft geschlossen"},{q:"Der Name deines künftigen Büros:",a:"Dein eigener Name (Büro Soundso)",b:"Ein cooles Abstraktum (lebenslang erklären)"},{q:"Der Stil der Aufgabenstellung:",a:"100 Seiten Analyse + völlige Freiheit",b:"Null Analyse + erdrückende Vorgaben"},{q:"Wähl dein Grundstück:",a:"30-Grad-Steilhang",b:"Spitzwinkliges Mini-Dreieck"},{q:"Kritikformat, lebenslang fixiert:",a:"Öffentliche Kritik im Audimax vor der ganzen Fakultät",b:"1:1 hinter verschlossener Tür mit dem Prof"},{q:"Kleiner Zeichenfluch:",a:"Höhenlinien passen nie ganz zusammen",b:"Maßstabsleiste immer vergessen"},{q:"Der Nachtschicht-Sound ist vorgeschrieben:",a:"Lo-fi, 24 Stunden Zwangsbeschallung",b:"Absolute Stille erzwungen (Kopfhörer verboten)"},{q:"Das Schicksal deines Portfolios:",a:"In der Fakultätsbroschüre verewigt (nicht änderbar)",b:"Für immer versiegelt (niemand sieht es)"},{q:"Dein Stand auf der Abschlussausstellung:",a:"Toplage am Eingang (voll und laut)",b:"Ruhige Ecke (still, aber menschenleer)"},{q:"Eine Meisterklasse, nur eine:",a:"Rem Koolhaas' Vortrag im Maschinengewehrtempo",b:"Peter Zumthors Workshop des Schweigens"},{q:"Fähigkeitentausch, wähle:",a:"Glasherz + Geniehände",b:"Stahlherz + Durchschnittshände"},{q:"Kleiner Druckfluch:",a:"Alles kommt 1 % verkleinert heraus",b:"Alle Ränder leicht schief"},{q:"Nur eine Hochschulgruppe:",a:"Architektur-Exkursionsclub",b:"Tischlerei-Werkstattclub"},{q:"Deine erste Baustelle:",a:"Sanierung eines Wohnhauses",b:"Superhochhaus"},{q:"Thema des Abschluss-Studios:",a:"Masterplan im Stadtmaßstab",b:"Detail-Mockup im Maßstab 1:1"},{q:"Kleiner CAD-Fluch:",a:"Maßhilfslinien am Bildschirm unsichtbar",b:"Alle Textstile zerschossen"},{q:"Ein Video 100-mal ansehen:",a:"Eine Architektur-Doku",b:"Die Stadtfalt-Szene aus Inception"},{q:"Nur eine Darstellungsart fürs Leben:",a:"Nur Axonometrie",b:"Nur Zentralperspektive"},{q:"Der Ferienjob:",a:"Einen Monat Ziegel schleppen",b:"1000 A1-Pläne falten"},{q:"Der Fluch der Siebensachen:",a:"Du verlierst ständig den Dreikantmaßstab",b:"Deine Minen brechen ständig"},{q:"Nur ein Bebauungstyp fürs Leben:",a:"Nur Hofhaus-Schemata",b:"Nur aufgeständerte Schemata"},{q:"Das Dach-Dilemma:",a:"Flachdach (lebenslange Angst vor Lecks)",b:"Steildach (Dachboden lebenslang Sauna)"},{q:"Normprüfung, lebenslang zuständig für:",a:"Nur Verschattung/Besonnung",b:"Nur Fluchtweglängen"},{q:"Deine Entwurfssprache, lebenslang fixiert:",a:"Nur Corbusiers fünf Punkte",b:"Nur Mies' universeller Raum"},{q:"Wähl deine Entwurfsmuse:",a:"Deine seltsamen Träume jeder Nacht",b:"Die Leute, die du in der U-Bahn beobachtest"},{q:"Nur ein Prof-Lob, einmal im Leben:",a:"„Starke Hand“ (Handwerk anerkannt)",b:"„Starker Kopf“ (Konzept anerkannt)"},{q:"Das Schicksal deines Gebäudes:",a:"Berühmt durch einen frechen Spitznamen des Volkes",b:"Ohne Spitznamen, still respektiert"},{q:"Vorabend der Abgabe — ein Cheat:",a:"Zeit 3 Stunden anhalten (nur du bewegst dich)",b:"Einen Kommilitonen beschwören (3 Stunden Assistenz)"}];
+const QBANK_DE=[{q:"Die Nacht vor der Abgabe - eines passiert garantiert:",a:"Alle Arbeitsdateien sind weg",b:"Der Plotter streikt am Abgabemorgen"},{q:"Nur eine Waffe bis zum Abschluss:",a:"Nur Handzeichnung, lebenslang",b:"Nur Modelle (von Plänen befreit)"},{q:"In der Kritik - was ist schwerer auszuhalten?",a:"20 Minuten Punkt-für-Punkt-Verriss",b:"3 Minuten Schweigen... dann „Der Nächste“"},{q:"Der Preis der Nachtschicht, wähle:",a:"Eine Woche durchmachen und eine 1,0",b:"Jeden Tag pünktlich gehen und eine 3,0"},{q:"Ein Material für die ganze Karriere:",a:"Alles Glas (Curtain-Wall-Leben)",b:"Alles Sichtbeton"},{q:"Dein Verhältnis zum Zeichensaal:",a:"Gleich dort einziehen (Schlafsack inklusive)",b:"Lebenslanges Hausverbot (nur Homeoffice)"},{q:"Transport des finalen Modells:",a:"Volle U-Bahn im Berufsverkehr",b:"30 Minuten zu Fuß im Platzregen (Schirm in einer Hand)"},{q:"Wähl deinen Fluch:",a:"Alle CAD-Shortcuts vergessen (nur Maus)",b:"Jede erhaltene PSD hat vereinte Ebenen"},{q:"Modellbau-Methode, nur eine:",a:"100 Arbeitsmodelle",b:"EIN finales Modell, kein Fehler erlaubt"},{q:"Dein Stil ist lebenslang fixiert:",a:"Kurven verboten (nur rechte Winkel)",b:"Geraden verboten (alles Freiform)"},{q:"Das Schicksal deiner Thesis:",a:"Sie wird wirklich gebaut (keine Änderung möglich)",b:"Sie bleibt für immer auf dem Papier"},{q:"Nur ein 3D-Tool fürs Leben:",a:"Nur SketchUp",b:"Nur Rhino"},{q:"Wähl die Lehrmethode:",a:"Jede Woche Exkursion (mit Bericht)",b:"Null Exkursionen, 4 Jahre reine Theorie"},{q:"Dein Betreuer:",a:"Herzlich, lässt dich aber wöchentlich alles umwerfen",b:"Null Feedback, egal was du abgibst"},{q:"Ein Gerät lebenslang gratis:",a:"3D-Drucker unbegrenzt",b:"Lasercutter unbegrenzt"},{q:"Ein Entwurfsthema fürs Leben:",a:"Nur Hochhäuser",b:"Nur Einfamilienhäuser"},{q:"Der Morgen nach der Nachtschicht - was ist weniger schlimm?",a:"Statik-Test um 8 Uhr",b:"Kritik um Punkt 9, du bist als Erster dran"},{q:"Dein Kreuz mit dem Kleber, wähle:",a:"Holzleim geht nie wieder von den Händen",b:"Styropor schneiden ohne Cutter"},{q:"Deine Zukunft als Architekt:",a:"Weltberühmt, aber lebenslang pleite",b:"Völlig unbekannt, aber reich"},{q:"4 Uhr morgens im Zeichensaal, dein Zustand:",a:"Plötzlich das ganze Konzept umwerfen wollen",b:"Konzept steht, aber die Hand bewegt sich nicht"},{q:"Der erste Satz in der Kritik - welcher ist gruseliger?",a:"„Das hab ich doch schon mal irgendwo gesehen?“",b:"„Hm... was ist das denn?“"},{q:"Ein Geruch für den Rest des Lebens:",a:"Transparentpapier + Marker",b:"Sprühkleber"},{q:"Nur ein Modellbaumaterial lebenslang:",a:"Nur Finnpappe",b:"Nur Balsa"},{q:"Nur ein Maßstab für immer:",a:"Nur 1:500 (nur Baumasse)",b:"Nur 1:20 (Detailhölle)"},{q:"Du bist nur in einem brillant:",a:"Grundriss-Gott (Schnitte katastrophal)",b:"Schnitt-Gott (Grundrisse katastrophal)"},{q:"Werde Meister in genau einer Sache:",a:"Diagramm-Meister",b:"Rendering-Meister"},{q:"An einem Tag zu schaffen:",a:"40-seitiges Portfolio",b:"Finales Modell in 1:50"},{q:"Das hoffnungsloseste Prof-Feedback:",a:"„Nochmal.“",b:"„Hmm...... (Schweigen) Na gut, mach mal weiter so.“"},{q:"Deine Rolle in der Gruppenarbeit:",a:"Lebenslang CAD/Pläne",b:"Lebenslang Modellbau"},{q:"Pläne vom Copyshop - was ist weniger schlimm?",a:"Farben völlig anders als am Bildschirm",b:"Seiten in falscher Reihenfolge"},{q:"Wähl deinen Platz im Zeichensaal:",a:"Fensterecke (Sonne, aber eiskalt im Winter)",b:"Direkt an der Tür (alle sehen deinen Bildschirm)"},{q:"Die Angewohnheit des Sitznachbarn - was nervt mehr?",a:"Schnarchen in der Nachtschicht",b:"Telefonate im Morgengrauen"},{q:"Ein Praktikum winkt!",a:"Berühmtes Atelier, unbezahlt, ein Jahr",b:"Kleines Büro um die Ecke, bezahlt, ein Jahr"},{q:"Du verlierst eines für immer:",a:"Planbeschriftung von Hand",b:"Maße im Kopf rechnen"},{q:"Ein Verwechslungsfluch fürs Leben:",a:"GRZ und GFZ immer durcheinander",b:"Norden im Plan nie zu finden"},{q:"Nur ein Tragwerk fürs Leben:",a:"Nur Skelettbau",b:"Nur Wandbau"},{q:"Das einzige Detail, das du je zeichnest:",a:"Nur Treppendetail",b:"Nur Baddetail"},{q:"Wähl das Ende deiner Kritik:",a:"Geniale Idee, aber Präsentation vergeigt",b:"Banale Idee, aber Präsentation triumphal"},{q:"Auf Exkursion nur eine Option:",a:"Nur Fotos (Skizzen verboten)",b:"Nur Skizzen (Fotos verboten)"},{q:"Dein Modellstil fürs Leben:",a:"Nur makellos weiße Modelle",b:"Nur Material- und Farbmodelle"},{q:"Zusammensetzung der Gruppe:",a:"4 Jahre dasselbe Team (ob man sich mag oder nicht)",b:"Jedes Semester komplett ausgelost"},{q:"Deine chronische Entwurfskrankheit:",a:"Starkes Konzept, aber keine Entwicklung",b:"Starke Entwicklung, aber ödes Konzept"},{q:"1 Stunde vor Abgabe fehlen noch:",a:"3 Renderings",b:"Alle Pläne bemaßen"},{q:"Deine Zukunft steht fest:",a:"Master garantiert",b:"Direkt ins Büro, garantiert"},{q:"Dein Gebäude wird gebaut - unter einer Bedingung:",a:"Name des Entwerfers bleibt geheim",b:"Name bleibt, aber Honorar gleich null"},{q:"Nur ein Beruf fürs Leben:",a:"Nur Wettbewerbe",b:"Nur Innenausbau"},{q:"Deine Pläne sind verflucht:",a:"Alle Texte werden zu Comic Sans",b:"Alle Linienstärken werden identisch"},{q:"Ein Monat Sommer, wähle:",a:"Ein Monat auf der Baustelle",b:"Ein Monat Überstunden im Büro"},{q:"Eine absurde Regel für deine Entwürfe:",a:"Stützenzahl immer ungerade",b:"Alle Fenster quadratisch"},{q:"100er-Challenge - was nimmst du?",a:"100 Meisterpläne durchpausen",b:"100 Massenmodelle bauen"},{q:"Der Fluch deiner Präsentation:",a:"Alle Schriften werden kaputt angezeigt",b:"Alle Bilder in Matschauflösung"},{q:"Nur ein Nachtschicht-Treibstoff:",a:"Energydrinks unbegrenzt (Kaffee verboten)",b:"Kaffee unbegrenzt (Energydrinks verboten)"},{q:"Dein Essen ist aus dem Saal-Kühlschrank verschwunden...",a:"Du kennst den Täter, darfst aber nichts sagen",b:"Du erfährst nie, wer es war"},{q:"Abgabeform fürs Leben:",a:"Lebenslang mündliche Kritik (Zittern)",b:"Lebenslang schriftlich (eine Zeile Feedback)"},{q:"Unfall beim Modelltransport!",a:"Das Dach fliegt weg (Korpus heil)",b:"Das Erdgeschoss ist zerquetscht (Dach heil)"},{q:"Der Fluch deiner CAD-Datei:",a:"Alles liegt auf Layer 0",b:"Alle Blöcke sind aufgelöst"},{q:"Ein Programm fehlt dir lebenslang:",a:"Ohne Photoshop leben",b:"Ohne Illustrator leben"},{q:"Die härtere Aufgabe:",a:"3 Meter schmales Haus",b:"Stützenfreie Großsporthalle"},{q:"Wähl deinen Nachtschicht-Partner:",a:"Der Quassler (lustig, aber nichts geht voran)",b:"Der Stille (einsam, aber konzentriert)"},{q:"Du erhältst eine Fähigkeit:",a:"Perfekte Proportionen in 3 Sekunden bei jeder Skizze",b:"Jeden Grundriss nach einmal Sehen auswendig"},{q:"Das Schicksal deines Portfolios:",a:"Hässliches Layout, aber starker Inhalt",b:"Schickes Layout, aber gähnende Leere"},{q:"Dein Wettbewerbsergebnis:",a:"Ausgeschieden, aber mit ausführlichem Juryurteil",b:"Anerkennung, aber null Kommentar"},{q:"Deine Arbeitsumgebung fürs Leben:",a:"1 Monitor + Luxusstuhl",b:"3 Monitore + Holzbank"},{q:"Ein Abendessen mit:",a:"Le Corbusier",b:"Zaha Hadid"},{q:"Ein Zeitmaschinen-Ticket:",a:"Baustelle des Pantheons",b:"Baustelle der Pyramiden"},{q:"Eine Nacht in einem Meisterhaus:",a:"Fallingwater (Wasserfall-ASMR)",b:"Villa Savoye (pure Moderne)"},{q:"Lerne bei einem Meister:",a:"Mies van der Rohe",b:"Frank Lloyd Wright"},{q:"Eine Ästhetik fürs Leben:",a:"Minimalismus (Less is more)",b:"Maximalismus (Less is bore)"},{q:"Nur ein Tragwerksmaterial fürs Leben:",a:"Nur Holzbau",b:"Nur Stahlbau"},{q:"Das Haus deines Lebens:",a:"Altbau (Charme und hohe Decken, im Winter eiskalt)",b:"Neubau (bequem, aber austauschbar)"},{q:"Ein nationales Projekt:",a:"Ein futuristisches Wahrzeichen entwerfen",b:"Ein Baudenkmal originalgetreu sanieren"},{q:"Ein Monat Architekturreise:",a:"Europa (von der Klassik bis heute)",b:"Japan (Land der Details und Fügungen)"},{q:"Besitze ein Meisterwerk:",a:"Die Kirche des Lichts",b:"Das Farnsworth House"},{q:"Extremes Wohnen, wähle:",a:"Penthouse im Superhochhaus (Angst vor Aufzugsausfall)",b:"Komfortabler Bunker unter der Erde (ohne Fenster)"},{q:"Nur ein Stil, den du lebenslang vertrittst:",a:"Brutalismus",b:"Barock"},{q:"Nur eine Bauaufgabe fürs Leben:",a:"Nur Museen und Galerien",b:"Nur Sakralbauten"},{q:"Der Stil, der sich in deine Hand gräbt:",a:"Zahas fließende Kurven",b:"Mies' perfekte Geraden"},{q:"Nur eine Expertise fürs Leben:",a:"Brückenentwerfer",b:"Turmentwerfer"},{q:"Wähl eine mystische Kraft:",a:"Mit den Erbauern der Sieben Weltwunder sprechen",b:"Die Architektur in 100 Jahren vorab sehen"},{q:"Ein Meisterwerk des Lichts, nur eines:",a:"Die Kapelle von Ronchamp",b:"Das Kimbell Art Museum"},{q:"Dein Ruhm als Entwerfer:",a:"Das Wahrzeichen deiner Heimatstadt",b:"Ein verstecktes Meisterwerk irgendwo auf der Welt"},{q:"Nur ein Beruf fürs Leben:",a:"Nur Umbau und Bauen im Bestand",b:"Nur Neubau"},{q:"Erbe ein Paar Hände:",a:"Gehrys knüllende Hände",b:"Calatravas Skeletthände"},{q:"Das Erbe des Architekten:",a:"1 Gebäude, das 100 Jahre hält",b:"100 Gebäude, die 10 Jahre halten"},{q:"Extremes Grundstück, wähle:",a:"30 m² mitten in Berlin",b:"3 Hektar tief in den Bergen"},{q:"Ein Weltpreis:",a:"Der Pritzker (Nobelpreis der Architektur)",b:"Der Goldene Löwe der Venedig-Biennale"},{q:"Ein Ort bleibt dir lebenslang verwehrt:",a:"Alle Kathedralen Europas",b:"Alle Hochhaus-Aussichtsplattformen"},{q:"Die Identität deines Büros:",a:"Solo-Atelier (frei, aber prekär)",b:"Partner im Großbüro (sicher, aber Konzernleben)"},{q:"Deine Art zu reisen:",a:"Berühmte Bauten im Schnelldurchlauf abhaken",b:"Durch Gassen und Alltagsarchitektur schlendern"},{q:"Nur ein Dach fürs Leben:",a:"Dachgarten (Wartungshölle)",b:"Satteldach (mit Dachboden)"},{q:"Dein Raumgeschmack:",a:"5 m Deckenhöhe, Weite (Heizkosten-Explosion)",b:"2,2 m Gemütlichkeit (leicht beengt)"},{q:"Dein Fenstergeschmack:",a:"Raumhohe Verglasung (Vorhänge Pflicht)",b:"Viele kleine Fenster (Licht wie gerahmte Bilder)"},{q:"Dein Treppengeschmack:",a:"Wendeltreppe (schön, aber Umzugshölle)",b:"Gerade Treppe (praktisch, aber öde)"},{q:"Nur eine Jahreszeit für immer:",a:"Ewiger Sommer (Klimaanlage im Saal auf Anschlag)",b:"Ewiger Winter (der Leim trocknet schnell)"},{q:"Der Fortbewegungsfluch:",a:"Lebenslang nur Treppen (Aufzug verboten)",b:"Lebenslang nur Aufzug (Treppen verboten)"},{q:"Ein Werkzeug fährt in dich:",a:"Deine rechte Hand wird zum Dreikantmaßstab",b:"Deine linke Hand wird zum Cuttermesser"},{q:"Nur ein Nachtschicht-Snack:",a:"Instantnudeln + Brötchen vom Späti",b:"Döner geliefert (30 Minuten Wartezeit)"},{q:"Der Saal-Snack ist festgelegt:",a:"Gummibärchen unbegrenzt",b:"Chips unbegrenzt"},{q:"Allein mit dem Prof im Aufzug!",a:"Du sprichst zuerst über den Entwurf",b:"Perfektes Schweigen bis ins Erdgeschoss"},{q:"Niemand vor deinem Plan...",a:"Du machst selbst den Marktschreier",b:"Du harrst still aus"},{q:"Der Prof scheint in deiner Kritik einzunicken!",a:"Du wirst lauter",b:"Du kürzt heimlich ab"},{q:"Ein Kommilitone bringt fast dein Konzept mit!",a:"Du sprichst es sofort an und klärst es",b:"Du änderst dein Konzept"},{q:"Dein Nachtschicht-Nachbar fängt an zu weinen...",a:"Du reichst wortlos einen Schokoriegel",b:"Du weinst mit"},{q:"10 Minuten vor Abgabe, 5 Leute vorm Plotter!",a:"Du bettelst dich nach vorn",b:"Du fügst dich dem Schicksal und stellst dich an"},{q:"Der Prof packt dein Modell und schüttelt es!",a:"Du sagst „Vorsicht, bitte“",b:"Du betest nur, dass nichts bricht"},{q:"Du findest ein Portemonnaie. Es gehört dem Rivalen-Studio...",a:"Du gibst es sofort zurück (klar)",b:"Du gibst es zurück und lässt es dir groß anrechnen"},{q:"„Fragen?“ Stille, 5 Sekunden...",a:"Du fragst irgendwas, um die Stille zu brechen",b:"Du starrst auf den Boden (Blickkontakt = Ende)"},{q:"Alles neu oder weitermachen - Abgabe in 3 Tagen!",a:"Du wirfst alles um (ohne Reue)",b:"Du setzt alles auf die Weiterentwicklung"},{q:"Mitten im Vortrag: „ähm... also...“",a:"Du sagst ehrlich „Moment bitte“ und sortierst dich",b:"Du redest einfach weiter und riskierst es"},{q:"Ein Freund findet deinen Entwurf „etwas bieder“...",a:"Du gibst es zu und bittest um Rat",b:"Du predigst 3 Minuten die Ästhetik des Gewöhnlichen"},{q:"Totaler Stromausfall im Saal, im Morgengrauen!",a:"Handylampe an und weitermachen",b:"Das ist Schicksal - ab nach Hause"},{q:"Der Prof lobt das Arbeitsmodell, das du weggeworfen hattest!",a:"Du gestehst: „Das hatte ich eigentlich weggeworfen“",b:"Du erklärst: „Das ist mein wahrer Entwurf“ und lässt es auferstehen"},{q:"In der öffentlichen Kritik fragt ein Gast: „Warum?“",a:"Du gehst mit vorbereiteter Logik in die Offensive",b:"„Gute Frage!“ - erstmal Zeit schinden"},{q:"Nur ein Fassadenmaterial fürs Leben:",a:"Nur roter Backstein",b:"Nur Metallpaneele"},{q:"Ein Abendessen mit einem deutschen Meister:",a:"Frei Otto",b:"Gottfried Böhm"},{q:"Nur eine Exkursion möglich:",a:"Der Kölner Dom",b:"Das Bauhaus Dessau"},{q:"Die Sprache deiner Pläne ist festgelegt:",a:"Alles Englisch (wirkt schick, Tippfehlergefahr)",b:"Alles Deutsch (ehrlich, aber welche Schrift?)"},{q:"Der Lageplan-Fluch, wähle:",a:"1000 Baumsymbole von Hand zeichnen",b:"Die komplette Stellplatzplanung neu machen"},{q:"Deine Vortragszeit, lebenslang fixiert:",a:"3 Minuten (Kompressionshölle)",b:"30 Minuten (Schweigehölle)"},{q:"Modellfoto - verzichte auf eines:",a:"Kein Licht-Equipment (nur Handylampe)",b:"Keine Nachbearbeitung (wie geschossen abgeben)"},{q:"PC-Verrat vor der Abgabe - was ist weniger schlimm?",a:"Zwangsupdate startet",b:"Autospeichern war die ganze Zeit aus"},{q:"Der vom Prof entdeckte Fehler - was schmerzt weniger?",a:"Tippfehler mitten auf dem Plan",b:"Maßstabsfehler im Schnitt"},{q:"Dein Skizzenwerkzeug fürs Leben:",a:"Nur Transparentpapier + Stift",b:"Nur iPad"},{q:"Deine Wettbewerbskarriere:",a:"EIN erster Preis (alles andere ausgeschieden)",b:"Zehn Anerkennungen (kein erster Preis)"},{q:"Wähl deinen Saalstuhl:",a:"Weich, aber quietscht bei jeder Bewegung",b:"Bretthart, aber lautlos"},{q:"Eine Auflage verfolgt dich lebenslang:",a:"Südausrichtung verboten",b:"Öffnungsanteil auf 20 % begrenzt"},{q:"Das Pech am Exkursionstag, wähle:",a:"Dauerregen den ganzen Tag",b:"Bei Ankunft geschlossen"},{q:"Der Name deines künftigen Büros:",a:"Dein eigener Name (Büro Soundso)",b:"Ein cooles Abstraktum (lebenslang erklären)"},{q:"Der Stil der Aufgabenstellung:",a:"100 Seiten Analyse + völlige Freiheit",b:"Null Analyse + erdrückende Vorgaben"},{q:"Wähl dein Grundstück:",a:"30-Grad-Steilhang",b:"Spitzwinkliges Mini-Dreieck"},{q:"Kritikformat, lebenslang fixiert:",a:"Öffentliche Kritik im Audimax vor der ganzen Fakultät",b:"1:1 hinter verschlossener Tür mit dem Prof"},{q:"Kleiner Zeichenfluch:",a:"Höhenlinien passen nie ganz zusammen",b:"Maßstabsleiste immer vergessen"},{q:"Der Nachtschicht-Sound ist vorgeschrieben:",a:"Lo-fi, 24 Stunden Zwangsbeschallung",b:"Absolute Stille erzwungen (Kopfhörer verboten)"},{q:"Das Schicksal deines Portfolios:",a:"In der Fakultätsbroschüre verewigt (nicht änderbar)",b:"Für immer versiegelt (niemand sieht es)"},{q:"Dein Stand auf der Abschlussausstellung:",a:"Toplage am Eingang (voll und laut)",b:"Ruhige Ecke (still, aber menschenleer)"},{q:"Eine Meisterklasse, nur eine:",a:"Rem Koolhaas' Vortrag im Maschinengewehrtempo",b:"Peter Zumthors Workshop des Schweigens"},{q:"Fähigkeitentausch, wähle:",a:"Glasherz + Geniehände",b:"Stahlherz + Durchschnittshände"},{q:"Kleiner Druckfluch:",a:"Alles kommt 1 % verkleinert heraus",b:"Alle Ränder leicht schief"},{q:"Nur eine Hochschulgruppe:",a:"Architektur-Exkursionsclub",b:"Tischlerei-Werkstattclub"},{q:"Deine erste Baustelle:",a:"Sanierung eines Wohnhauses",b:"Superhochhaus"},{q:"Thema des Abschluss-Studios:",a:"Masterplan im Stadtmaßstab",b:"Detail-Mockup im Maßstab 1:1"},{q:"Kleiner CAD-Fluch:",a:"Maßhilfslinien am Bildschirm unsichtbar",b:"Alle Textstile zerschossen"},{q:"Ein Video 100-mal ansehen:",a:"Eine Architektur-Doku",b:"Die Stadtfalt-Szene aus Inception"},{q:"Nur eine Darstellungsart fürs Leben:",a:"Nur Axonometrie",b:"Nur Zentralperspektive"},{q:"Der Ferienjob:",a:"Einen Monat Ziegel schleppen",b:"1000 A1-Pläne falten"},{q:"Der Fluch der Siebensachen:",a:"Du verlierst ständig den Dreikantmaßstab",b:"Deine Minen brechen ständig"},{q:"Nur ein Bebauungstyp fürs Leben:",a:"Nur Hofhaus-Schemata",b:"Nur aufgeständerte Schemata"},{q:"Das Dach-Dilemma:",a:"Flachdach (lebenslange Angst vor Lecks)",b:"Steildach (Dachboden lebenslang Sauna)"},{q:"Normprüfung, lebenslang zuständig für:",a:"Nur Verschattung/Besonnung",b:"Nur Fluchtweglängen"},{q:"Deine Entwurfssprache, lebenslang fixiert:",a:"Nur Corbusiers fünf Punkte",b:"Nur Mies' universeller Raum"},{q:"Wähl deine Entwurfsmuse:",a:"Deine seltsamen Träume jeder Nacht",b:"Die Leute, die du in der U-Bahn beobachtest"},{q:"Nur ein Prof-Lob, einmal im Leben:",a:"„Starke Hand“ (Handwerk anerkannt)",b:"„Starker Kopf“ (Konzept anerkannt)"},{q:"Das Schicksal deines Gebäudes:",a:"Berühmt durch einen frechen Spitznamen des Volkes",b:"Ohne Spitznamen, still respektiert"},{q:"Vorabend der Abgabe - ein Cheat:",a:"Zeit 3 Stunden anhalten (nur du bewegst dich)",b:"Einen Kommilitonen beschwören (3 Stunden Assistenz)"}];
 const QBANK_ES=[{q:"La noche antes de la entrega, una de las dos pasa seguro:",a:"Desaparecen todos tus archivos de trabajo",b:"El plóter se avería la mañana de la entrega"},{q:"Una sola arma hasta el título:",a:"Solo dibujo a mano, de por vida",b:"Solo maquetas (exento de planos)"},{q:"En la crítica, ¿qué es más duro de aguantar?",a:"20 minutos de repaso punto por punto",b:"3 minutos de silencio... y «El siguiente»"},{q:"El precio de la noche en vela, elige:",a:"Una semana sin dormir y un 10",b:"Salir puntual cada día y un 5"},{q:"Un solo material para toda tu carrera:",a:"Todo vidrio (vida de muro cortina)",b:"Todo hormigón visto"},{q:"Tu relación con el taller:",a:"Vivir directamente allí (saco de dormir incluido)",b:"Prohibición de entrada de por vida (solo en casa)"},{q:"Transportar la maqueta final:",a:"Metro abarrotado en hora punta",b:"30 min andando bajo el aguacero (paraguas en una mano)"},{q:"Elige tu maldición:",a:"Olvidar todos los atajos de CAD (solo ratón)",b:"Todos los PSD que recibes traen capas combinadas"},{q:"Método de maqueta, solo uno:",a:"100 maquetas de estudio",b:"UNA sola maqueta final, sin margen de error"},{q:"Tu estilo queda fijado de por vida:",a:"Curvas prohibidas (solo ángulos rectos)",b:"Rectas prohibidas (todo curvas)"},{q:"El destino de tu proyecto fin de carrera:",a:"Se construye de verdad (sin poder cambiarlo)",b:"Se queda para siempre en el papel"},{q:"Una sola herramienta 3D para siempre:",a:"Solo SketchUp",b:"Solo Rhino"},{q:"Elige la docencia:",a:"Viaje de estudios cada semana (con memoria)",b:"Cero visitas, 4 años de pura teoría"},{q:"Tu tutor de proyectos:",a:"Cariñoso pero te hace rehacerlo todo cada semana",b:"Cero feedback, le da igual lo que entregues"},{q:"Un equipo gratis de por vida:",a:"Impresora 3D ilimitada",b:"Corte láser ilimitado"},{q:"Un solo tema de proyecto de por vida:",a:"Solo rascacielos",b:"Solo viviendas unifamiliares"},{q:"La mañana tras la noche en vela, lo menos malo:",a:"Examen sorpresa de estructuras a las 8",b:"Crítica a las 9 en punto y sales el primero"},{q:"Tu cruz con el pegamento, elige:",a:"La cola blanca no se va nunca de las manos",b:"Cortar poliestireno sin cúter"},{q:"Tu futuro como arquitecto:",a:"Famoso en el mundo entero pero sin un euro",b:"Desconocido para todos pero rico"},{q:"Las 4 de la mañana en el taller, tu estado:",a:"Ganas repentinas de tirar todo el concepto",b:"El concepto aguanta pero la mano no responde"},{q:"La primera frase del tribunal, ¿cuál asusta más?",a:"«Esto ya lo he visto en alguna parte, ¿no?»",b:"«Eh... ¿qué es esto?»"},{q:"Un olor que soportarás toda la vida:",a:"Papel vegetal + rotuladores",b:"Pegamento en espray"},{q:"Un solo material de maqueta de por vida:",a:"Solo cartón pluma",b:"Solo balsa"},{q:"Una sola escala para siempre:",a:"Solo 1:500 (solo volúmenes)",b:"Solo 1:20 (infierno del detalle)"},{q:"Solo brillas en uno:",a:"Dios de la planta (secciones desastrosas)",b:"Dios de la sección (plantas desastrosas)"},{q:"Conviértete en maestro de una sola cosa:",a:"Maestro de los diagramas",b:"Maestro del render"},{q:"Para terminar en un día:",a:"Porfolio de 40 páginas",b:"Maqueta final a 1:50"},{q:"El feedback más desesperante del profe:",a:"«Repítelo.»",b:"«Mmm...... (silencio) Bueno, sigue así a ver.»"},{q:"Tu papel en el trabajo en grupo:",a:"Responsable de CAD/planos de por vida",b:"Responsable de maquetas de por vida"},{q:"Paneles recogidos en la copistería, lo menos malo:",a:"Colores totalmente distintos a la pantalla",b:"Páginas en orden cambiado"},{q:"Elige tu sitio en el taller:",a:"Rincón de la ventana (sol, pero helador en invierno)",b:"Frente a la puerta (todos ven tu pantalla)"},{q:"La manía del compañero de al lado, ¿cuál es peor?",a:"Ronquidos en plena noche en vela",b:"Llamadas de teléfono de madrugada"},{q:"¡Llega una oferta de prácticas!",a:"Estudio famoso, sin sueldo, un año",b:"Estudio pequeño de barrio, con sueldo, un año"},{q:"Pierdes una cosa para siempre:",a:"Rotular planos a mano",b:"Calcular cotas de cabeza"},{q:"Una confusión maldita de por vida:",a:"Ocupación y edificabilidad siempre mezcladas",b:"El norte del plano siempre perdido"},{q:"Una sola estructura para toda la vida:",a:"Solo pórticos",b:"Solo muros de carga"},{q:"El único detalle que dibujarás en tu vida:",a:"Solo detalle de escalera",b:"Solo detalle de baño"},{q:"Elige el final de tu crítica:",a:"Idea brillante pero presentación desastrosa",b:"Idea del montón pero presentación triunfal"},{q:"En el viaje de estudios, una sola opción:",a:"Solo fotos (croquis prohibidos)",b:"Solo croquis (fotos prohibidas)"},{q:"Tu estilo de maqueta de por vida:",a:"Solo maquetas blancas inmaculadas",b:"Solo maquetas con materiales y color"},{q:"Composición del grupo:",a:"El mismo equipo 4 años (para bien o para mal)",b:"Sorteo total cada cuatrimestre"},{q:"Tu enfermedad crónica de proyecto:",a:"Gran concepto pero incapaz de desarrollarlo",b:"Gran desarrollo pero concepto aburrido"},{q:"A 1 hora de la entrega queda:",a:"3 renders",b:"Acotar todos los planos"},{q:"Tu futuro queda sellado:",a:"Máster garantizado",b:"Directo al estudio, garantizado"},{q:"Tu edificio se construye con una condición:",a:"Nombre del proyectista en secreto",b:"Tu nombre queda pero honorarios a cero"},{q:"Un solo oficio de por vida:",a:"Solo concursos",b:"Solo interiorismo"},{q:"Tus planos quedan malditos:",a:"Todos los textos pasan a Comic Sans",b:"Todos los grosores de línea se igualan"},{q:"Un mes de verano, elige:",a:"Un mes de obra",b:"Un mes de horas extra en el estudio"},{q:"Una regla absurda invade tus proyectos:",a:"Número de pilares siempre impar",b:"Todas las ventanas cuadradas"},{q:"Reto de los 100, ¿cuál eliges?",a:"Calcar 100 planos de maestros",b:"100 maquetas de volumetría"},{q:"La maldición de tu presentación:",a:"Todas las fuentes se ven rotas",b:"Todas las imágenes en baja resolución"},{q:"Un solo combustible de madrugada:",a:"Bebidas energéticas ilimitadas (café prohibido)",b:"Café ilimitado (energéticas prohibidas)"},{q:"Tu comida desapareció de la nevera del taller...",a:"Sabes quién fue pero no puedes decirlo",b:"Nunca sabrás quién fue"},{q:"Modo de entrega de por vida:",a:"Crítica oral de por vida (temblores)",b:"Entrega escrita de por vida (una línea de feedback)"},{q:"¡Accidente transportando la maqueta!",a:"Sale volando la cubierta (el cuerpo intacto)",b:"Se aplasta la planta baja (la cubierta intacta)"},{q:"La maldición de tu archivo CAD:",a:"Todo dibujado en la capa 0",b:"Todos los bloques descompuestos"},{q:"Vivir sin un programa de por vida:",a:"Sin Photoshop",b:"Sin Illustrator"},{q:"El tema más difícil:",a:"Casa de 3 metros de ancho",b:"Polideportivo sin pilares"},{q:"Elige compañero de noche en vela:",a:"El hablador (divertido pero no se avanza)",b:"El callado (solitario pero concentrado)"},{q:"Obtienes un poder:",a:"Proporciones perfectas en 3 segundos en cualquier croquis",b:"Memorizar la planta de todo edificio visto una vez"},{q:"El destino de tu porfolio:",a:"Diseño feo pero contenido sólido",b:"Diseño molón pero contenido vacío"},{q:"Resultado de tu concurso:",a:"Eliminado pero con acta detallada",b:"Mención pero sin ningún comentario"},{q:"Tu entorno de trabajo de por vida:",a:"1 monitor + sillón de lujo",b:"3 monitores + banco de madera"},{q:"Una cena con:",a:"Le Corbusier",b:"Zaha Hadid"},{q:"Un billete de máquina del tiempo:",a:"La obra del Panteón",b:"La obra de las Pirámides"},{q:"Una noche en una casa mítica:",a:"La Casa de la Cascada (ASMR de cascada)",b:"La Villa Saboya (modernismo puro)"},{q:"Aprende de un maestro:",a:"Mies van der Rohe",b:"Frank Lloyd Wright"},{q:"Una sola estética de por vida:",a:"Minimalismo (Less is more)",b:"Maximalismo (Less is bore)"},{q:"Un solo material estructural de por vida:",a:"Solo madera",b:"Solo acero"},{q:"La casa de tu vida:",a:"Casa de pueblo (encanto, pero heladora en invierno)",b:"Piso de obra nueva (cómodo pero clónico)"},{q:"Participa en un proyecto nacional:",a:"Diseñar un hito futurista",b:"Terminar la Sagrada Família"},{q:"Un mes de viaje de arquitectura:",a:"Europa (del clásico al contemporáneo)",b:"Japón (el país del detalle y el acabado)"},{q:"Posee una obra maestra:",a:"La Iglesia de la Luz",b:"La Casa Farnsworth"},{q:"Vivienda extrema, elige:",a:"Ático en un supperrascacielos (pánico a la avería del ascensor)",b:"Búnker subterráneo confortable (sin ventanas)"},{q:"Un solo estilo que defender de por vida:",a:"Brutalismo",b:"Barroco"},{q:"Un solo programa de por vida:",a:"Solo museos y galerías",b:"Solo arquitectura religiosa"},{q:"El estilo grabado en tu mano:",a:"Las curvas fluidas de Zaha",b:"Las líneas perfectas de Mies"},{q:"Un solo tipo de experto de por vida:",a:"Proyectista de puentes",b:"Proyectista de torres"},{q:"Elige un poder místico:",a:"Hablar con los constructores de las Siete Maravillas",b:"Ver la arquitectura de dentro de 100 años"},{q:"Una obra maestra de la luz, solo una:",a:"La capilla de Ronchamp",b:"El museo Kimbell"},{q:"Tu gloria como proyectista:",a:"El hito de tu ciudad",b:"Una obra maestra escondida en algún lugar del mundo"},{q:"Un solo oficio de por vida:",a:"Solo rehabilitación y reutilización",b:"Solo obra nueva"},{q:"Hereda un par de manos:",a:"Las manos arrugadoras de Gehry",b:"Las manos de esqueleto de Calatrava"},{q:"El legado del arquitecto:",a:"1 edificio que dura 100 años",b:"100 edificios que duran 10 años"},{q:"Solar extremo, elige:",a:"30 m² en pleno centro de Madrid",b:"3 hectáreas en mitad del monte"},{q:"Un gran premio mundial:",a:"El Pritzker (el Nobel de la arquitectura)",b:"El León de Oro de la Bienal de Venecia"},{q:"Un lugar te queda vetado de por vida:",a:"Todas las catedrales de Europa",b:"Todos los miradores de rascacielos"},{q:"La identidad de tu estudio:",a:"Estudio en solitario (libre pero precario)",b:"Socio de un gran estudio (estable pero vida corporativa)"},{q:"Tu forma de viajar:",a:"Tachar monumentos famosos a toda prisa",b:"Callejear entre arquitectura cotidiana"},{q:"Una sola cubierta de por vida:",a:"Cubierta ajardinada (infierno de mantenimiento)",b:"Cubierta a dos aguas (con desván)"},{q:"Tu gusto espacial:",a:"5 m de altura libre, amplitud (factura de calefacción brutal)",b:"2,2 m acogedores (algo agobiante)"},{q:"Tu gusto de ventanas:",a:"Cristalera de suelo a techo (cortinas obligatorias)",b:"Muchas ventanitas (la luz como cuadros)"},{q:"Tu gusto de escaleras:",a:"Escalera de caracol (preciosa pero infierno de mudanza)",b:"Escalera recta (práctica pero aburrida)"},{q:"Una sola estación para siempre:",a:"Verano eterno (aire acondicionado a tope en el taller)",b:"Invierno eterno (la cola seca rápido)"},{q:"La maldición del desplazamiento:",a:"Solo escaleras de por vida (ascensor prohibido)",b:"Solo ascensor de por vida (escaleras prohibidas)"},{q:"Una herramienta se encarna en ti:",a:"Tu mano derecha se vuelve un escalímetro",b:"Tu mano izquierda se vuelve un cúter"},{q:"Un solo tentempié de madrugada:",a:"Fideos instantáneos + bocadillo de gasolinera",b:"Pizza a domicilio (30 min de espera)"},{q:"El picoteo del taller queda fijado:",a:"Gominolas ilimitadas",b:"Patatas fritas ilimitadas"},{q:"¡A solas con el profe en el ascensor!",a:"Sacas tú el tema del proyecto",b:"Silencio perfecto hasta la planta baja"},{q:"No hay nadie ante tu panel...",a:"Haces tú mismo de pregonero",b:"Aguantas en silencio"},{q:"¡El profe parece dormirse en tu crítica!",a:"Subes la voz",b:"Acortas disimuladamente"},{q:"¡Un compañero trae un concepto casi igual al tuyo!",a:"Lo hablas de inmediato para aclararlo",b:"Cambias tú de concepto"},{q:"Tu vecino de noche en vela se echa a llorar...",a:"Le pasas una chocolatina sin decir nada",b:"Lloras con él"},{q:"¡10 min para la entrega y 5 en la cola del plóter!",a:"Suplicas para colarte",b:"Aceptas tu destino y haces cola"},{q:"¡El profe agarra tu maqueta y la zarandea!",a:"Dices «cuidado, por favor»",b:"Solo rezas para que no se rompa"},{q:"Encuentras una cartera. Es del taller rival...",a:"La devuelves al momento (obvio)",b:"La devuelves dejando bien claro el favor"},{q:"«¿Preguntas?» Silencio, 5 segundos...",a:"Preguntas cualquier cosa para romper el hielo",b:"Miras al suelo (cruzar miradas = fin)"},{q:"¿Rehacerlo todo o seguir? ¡Entrega en 3 días!",a:"Lo tiras todo (sin remordimientos)",b:"Lo apuestas todo al desarrollo"},{q:"En plena presentación: «eh... o sea...»",a:"Dices con honestidad «un momento» y te recompones",b:"Sigues hablando lo que sea y te la juegas"},{q:"Un amigo ve tu proyecto «un poco del montón»...",a:"Lo admites y pides consejo",b:"Predicas 3 minutos la estética de lo corriente"},{q:"¡Apagón total en el taller de madrugada!",a:"Linterna del móvil y a seguir",b:"Es el destino: a casa"},{q:"¡El profe elogia la maqueta de estudio que habías tirado!",a:"Confiesas «en realidad la había tirado»",b:"Declaras «esa es mi verdadera propuesta» y la resucitas"},{q:"En la crítica pública un invitado pregunta: «¿Por qué?»",a:"Atacas de frente con la lógica preparada",b:"«¡Buena pregunta!» para ganar tiempo"},{q:"Un solo material de fachada de por vida:",a:"Solo ladrillo rojo",b:"Solo paneles metálicos"},{q:"Una cena con un maestro español:",a:"Rafael Moneo",b:"Ricardo Bofill"},{q:"Una sola visita de estudios posible:",a:"La Alhambra",b:"La Sagrada Família"},{q:"El idioma de tus paneles queda fijado:",a:"Todo en inglés (queda fino, ojo a las erratas)",b:"Todo en español (honesto, pero ¿qué fuente uso?)"},{q:"La maldición del plano de situación, elige:",a:"Dibujar 1000 árboles a mano",b:"Rehacer todo el esquema de aparcamiento"},{q:"Tu tiempo de presentación de por vida:",a:"3 minutos (infierno de la síntesis)",b:"30 minutos (infierno del silencio)"},{q:"Foto de maqueta, renuncia a uno:",a:"Sin equipo de luz (solo linterna del móvil)",b:"Sin retoque (se entrega tal cual)"},{q:"Traición del PC antes de la entrega, lo menos malo:",a:"Arranca la actualización forzosa del sistema",b:"Descubres que el autoguardado estaba apagado"},{q:"El error que pilla el profe, ¿cuál duele menos?",a:"Una errata en pleno centro del panel",b:"Un error de escala en la sección"},{q:"Tu herramienta de croquis de por vida:",a:"Solo vegetal + rotulador",b:"Solo iPad"},{q:"Tu carrera de concursos:",a:"UN primer premio (todo lo demás eliminado)",b:"Diez menciones (ningún primer premio)"},{q:"Elige tu silla del taller:",a:"Mullida pero chirría con cada movimiento",b:"Dura como una piedra pero silenciosa"},{q:"Una restricción te persigue de por vida:",a:"Orientación sur prohibida",b:"Huecos limitados al 20 %"},{q:"La mala suerte del día de visita, elige:",a:"Diluvio todo el día",b:"Cerrado al llegar"},{q:"El nombre de tu futuro estudio:",a:"Tu propio nombre (Estudio Fulano)",b:"Una palabra abstracta molona (a explicar toda la vida)"},{q:"El estilo del enunciado:",a:"100 páginas de análisis + libertad total",b:"Cero análisis + condiciones asfixiantes"},{q:"Elige tu solar:",a:"Ladera al 30 %",b:"Triángulo agudo diminuto"},{q:"Formato de crítica de por vida:",a:"Crítica pública en el aula magna ante toda la escuela",b:"A puerta cerrada, tú y el profe"},{q:"Pequeña maldición de dibujo:",a:"Las curvas de nivel nunca encajan del todo",b:"La escala gráfica siempre olvidada"},{q:"El sonido de la madrugada queda impuesto:",a:"Lo-fi forzoso 24 horas",b:"Silencio absoluto forzoso (auriculares prohibidos)"},{q:"El destino de tu porfolio:",a:"Inmortalizado en el folleto de la escuela (inmodificable)",b:"Sellado para siempre (nadie lo ve)"},{q:"Tu puesto en la expo de fin de carrera:",a:"Sitio de oro en la entrada (gentío y ruido)",b:"Rincón tranquilo (paz pero desierto)"},{q:"Una clase magistral, solo una:",a:"La conferencia ametralladora de Rem Koolhaas",b:"El taller del silencio de Peter Zumthor"},{q:"Intercambio de capacidades, elige:",a:"Corazón de cristal + manos de genio",b:"Corazón de acero + manos corrientes"},{q:"Pequeña maldición de impresión:",a:"Todo sale reducido un 1 %",b:"Todos los márgenes ligeramente torcidos"},{q:"Una sola asociación de estudiantes:",a:"Club de visitas de arquitectura",b:"Club de carpintería"},{q:"Tu primera obra:",a:"Reforma de una vivienda",b:"Superrascacielos"},{q:"Tema del taller de último curso:",a:"Plan director a escala urbana",b:"Prototipo de detalle a escala 1:1"},{q:"Pequeña maldición de CAD:",a:"Líneas de cota invisibles en pantalla",b:"Todos los estilos de texto corruptos"},{q:"Un vídeo para ver 100 veces:",a:"Un documental de arquitectura",b:"La escena de la ciudad plegándose de Origen"},{q:"Un solo modo de representación de por vida:",a:"Solo axonometría",b:"Solo perspectiva cónica de un punto"},{q:"El trabajillo de verano:",a:"Cargar ladrillos un mes",b:"Doblar 1000 planos A1"},{q:"La maldición de tus bártulos:",a:"Pierdes el escalímetro sin parar",b:"Las minas se te parten sin parar"},{q:"Un solo tipo de implantación de por vida:",a:"Solo esquemas con patio",b:"Solo esquemas sobre pilotis"},{q:"El dilema de la cubierta:",a:"Cubierta plana (ansiedad de goteras de por vida)",b:"Cubierta inclinada (desván sauna de por vida)"},{q:"Comprobación normativa de por vida:",a:"Solo soleamiento",b:"Solo recorridos de evacuación"},{q:"Tu lenguaje de proyecto de por vida:",a:"Solo los 5 puntos de Le Corbusier",b:"Solo el espacio universal de Mies"},{q:"Elige tu musa de proyecto:",a:"Los sueños raros de cada noche",b:"La gente que observas en el metro"},{q:"Un solo elogio del profe, para toda la vida:",a:"«Qué buena mano» (reconoce el oficio)",b:"«Qué buena cabeza» (reconoce el concepto)"},{q:"El destino de tu edificio:",a:"Famoso por un mote gracioso puesto por la gente",b:"Sin mote, respetado en silencio"},{q:"Víspera de la entrega, usa un truco:",a:"Parar el tiempo 3 horas (solo tú te mueves)",b:"Invocar a un compañero (ayudante 3 horas)"}];
 
 let LANG="ko";
@@ -1623,7 +1631,7 @@ async function bumpStats(field){
 
 /* ── 8비트 효과음 ── */
 let audioCtx=null, masterGain=null;
-let SND={vol:0.7, on:true}; // 기본 소리 켬 — 토글 하나로 BGM+SFX 동시 제어
+let SND={vol:0.7, on:true}; // 기본 소리 켬 - 토글 하나로 BGM+SFX 동시 제어
 function busOut(){
   masterGain=masterGain||(()=>{ const g=audioCtx.createGain(); g.gain.value=SND.vol; g.connect(audioCtx.destination); return g; })();
   return masterGain;
@@ -1744,7 +1752,7 @@ async function soloPick(choice){
   $("optA").disabled=true;$("optB").disabled=true; sfxSelect();
   myPicks[idx]=choice;
   const bi=ROUND[idx].bi, myIdx=idx;
-  // 1) 즉시 잠금 + 짧은 드럼롤(0.7초) 후 공개 — 긴장감은 살리고 답답함은 없게
+  // 1) 즉시 잠금 + 짧은 드럼롤(0.7초) 후 공개 - 긴장감은 살리고 답답함은 없게
   sfxTick(); setTimeout(sfxTick,180); setTimeout(sfxTick,360);
   await new Promise(r=>setTimeout(r,550)); // 살짝의 두구두구
   const c=soloStats[bi]||{a:0,b:0};
@@ -1989,7 +1997,7 @@ async function pickChoice(choice){
   if(prev===choice) return;
   sfxSelect();
   myPicks[idx]=choice;
-  // 마감 전까지 자유롭게 변경 가능 — 버튼은 계속 활성 상태 유지
+  // 마감 전까지 자유롭게 변경 가능 - 버튼은 계속 활성 상태 유지
   $("optA").classList.toggle("locked-pick",choice==="a");
   $("optB").classList.toggle("locked-pick",choice==="b");
   if(prev){ try{ await window.storage.delete(vKey(room.code,idx,curG)+uid+"-"+prev,true); }catch(e){} }
@@ -1998,7 +2006,8 @@ async function pickChoice(choice){
 
 /* ═══ 게임 신청 보드 ═══ */
 const IDEAS_KEY="arcade-ideas-v1";
-const BUGS_KEY="arcade-qfeedback-v1";
+/* 제보는 이제 서버(/api/reports)에 있다. 예전 키는 쓰지 않으며, /api/kv 에서도
+   막아 두었다 — 열어 두면 누구나 남의 제보를 그대로 받아갈 수 있다. */
 const TP_ICON={"밸런스붕괴":"⚖️","새질문":"💡","개선":"✨"};
 async function loadIdeas(){
   const raw=await sGet(IDEAS_KEY);
@@ -2027,7 +2036,7 @@ $("btnPostIdea").addEventListener("click",async()=>{
   $("btnPostIdea").disabled=true;
   $("sgErr").textContent=UI[LANG].modChecking||"...";
   const mod=await moderateText(n+" | "+t);
-  if(!mod.ok){ $("sgErr").textContent=(UI[LANG].modErr||"Blocked")+(mod.reason?" — "+mod.reason:""); $("btnPostIdea").disabled=false; return; }
+  if(!mod.ok){ $("sgErr").textContent=(UI[LANG].modErr||"Blocked")+(mod.reason?" - "+mod.reason:""); $("btnPostIdea").disabled=false; return; }
   $("sgErr").textContent="";
   const list=await loadIdeas();
   list.push({n,t,ts:Date.now()});
@@ -2040,42 +2049,101 @@ $("btnPostIdea").addEventListener("click",async()=>{
 });
 $("btnSgBack").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="ARCHI ARCADE"; show("vArcade"); });
 
-/* ── 버그 제보 보드 ── */
+/* ── 제보(공작소) ──
+   제보는 공용 저장소가 아니라 서버(/api/reports)에 둔다. 그 저장소는 누구나 읽을 수
+   있어서, 화면에서 숨기는 것만으로는 "관리자만 보기" 가 되지 않았다.
+   목록은 관리자에게만 전체가 오고, 그 밖에는 본인 것만 온다 — 지울 수 있게 하려면
+   본인 것은 보여야 한다. */
+let BUG_ADMIN=false;
 async function loadBugs(){
-  const raw=await sGet(BUGS_KEY);
-  try{ const p=JSON.parse(raw); return Array.isArray(p)?p:[]; }catch(e){ return []; }
+  try{
+    const r=await fetch("/api/reports",{cache:"no-store"});
+    if(r.status===401) return {need:true,rows:[]};
+    if(!r.ok) return {rows:[]};
+    const d=await r.json();
+    BUG_ADMIN=!!d.admin;
+    return {rows:d.rows||[],admin:BUG_ADMIN};
+  }catch(e){ return {rows:[]}; }
 }
-function renderBugs(list){
-  $("bugList").innerHTML=list.length
-    ? list.slice().reverse().map(i=>'<span class="idea-line"><span class="who">'+(TP_ICON[i.tp]||"▪")+' '+esc(i.n)+'</span> '+esc(i.t)+'</span>').join("")
-    : UI[LANG].emptyBugs;
+function renderBugs(res){
+  const u=UI[LANG];
+  const need=!!(res&&res.need);
+  const rows=(res&&res.rows)||[];
+
+  /* 로그인 안 했으면 입력칸을 숨기고 안내만 보여 준다. */
+  ["bgTypeF","bgNameF","bgTextF"].forEach(id=>{ const e=$(id); if(e) e.classList.toggle("hidden",need); });
+  $("btnPostBug").classList.toggle("hidden",need);
+  $("bgNeedLogin").classList.toggle("hidden",!need);
+  $("btnBgLogin").classList.toggle("hidden",!need);
+  if(need){
+    $("bgNeedLogin").textContent=u.bugNeedLogin||"로그인하면 제보할 수 있어요.";
+    $("btnBgLogin").textContent=u.bugGoLogin||"로그인하러 가기 ▶";
+    $("bgListHead").textContent="";
+    $("bugList").textContent="";
+    return;
+  }
+
+  $("bgListHead").textContent = BUG_ADMIN ? (u.bugHeadAdmin||"") : (u.bugHeadMine||"");
+  $("bugList").innerHTML = rows.length
+    ? rows.map(i=>
+        '<span class="idea-line">'+
+        '<button class="crt-btn" data-bugdel="'+esc(i.id)+'" style="margin-right:8px;padding:2px 6px;font-size:8px;color:var(--red);border-color:var(--red)">X</button>'+
+        '<span class="who">'+(TP_ICON[i.kind]||"▪")+' '+esc(i.authorName)+'</span> '+esc(i.body)+
+        '</span>').join("")
+    : (BUG_ADMIN ? (u.emptyBugs||"") : (u.bugEmptyMine||u.emptyBugs||""));
+}
+async function refreshBugs(){
+  $("bugList").textContent=UI[LANG].loading||"...";
+  renderBugs(await loadBugs());
 }
 $("cartReport").addEventListener("click",async()=>{
   sfxNext(); $("hudM").textContent="WORKSHOP"; show("vReport");
-  $("bgName").value = USER ? USER.name : UI[LANG].anon;
-  $("bugList").textContent="불러오는 중...";
-  renderBugs(await loadBugs());
+  $("bgName").value = USER ? USER.name : "";
+  await refreshBugs();
 });
+$("btnBgLogin").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI(); });
+
+/* 지우기 — 서버가 본인 것인지(또는 관리자인지) 판단한다. */
+document.addEventListener("click", async e=>{
+  const t=e.target.closest("[data-bugdel]");
+  if(!t) return;
+  const id=t.getAttribute("data-bugdel");
+  t.disabled=true;
+  try{
+    const r=await fetch("/api/reports?id="+encodeURIComponent(id),{method:"DELETE"});
+    if(!r.ok){ const d=await r.json().catch(()=>({})); $("bgErr").textContent=d.error||UI[LANG].saveFail; t.disabled=false; return; }
+    sfxNext(); $("bgErr").textContent="";
+    await refreshBugs(); refreshDock();
+  }catch(err){ $("bgErr").textContent=UI[LANG].saveFail; t.disabled=false; }
+});
+
 $("btnPostBug").addEventListener("click",async()=>{
-  const n=(clean($("bgName").value)||UI[LANG].anon).slice(0,8);
+  const n=clean($("bgName").value).slice(0,8);
   const t=clean($("bgText").value).slice(0,80);
   const tp=$("bgType").value;
   if(!t){ $("bgErr").textContent=UI[LANG].needBug; return; }
   if(throttled("bug")){ $("bgErr").textContent=UI[LANG].throttle; return; }
-  $("bgErr").textContent="";
   $("btnPostBug").disabled=true;
   $("bgErr").textContent=UI[LANG].modChecking||"...";
-  const mod=await moderateText(n+" | "+t);
-  if(!mod.ok){ $("bgErr").textContent=(UI[LANG].modErr||"Blocked")+(mod.reason?" — "+mod.reason:""); $("btnPostBug").disabled=false; return; }
-  $("bgErr").textContent="";
-  const list=await loadBugs();
-  list.push({n,t,tp,ts:Date.now()});
-  const ok=await sSet(BUGS_KEY,JSON.stringify(list.slice(-80)));
-  $("btnPostBug").disabled=false;
-  if(!ok){ $("bgErr").textContent=UI[LANG].saveFail; return; }
-  sfxSelect();
-  $("bgText").value="";
-  renderBugs(list); refreshDock();
+  try{
+    /* 검열은 서버가 저장 직전에 다시 본다. 화면에서만 걸러 두면 API 를 직접 부르면 지나간다. */
+    const r=await fetch("/api/reports",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({kind:tp,body:t,authorName:n,lang:LANG})
+    });
+    const d=await r.json().catch(()=>({}));
+    $("btnPostBug").disabled=false;
+    if(r.status===401){ $("bgErr").textContent=""; await refreshBugs(); return; }
+    if(r.status===422){ $("bgErr").textContent=(UI[LANG].modErr||"Blocked")+(d.reason?" - "+d.reason:""); return; }
+    if(!r.ok){ $("bgErr").textContent=d.error||UI[LANG].saveFail; return; }
+    $("bgErr").textContent="";
+    sfxSelect();
+    $("bgText").value="";
+    await refreshBugs(); refreshDock();
+  }catch(err){
+    $("btnPostBug").disabled=false;
+    $("bgErr").textContent=UI[LANG].saveFail;
+  }
 });
 $("btnBgBack").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="ARCHI ARCADE"; show("vArcade"); });
 
@@ -2115,7 +2183,7 @@ document.addEventListener("keydown",e=>{
 });
 
 
-/* ═══ 한/영 i18n — 게임플레이 루프 대상. 신청/공작소 보드는 KO 유지 ═══ */
+/* ═══ 한/영 i18n - 게임플레이 루프 대상. 신청/공작소 보드는 KO 유지 ═══ */
 function globalLine(e){
   const t=(e.a||0)+(e.b||0);
   if(!t) return "";
@@ -2129,7 +2197,7 @@ ko:{
   btnSolo:'혼자 플레이', btnHost:'방 만들기 (호스트)', btnJoin:'방 입장하기', btnLobby:'← 오락실로', back:'← 뒤로',
   hsTitle:'방 만들기', pwLabel:'비밀번호 (참가자 입장용)', tmLabel:'문항당 투표 제한시간',
   tmOpts:['5초 (스피드전)','10초','15초','20초','30초 (여유롭게)'], btnCreate:'방 생성',
-  ntShare:'참가자에게 알려주세요 — 방 코드 & 비밀번호', ntStart:'시작하면 문항이 모든 참가자 화면에 동시에 뜹니다',
+  ntShare:'참가자에게 알려주세요 - 방 코드 & 비밀번호', ntStart:'시작하면 문항이 모든 참가자 화면에 동시에 뜹니다',
   btnReroll:'질문 세트 다시 뽑기', waitingPlayers:'참가자 대기 중...',
   jnTitle:'방 입장', jnLabels:['방 코드 (4자리)','비밀번호','닉네임'], btnEnter:'입장',
   wtTitle:'입장 완료!', wtWait:'호스트가 시작하기를 기다리는 중...',
@@ -2140,9 +2208,9 @@ ko:{
   roomMeta:(t,n)=>'이 방 '+t+'명 투표 / 참가자 '+n+'명',
   roomMetaP:t=>'이 방 '+t+'명 투표',
   globalPre:'전체 유저:', hostPreparing:'호스트가 다음 문항 준비 중',
-  netErr:'NETWORK ERROR — 내 선택만 표시 중',
-  err:{needPw:'비밀번호를 입력하세요', creating:'생성 중...', noCode:'빈 방 코드를 찾지 못했습니다 — 다시 시도해주세요',
-       createFail:'방 생성 실패 — 잠시 후 다시 시도하세요', code4:'방 코드는 4자리 숫자입니다', checking:'확인 중...',
+  netErr:'NETWORK ERROR - 내 선택만 표시 중',
+  err:{needPw:'비밀번호를 입력하세요', creating:'생성 중...', noCode:'빈 방 코드를 찾지 못했습니다 - 다시 시도해주세요',
+       createFail:'방 생성 실패 - 잠시 후 다시 시도하세요', code4:'방 코드는 4자리 숫자입니다', checking:'확인 중...',
        noRoom:'존재하지 않는 방입니다', badRead:'방 정보를 읽을 수 없습니다', expired:'만료된 방입니다 (24시간 경과)', badPw:'비밀번호가 틀렸습니다'},
   ranks:(m,n)=> m>=Math.round(n*0.4)?['<b>S RANK · 아방가르드</b>','다수결? 그런 건 크리틱에서나 통하지.<br>내 설계는 내가 정하는 반항아 타입!']
         : m>=Math.round(n*0.2)?['<b>A RANK · 밸런스 아키텍트</b>','소신과 트렌드 사이의 줄타기 장인.<br>어떤 스튜디오에서도 살아남는 타입!']
@@ -2154,7 +2222,7 @@ en:{
   btnSolo:'SOLO PLAY', btnHost:'CREATE ROOM (HOST)', btnJoin:'JOIN ROOM', btnLobby:'← ARCADE', back:'← BACK',
   hsTitle:'CREATE ROOM', pwLabel:'PASSWORD (players use this to join)', tmLabel:'TIME LIMIT PER QUESTION',
   tmOpts:['5s (speedrun)','10s','15s','20s','30s (relaxed)'], btnCreate:'CREATE',
-  ntShare:'Share with players — room code & password', ntStart:'Questions appear on every player screen at once',
+  ntShare:'Share with players - room code & password', ntStart:'Questions appear on every player screen at once',
   btnReroll:'REROLL QUESTION SET', waitingPlayers:'Waiting for players...',
   jnTitle:'JOIN ROOM', jnLabels:['ROOM CODE (4 digits)','PASSWORD','NICKNAME'], btnEnter:'ENTER',
   wtTitle:'YOU ARE IN!', wtWait:'Waiting for the host to start...',
@@ -2165,9 +2233,9 @@ en:{
   roomMeta:(t,n)=>t+' voted in this room / '+n+' players',
   roomMetaP:t=>t+' voted in this room',
   globalPre:'All users:', hostPreparing:'Host is preparing the next question',
-  netErr:'NETWORK ERROR — showing your pick only',
-  err:{needPw:'Enter a password', creating:'Creating...', noCode:'No free room code found — try again',
-       createFail:'Failed to create room — try again shortly', code4:'Room code is 4 digits', checking:'Checking...',
+  netErr:'NETWORK ERROR - showing your pick only',
+  err:{needPw:'Enter a password', creating:'Creating...', noCode:'No free room code found - try again',
+       createFail:'Failed to create room - try again shortly', code4:'Room code is 4 digits', checking:'Checking...',
        noRoom:'Room not found', badRead:'Could not read room data', expired:'Room expired (24h passed)', badPw:'Wrong password'},
   ranks:(m,n)=> m>=Math.round(n*0.4)?['<b>S RANK · AVANT-GARDE</b>','Majority rule? Not in my studio.<br>You design on your own terms!']
         : m>=Math.round(n*0.2)?['<b>A RANK · BALANCE ARCHITECT</b>','A tightrope walker between conviction and trend.<br>You would survive any studio!']
@@ -2189,7 +2257,7 @@ UI.fr={
   tmLabel:"Temps de vote par question",
   tmOpts:["5 s (sprint)", "10 s", "15 s", "20 s", "30 s (tranquille)"],
   btnCreate:"Créer",
-  ntShare:"À partager — numéro de salle et mot de passe",
+  ntShare:"À partager - numéro de salle et mot de passe",
   ntStart:"Au lancement, la question s'affiche chez tous les joueurs en même temps",
   btnReroll:"Retirer les questions",
   waitingPlayers:"En attente de joueurs...",
@@ -2207,8 +2275,8 @@ UI.fr={
   lblM:"Fois à contre-courant",
   globalPre:"Monde entier : ",
   hostPreparing:"L'hôte prépare la question suivante",
-  netErr:"Erreur réseau — seul ton choix est affiché",
-  err:{"needPw": "Entre un mot de passe", "creating": "Création...", "noCode": "Aucun numéro libre — réessaie", "createFail": "Échec de création — réessaie plus tard", "code4": "Le numéro fait 4 chiffres", "checking": "Vérification...", "noRoom": "Cette salle n'existe pas", "badRead": "Impossible de lire la salle", "expired": "Salle expirée (plus de 24 h)", "badPw": "Mauvais mot de passe"},
+  netErr:"Erreur réseau - seul ton choix est affiché",
+  err:{"needPw": "Entre un mot de passe", "creating": "Création...", "noCode": "Aucun numéro libre - réessaie", "createFail": "Échec de création - réessaie plus tard", "code4": "Le numéro fait 4 chiffres", "checking": "Vérification...", "noRoom": "Cette salle n'existe pas", "badRead": "Impossible de lire la salle", "expired": "Salle expirée (plus de 24 h)", "badPw": "Mauvais mot de passe"},
   hubLogo:"L'ARCADE<br>DE L'ATELIER",
   marquee:"L'espace officiel de procrastination pour étudiants en archi épuisés ··· une petite partie tous ensemble, puis retour aux maquettes ··· de nouveaux jeux arrivent sans cesse ···",
   cartNames:["LE GRAND<br>DILEMME ARCHI", "QUI A CONÇU<br>CE BÂTIMENT ?", "VOCAB ARCHI<br>QUIZ ÉCLAIR", "LOUP-GAROU<br>DE L'ATELIER", "CHERCHEZ<br>L'ERREUR DU PLAN", "TEST DU<br>SENS DE L'ÉCHELLE"],
@@ -2233,7 +2301,7 @@ UI.fr={
   needIdea:"Entre une idée de jeu",
   needBug:"Entre les détails",
   throttle:"Trop vite ! Réessaie dans 15 s (anti-spam)",
-  saveFail:"Échec de sauvegarde — réessaie",
+  saveFail:"Échec de sauvegarde - réessaie",
   auTitle:"CARTE JOUEUR",
   auDesc:"Un pseudo et un PIN suffisent pour sauvegarder ton palmarès.<br>Tout reste jouable sans connexion.",
   auNameL:"PSEUDO (2-8 car.)",
@@ -2244,9 +2312,9 @@ UI.fr={
   auErrName:"Pseudo : 2-8 lettres/chiffres/_",
   auErrPin:"PIN : 4 caractères minimum",
   auErrDup:"Pseudo déjà pris",
-  auErrNo:"Pseudo introuvable — clique S'INSCRIRE",
+  auErrNo:"Pseudo introuvable - clique S'INSCRIRE",
   auErrPw:"Mauvais PIN",
-  auErrNet:"Erreur réseau — réessaie",
+  auErrNet:"Erreur réseau - réessaie",
   cardPlays:"Parties terminées",
   cardMinor:"Choix minoritaires (total)",
   cardTitle:"Titre actuel",
@@ -2288,7 +2356,7 @@ UI.it={
   tmLabel:"Tempo di voto per domanda",
   tmOpts:["5 s (sprint)", "10 s", "15 s", "20 s", "30 s (con calma)"],
   btnCreate:"Crea",
-  ntShare:"Da condividere — numero stanza e password",
+  ntShare:"Da condividere - numero stanza e password",
   ntStart:"All'avvio la domanda appare a tutti in contemporanea",
   btnReroll:"Ripesca le domande",
   waitingPlayers:"In attesa di giocatori...",
@@ -2306,8 +2374,8 @@ UI.it={
   lblM:"Volte controcorrente",
   globalPre:"Tutto il mondo: ",
   hostPreparing:"L'host prepara la prossima domanda",
-  netErr:"Errore di rete — mostrata solo la tua scelta",
-  err:{"needPw": "Inserisci una password", "creating": "Creazione...", "noCode": "Nessun numero libero — riprova", "createFail": "Creazione fallita — riprova più tardi", "code4": "Il numero ha 4 cifre", "checking": "Verifica...", "noRoom": "La stanza non esiste", "badRead": "Impossibile leggere la stanza", "expired": "Stanza scaduta (oltre 24 h)", "badPw": "Password errata"},
+  netErr:"Errore di rete - mostrata solo la tua scelta",
+  err:{"needPw": "Inserisci una password", "creating": "Creazione...", "noCode": "Nessun numero libero - riprova", "createFail": "Creazione fallita - riprova più tardi", "code4": "Il numero ha 4 cifre", "checking": "Verifica...", "noRoom": "La stanza non esiste", "badRead": "Impossibile leggere la stanza", "expired": "Stanza scaduta (oltre 24 h)", "badPw": "Password errata"},
   hubLogo:"LA SALA GIOCHI<br>DELL'AULA STUDIO",
   marquee:"Lo spazio ufficiale di procrastinazione per studenti di architettura esausti ··· una partita tutti insieme, poi di nuovo ai plastici ··· nuovi giochi in arrivo ···",
   cartNames:["IL GRANDE<br>DILEMMA ARCHI", "CHI HA PROGETTATO<br>QUESTO EDIFICIO?", "TERMINI ARCHI<br>QUIZ LAMPO", "LUPUS<br>DELL'AULA STUDIO", "TROVA L'ERRORE<br>NEL DISEGNO", "TEST DEL<br>SENSO DI SCALA"],
@@ -2332,7 +2400,7 @@ UI.it={
   needIdea:"Inserisci un'idea di gioco",
   needBug:"Inserisci i dettagli",
   throttle:"Troppo veloce! Riprova tra 15 s (anti-spam)",
-  saveFail:"Salvataggio fallito — riprova",
+  saveFail:"Salvataggio fallito - riprova",
   auTitle:"TESSERA GIOCATORE",
   auDesc:"Bastano nickname e PIN per salvare record e titolo.<br>Tutto resta giocabile senza accesso.",
   auNameL:"NICKNAME (2-8 car.)",
@@ -2343,9 +2411,9 @@ UI.it={
   auErrName:"Nickname: 2-8 lettere/numeri/_",
   auErrPin:"PIN: minimo 4 caratteri",
   auErrDup:"Nickname già in uso",
-  auErrNo:"Nickname non trovato — premi REGISTRATI",
+  auErrNo:"Nickname non trovato - premi REGISTRATI",
   auErrPw:"PIN errato",
-  auErrNet:"Errore di rete — riprova",
+  auErrNet:"Errore di rete - riprova",
   cardPlays:"Partite completate",
   cardMinor:"Scelte di minoranza (totale)",
   cardTitle:"Titolo attuale",
@@ -2387,7 +2455,7 @@ UI.de={
   tmLabel:"Abstimmzeit pro Frage",
   tmOpts:["5 s (Sprint)", "10 s", "15 s", "20 s", "30 s (gemütlich)"],
   btnCreate:"Erstellen",
-  ntShare:"Zum Teilen — Raumnummer und Passwort",
+  ntShare:"Zum Teilen - Raumnummer und Passwort",
   ntStart:"Beim Start erscheint die Frage bei allen gleichzeitig",
   btnReroll:"Fragen neu ziehen",
   waitingPlayers:"Warte auf Spieler...",
@@ -2405,8 +2473,8 @@ UI.de={
   lblM:"Male gegen den Strom",
   globalPre:"Weltweit: ",
   hostPreparing:"Der Host bereitet die nächste Frage vor",
-  netErr:"Netzwerkfehler — nur deine Wahl wird angezeigt",
-  err:{"needPw": "Gib ein Passwort ein", "creating": "Wird erstellt...", "noCode": "Keine freie Nummer — versuch's nochmal", "createFail": "Erstellen fehlgeschlagen — später erneut versuchen", "code4": "Die Nummer hat 4 Ziffern", "checking": "Prüfe...", "noRoom": "Diesen Raum gibt es nicht", "badRead": "Raum kann nicht gelesen werden", "expired": "Raum abgelaufen (über 24 h)", "badPw": "Falsches Passwort"},
+  netErr:"Netzwerkfehler - nur deine Wahl wird angezeigt",
+  err:{"needPw": "Gib ein Passwort ein", "creating": "Wird erstellt...", "noCode": "Keine freie Nummer - versuch's nochmal", "createFail": "Erstellen fehlgeschlagen - später erneut versuchen", "code4": "Die Nummer hat 4 Ziffern", "checking": "Prüfe...", "noRoom": "Diesen Raum gibt es nicht", "badRead": "Raum kann nicht gelesen werden", "expired": "Raum abgelaufen (über 24 h)", "badPw": "Falsches Passwort"},
   hubLogo:"DIE SPIELHALLE<br>IM ZEICHENSAAL",
   marquee:"Der offizielle Prokrastinationsraum für erschöpfte Architekturstudierende ··· eine Runde zusammen, dann zurück zu den Modellen ··· neue Spiele kommen laufend ···",
   cartNames:["DAS GROSSE<br>ARCHI-DILEMMA", "WER HAT DAS<br>ENTWORFEN?", "ARCHI-BEGRIFFE<br>BLITZ-QUIZ", "WERWOLF IM<br>ZEICHENSAAL", "FINDE DEN<br>PLANFEHLER", "MASSSTABS-<br>GEFÜHL-TEST"],
@@ -2421,7 +2489,7 @@ UI.de={
   sgLabels:["Spitzname", "Spielidee"],
   btnPostIdea:"WUNSCH EINWERFEN",
   wsTitle:"FRAGEN-WERKSTATT",
-  wsNote:"Hilf mit, die Fragen besser zu machen.<br>Schieflagen, neue Ideen — alles willkommen.",
+  wsNote:"Hilf mit, die Fragen besser zu machen.<br>Schieflagen, neue Ideen - alles willkommen.",
   wsTypeL:"TYP",
   wsOpts:["⚖️ Schieflage (eine Seite gewinnt immer)", "💡 Idee für neue Frage", "✨ Lustiger wäre es, wenn..."],
   wsLabels:["Spitzname", "Details"],
@@ -2431,7 +2499,7 @@ UI.de={
   needIdea:"Gib eine Spielidee ein",
   needBug:"Gib Details ein",
   throttle:"Zu schnell! In 15 s nochmal (Spamschutz)",
-  saveFail:"Speichern fehlgeschlagen — nochmal versuchen",
+  saveFail:"Speichern fehlgeschlagen - nochmal versuchen",
   auTitle:"SPIELERKARTE",
   auDesc:"Spitzname und PIN genügen, um Bilanz und Titel zu speichern.<br>Ohne Anmeldung bleibt alles spielbar.",
   auNameL:"SPITZNAME (2-8 Zeichen)",
@@ -2442,9 +2510,9 @@ UI.de={
   auErrName:"Spitzname: 2-8 Buchstaben/Ziffern/_",
   auErrPin:"PIN: mindestens 4 Zeichen",
   auErrDup:"Spitzname schon vergeben",
-  auErrNo:"Spitzname nicht gefunden — drück REGISTRIEREN",
+  auErrNo:"Spitzname nicht gefunden - drück REGISTRIEREN",
   auErrPw:"Falsche PIN",
-  auErrNet:"Netzwerkfehler — nochmal versuchen",
+  auErrNet:"Netzwerkfehler - nochmal versuchen",
   cardPlays:"Beendete Spiele",
   cardMinor:"Minderheitswahlen (gesamt)",
   cardTitle:"Aktueller Titel",
@@ -2486,7 +2554,7 @@ UI.es={
   tmLabel:"Tiempo de voto por pregunta",
   tmOpts:["5 s (esprint)", "10 s", "15 s", "20 s", "30 s (con calma)"],
   btnCreate:"Crear",
-  ntShare:"Para compartir — número de sala y contraseña",
+  ntShare:"Para compartir - número de sala y contraseña",
   ntStart:"Al empezar, la pregunta aparece a la vez en todas las pantallas",
   btnReroll:"Volver a sortear preguntas",
   waitingPlayers:"Esperando jugadores...",
@@ -2504,8 +2572,8 @@ UI.es={
   lblM:"Veces a contracorriente",
   globalPre:"Todo el mundo: ",
   hostPreparing:"El anfitrión prepara la siguiente pregunta",
-  netErr:"Error de red — solo se muestra tu elección",
-  err:{"needPw": "Escribe una contraseña", "creating": "Creando...", "noCode": "No hay números libres — inténtalo de nuevo", "createFail": "Fallo al crear — inténtalo más tarde", "code4": "El número tiene 4 cifras", "checking": "Comprobando...", "noRoom": "Esa sala no existe", "badRead": "No se puede leer la sala", "expired": "Sala caducada (más de 24 h)", "badPw": "Contraseña incorrecta"},
+  netErr:"Error de red - solo se muestra tu elección",
+  err:{"needPw": "Escribe una contraseña", "creating": "Creando...", "noCode": "No hay números libres - inténtalo de nuevo", "createFail": "Fallo al crear - inténtalo más tarde", "code4": "El número tiene 4 cifras", "checking": "Comprobando...", "noRoom": "Esa sala no existe", "badRead": "No se puede leer la sala", "expired": "Sala caducada (más de 24 h)", "badPw": "Contraseña incorrecta"},
   hubLogo:"EL SALÓN RECREATIVO<br>DEL TALLER",
   marquee:"El espacio oficial de procrastinación para estudiantes de arquitectura agotados ··· una partida todos juntos y de vuelta a las maquetas ··· nuevos juegos en camino ···",
   cartNames:["EL GRAN<br>DILEMA ARQUI", "¿QUIÉN DISEÑÓ<br>ESTE EDIFICIO?", "TÉRMINOS ARQUI<br>QUIZ RELÁMPAGO", "HOMBRE LOBO<br>DEL TALLER", "BUSCA EL ERROR<br>DEL PLANO", "TEST DEL<br>SENTIDO DE ESCALA"],
@@ -2530,7 +2598,7 @@ UI.es={
   needIdea:"Escribe una idea de juego",
   needBug:"Escribe los detalles",
   throttle:"¡Demasiado rápido! Prueba en 15 s (antispam)",
-  saveFail:"Fallo al guardar — inténtalo de nuevo",
+  saveFail:"Fallo al guardar - inténtalo de nuevo",
   auTitle:"CARNÉ DE JUGADOR",
   auDesc:"Con apodo y PIN basta para guardar tu historial y título.<br>Sin registrarte puedes jugar a todo igualmente.",
   auNameL:"APODO (2-8 caracteres)",
@@ -2541,9 +2609,9 @@ UI.es={
   auErrName:"Apodo: 2-8 letras/números/_",
   auErrPin:"PIN: mínimo 4 caracteres",
   auErrDup:"Ese apodo ya existe",
-  auErrNo:"Apodo no encontrado — pulsa REGISTRARSE",
+  auErrNo:"Apodo no encontrado - pulsa REGISTRARSE",
   auErrPw:"PIN incorrecto",
-  auErrNet:"Error de red — inténtalo de nuevo",
+  auErrNet:"Error de red - inténtalo de nuevo",
   cardPlays:"Partidas completadas",
   cardMinor:"Elecciones minoritarias (total)",
   cardTitle:"Título actual",
@@ -2625,15 +2693,12 @@ $("btnSwapQ").addEventListener("click",()=>hostSwapQuestion());
 
 
 
-/* ═══════════ 회원(플레이어 카드) · 관리자 · PC 독 · 허브 i18n — v1.3 ═══════════ */
-const ADMIN_HASH="af34f57c9faec1f06fd021ad2315b9f3246c3706d56dfe1a8e258d8769ddcf90"; // 레거시(SHA-256 1회) — ADMIN_PBK 설정 시 무시됨
-/* 관리자 해시 강화: 아래 salt/ph를 채우면 PBKDF2(120k) 경로로 검증한다(레거시는 자동 무시).
-   생성법 — 브라우저 콘솔에서 실행 후 출력값을 그대로 붙여넣기:
-     (async()=>{const s=randHex(16);console.log(JSON.stringify({salt:s,ph:await pbkdf2(prompt("관리자 비밀번호"),s,PBK_IT)}));})()
-   ※ 정적 SPA인 이상 클라이언트 게이트는 우회 가능 — 진짜 해결은 DEV_HANDOFF STEP 2(서버 인증). */
-const ADMIN_PBK={salt:"6fc2a65996abf1fbd274f7b0ed22f529",ph:"889c0d9806409617341ab87a44d417a46173e479f8075aed9b34f1803a18e5d2"};
+/* ═══════════ 회원(플레이어 카드) · 관리자 · PC 독 · 허브 i18n - v1.3 ═══════════ */
+/* 관리자 비밀번호의 해시가 여기 박혀 있었다. 이 파일은 누구나 받아볼 수 있으므로
+   그 값으로 오프라인 대입이 가능했고, 통과 여부도 브라우저가 정해 개발자 도구로
+   건너뛸 수도 있었다. 관리자 판정은 서버로 옮겼다(lib/auth.ts isAdminName) —
+   여기에는 아무것도 두지 않는다. */
 let USER=null;
-const uKey=n=>"abg-user-"+n.toLowerCase();
 const TITLES=[
  [0,"견습 제도사","Apprentice Drafter","见习制图员","見習い製図士","Apprenti dessinateur","Disegnatore apprendista","Zeichenlehrling","Delineante aprendiz","見習製圖員"],
  [3,"도면 요정","Drawing Fairy","图纸精灵","図面の妖精","Fée du dessin","Fata del disegno","Planfee","Hada del plano","圖紙精靈"],
@@ -2657,10 +2722,10 @@ Object.assign(UI.ko,{
   wsTypeL:'제보 유형',wsOpts:['⚖️ 밸런스 붕괴 신고 (한쪽이 너무 유리함)','💡 새 질문 제안','✨ 이런 식이면 더 재밌겠다'],
   wsLabels:['닉네임','내용'],btnPostBug:'제보 넣기',
   emptyIdeas:'아직 신청이 없습니다. 첫 번째 코인을 넣어주세요!',emptyBugs:'아직 제보가 없습니다. 첫 번째 공작을 시작해주세요!',
-  needIdea:'게임 아이디어를 입력해주세요',needBug:'내용을 입력해주세요',throttle:'너무 빨라요! 15초 뒤에 다시 (도배 방지)',saveFail:'저장 실패 — 잠시 후 다시 시도해주세요',
+  needIdea:'게임 아이디어를 입력해주세요',needBug:'내용을 입력해주세요',throttle:'너무 빨라요! 15초 뒤에 다시 (도배 방지)',saveFail:'저장 실패 - 잠시 후 다시 시도해주세요',
   auTitle:'플레이어 카드',auDesc:'닉네임과 PIN만으로 전적·칭호가 저장됩니다.<br>로그인 없이도 모든 게임을 즐길 수 있어요.',
   auNameL:'닉네임 (2~8자)',auPinL:'PIN (4~12자)',btnLogin:'로그인',btnRegister:'가입하기',btnLogout:'로그아웃',
-  auErrName:'닉네임은 2~8자 (한글/영문/숫자/_)',auErrPin:'PIN은 4자 이상',auErrDup:'이미 존재하는 닉네임입니다',auErrNo:'없는 닉네임입니다 — 가입하기를 눌러주세요',auErrPw:'PIN이 틀렸습니다',auErrNet:'통신 실패 — 잠시 후 다시',
+  auErrName:'닉네임은 2~8자 (한글/영문/숫자/_)',auErrPin:'PIN은 4자 이상',auErrDup:'이미 존재하는 닉네임입니다',auErrNo:'없는 닉네임입니다 - 가입하기를 눌러주세요',auErrPw:'PIN이 틀렸습니다',auErrNet:'통신 실패 - 잠시 후 다시',
   cardPlays:'완주한 게임',cardMinor:'누적 소수파 선택',cardTitle:'현재 칭호',cardNext:(n,r)=>'다음 칭호 「'+n+'」까지 '+r+'판',cardMax:'최고 등급 달성!',
   dkT1:'NOW OPEN',dkB1:'밤샘하다 지친 건축학도를 위한 온라인 오락실.<br>매 판 랜덤 질문, 전세계 누적 통계, 라이브 방 대전.',
   dkGuest:'게스트 모드로 플레이 중.<br>로그인하면 전적과 칭호가 저장됩니다.',
@@ -2678,10 +2743,10 @@ Object.assign(UI.en,{
   wsTypeL:'TYPE',wsOpts:['⚖️ Broken balance (one side always wins)','💡 New question idea','✨ It would be more fun if...'],
   wsLabels:['NICKNAME','Details'],btnPostBug:'SUBMIT',
   emptyIdeas:'No requests yet. Insert the first coin!',emptyBugs:'No reports yet. Start the first tinkering!',
-  needIdea:'Enter a game idea',needBug:'Enter details',throttle:'Too fast! Try again in 15s (anti-spam)',saveFail:'Save failed — try again shortly',
+  needIdea:'Enter a game idea',needBug:'Enter details',throttle:'Too fast! Try again in 15s (anti-spam)',saveFail:'Save failed - try again shortly',
   auTitle:'PLAYER CARD',auDesc:'A nickname and PIN save your record and title.<br>Everything is still playable without logging in.',
   auNameL:'NICKNAME (2-8 chars)',auPinL:'PIN (4-12 chars)',btnLogin:'LOG IN',btnRegister:'SIGN UP',btnLogout:'LOG OUT',
-  auErrName:'Nickname: 2-8 letters/numbers/_',auErrPin:'PIN must be 4+ chars',auErrDup:'Nickname already taken',auErrNo:'Nickname not found — press SIGN UP',auErrPw:'Wrong PIN',auErrNet:'Network error — try again',
+  auErrName:'Nickname: 2-8 letters/numbers/_',auErrPin:'PIN must be 4+ chars',auErrDup:'Nickname already taken',auErrNo:'Nickname not found - press SIGN UP',auErrPw:'Wrong PIN',auErrNet:'Network error - try again',
   cardPlays:'Games completed',cardMinor:'Minority picks (total)',cardTitle:'Current title',cardNext:(n,r)=>r+' games until title: '+n,cardMax:'Max rank achieved!',
   dkT1:'NOW OPEN',dkB1:'An online arcade for exhausted architecture students.<br>Random questions each run, global stats, live rooms.',
   dkGuest:'Playing as guest.<br>Log in to save your record and title.',
@@ -2757,7 +2822,7 @@ async function authPost(path,body){
     return {ok:r.ok,status:r.status,d:d||{}};
   }catch(e){ return {ok:false,status:0,d:{}}; }
 }
-/* 서버가 준 사용자 정보를 원본이 쓰던 USER 모양으로 맞춘다 — 화면 코드는 그대로 둔다. */
+/* 서버가 준 사용자 정보를 원본이 쓰던 USER 모양으로 맞춘다 - 화면 코드는 그대로 둔다. */
 function setUser(u,schoolEmail){
   USER = u ? {
     name:u.name, email:u.email||"", verified:!!u.verified,
@@ -2783,14 +2848,10 @@ async function doLogin(){
   const n=clean($("auName").value), p=$("auPin").value;
   if(!n||!p){ $("auErr").textContent=UI[LANG].auErrPin; return; }
   $("auErr").textContent="...";
-  if(n.toLowerCase()==="admin"){
-    const ok=(ADMIN_PBK.salt&&ADMIN_PBK.ph)
-      ? (await pbkdf2(p,ADMIN_PBK.salt,PBK_IT))===ADMIN_PBK.ph
-      : (await hashPw("user::"+p))===ADMIN_HASH;
-    if(ok){ $("auErr").textContent=""; sfxClear(); openAdmin(); }
-    else $("auErr").textContent=UI[LANG].auErrPw;
-    return;
-  }
+  /* 관리자도 같은 로그인을 쓴다. 예전에는 관리자 비밀번호의 해시를 이 페이지에 박아
+     두고 브라우저가 비교했는데, 그 값은 누구나 볼 수 있어 오프라인에서 대입할 수 있고
+     통과 여부도 브라우저가 정하므로 개발자 도구로 건너뛸 수 있었다. 이제 서버가
+     판단하고, 관리자인지는 /api/reports 의 응답(admin)으로만 알 수 있다. */
   const r=await authPost("/api/auth/login",{name:n,pw:p});
   if(!r.ok){ $("auErr").textContent=r.d.error||UI[LANG].auErrNet; return; }
   setUser(r.d.user);
@@ -2853,7 +2914,7 @@ $("btnFgSend").addEventListener("click",async()=>{
   const r=await authPost("/api/auth/reset/request",{email:em});
   if(!r.ok){ $("fgErr").textContent=(r.d.mailNotReady?UI[LANG].fgMailSoon:r.d.error)||UI[LANG].auErrNet; return; }
   $("fgErr").textContent="";
-  // 가입된 주소인지는 알려주지 않는다 — 어느 쪽이든 같은 화면으로 넘어간다.
+  // 가입된 주소인지는 알려주지 않는다 - 어느 쪽이든 같은 화면으로 넘어간다.
   $("fgCodeF").classList.remove("hidden"); $("fgPwF").classList.remove("hidden");
   $("btnFgSend").classList.add("hidden"); $("btnFgConfirm").classList.remove("hidden");
   if(r.d.devCode){ $("fgDev").classList.remove("hidden"); $("fgDev").textContent=UI[LANG].fgDev+" "+r.d.devCode; }
@@ -2902,7 +2963,17 @@ async function openAdmin(){
     '<div style="clear:both"><span class="lbl">PLAYS (게임 시작)</span><span class="val">'+(s?(s.plays||0):"?")+'</span></div>'+
     '<div style="clear:both"><span class="lbl">질문은행</span><span class="val">'+QBANK.length+'</span></div>';
   renderAdmList("admIdeas", await loadIdeas(), IDEAS_KEY);
-  renderAdmList("admBugs", await loadBugs(), BUGS_KEY);
+  /* 제보는 서버에 있고 모양도 다르다(id 로 지운다). 관리자 계정으로 로그인해 있으면
+     전체가, 아니면 본인 것만 온다 — 판단은 서버가 한다. */
+  const rep=await loadBugs();
+  const el=$("admBugs");
+  el.innerHTML = (rep.rows&&rep.rows.length)
+    ? rep.rows.map(i=>
+        '<span class="idea-line">'+
+        '<button class="crt-btn" data-bugdel="'+esc(i.id)+'" style="margin-right:8px;padding:2px 6px;font-size:8px;color:var(--red);border-color:var(--red)">X</button>'+
+        '<span class="who">'+(TP_ICON[i.kind]||"▪")+' '+esc(i.authorName)+'</span> '+esc(i.body)+
+        '</span>').join("")
+    : (rep.need ? "관리자 계정으로 로그인해야 보입니다" : "비어 있음");
 }
 function renderAdmList(elId, list, key){
   const el=$(elId);
@@ -2916,6 +2987,7 @@ function renderAdmList(elId, list, key){
 document.addEventListener("click", async e=>{
   const t=e.target.closest("[data-admdel]");
   if(!t) return;
+  // 이 경로는 이제 게임 신청 목록에만 쓴다. 제보는 data-bugdel 로 서버에 지운다.
   const [key,idxStr]=t.getAttribute("data-admdel").split(":");
   const di=parseInt(idxStr,10);
   const raw=await sGet(key); let list=[];
@@ -2931,7 +3003,7 @@ async function refreshDock(){
   if(!USER) $("dockUser").innerHTML=u.dkGuest;
   else{
     const p=USER.prof;
-    $("dockUser").innerHTML='<b>'+esc(USER.name)+'</b> — '+esc(titleFor(p.plays||0))+'<br>'+u.cardPlays+': <b>'+(p.plays||0)+'</b> · '+u.cardMinor+': <b>'+(p.minor||0)+'</b>';
+    $("dockUser").innerHTML='<b>'+esc(USER.name)+'</b> - '+esc(titleFor(p.plays||0))+'<br>'+u.cardPlays+': <b>'+(p.plays||0)+'</b> · '+u.cardMinor+': <b>'+(p.minor||0)+'</b>';
   }
   try{
     const ideas=(await loadIdeas()).slice(-3).reverse();
@@ -2946,7 +3018,7 @@ if(window.matchMedia&&window.matchMedia("(min-width:1100px)").matches){ refreshD
 
 
 
-/* ═══ 질문 리액션(🔥/😑) — 원터치 집계, 입력 없음 ═══ */
+/* ═══ 질문 리액션(🔥/😑) - 원터치 집계, 입력 없음 ═══ */
 const QREACT_KEY="arcade-qreact-v1";
 const reacted=new Set(); // 세션당 질문별 1회
 Object.assign(UI.ko,{rHot:"꿀잼",rMeh:"노잼"});
@@ -2994,10 +3066,10 @@ openAdmin=async function(){
     const rows=Object.entries(m).map(([bi,e])=>({bi:+bi,h:e.h||0,mm:e.m||0}));
     const hot=rows.filter(r=>r.h>0).sort((a,b)=>b.h-a.h).slice(0,5);
     const meh=rows.filter(r=>r.mm>0).sort((a,b)=>b.mm-a.mm).slice(0,5);
-    const line=r=>'<span class="idea-line">🔥'+r.h+' 😑'+r.mm+' — '+esc((QBANK[r.bi]||{}).q||"?")+'</span>';
+    const line=r=>'<span class="idea-line">🔥'+r.h+' 😑'+r.mm+' - '+esc((QBANK[r.bi]||{}).q||"?")+'</span>';
     const extra=document.createElement("div");
     extra.innerHTML='<div class="note" style="margin-top:14px">🔥 핫 질문 TOP5</div><div class="playerlist">'+(hot.length?hot.map(line).join(""):"데이터 없음")+'</div>'+
-                    '<div class="note" style="margin-top:14px">😑 노잼 신고 TOP5 — 교체 후보</div><div class="playerlist">'+(meh.length?meh.map(line).join(""):"데이터 없음")+'</div>';
+                    '<div class="note" style="margin-top:14px">😑 노잼 신고 TOP5 - 교체 후보</div><div class="playerlist">'+(meh.length?meh.map(line).join(""):"데이터 없음")+'</div>';
     $("admBugs").parentNode.insertBefore(extra,$("btnAdmBack"));
     // 중복 삽입 방지: 기존 것 제거
     const olds=document.querySelectorAll("#vAdmin [data-reactpanel]");
@@ -3037,7 +3109,7 @@ UI.zh={
   btnSolo:'单人游玩',btnHost:'创建房间（主持）',btnJoin:'加入房间',btnLobby:'← 回游戏厅',back:'← 返回',
   hsTitle:'创建房间',pwLabel:'密码（玩家加入用）',tmLabel:'每题投票时限',
   tmOpts:['5秒（竞速）','10秒','15秒','20秒','30秒（悠闲）'],btnCreate:'创建',
-  ntShare:'告诉玩家 — 房间号和密码',ntStart:'开始后题目将同时出现在所有玩家屏幕上',
+  ntShare:'告诉玩家 - 房间号和密码',ntStart:'开始后题目将同时出现在所有玩家屏幕上',
   btnReroll:'重抽题目',waitingPlayers:'等待玩家中...',
   jnTitle:'加入房间',jnLabels:['房间号（4位）','密码','昵称'],btnEnter:'进入',
   wtTitle:'加入成功！',wtWait:'等待主持人开始...',
@@ -3048,8 +3120,8 @@ UI.zh={
   roomMeta:(t,n)=>'本房间 '+t+' 人投票 / 共 '+n+' 名玩家',
   roomMetaP:t=>'本房间 '+t+' 人投票',
   globalPre:'全球用户：',hostPreparing:'主持人正在准备下一题',
-  netErr:'网络错误 — 仅显示你的选择',
-  err:{needPw:'请输入密码',creating:'创建中...',noCode:'没有可用房间号 — 请重试',createFail:'创建失败 — 请稍后再试',code4:'房间号为4位数字',checking:'确认中...',noRoom:'房间不存在',badRead:'无法读取房间信息',expired:'房间已过期（超过24小时）',badPw:'密码错误'},
+  netErr:'网络错误 - 仅显示你的选择',
+  err:{needPw:'请输入密码',creating:'创建中...',noCode:'没有可用房间号 - 请重试',createFail:'创建失败 - 请稍后再试',code4:'房间号为4位数字',checking:'确认中...',noRoom:'房间不存在',badRead:'无法读取房间信息',expired:'房间已过期（超过24小时）',badPw:'密码错误'},
   ranks:(m,n)=> m>=Math.round(n*0.4)?['<b>S RANK · 先锋派</b>','少数服从多数？评图上才用得着。<br>我的设计我做主！']
         : m>=Math.round(n*0.2)?['<b>A RANK · 平衡建筑师</b>','在信念与潮流之间走钢丝的高手。<br>在任何工作室都能生存！']
         : ['<b>B RANK · 甲方的最爱</b>','与大众的感觉同行的设计者。<br>业主一定会爱上你！'],
@@ -3064,10 +3136,10 @@ UI.zh={
   wsTypeL:'类型',wsOpts:['⚖️ 不平衡举报（一边总是赢）','💡 新题提议','✨ 这样会更有趣'],
   wsLabels:['昵称','内容'],btnPostBug:'提交',
   emptyIdeas:'还没有申请。投下第一枚硬币吧！',emptyBugs:'还没有反馈。开始第一次打磨吧！',
-  needIdea:'请输入游戏点子',needBug:'请输入内容',throttle:'太快了！15秒后再试（防刷屏）',saveFail:'保存失败 — 请稍后再试',
+  needIdea:'请输入游戏点子',needBug:'请输入内容',throttle:'太快了！15秒后再试（防刷屏）',saveFail:'保存失败 - 请稍后再试',
   auTitle:'玩家卡',auDesc:'只需昵称和PIN即可保存战绩和称号。<br>不登录也能玩所有游戏。',
   auNameL:'昵称（2~8字）',auPinL:'PIN（4~12位）',btnLogin:'登录',btnRegister:'注册',btnLogout:'登出',
-  auErrName:'昵称须为2~8个字符',auErrPin:'PIN至少4位',auErrDup:'昵称已存在',auErrNo:'昵称不存在 — 请点注册',auErrPw:'PIN错误',auErrNet:'网络错误 — 请稍后再试',
+  auErrName:'昵称须为2~8个字符',auErrPin:'PIN至少4位',auErrDup:'昵称已存在',auErrNo:'昵称不存在 - 请点注册',auErrPw:'PIN错误',auErrNet:'网络错误 - 请稍后再试',
   cardPlays:'完成的游戏',cardMinor:'累计少数派选择',cardTitle:'当前称号',cardNext:(n,r)=>'距离称号「'+n+'」还差 '+r+' 局',cardMax:'已达最高等级！',
   dkT1:'NOW OPEN',dkB1:'为熬夜建筑学子打造的线上游戏厅。<br>每局随机出题，全球统计，实时对战房。',
   dkGuest:'正在以游客模式游玩。<br>登录即可保存战绩和称号。',
@@ -3081,7 +3153,7 @@ UI.ja={
   btnSolo:'ひとりで遊ぶ',btnHost:'ルーム作成（ホスト）',btnJoin:'ルームに入る',btnLobby:'← ゲーセンへ',back:'← 戻る',
   hsTitle:'ルーム作成',pwLabel:'パスワード（参加用）',tmLabel:'1問あたりの制限時間',
   tmOpts:['5秒（スピード戦）','10秒','15秒','20秒','30秒（ゆったり）'],btnCreate:'作成',
-  ntShare:'参加者に伝えよう — ルーム番号とパスワード',ntStart:'開始すると全員の画面に同時に問題が表示されます',
+  ntShare:'参加者に伝えよう - ルーム番号とパスワード',ntStart:'開始すると全員の画面に同時に問題が表示されます',
   btnReroll:'問題セットを引き直す',waitingPlayers:'参加者を待っています...',
   jnTitle:'ルームに入る',jnLabels:['ルーム番号（4桁）','パスワード','ニックネーム'],btnEnter:'入室',
   wtTitle:'入室完了！',wtWait:'ホストの開始を待っています...',
@@ -3092,8 +3164,8 @@ UI.ja={
   roomMeta:(t,n)=>'このルームで '+t+' 人投票 / 参加者 '+n+' 人',
   roomMetaP:t=>'このルームで '+t+' 人投票',
   globalPre:'全ユーザー：',hostPreparing:'ホストが次の問題を準備中',
-  netErr:'ネットワークエラー — 自分の選択のみ表示中',
-  err:{needPw:'パスワードを入力してください',creating:'作成中...',noCode:'空きルーム番号が見つかりません — 再試行してください',createFail:'作成失敗 — しばらくして再試行',code4:'ルーム番号は4桁の数字です',checking:'確認中...',noRoom:'ルームが存在しません',badRead:'ルーム情報を読めません',expired:'期限切れのルームです（24時間経過）',badPw:'パスワードが違います'},
+  netErr:'ネットワークエラー - 自分の選択のみ表示中',
+  err:{needPw:'パスワードを入力してください',creating:'作成中...',noCode:'空きルーム番号が見つかりません - 再試行してください',createFail:'作成失敗 - しばらくして再試行',code4:'ルーム番号は4桁の数字です',checking:'確認中...',noRoom:'ルームが存在しません',badRead:'ルーム情報を読めません',expired:'期限切れのルームです（24時間経過）',badPw:'パスワードが違います'},
   ranks:(m,n)=> m>=Math.round(n*0.4)?['<b>S RANK · アバンギャルド</b>','多数決？そんなのエスキスだけで十分。<br>自分の設計は自分で決める反逆者タイプ！']
         : m>=Math.round(n*0.2)?['<b>A RANK · バランス・アーキテクト</b>','信念とトレンドの間の綱渡り職人。<br>どのスタジオでも生き残れるタイプ！']
         : ['<b>B RANK · クライアントの恋人</b>','大衆の感覚と共に歩む設計者。<br>施主に愛されるタイプ！'],
@@ -3108,10 +3180,10 @@ UI.ja={
   wsTypeL:'種類',wsOpts:['⚖️ バランス崩壊報告（片方が有利すぎ）','💡 新しい問題の提案','✨ こうしたらもっと面白い'],
   wsLabels:['ニックネーム','内容'],btnPostBug:'送信',
   emptyIdeas:'まだリクエストがありません。最初のコインを入れよう！',emptyBugs:'まだ報告がありません。最初の工作を始めよう！',
-  needIdea:'ゲームのアイデアを入力してください',needBug:'内容を入力してください',throttle:'早すぎ！15秒後にもう一度（スパム防止）',saveFail:'保存失敗 — しばらくして再試行',
+  needIdea:'ゲームのアイデアを入力してください',needBug:'内容を入力してください',throttle:'早すぎ！15秒後にもう一度（スパム防止）',saveFail:'保存失敗 - しばらくして再試行',
   auTitle:'プレイヤーカード',auDesc:'ニックネームとPINだけで戦績・称号を保存。<br>ログインなしでも全ゲーム遊べます。',
   auNameL:'ニックネーム（2~8字）',auPinL:'PIN（4~12字）',btnLogin:'ログイン',btnRegister:'登録',btnLogout:'ログアウト',
-  auErrName:'ニックネームは2~8字',auErrPin:'PINは4字以上',auErrDup:'既に存在するニックネームです',auErrNo:'ニックネームが見つかりません — 登録を押してください',auErrPw:'PINが違います',auErrNet:'通信エラー — しばらくして再試行',
+  auErrName:'ニックネームは2~8字',auErrPin:'PINは4字以上',auErrDup:'既に存在するニックネームです',auErrNo:'ニックネームが見つかりません - 登録を押してください',auErrPw:'PINが違います',auErrNet:'通信エラー - しばらくして再試行',
   cardPlays:'完走したゲーム',cardMinor:'累計少数派の選択',cardTitle:'現在の称号',cardNext:(n,r)=>'次の称号「'+n+'」まであと '+r+' 局',cardMax:'最高ランク達成！',
   dkT1:'NOW OPEN',dkB1:'徹夜で疲れた建築学生のためのオンラインゲーセン。<br>毎回ランダム出題、世界共通統計、ライブルーム対戦。',
   dkGuest:'ゲストモードでプレイ中。<br>ログインすると戦績と称号が保存されます。',
@@ -3187,7 +3259,7 @@ $("commX").addEventListener("click",()=>{ sfxNext(); closeOv(); });
 $("ovGames").addEventListener("click",e=>{ if(e.target.id==="ovGames") closeOv(); });
 $("ovComm").addEventListener("click",e=>{ if(e.target.id==="ovComm") closeOv(); });
 
-/* ═══ 커뮤니티 윙 — 언어권별 노출 순서 + 관심도 수집 ═══ */
+/* ═══ 커뮤니티 윙 - 언어권별 노출 순서 + 관심도 수집 ═══ */
 const IKEY="arcade-interest-v1";
 const _intDone=new Set();
 function buildCommStrip(){
@@ -3230,14 +3302,14 @@ async function openComm(fid){
   });
 }
 
-/* OP ROOM — 커뮤니티 관심도 리포트 (기능별·언어별) */
+/* OP ROOM - 커뮤니티 관심도 리포트 (기능별·언어별) */
 if(typeof openAdmin==="function"){
   const _openAdmin=openAdmin;
   openAdmin=async function(){
     await _openAdmin();
     let box=$("admInterest");
     if(!box){
-      const note=document.createElement("div"); note.className="note"; note.textContent="커뮤니티 기능 관심도 — 어느 언어권이 무엇을 원하는가";
+      const note=document.createElement("div"); note.className="note"; note.textContent="커뮤니티 기능 관심도 - 어느 언어권이 무엇을 원하는가";
       box=document.createElement("div"); box.className="playerlist"; box.id="admInterest"; box.style.maxHeight="150px";
       const back=$("btnAdmBack"); back.parentNode.insertBefore(note,back); back.parentNode.insertBefore(box,back);
     }
@@ -3299,9 +3371,25 @@ updateAuthUI=function(){
   }
   else setAuthMode(AUTH_MODE);
   renderSchoolHint();
-};
 
-/* 학교 메일로 가입했으면 인증으로 이어 준다 — 주소를 다시 적게 하지 않는다. */
+  /* 비밀번호 바꾸기는 로그인한 사람에게만. 실제 변경은 메일 코드를 확인한 뒤라
+     비밀번호 찾기와 같은 경로를 쓴다 — 주소는 계정 것으로 미리 채워진다. */
+  $("btnChangePw").classList.toggle("hidden",!logged);
+  if(logged) $("btnChangePw").textContent=UI[LANG].btnChangePw||"비밀번호 바꾸기";
+
+  /* 관리자 여부는 서버만 안다. 물어보고 맞을 때만 버튼을 띄운다. */
+  $("btnOpenAdmin").classList.toggle("hidden",true);
+  if(logged){
+    fetch("/api/reports",{cache:"no-store"})
+      .then(r=>r.ok?r.json():null)
+      .then(d=>{ if(d&&d.admin) $("btnOpenAdmin").classList.remove("hidden"); })
+      .catch(()=>undefined);
+  }
+};
+$("btnChangePw").addEventListener("click",()=>showForgot());
+$("btnOpenAdmin").addEventListener("click",()=>{ sfxNext(); openAdmin(); });
+
+/* 학교 메일로 가입했으면 인증으로 이어 준다 - 주소를 다시 적게 하지 않는다. */
 function renderSchoolHint(){
   const u=UI[LANG];
   const show = !!(USER && USER.schoolEmail && !USER.verified);
@@ -3318,8 +3406,8 @@ $("btnGoVerify").addEventListener("click",()=>{ sfxNext(); location.href="/verif
 
 /* ═══ 신규 기능 i18n (8개 언어) + 문화별 커뮤니티 노출 순서 ═══ */
 Object.assign(UI.ko,{
-  moreGames:'더 많은<br>게임 보기', gcatT:'게임 카탈로그', gcatGhost:'다음 슬롯은 비어 있어요 — 하고 싶은 게임을 신청해 주세요!',
-  gameCat:[['건축학과 밸런스게임','설계실의 영원한 논쟁을 투표로 끝장내는 궁극의 2지선다'],['이 건물 누가 설계했게','실루엣·사진만 보고 건축가를 맞히는 눈썰미 퀴즈'],['건축용어 스피드 퀴즈','캔틸레버부터 코니스까지, 제한시간 안에 용어 맞히기'],['설계실 라이어게임','한 명만 다른 제시어를 받는다 — 설계실 눈치 게임'],['도면 틀린그림찾기','멀쩡해 보이는 도면 속 오류를 빨리 찾는 사람이 승리'],['스케일 감각 테스트','이 문, 몇 mm일까? 몸에 밴 스케일 감각 측정']],
+  moreGames:'더 많은<br>게임 보기', gcatT:'게임 카탈로그', gcatGhost:'다음 슬롯은 비어 있어요 - 하고 싶은 게임을 신청해 주세요!',
+  gameCat:[['건축학과 밸런스게임','설계실의 영원한 논쟁을 투표로 끝장내는 궁극의 2지선다'],['이 건물 누가 설계했게','실루엣·사진만 보고 건축가를 맞히는 눈썰미 퀴즈'],['건축용어 스피드 퀴즈','캔틸레버부터 코니스까지, 제한시간 안에 용어 맞히기'],['설계실 라이어게임','한 명만 다른 제시어를 받는다 - 설계실 눈치 게임'],['도면 틀린그림찾기','멀쩡해 보이는 도면 속 오류를 빨리 찾는 사람이 승리'],['스케일 감각 테스트','이 문, 몇 mm일까? 몸에 밴 스케일 감각 측정']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'오픈 준비 중 · 관심 등록 받는 중',
   btnInterest:'이 기능 원해요! ♥', interestDone:'등록 완료 ✔ 오픈되면 만나요',
   commOrder:['team','crit','res','match'],
@@ -3334,8 +3422,8 @@ Object.assign(UI.ko,{
   auStrength:['약함','보통','강함']
 });
 Object.assign(UI.en,{
-  moreGames:'SEE ALL<br>GAMES', gcatT:'GAME CATALOG', gcatGhost:'This slot is empty — request the game you want!',
-  gameCat:[['Archi Balance Game','The ultimate either/or that settles studio debates by global vote'],['Guess the Architect','Name the architect from a silhouette or photo'],['Archi Terms Speed Quiz','From cantilever to cornice — beat the clock'],['Studio Liar Game','One player gets a different prompt — bluff your studio'],['Spot the Drawing Error','Find the hidden mistakes in a clean-looking drawing'],['Scale Sense Test','How many mm is that door? Test your body memory']],
+  moreGames:'SEE ALL<br>GAMES', gcatT:'GAME CATALOG', gcatGhost:'This slot is empty - request the game you want!',
+  gameCat:[['Archi Balance Game','The ultimate either/or that settles studio debates by global vote'],['Guess the Architect','Name the architect from a silhouette or photo'],['Archi Terms Speed Quiz','From cantilever to cornice - beat the clock'],['Studio Liar Game','One player gets a different prompt - bluff your studio'],['Spot the Drawing Error','Find the hidden mistakes in a clean-looking drawing'],['Scale Sense Test','How many mm is that door? Test your body memory']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'In prep · collecting interest',
   btnInterest:'I want this! ♥', interestDone:'Registered ✔ See you at launch',
   commOrder:['team','crit','match','res'],
@@ -3350,8 +3438,8 @@ Object.assign(UI.en,{
   auStrength:['Weak','Okay','Strong']
 });
 Object.assign(UI.zh,{
-  moreGames:'查看<br>全部游戏', gcatT:'游戏目录', gcatGhost:'这个卡槽还空着——来申请你想玩的游戏吧！',
-  gameCat:[['建筑系二选一大战','用全球投票终结画室永恒争论的终极二选一'],['这栋楼谁设计的','只看剪影或照片猜建筑师的眼力测验'],['建筑术语速答竞赛','从悬挑到檐口，限时抢答'],['制图室谁是卧底','只有一人拿到不同题目——画室推理博弈'],['图纸找不同','谁先找出看似正常的图纸里的错误谁赢'],['比例感觉测试','这扇门多少毫米？测测刻进身体的比例感']],
+  moreGames:'查看<br>全部游戏', gcatT:'游戏目录', gcatGhost:'这个卡槽还空着-来申请你想玩的游戏吧！',
+  gameCat:[['建筑系二选一大战','用全球投票终结画室永恒争论的终极二选一'],['这栋楼谁设计的','只看剪影或照片猜建筑师的眼力测验'],['建筑术语速答竞赛','从悬挑到檐口，限时抢答'],['制图室谁是卧底','只有一人拿到不同题目-画室推理博弈'],['图纸找不同','谁先找出看似正常的图纸里的错误谁赢'],['比例感觉测试','这扇门多少毫米？测测刻进身体的比例感']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'筹备中 · 收集心愿',
   btnInterest:'我想要这个！♥', interestDone:'已登记 ✔ 上线见',
   commOrder:['match','team','crit','res'],
@@ -3366,8 +3454,8 @@ Object.assign(UI.zh,{
   auStrength:['弱','中','强']
 });
 Object.assign(UI.ja,{
-  moreGames:'ゲームを<br>すべて見る', gcatT:'ゲームカタログ', gcatGhost:'このスロットは空きです——遊びたいゲームをリクエスト！',
-  gameCat:[['建築学科 究極の二択','製図室の永遠の論争を世界投票で決着させる二択'],['この建物 誰の設計？','シルエットや写真だけで建築家を当てる眼力クイズ'],['建築用語スピードクイズ','キャンチからコーニスまで、制限時間内に即答'],['製図室人狼ゲーム','一人だけ違うお題——製図室の腹の探り合い'],['図面間違い探し','一見まともな図面のミスを早く見つけた人の勝ち'],['スケール感覚テスト','このドア、何mm？体に染みたスケール感を測定']],
+  moreGames:'ゲームを<br>すべて見る', gcatT:'ゲームカタログ', gcatGhost:'このスロットは空きです-遊びたいゲームをリクエスト！',
+  gameCat:[['建築学科 究極の二択','製図室の永遠の論争を世界投票で決着させる二択'],['この建物 誰の設計？','シルエットや写真だけで建築家を当てる眼力クイズ'],['建築用語スピードクイズ','キャンチからコーニスまで、制限時間内に即答'],['製図室人狼ゲーム','一人だけ違うお題-製図室の腹の探り合い'],['図面間違い探し','一見まともな図面のミスを早く見つけた人の勝ち'],['スケール感覚テスト','このドア、何mm？体に染みたスケール感を測定']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'準備中 · 興味登録受付中',
   btnInterest:'この機能ほしい！♥', interestDone:'登録完了 ✔ オープンでお会いしましょう',
   commOrder:['team','crit','match','res'],
@@ -3382,8 +3470,8 @@ Object.assign(UI.ja,{
   auStrength:['弱い','普通','強い']
 });
 Object.assign(UI.fr,{
-  moreGames:'VOIR TOUS<br>LES JEUX', gcatT:'CATALOGUE DE JEUX', gcatGhost:'Ce slot est vide — demande le jeu de tes rêves !',
-  gameCat:[['Le Grand Dilemme Archi','Le duel ultime qui tranche les débats d\'atelier par vote mondial'],['Qui a conçu ce bâtiment ?','Devine l\'architecte à partir d\'une silhouette ou d\'une photo'],['Vocab Archi Quiz Éclair','Du porte-à-faux à la corniche, réponds avant la fin du chrono'],['Loup-Garou de l\'Atelier','Un seul joueur reçoit une autre consigne — bluffe ton atelier'],['Cherchez l\'Erreur du Plan','Trouve les fautes cachées dans un plan d\'apparence propre'],['Test du Sens de l\'Échelle','Cette porte fait combien de mm ? Mesure ta mémoire du corps']],
+  moreGames:'VOIR TOUS<br>LES JEUX', gcatT:'CATALOGUE DE JEUX', gcatGhost:'Ce slot est vide - demande le jeu de tes rêves !',
+  gameCat:[['Le Grand Dilemme Archi','Le duel ultime qui tranche les débats d\'atelier par vote mondial'],['Qui a conçu ce bâtiment ?','Devine l\'architecte à partir d\'une silhouette ou d\'une photo'],['Vocab Archi Quiz Éclair','Du porte-à-faux à la corniche, réponds avant la fin du chrono'],['Loup-Garou de l\'Atelier','Un seul joueur reçoit une autre consigne - bluffe ton atelier'],['Cherchez l\'Erreur du Plan','Trouve les fautes cachées dans un plan d\'apparence propre'],['Test du Sens de l\'Échelle','Cette porte fait combien de mm ? Mesure ta mémoire du corps']],
   commHead:'▼ COMMUNAUTÉ · OUVERTURE PROCHAINE ▼', commSoonTag:'En préparation · intérêts comptés',
   btnInterest:'Je veux ça ! ♥', interestDone:'Enregistré ✔ À l\'ouverture !',
   commOrder:['team','match','crit','res'],
@@ -3398,8 +3486,8 @@ Object.assign(UI.fr,{
   auStrength:['Faible','Moyen','Fort']
 });
 Object.assign(UI.it,{
-  moreGames:'VEDI TUTTI<br>I GIOCHI', gcatT:'CATALOGO GIOCHI', gcatGhost:'Questo slot è vuoto — richiedi il gioco che vuoi!',
-  gameCat:[['Il Grande Dilemma Archi','Il duello definitivo che chiude i dibattiti d\'aula col voto mondiale'],['Chi ha progettato questo edificio?','Indovina l\'architetto da una sagoma o una foto'],['Termini Archi Quiz Lampo','Dallo sbalzo al cornicione, rispondi prima del gong'],['Lupus dell\'Aula Studio','Un solo giocatore riceve un tema diverso — bluffa i colleghi'],['Trova l\'Errore nel Disegno','Scova gli errori nascosti in una tavola all\'apparenza pulita'],['Test del Senso di Scala','Quanti mm è quella porta? Misura la memoria del corpo']],
+  moreGames:'VEDI TUTTI<br>I GIOCHI', gcatT:'CATALOGO GIOCHI', gcatGhost:'Questo slot è vuoto - richiedi il gioco che vuoi!',
+  gameCat:[['Il Grande Dilemma Archi','Il duello definitivo che chiude i dibattiti d\'aula col voto mondiale'],['Chi ha progettato questo edificio?','Indovina l\'architetto da una sagoma o una foto'],['Termini Archi Quiz Lampo','Dallo sbalzo al cornicione, rispondi prima del gong'],['Lupus dell\'Aula Studio','Un solo giocatore riceve un tema diverso - bluffa i colleghi'],['Trova l\'Errore nel Disegno','Scova gli errori nascosti in una tavola all\'apparenza pulita'],['Test del Senso di Scala','Quanti mm è quella porta? Misura la memoria del corpo']],
   commHead:'▼ COMMUNITY · APERTURA IN ARRIVO ▼', commSoonTag:'In preparazione · interesse in raccolta',
   btnInterest:'Lo voglio! ♥', interestDone:'Registrato ✔ Ci vediamo all\'apertura',
   commOrder:['team','match','crit','res'],
@@ -3414,8 +3502,8 @@ Object.assign(UI.it,{
   auStrength:['Debole','Media','Forte']
 });
 Object.assign(UI.de,{
-  moreGames:'ALLE SPIELE<br>ANSEHEN', gcatT:'SPIELKATALOG', gcatGhost:'Dieser Slot ist frei — wünsch dir dein Spiel!',
-  gameCat:[['Das Große Archi-Dilemma','Das ultimative Entweder-oder, das Saal-Debatten per Weltabstimmung beendet'],['Wer hat das entworfen?','Errate den Architekten an Silhouette oder Foto'],['Archi-Begriffe Blitz-Quiz','Vom Kragarm bis zum Gesims — gegen die Uhr'],['Werwolf im Zeichensaal','Nur einer bekommt eine andere Aufgabe — bluffe deinen Saal'],['Finde den Planfehler','Wer die versteckten Fehler im sauberen Plan zuerst findet, gewinnt'],['Maßstabsgefühl-Test','Wie viele mm hat diese Tür? Teste dein Körpergedächtnis']],
+  moreGames:'ALLE SPIELE<br>ANSEHEN', gcatT:'SPIELKATALOG', gcatGhost:'Dieser Slot ist frei - wünsch dir dein Spiel!',
+  gameCat:[['Das Große Archi-Dilemma','Das ultimative Entweder-oder, das Saal-Debatten per Weltabstimmung beendet'],['Wer hat das entworfen?','Errate den Architekten an Silhouette oder Foto'],['Archi-Begriffe Blitz-Quiz','Vom Kragarm bis zum Gesims - gegen die Uhr'],['Werwolf im Zeichensaal','Nur einer bekommt eine andere Aufgabe - bluffe deinen Saal'],['Finde den Planfehler','Wer die versteckten Fehler im sauberen Plan zuerst findet, gewinnt'],['Maßstabsgefühl-Test','Wie viele mm hat diese Tür? Teste dein Körpergedächtnis']],
   commHead:'▼ COMMUNITY · ERÖFFNUNG BALD ▼', commSoonTag:'In Vorbereitung · Interesse wird gezählt',
   btnInterest:'Will ich haben! ♥', interestDone:'Registriert ✔ Bis zur Eröffnung',
   commOrder:['team','res','crit','match'],
@@ -3430,8 +3518,8 @@ Object.assign(UI.de,{
   auStrength:['Schwach','Okay','Stark']
 });
 Object.assign(UI.es,{
-  moreGames:'VER TODOS<br>LOS JUEGOS', gcatT:'CATÁLOGO DE JUEGOS', gcatGhost:'Este hueco está vacío — ¡pide el juego que quieras!',
-  gameCat:[['El Gran Dilema Arqui','El duelo definitivo que zanja los debates del taller por voto mundial'],['¿Quién diseñó este edificio?','Adivina el arquitecto por una silueta o una foto'],['Términos Arqui Quiz Relámpago','Del voladizo a la cornisa, responde contra el reloj'],['Hombre Lobo del Taller','Solo uno recibe otra consigna — farolea a tu taller'],['Busca el Error del Plano','Gana quien antes encuentre los fallos ocultos de un plano impecable'],['Test del Sentido de Escala','¿Cuántos mm tiene esa puerta? Mide tu memoria corporal']],
+  moreGames:'VER TODOS<br>LOS JUEGOS', gcatT:'CATÁLOGO DE JUEGOS', gcatGhost:'Este hueco está vacío - ¡pide el juego que quieras!',
+  gameCat:[['El Gran Dilema Arqui','El duelo definitivo que zanja los debates del taller por voto mundial'],['¿Quién diseñó este edificio?','Adivina el arquitecto por una silueta o una foto'],['Términos Arqui Quiz Relámpago','Del voladizo a la cornisa, responde contra el reloj'],['Hombre Lobo del Taller','Solo uno recibe otra consigna - farolea a tu taller'],['Busca el Error del Plano','Gana quien antes encuentre los fallos ocultos de un plano impecable'],['Test del Sentido de Escala','¿Cuántos mm tiene esa puerta? Mide tu memoria corporal']],
   commHead:'▼ COMUNIDAD · APERTURA PRÓXIMA ▼', commSoonTag:'En preparación · registrando interés',
   btnInterest:'¡Lo quiero! ♥', interestDone:'Registrado ✔ Nos vemos en la apertura',
   commOrder:['match','team','crit','res'],
@@ -3461,7 +3549,7 @@ applyLang();
 
 
 
-/* ═══ 좌상단 뒤로가기 — 각 뷰의 기존 뒤로가기와 동일 동작 ═══ */
+/* ═══ 좌상단 뒤로가기 - 각 뷰의 기존 뒤로가기와 동일 동작 ═══ */
 const TOPBACK_MAP={
   vAuth:"#btnAuBack", vAdmin:"#btnAdmBack", vSuggest:"#btnSgBack", vReport:"#btnBgBack",
   vTitle:"#btnLobby", vHostSetup:"#vHostSetup [data-back]", vJoin:"#vJoin [data-back]"
@@ -3480,7 +3568,7 @@ $("topBack").addEventListener("click",()=>{
 
 
 
-/* ═══ 繁體中文(TW) — s2twp 대만 어휘 변환 + 문화 치환 ═══ */
+/* ═══ 繁體中文(TW) - s2twp 대만 어휘 변환 + 문화 치환 ═══ */
 const QBANK_TW=[
 {q:"截止日前夜，兩者必發生其一：",a:"工作檔案全部損壞",b:"提交當天早上印表機罷工"},
 {q:"到畢業只能選一樣武器：",a:"一輩子只畫手繪圖",b:"一輩子只做模型（免交圖紙）"},
@@ -3645,7 +3733,7 @@ UI.tw={
   btnSolo:'單人遊玩',btnHost:'建立房間（主持）',btnJoin:'加入房間',btnLobby:'← 迴游戲廳',back:'← 返回',
   hsTitle:'建立房間',pwLabel:'密碼（玩家加入用）',tmLabel:'每題投票時限',
   tmOpts:['5秒（競速）','10秒','15秒','20秒','30秒（悠閒）'],btnCreate:'建立',
-  ntShare:'告訴玩家 — 房間號和密碼',ntStart:'開始後題目將同時出現在所有玩家螢幕上',
+  ntShare:'告訴玩家 - 房間號和密碼',ntStart:'開始後題目將同時出現在所有玩家螢幕上',
   btnReroll:'重抽題目',waitingPlayers:'等待玩家中...',
   jnTitle:'加入房間',jnLabels:['房間號（4位）','密碼','暱稱'],btnEnter:'進入',
   wtTitle:'加入成功！',wtWait:'等待主持人開始...',
@@ -3656,8 +3744,8 @@ UI.tw={
   roomMeta:(t,n)=>'本房間 '+t+' 人投票 / 共 '+n+' 名玩家',
   roomMetaP:t=>'本房間 '+t+' 人投票',
   globalPre:'全球使用者：',hostPreparing:'主持人正在準備下一題',
-  netErr:'網路錯誤 — 僅顯示你的選擇',
-  err:{needPw:'請輸入密碼',creating:'建立中...',noCode:'沒有可用房間號 — 請重試',createFail:'建立失敗 — 請稍後再試',code4:'房間號為4位數字',checking:'確認中...',noRoom:'房間不存在',badRead:'無法讀取房間資訊',expired:'房間已過期（超過24小時）',badPw:'密碼錯誤'},
+  netErr:'網路錯誤 - 僅顯示你的選擇',
+  err:{needPw:'請輸入密碼',creating:'建立中...',noCode:'沒有可用房間號 - 請重試',createFail:'建立失敗 - 請稍後再試',code4:'房間號為4位數字',checking:'確認中...',noRoom:'房間不存在',badRead:'無法讀取房間資訊',expired:'房間已過期（超過24小時）',badPw:'密碼錯誤'},
   ranks:(m,n)=> m>=Math.round(n*0.4)?['<b>S RANK · 先鋒派</b>','少數服從多數？評圖上才用得著。<br>我的設計我做主！']
         : m>=Math.round(n*0.2)?['<b>A RANK · 平衡建築師</b>','在信念與潮流之間走鋼絲的高手。<br>在任何工作室都能生存！']
         : ['<b>B RANK · 甲方的最愛</b>','與大眾的感覺同行的設計者。<br>業主一定會愛上你！'],
@@ -3672,10 +3760,10 @@ UI.tw={
   wsTypeL:'型別',wsOpts:['⚖️ 不平衡舉報（一邊總是贏）','💡 新題提議','✨ 這樣會更有趣'],
   wsLabels:['暱稱','內容'],btnPostBug:'提交',
   emptyIdeas:'還沒有申請。投下第一枚硬幣吧！',emptyBugs:'還沒有反饋。開始第一次打磨吧！',
-  needIdea:'請輸入遊戲點子',needBug:'請輸入內容',throttle:'太快了！15秒後再試（防刷屏）',saveFail:'儲存失敗 — 請稍後再試',
+  needIdea:'請輸入遊戲點子',needBug:'請輸入內容',throttle:'太快了！15秒後再試（防刷屏）',saveFail:'儲存失敗 - 請稍後再試',
   auTitle:'玩家卡',auDesc:'只需暱稱和PIN即可儲存戰績和稱號。<br>不登入也能玩所有遊戲。',
   auNameL:'暱稱（2~8字）',auPinL:'PIN（4~12位）',btnLogin:'登入',btnRegister:'註冊',btnLogout:'登出',
-  auErrName:'暱稱須為2~8個字元',auErrPin:'PIN至少4位',auErrDup:'暱稱已存在',auErrNo:'暱稱不存在 — 請點註冊',auErrPw:'PIN錯誤',auErrNet:'網路錯誤 — 請稍後再試',
+  auErrName:'暱稱須為2~8個字元',auErrPin:'PIN至少4位',auErrDup:'暱稱已存在',auErrNo:'暱稱不存在 - 請點註冊',auErrPw:'PIN錯誤',auErrNet:'網路錯誤 - 請稍後再試',
   cardPlays:'完成的遊戲',cardMinor:'累計少數派選擇',cardTitle:'當前稱號',cardNext:(n,r)=>'距離稱號「'+n+'」還差 '+r+' 局',cardMax:'已達最高等級！',
   dkT1:'NOW OPEN',dkB1:'為熬夜建築學子打造的線上遊戲廳。<br>每局隨機出題，全球統計，實時對戰房。',
   dkGuest:'正在以遊客模式遊玩。<br>登入即可儲存戰績和稱號。',
@@ -3686,8 +3774,8 @@ UI.tw={
 };
 Object.assign(UI.tw,{phHostPw:"例：1234",phJoinCode:"例：7842",phJoinName:"例：通宵戰神",phSgName:"例：製圖室幽靈",phSgText:"例：猜名建築剪影",phBgName:"例：工坊坊主",phBgText:"例：這題A必勝，太無聊了"});
 Object.assign(UI.tw,{
-  moreGames:'檢視<br>全部遊戲', gcatT:'遊戲目錄', gcatGhost:'這個卡槽還空著——來申請你想玩的遊戲吧！',
-  gameCat:[['建築系二選一大戰','用全球投票終結畫室永恆爭論的終極二選一'],['這棟樓誰設計的','只看剪影或照片猜建築師的眼力測驗'],['建築術語速答競賽','從懸挑到簷口，限時搶答'],['製圖室誰是臥底','只有一人拿到不同題目——畫室推理博弈'],['圖紙找不同','誰先找出看似正常的圖紙裡的錯誤誰贏'],['比例感覺測試','這扇門多少毫米？測測刻進身體的比例感']],
+  moreGames:'檢視<br>全部遊戲', gcatT:'遊戲目錄', gcatGhost:'這個卡槽還空著-來申請你想玩的遊戲吧！',
+  gameCat:[['建築系二選一大戰','用全球投票終結畫室永恆爭論的終極二選一'],['這棟樓誰設計的','只看剪影或照片猜建築師的眼力測驗'],['建築術語速答競賽','從懸挑到簷口，限時搶答'],['製圖室誰是臥底','只有一人拿到不同題目-畫室推理博弈'],['圖紙找不同','誰先找出看似正常的圖紙裡的錯誤誰贏'],['比例感覺測試','這扇門多少毫米？測測刻進身體的比例感']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'籌備中 · 收集心願',
   btnInterest:'我想要這個！♥', interestDone:'已登記 ✔ 上線見',
   commOrder:['match','team','crit','res'],
@@ -3704,7 +3792,7 @@ Object.assign(UI.tw,{
 Object.assign(UI.tw,{modErr:"AI判定此內容不適合釋出",modChecking:"AI稽核中..."});
 
 
-/* ═══ AI 콘텐츠 검열 — 키워드가 아닌 문맥으로 판단 ═══ */
+/* ═══ AI 콘텐츠 검열 - 키워드가 아닌 문맥으로 판단 ═══ */
 async function moderateText(txt){
   try{
     /* 판정은 서버(/api/moderate)가 한다. 브라우저에서 직접 부르면 API 키가 노출되고,
@@ -3715,7 +3803,7 @@ async function moderateText(txt){
     }).then(r=>r.json());
     const j=await Promise.race([p,new Promise((_,rj)=>setTimeout(()=>rj(new Error("timeout")),9000))]);
     return {ok:!!j.ok, reason:j.reason||""};
-  }catch(e){ return {ok:true, reason:""}; } /* 판정 불가 시 통과 — 룰베이스식 오탐 방지 우선 */
+  }catch(e){ return {ok:true, reason:""}; } /* 판정 불가 시 통과 - 룰베이스식 오탐 방지 우선 */
 }
 Object.assign(UI.ko,{modErr:"AI가 이 내용은 게시하기 어렵다고 판단했어요",modChecking:"AI 확인 중..."});
 Object.assign(UI.en,{modErr:"AI flagged this as not postable",modChecking:"AI checking..."});
@@ -3728,35 +3816,35 @@ Object.assign(UI.es,{modErr:"La IA consideró este contenido no publicable",modC
 
 
 
-/* ═══ 신작 카탈로그 — 빙고·체스·마피아 (9개 언어) ═══ */
+/* ═══ 신작 카탈로그 - 빙고·체스·마피아 (9개 언어) ═══ */
 (function(){
   const add=(c,rows)=>{ if(UI[c]&&UI[c].gameCat) UI[c].gameCat.push(...rows); };
   add("ko",[["설계실 공감 빙고","\"교수님이 다 뒤집으래\"… 설계실 리얼 경험담으로 채우는 5×5 공감 빙고"],
             ["스트럭처 체스","기물이 기둥·보·아치! 구조 감각으로 두는 건축가의 체스"],
-            ["설계실 마피아","밤마다 누군가 도면을 찢는다 — 낮 토론으로 마피아를 찾아라"]]);
-  add("en",[["Studio Bingo","A 5×5 bingo of painfully real studio moments — \"redo everything\" included"],
-            ["Structure Chess","Pieces are columns, beams and arches — chess for structural minds"],
+            ["설계실 마피아","밤마다 누군가 도면을 찢는다 - 낮 토론으로 마피아를 찾아라"]]);
+  add("en",[["Studio Bingo","A 5×5 bingo of painfully real studio moments - \"redo everything\" included"],
+            ["Structure Chess","Pieces are columns, beams and arches - chess for structural minds"],
             ["Studio Mafia","Every night a drawing gets shredded. Debate by day, unmask the mafia"]]);
   add("zh",[["画室共鸣宾果","用\"教授让全部重做\"这类真实经历填满的5×5共鸣宾果"],
-            ["结构象棋","棋子是柱、梁、拱——用结构直觉下的建筑师象棋"],
-            ["画室天黑请闭眼","每到夜里就有人撕图纸——白天讨论揪出狼人"]]);
+            ["结构象棋","棋子是柱、梁、拱-用结构直觉下的建筑师象棋"],
+            ["画室天黑请闭眼","每到夜里就有人撕图纸-白天讨论揪出狼人"]]);
   add("tw",[["畫室共鳴賓果","用「教授叫你全部重做」這類真實經歷填滿的5×5共鳴賓果"],
-            ["結構西洋棋","棋子是柱、樑、拱——用結構直覺下的建築師棋局"],
-            ["畫室狼人殺","每到夜裡就有人撕圖紙——白天討論揪出狼人"]]);
+            ["結構西洋棋","棋子是柱、樑、拱-用結構直覺下的建築師棋局"],
+            ["畫室狼人殺","每到夜裡就有人撕圖紙-白天討論揪出狼人"]]);
   add("ja",[["製図室あるあるビンゴ","「教授に全部やり直しと言われた」等のリアル体験で埋める5×5ビンゴ"],
             ["ストラクチャーチェス","駒は柱・梁・アーチ！構造感覚で指す建築家のチェス"],
-            ["製図室マフィア","夜ごと図面が破られる——昼の推理でマフィアを探せ"]]);
-  add("fr",[["Bingo de l'atelier","Un bingo 5×5 des moments trop vrais — «\u00a0tout refaire\u00a0» inclus"],
-            ["Échecs de structure","Les pièces sont poteaux, poutres et arcs — les échecs des esprits structurels"],
+            ["製図室マフィア","夜ごと図面が破られる-昼の推理でマフィアを探せ"]]);
+  add("fr",[["Bingo de l'atelier","Un bingo 5×5 des moments trop vrais - «\u00a0tout refaire\u00a0» inclus"],
+            ["Échecs de structure","Les pièces sont poteaux, poutres et arcs - les échecs des esprits structurels"],
             ["Mafia de l'atelier","Chaque nuit, un plan est déchiré. Débattez le jour, démasquez la mafia"]]);
-  add("it",[["Bingo dell'aula","Bingo 5×5 dei momenti fin troppo veri — «rifai tutto» compreso"],
-            ["Scacchi strutturali","I pezzi sono pilastri, travi e archi — scacchi per menti strutturali"],
+  add("it",[["Bingo dell'aula","Bingo 5×5 dei momenti fin troppo veri - «rifai tutto» compreso"],
+            ["Scacchi strutturali","I pezzi sono pilastri, travi e archi - scacchi per menti strutturali"],
             ["Mafia dell'aula","Ogni notte una tavola viene strappata. Dibattito di giorno, smascherate la mafia"]]);
-  add("de",[["Zeichensaal-Bingo","5×5-Bingo der schmerzhaft wahren Momente — \u201ealles nochmal\u201c inklusive"],
-            ["Struktur-Schach","Die Figuren sind Stützen, Balken und Bögen — Schach für Statik-Köpfe"],
+  add("de",[["Zeichensaal-Bingo","5×5-Bingo der schmerzhaft wahren Momente - \u201ealles nochmal\u201c inklusive"],
+            ["Struktur-Schach","Die Figuren sind Stützen, Balken und Bögen - Schach für Statik-Köpfe"],
             ["Zeichensaal-Mafia","Jede Nacht wird ein Plan zerrissen. Tagsüber debattieren, Mafia entlarven"]]);
-  add("es",[["Bingo del taller","Bingo 5×5 de momentos dolorosamente reales — «repítelo todo» incluido"],
-            ["Ajedrez estructural","Las piezas son pilares, vigas y arcos — ajedrez para mentes estructurales"],
+  add("es",[["Bingo del taller","Bingo 5×5 de momentos dolorosamente reales - «repítelo todo» incluido"],
+            ["Ajedrez estructural","Las piezas son pilares, vigas y arcos - ajedrez para mentes estructurales"],
             ["Mafia del taller","Cada noche alguien rompe un plano. Debate de día y desenmascara a la mafia"]]);
 })();
 
@@ -3931,7 +4019,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'비밀번호 찾기',fgDesc:'가입할 때 쓴 이메일로 6자리 코드를 보냅니다.',
         fgEmail:'이메일',fgCode:'인증 코드 (6자리)',fgPw:'새 비밀번호 (8자+, 영문+숫자)',
         fgSend:'코드 받기 ▶',fgConfirm:'비밀번호 바꾸기 ▶',fgBack:'← 돌아가기',
-        fgDev:'개발 모드 — 코드:',fgErrCode:'6자리를 입력해주세요',
+        fgDev:'개발 모드 - 코드:',fgErrCode:'6자리를 입력해주세요',
         fgDone:'비밀번호를 바꿨어요. 새 비밀번호로 로그인해주세요',
         fgMailSoon:'비밀번호 찾기는 메일 발송 준비가 끝나면 열립니다'},
     en:{auEmail:'EMAIL (used to recover your password)',auErrEmail:'Check the email format',
@@ -3941,7 +4029,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'RESET PASSWORD',fgDesc:'We send a 6-digit code to the email you signed up with.',
         fgEmail:'EMAIL',fgCode:'CODE (6 digits)',fgPw:'NEW PASSWORD (8+, letters + numbers)',
         fgSend:'SEND CODE ▶',fgConfirm:'CHANGE PASSWORD ▶',fgBack:'← BACK',
-        fgDev:'Dev mode — code:',fgErrCode:'Enter all 6 digits',
+        fgDev:'Dev mode - code:',fgErrCode:'Enter all 6 digits',
         fgDone:'Password changed. Log in with the new one.',
         fgMailSoon:'Password reset opens once email sending is ready'},
     zh:{auEmail:'邮箱（用于找回密码）',auErrEmail:'请检查邮箱格式',
@@ -3951,7 +4039,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'找回密码',fgDesc:'我们会向注册邮箱发送6位验证码。',
         fgEmail:'邮箱',fgCode:'验证码（6位）',fgPw:'新密码（8位以上，字母+数字）',
         fgSend:'获取验证码 ▶',fgConfirm:'修改密码 ▶',fgBack:'← 返回',
-        fgDev:'开发模式 — 验证码：',fgErrCode:'请输入6位数字',
+        fgDev:'开发模式 - 验证码：',fgErrCode:'请输入6位数字',
         fgDone:'密码已修改，请用新密码登录。',
         fgMailSoon:'找回密码将在邮件发送准备就绪后开放'},
     tw:{auEmail:'信箱（用於找回密碼）',auErrEmail:'請檢查信箱格式',
@@ -3961,7 +4049,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'找回密碼',fgDesc:'我們會向註冊信箱寄送6位驗證碼。',
         fgEmail:'信箱',fgCode:'驗證碼（6位）',fgPw:'新密碼（8位以上，字母+數字）',
         fgSend:'取得驗證碼 ▶',fgConfirm:'修改密碼 ▶',fgBack:'← 返回',
-        fgDev:'開發模式 — 驗證碼：',fgErrCode:'請輸入6位數字',
+        fgDev:'開發模式 - 驗證碼：',fgErrCode:'請輸入6位數字',
         fgDone:'密碼已修改，請用新密碼登入。',
         fgMailSoon:'找回密碼將在郵件寄送準備就緒後開放'},
     ja:{auEmail:'メール（パスワード再設定に使います）',auErrEmail:'メールの形式を確認してください',
@@ -3971,7 +4059,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'パスワード再設定',fgDesc:'登録したメールに6桁のコードを送ります。',
         fgEmail:'メール',fgCode:'コード（6桁）',fgPw:'新しいパスワード（8文字以上・英字+数字）',
         fgSend:'コードを受け取る ▶',fgConfirm:'パスワードを変更 ▶',fgBack:'← 戻る',
-        fgDev:'開発モード — コード：',fgErrCode:'6桁を入力してください',
+        fgDev:'開発モード - コード：',fgErrCode:'6桁を入力してください',
         fgDone:'パスワードを変更しました。新しいパスワードでログインしてください。',
         fgMailSoon:'パスワード再設定はメール送信の準備が整い次第オープンします'},
     fr:{auEmail:'E-MAIL (pour récupérer votre mot de passe)',auErrEmail:"Vérifiez le format de l'e-mail",
@@ -3981,7 +4069,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'RÉINITIALISER',fgDesc:"Nous envoyons un code à 6 chiffres à l'e-mail d'inscription.",
         fgEmail:'E-MAIL',fgCode:'CODE (6 chiffres)',fgPw:'NOUVEAU MOT DE PASSE (8+, lettres + chiffres)',
         fgSend:'RECEVOIR LE CODE ▶',fgConfirm:'CHANGER ▶',fgBack:'← RETOUR',
-        fgDev:'Mode dev — code :',fgErrCode:'Saisissez les 6 chiffres',
+        fgDev:'Mode dev - code :',fgErrCode:'Saisissez les 6 chiffres',
         fgDone:'Mot de passe changé. Connectez-vous avec le nouveau.',
         fgMailSoon:"La réinitialisation ouvrira dès que l'envoi d'e-mails sera prêt"},
     it:{auEmail:'E-MAIL (per recuperare la password)',auErrEmail:"Controlla il formato dell'e-mail",
@@ -3991,7 +4079,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'REIMPOSTA PASSWORD',fgDesc:"Inviamo un codice a 6 cifre all'e-mail di registrazione.",
         fgEmail:'E-MAIL',fgCode:'CODICE (6 cifre)',fgPw:'NUOVA PASSWORD (8+, lettere + numeri)',
         fgSend:'RICEVI IL CODICE ▶',fgConfirm:'CAMBIA PASSWORD ▶',fgBack:'← INDIETRO',
-        fgDev:'Modalità dev — codice:',fgErrCode:'Inserisci tutte le 6 cifre',
+        fgDev:'Modalità dev - codice:',fgErrCode:'Inserisci tutte le 6 cifre',
         fgDone:'Password cambiata. Accedi con quella nuova.',
         fgMailSoon:"Il reimpostare aprirà appena l'invio e-mail sarà pronto"},
     de:{auEmail:'E-MAIL (für die Passwort-Wiederherstellung)',auErrEmail:'Bitte E-Mail-Format prüfen',
@@ -4001,7 +4089,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'PASSWORT ZURÜCKSETZEN',fgDesc:'Wir senden einen 6-stelligen Code an die Anmelde-E-Mail.',
         fgEmail:'E-MAIL',fgCode:'CODE (6 Stellen)',fgPw:'NEUES PASSWORT (8+, Buchstaben + Zahlen)',
         fgSend:'CODE ANFORDERN ▶',fgConfirm:'PASSWORT ÄNDERN ▶',fgBack:'← ZURÜCK',
-        fgDev:'Dev-Modus — Code:',fgErrCode:'Bitte alle 6 Stellen eingeben',
+        fgDev:'Dev-Modus - Code:',fgErrCode:'Bitte alle 6 Stellen eingeben',
         fgDone:'Passwort geändert. Melde dich mit dem neuen an.',
         fgMailSoon:'Das Zurücksetzen öffnet, sobald der E-Mail-Versand bereit ist'},
     es:{auEmail:'CORREO (para recuperar la contraseña)',auErrEmail:'Revisa el formato del correo',
@@ -4011,7 +4099,7 @@ $("exitYes").addEventListener("click",async()=>{
         fgTitle:'RESTABLECER CONTRASEÑA',fgDesc:'Enviamos un código de 6 dígitos al correo de registro.',
         fgEmail:'CORREO',fgCode:'CÓDIGO (6 dígitos)',fgPw:'NUEVA CONTRASEÑA (8+, letras + números)',
         fgSend:'RECIBIR CÓDIGO ▶',fgConfirm:'CAMBIAR CONTRASEÑA ▶',fgBack:'← ATRÁS',
-        fgDev:'Modo dev — código:',fgErrCode:'Introduce los 6 dígitos',
+        fgDev:'Modo dev - código:',fgErrCode:'Introduce los 6 dígitos',
         fgDone:'Contraseña cambiada. Entra con la nueva.',
         fgMailSoon:'El restablecimiento se abrirá cuando el envío de correo esté listo'}
   };
@@ -4045,6 +4133,31 @@ $("exitYes").addEventListener("click",async()=>{
 <!-- 로딩 표시와 선택창. 원본 인라인 스크립트가 만든 UI/applyLang 을 이어받는다. -->
 <script src="/arcade-ui.js"></script>
 <!-- 허브에 학교 인증·학교 순위·동문 섹션을 붙인다(원본 마크업은 그대로 둔다). -->
-<script src="/arcade-school.js"></script>
+<script src="/arcade-school.js">
+/* ═══ 제보 화면 문구 (9개 언어) ═══
+   제보는 로그인해야 넣을 수 있고, 목록은 관리자에게만 전체가 보인다.
+   그 밖에는 본인 것만 보이는데, 그래야 지울 수 있기 때문이다. */
+(function(){
+  const T={
+    ko:{bugNeedLogin:"로그인하면 제보할 수 있어요. 남긴 제보는 본인만 보고, 언제든 지울 수 있습니다.",bugGoLogin:"로그인하러 가기 ▶",bugHeadMine:"▼ 내가 넣은 제보 ▼",bugHeadAdmin:"▼ 전체 제보 (관리자) ▼",bugEmptyMine:"아직 넣은 제보가 없어요.",btnChangePw:"비밀번호 바꾸기"},
+    en:{bugNeedLogin:"Log in to send a report. Only you can see yours, and you can delete it any time.",bugGoLogin:"LOG IN ▶",bugHeadMine:"▼ MY REPORTS ▼",bugHeadAdmin:"▼ ALL REPORTS (ADMIN) ▼",bugEmptyMine:"You have not sent any reports yet.",btnChangePw:"CHANGE PASSWORD"},
+    zh:{bugNeedLogin:"登录后即可提交反馈。你的反馈只有你能看到，随时可以删除。",bugGoLogin:"去登录 ▶",bugHeadMine:"▼ 我提交的反馈 ▼",bugHeadAdmin:"▼ 全部反馈（管理员）▼",bugEmptyMine:"你还没有提交过反馈。",btnChangePw:"修改密码"},
+    tw:{bugNeedLogin:"登入後即可提交回報。你的回報只有你看得到，隨時可以刪除。",bugGoLogin:"前往登入 ▶",bugHeadMine:"▼ 我提交的回報 ▼",bugHeadAdmin:"▼ 全部回報（管理員）▼",bugEmptyMine:"你還沒有提交過回報。",btnChangePw:"修改密碼"},
+    ja:{bugNeedLogin:"ログインすると報告できます。自分の報告は自分だけが見られ、いつでも消せます。",bugGoLogin:"ログインする ▶",bugHeadMine:"▼ 自分が送った報告 ▼",bugHeadAdmin:"▼ すべての報告（管理者）▼",bugEmptyMine:"まだ報告を送っていません。",btnChangePw:"パスワードを変更"},
+    fr:{bugNeedLogin:"Connectez-vous pour envoyer un signalement. Vous seul voyez les vôtres et pouvez les supprimer.",bugGoLogin:"SE CONNECTER ▶",bugHeadMine:"▼ MES SIGNALEMENTS ▼",bugHeadAdmin:"▼ TOUS LES SIGNALEMENTS (ADMIN) ▼",bugEmptyMine:"Vous n'avez encore envoyé aucun signalement.",btnChangePw:"CHANGER LE MOT DE PASSE"},
+    it:{bugNeedLogin:"Accedi per inviare una segnalazione. Solo tu vedi le tue e puoi cancellarle quando vuoi.",bugGoLogin:"ACCEDI ▶",bugHeadMine:"▼ LE MIE SEGNALAZIONI ▼",bugHeadAdmin:"▼ TUTTE LE SEGNALAZIONI (ADMIN) ▼",bugEmptyMine:"Non hai ancora inviato segnalazioni.",btnChangePw:"CAMBIA PASSWORD"},
+    de:{bugNeedLogin:"Melde dich an, um etwas zu melden. Nur du siehst deine Meldungen und kannst sie jederzeit löschen.",bugGoLogin:"ANMELDEN ▶",bugHeadMine:"▼ MEINE MELDUNGEN ▼",bugHeadAdmin:"▼ ALLE MELDUNGEN (ADMIN) ▼",bugEmptyMine:"Du hast noch nichts gemeldet.",btnChangePw:"PASSWORT ÄNDERN"},
+    es:{bugNeedLogin:"Inicia sesión para enviar un aviso. Solo tú ves los tuyos y puedes borrarlos cuando quieras.",bugGoLogin:"INICIAR SESIÓN ▶",bugHeadMine:"▼ MIS AVISOS ▼",bugHeadAdmin:"▼ TODOS LOS AVISOS (ADMIN) ▼",bugEmptyMine:"Todavía no has enviado ningún aviso.",btnChangePw:"CAMBIAR CONTRASEÑA"}
+  };
+  Object.keys(T).forEach(function(c){ if(UI[c]) Object.assign(UI[c],T[c]); });
+  var prev=applyLang;
+  applyLang=function(){
+    prev();
+    var u=UI[LANG]; if(!u) return;
+    var b=$("btnChangePw"); if(b&&u.btnChangePw) b.textContent=u.btnChangePw;
+  };
+  applyLang();
+})();
+</script>
 </body>
 </html>
