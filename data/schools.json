@@ -1,0 +1,51 @@
+{
+  "_comment": [
+    "학교 메일 도메인 판별 규칙. 국가마다 학술 도메인 체계가 달라 두 가지를 함께 쓴다.",
+    "1) suffixRules — 국가 차원의 학술 전용 TLD. 한국/일본/중국/대만/미국 등은 이것만으로 충분하다.",
+    "2) domains — 학술 전용 TLD가 없는 국가(주로 유럽)를 위한 개별 도메인 목록.",
+    "유럽은 대학이 일반 국가 TLD를 쓰기 때문에 목록을 직접 관리할 수밖에 없다.",
+    "아래 목록은 건축학과가 있는 주요 대학 위주의 출발점이며, 신청을 받아 계속 늘려야 한다."
+  ],
+  "suffixRules": [
+    { "suffix": ".ac.kr", "country": "KR" },
+    { "suffix": ".ac.jp", "country": "JP" },
+    { "suffix": ".edu.cn", "country": "CN" },
+    { "suffix": ".edu.tw", "country": "TW" },
+    { "suffix": ".edu.hk", "country": "HK" },
+    { "suffix": ".ac.uk", "country": "GB" },
+    { "suffix": ".edu.au", "country": "AU" },
+    { "suffix": ".edu", "country": "US" }
+  ],
+  "domains": {
+    "u-tokyo.ac.jp": { "name": "東京大学", "country": "JP" },
+    "snu.ac.kr": { "name": "서울대학교", "country": "KR" },
+    "yonsei.ac.kr": { "name": "연세대학교", "country": "KR" },
+    "korea.ac.kr": { "name": "고려대학교", "country": "KR" },
+    "hanyang.ac.kr": { "name": "한양대학교", "country": "KR" },
+    "kaist.ac.kr": { "name": "KAIST", "country": "KR" },
+    "catholic.ac.kr": { "name": "가톨릭대학교", "country": "KR" },
+    "polimi.it": { "name": "Politecnico di Milano", "country": "IT" },
+    "unibo.it": { "name": "Università di Bologna", "country": "IT" },
+    "uniroma1.it": { "name": "Sapienza Università di Roma", "country": "IT" },
+    "iuav.it": { "name": "Università Iuav di Venezia", "country": "IT" },
+    "tum.de": { "name": "Technische Universität München", "country": "DE" },
+    "rwth-aachen.de": { "name": "RWTH Aachen", "country": "DE" },
+    "tu-berlin.de": { "name": "Technische Universität Berlin", "country": "DE" },
+    "tu-darmstadt.de": { "name": "TU Darmstadt", "country": "DE" },
+    "uni-stuttgart.de": { "name": "Universität Stuttgart", "country": "DE" },
+    "ethz.ch": { "name": "ETH Zürich", "country": "CH" },
+    "epfl.ch": { "name": "EPFL", "country": "CH" },
+    "upc.edu": { "name": "Universitat Politècnica de Catalunya", "country": "ES" },
+    "upm.es": { "name": "Universidad Politécnica de Madrid", "country": "ES" },
+    "us.es": { "name": "Universidad de Sevilla", "country": "ES" },
+    "etsavega.net": { "name": "ETSA Valladolid", "country": "ES" },
+    "paris-malaquais.archi.fr": { "name": "ENSA Paris-Malaquais", "country": "FR" },
+    "paris-belleville.archi.fr": { "name": "ENSA Paris-Belleville", "country": "FR" },
+    "versailles.archi.fr": { "name": "ENSA Versailles", "country": "FR" },
+    "marseille.archi.fr": { "name": "ENSA Marseille", "country": "FR" },
+    "lyon.archi.fr": { "name": "ENSA Lyon", "country": "FR" },
+    "nantes.archi.fr": { "name": "ENSA Nantes", "country": "FR" },
+    "tudelft.nl": { "name": "TU Delft", "country": "NL" },
+    "kuleuven.be": { "name": "KU Leuven", "country": "BE" }
+  }
+}

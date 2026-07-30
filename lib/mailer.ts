@@ -1,0 +1,54 @@
+/**
+ * 메일 발송.
+ *
+ * RESEND_API_KEY 가 없으면 실제로 보내지 않고 서버 로그에 남긴다. AI 검열과 같은
+ * 방식이다 — 키가 없어도 기능 전체가 동작하고, 키를 넣는 순간 실제 발송으로 바뀐다.
+ * 덕분에 계정을 만들기 전에도 인증 흐름을 끝까지 테스트할 수 있다.
+ */
+const API_KEY = process.env.RESEND_API_KEY;
+const FROM = process.env.MAIL_FROM || "ARCHI ARCADE <onboarding@resend.dev>";
+
+export const MAIL_ENABLED = Boolean(API_KEY);
+
+export interface MailResult {
+  sent: boolean;
+  /// 발송이 꺼져 있을 때만 채워진다. 개발 중 코드를 확인하는 용도이며
+  /// 프로덕션에서는 절대 응답에 실어 보내지 않는다.
+  devCode?: string;
+}
+
+export async function sendVerificationCode(to: string, code: string, schoolName: string): Promise<MailResult> {
+  const subject = "ARCHI ARCADE 학교 인증 코드";
+  const text = [
+    `인증 코드: ${code}`,
+    "",
+    `${schoolName} 소속으로 인증합니다.`,
+    "코드는 10분 뒤 만료됩니다.",
+    "",
+    "본인이 요청하지 않았다면 이 메일은 무시하셔도 됩니다.",
+  ].join("\n");
+
+  if (!API_KEY) {
+    console.log(`[mailer] 발송 비활성 — to=${to} code=${code}`);
+    return { sent: false, devCode: code };
+  }
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${API_KEY}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ from: FROM, to, subject, text }),
+    });
+    if (!res.ok) {
+      console.error(`[mailer] 발송 실패 ${res.status}`);
+      return { sent: false };
+    }
+    return { sent: true };
+  } catch (e) {
+    console.error("[mailer] 발송 오류", e);
+    return { sent: false };
+  }
+}

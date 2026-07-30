@@ -59,9 +59,15 @@ model Vote {
   roomCode    String?
   createdAt   DateTime @default(now())
 
+  /// 인증된 학생의 표에만 채워진다. 학교별 순위와, 데이터 상품에서
+  /// "검증된 건축학도 응답"만 따로 집계하기 위한 근거가 된다.
+  schoolDomain String?
+  major        String?
+
   @@index([questionIdx])
   @@index([createdAt])
   @@index([lang, questionIdx])
+  @@index([schoolDomain])
 }
 
 model Room {
@@ -95,16 +101,54 @@ model Room {
 
 model Post {
   id        Int      @id @default(autoincrement())
-  board     String // "ideas" | "qfeedback"
+  board     String // "ideas" | "qfeedback" | "school"
   author    String
   body      String
   type      String?
   lang      String
   createdAt DateTime @default(now())
 
+  /// 학교 커뮤니티 글일 때만 채워진다. 인증된 같은 학교 학생에게만 보인다.
+  schoolDomain String?
+  /// 건축학 · 건축공학 · 실내건축 · 도시공학 · 조경 · 공간디자인 (lib/school.ts MAJORS)
+  major        String?
+
   translations TranslationCache[]
 
   @@index([board, createdAt])
+  @@index([schoolDomain, createdAt])
+}
+
+/// 학교 메일로 인증한 학생. 계정(User)과 무관하게 존재할 수 있다 —
+/// 가입 없이 인증만으로 뱃지·학교 커뮤니티·동문 디렉터리를 쓰게 하기 위해서다.
+model StudentVerification {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  /// 집계 키. 서브도메인을 정규화한 대표 도메인이 들어간다.
+  schoolDomain String
+  schoolName   String
+  country      String
+  major        String
+  verifiedAt   DateTime @default(now())
+
+  /// 동문 디렉터리 공개 동의. 기본은 비공개이며 본인이 켤 때만 목록에 나타난다.
+  directoryOptIn Boolean @default(false)
+  /// 디렉터리에 노출할 정보. 동의했을 때만 의미가 있다.
+  displayName    String?
+  gradYear       Int?
+  company        String?
+
+  @@index([schoolDomain, major])
+  @@index([schoolDomain, directoryOptIn])
+}
+
+/// 인증 코드. 원문 대신 해시만 저장하고 만료·시도 횟수로 무차별 대입을 막는다.
+model VerifyCode {
+  email     String   @id
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
 }
 
 model QuestionReact {
