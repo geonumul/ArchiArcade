@@ -16,12 +16,30 @@ export interface RoomState {
   createdAt?: number;
 }
 
-const POLL_MS = 1500;
+/**
+ * 폴링 주기.
+ *
+ * 남은 시간은 서버가 내려준 deadline 을 받아 브라우저가 스스로 세기 때문에,
+ * 폴링은 "다음 문항으로 넘어갔는지"만 확인하면 된다. 그래서 1초 미만으로 조일 이유가
+ * 없고, 주기를 늘린 만큼 요청량이 그대로 줄어든다 — 무료 티어에서 가장 먼저 닿는
+ * 한계가 이 요청량이다.
+ */
+const POLL_QUIZ_MS = 3000;
+const POLL_IDLE_MS = 6000;
+
+export interface RoomSnapshot {
+  state: RoomState | null;
+  playerCount: number;
+  maxPlayers: number;
+}
 
 export function useRoomPoll(code: string | null, active: boolean) {
   const [state, setState] = useState<RoomState | null>(null);
+  const [playerCount, setPlayerCount] = useState(0);
+  const [maxPlayers, setMaxPlayers] = useState(0);
   const [gone, setGone] = useState(false);
-  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const phaseRef = useRef<RoomState["phase"] | null>(null);
 
   const fetchOnce = useCallback(async () => {
     if (!code) return;
@@ -32,8 +50,15 @@ export function useRoomPoll(code: string | null, active: boolean) {
         return;
       }
       if (!res.ok) return;
-      const data = (await res.json()) as { state: RoomState };
+      const data = (await res.json()) as {
+        state: RoomState;
+        playerCount?: number;
+        maxPlayers?: number;
+      };
       setState(data.state);
+      phaseRef.current = data.state?.phase ?? null;
+      if (typeof data.playerCount === "number") setPlayerCount(data.playerCount);
+      if (typeof data.maxPlayers === "number") setMaxPlayers(data.maxPlayers);
     } catch {
       // 일시적 네트워크 오류는 다음 주기에 자연히 복구된다
     }
@@ -41,15 +66,25 @@ export function useRoomPoll(code: string | null, active: boolean) {
 
   useEffect(() => {
     if (!code || !active) return;
-    void fetchOnce();
-    timer.current = setInterval(fetchOnce, POLL_MS);
+    let stopped = false;
+
+    const loop = async () => {
+      await fetchOnce();
+      if (stopped) return;
+      // 대기실처럼 변화가 드문 구간에서는 더 느리게 돈다.
+      const wait = phaseRef.current === "quiz" ? POLL_QUIZ_MS : POLL_IDLE_MS;
+      timer.current = setTimeout(loop, wait);
+    };
+    void loop();
+
     return () => {
-      if (timer.current) clearInterval(timer.current);
+      stopped = true;
+      if (timer.current) clearTimeout(timer.current);
       timer.current = null;
     };
   }, [code, active, fetchOnce]);
 
-  return { state, gone, refresh: fetchOnce, setState };
+  return { state, playerCount, maxPlayers, gone, refresh: fetchOnce, setState };
 }
 
 export async function patchRoom(code: string, state: RoomState): Promise<boolean> {

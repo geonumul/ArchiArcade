@@ -70,6 +70,12 @@ model Room {
   hostId    String?
   state     Json
   createdAt DateTime @default(now())
+  /// 상태가 마지막으로 바뀐 시각. 버려진 방이 정원을 계속 차지하지 않도록
+  /// 동시접속 집계에서 최근 활동한 방만 세는 데 쓴다.
+  updatedAt DateTime @updatedAt
+  /// 입장한 인원과 호스트가 정한 정원. 정원이 차면 새 입장을 막는다.
+  playerCount Int    @default(0)
+  maxPlayers  Int    @default(30)
   expiresAt DateTime
 
   // STEP 1.5 — 조직 방 여부. 둘 다 null 이면 개인 방(무료).
@@ -84,6 +90,7 @@ model Room {
 
   @@index([expiresAt])
   @@index([orgId, createdAt])
+  @@index([updatedAt])
 }
 
 model Post {

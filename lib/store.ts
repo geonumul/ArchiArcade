@@ -13,6 +13,7 @@
  */
 import { hasDatabase, prisma } from "@/lib/db";
 import { ROOM_TTL_MS } from "@/lib/game/round";
+import { ACTIVE_WINDOW_MIN, MAX_CONCURRENT_PLAYERS } from "@/lib/capacity";
 
 export interface RoomRecord {
   code: string;
@@ -21,7 +22,14 @@ export interface RoomRecord {
   state: unknown;
   orgId: string | null;
   expiresAt: Date;
+  playerCount: number;
+  maxPlayers: number;
 }
+
+/// 입장 시도 결과. 정원이 찼을 때와 방이 없을 때를 호출부가 구분할 수 있어야 한다.
+export type JoinResult =
+  | { ok: true; playerCount: number; maxPlayers: number }
+  | { ok: false; reason: "not_found" | "room_full" | "service_full"; playerCount?: number; maxPlayers?: number };
 
 export interface PostRecord {
   id: number;
@@ -41,11 +49,23 @@ export interface VoteTally {
 export interface Store {
   readonly backend: "prisma" | "memory";
 
-  createRoom(input: { code: string; pwHash: string; hostId?: string | null; state: unknown; orgId?: string | null }): Promise<RoomRecord>;
+  createRoom(input: {
+    code: string;
+    pwHash: string;
+    hostId?: string | null;
+    state: unknown;
+    orgId?: string | null;
+    maxPlayers: number;
+  }): Promise<RoomRecord>;
   getRoom(code: string): Promise<RoomRecord | null>;
   setRoomState(code: string, state: unknown): Promise<void>;
   deleteRoom(code: string): Promise<void>;
   purgeExpiredRooms(): Promise<number>;
+  /// 정원 검사와 인원 증가를 한 번에 처리한다. 두 사람이 마지막 한 자리에 동시에
+  /// 들어오는 경우를 막으려면 검사와 증가가 나뉘어 있으면 안 된다.
+  joinRoom(code: string): Promise<JoinResult>;
+  /// 최근 활동 중인 방들의 참가자 합계 — 서비스 전체 안전장치용.
+  activePlayers(): Promise<number>;
 
   addVote(input: { questionIdx: number; choice: "a" | "b"; lang: string; roomCode?: string | null }): Promise<void>;
   tallyVotes(questionIdx: number): Promise<VoteTally>;
@@ -84,7 +104,14 @@ function memoryState(): MemoryState {
 class MemoryStore implements Store {
   readonly backend = "memory" as const;
 
-  async createRoom(input: { code: string; pwHash: string; hostId?: string | null; state: unknown; orgId?: string | null }) {
+  async createRoom(input: {
+    code: string;
+    pwHash: string;
+    hostId?: string | null;
+    state: unknown;
+    orgId?: string | null;
+    maxPlayers: number;
+  }) {
     const rec: RoomRecord = {
       code: input.code,
       pwHash: input.pwHash,
@@ -92,9 +119,32 @@ class MemoryStore implements Store {
       state: input.state,
       orgId: input.orgId ?? null,
       expiresAt: new Date(Date.now() + ROOM_TTL_MS),
+      playerCount: 0,
+      maxPlayers: input.maxPlayers,
     };
     memoryState().rooms.set(input.code, rec);
     return rec;
+  }
+
+  async joinRoom(code: string): Promise<JoinResult> {
+    const rec = await this.getRoom(code);
+    if (!rec) return { ok: false, reason: "not_found" };
+    if (rec.playerCount >= rec.maxPlayers) {
+      return { ok: false, reason: "room_full", playerCount: rec.playerCount, maxPlayers: rec.maxPlayers };
+    }
+    if ((await this.activePlayers()) >= MAX_CONCURRENT_PLAYERS) {
+      return { ok: false, reason: "service_full" };
+    }
+    rec.playerCount += 1;
+    return { ok: true, playerCount: rec.playerCount, maxPlayers: rec.maxPlayers };
+  }
+
+  async activePlayers() {
+    let n = 0;
+    for (const rec of memoryState().rooms.values()) {
+      if (rec.expiresAt.getTime() > Date.now()) n += rec.playerCount;
+    }
+    return n;
   }
 
   async getRoom(code: string) {
@@ -183,7 +233,14 @@ class MemoryStore implements Store {
 class PrismaStore implements Store {
   readonly backend = "prisma" as const;
 
-  async createRoom(input: { code: string; pwHash: string; hostId?: string | null; state: unknown; orgId?: string | null }) {
+  async createRoom(input: {
+    code: string;
+    pwHash: string;
+    hostId?: string | null;
+    state: unknown;
+    orgId?: string | null;
+    maxPlayers: number;
+  }) {
     const row = await prisma!.room.create({
       data: {
         code: input.code,
@@ -191,10 +248,52 @@ class PrismaStore implements Store {
         hostId: input.hostId ?? null,
         state: input.state as never,
         orgId: input.orgId ?? null,
+        maxPlayers: input.maxPlayers,
         expiresAt: new Date(Date.now() + ROOM_TTL_MS),
       },
     });
     return toRoom(row);
+  }
+
+  async joinRoom(code: string): Promise<JoinResult> {
+    // 서비스 전체 안전장치가 먼저다. 방에 자리가 남아 있어도 동시에 열린 방이 많으면
+    // 무료 티어 한도를 넘기므로 여기서 막는다.
+    if ((await this.activePlayers()) >= MAX_CONCURRENT_PLAYERS) {
+      return { ok: false, reason: "service_full" };
+    }
+
+    // 검사와 증가를 한 문장으로 처리한다. 나누면 마지막 한 자리를 두 사람이
+    // 동시에 통과해 정원을 넘길 수 있다.
+    const rows = await prisma!.$queryRaw<{ playerCount: number; maxPlayers: number }[]>`
+      UPDATE "Room"
+         SET "playerCount" = "playerCount" + 1,
+             "updatedAt"   = NOW()
+       WHERE "code" = ${code}
+         AND "expiresAt" > NOW()
+         AND "playerCount" < "maxPlayers"
+      RETURNING "playerCount", "maxPlayers"
+    `;
+
+    if (rows.length > 0) {
+      return { ok: true, playerCount: rows[0].playerCount, maxPlayers: rows[0].maxPlayers };
+    }
+
+    // 갱신되지 않았다면 방이 없거나 정원이 찬 것이므로, 어느 쪽인지 확인해 알려준다.
+    const room = await prisma!.room.findUnique({
+      where: { code },
+      select: { playerCount: true, maxPlayers: true, expiresAt: true },
+    });
+    if (!room || room.expiresAt.getTime() < Date.now()) return { ok: false, reason: "not_found" };
+    return { ok: false, reason: "room_full", playerCount: room.playerCount, maxPlayers: room.maxPlayers };
+  }
+
+  async activePlayers() {
+    const since = new Date(Date.now() - ACTIVE_WINDOW_MIN * 60 * 1000);
+    const agg = await prisma!.room.aggregate({
+      _sum: { playerCount: true },
+      where: { updatedAt: { gte: since }, expiresAt: { gt: new Date() } },
+    });
+    return agg._sum.playerCount ?? 0;
   }
 
   async getRoom(code: string) {
@@ -283,6 +382,8 @@ function toRoom(row: {
   state: unknown;
   orgId: string | null;
   expiresAt: Date;
+  playerCount: number;
+  maxPlayers: number;
 }): RoomRecord {
   return {
     code: row.code,
@@ -291,6 +392,8 @@ function toRoom(row: {
     state: row.state,
     orgId: row.orgId,
     expiresAt: row.expiresAt,
+    playerCount: row.playerCount,
+    maxPlayers: row.maxPlayers,
   };
 }
 

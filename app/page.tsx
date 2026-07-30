@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { LANGS, LANG_LABELS, type Lang, t } from "@/lib/i18n";
 import { bank, BANK_SIZE } from "@/lib/game/bank";
 import { drawRound, DEFAULT_ROUND_LENGTH, ROUND_LENGTHS } from "@/lib/game/round";
+import { DEFAULT_ROOM_SIZE, ROOM_SIZES } from "@/lib/capacity";
 import { titleFor } from "@/lib/game/titles";
 import { useRoomPoll, useCountdown, patchRoom, closeRoom, type RoomState } from "@/lib/useRoom";
 
@@ -34,7 +35,7 @@ export default function Home() {
   const [tally, setTally] = useState<Tally | null>(null);
 
   const questions = useMemo(() => bank(lang), [lang]);
-  const { state: roomState, gone } = useRoomPoll(code, view === "room");
+  const { state: roomState, playerCount, maxPlayers, gone } = useRoomPoll(code, view === "room");
 
   // 호스트는 자기 상태를 밀어 올리고, 참가자는 폴링 결과를 따른다.
   const liveSeed = mode === "player" ? (roomState?.seed ?? []) : seed;
@@ -218,6 +219,10 @@ export default function Home() {
             <>
               <h2 className="aa-title">{code}</h2>
               <p className="aa-note">참가자에게 이 코드와 비밀번호를 알려주세요</p>
+              <p className={playerCount >= maxPlayers && maxPlayers > 0 ? "aa-full" : "aa-note"}>
+                참가자 {playerCount} / {maxPlayers}
+                {maxPlayers > 0 && playerCount >= maxPlayers && " · 정원이 찼어요"}
+              </p>
               <button
                 className="aa-btn aa-btn-primary"
                 onClick={async () => {
@@ -236,6 +241,9 @@ export default function Home() {
           ) : mode === "player" && roomState?.phase === "lobby" ? (
             <>
               <h2 className="aa-title">{code}</h2>
+              <p className="aa-note">
+                참가자 {playerCount} / {maxPlayers}
+              </p>
               <p className="aa-note">호스트가 시작하기를 기다리는 중...</p>
             </>
           ) : current ? (
@@ -339,6 +347,7 @@ function HostSetup({
   const [pw, setPw] = useState("");
   const [questions, setQuestions] = useState<number>(DEFAULT_ROUND_LENGTH);
   const [timeLimit, setTimeLimit] = useState(10);
+  const [maxPlayers, setMaxPlayers] = useState<number>(DEFAULT_ROOM_SIZE);
 
   const create = async () => {
     setErr("");
@@ -347,7 +356,7 @@ function HostSetup({
       const res = await fetch("/api/rooms", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ pw, questions, timeLimit, lang }),
+        body: JSON.stringify({ pw, questions, timeLimit, lang, maxPlayers }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -380,6 +389,14 @@ function HostSetup({
         {[10, 15, 20, 30].map((n) => (
           <option key={n} value={n}>
             {n}
+          </option>
+        ))}
+      </select>
+      <label className="aa-note">정원 (이 인원이 차면 입장이 막힙니다)</label>
+      <select className="aa-lang" value={maxPlayers} onChange={(e) => setMaxPlayers(Number(e.target.value))}>
+        {ROOM_SIZES.map((n) => (
+          <option key={n} value={n}>
+            {n}명
           </option>
         ))}
       </select>

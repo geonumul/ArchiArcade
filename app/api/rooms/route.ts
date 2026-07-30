@@ -4,6 +4,7 @@ import { hashPassword } from "@/lib/auth";
 import { drawRound, makeRoomCode, DEFAULT_ROUND_LENGTH, ROUND_LENGTHS } from "@/lib/game/round";
 import { rateLimit } from "@/lib/ratelimit";
 import { isLang } from "@/lib/i18n";
+import { DEFAULT_ROOM_SIZE, isRoomSize } from "@/lib/capacity";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { pw?: unknown; questions?: unknown; timeLimit?: unknown; lang?: unknown };
+  let body: { pw?: unknown; questions?: unknown; timeLimit?: unknown; lang?: unknown; maxPlayers?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -35,6 +36,7 @@ export async function POST(req: Request) {
   const questions = (ROUND_LENGTHS as readonly number[]).includes(nRaw) ? nRaw : DEFAULT_ROUND_LENGTH;
   const timeLimit = Math.min(60, Math.max(5, Number(body.timeLimit) || 10));
   const lang = isLang(typeof body.lang === "string" ? body.lang : null) ? (body.lang as string) : "ko";
+  const maxPlayers = isRoomSize(Number(body.maxPlayers)) ? Number(body.maxPlayers) : DEFAULT_ROOM_SIZE;
 
   const s = store();
   // 살아있는 방과 코드가 겹치지 않을 때까지 재추첨 (원본과 동일하게 최대 5회)
@@ -54,8 +56,9 @@ export async function POST(req: Request) {
   await s.createRoom({
     code,
     pwHash: await hashPassword(pw),
+    maxPlayers,
     state: { phase: "lobby", seed, timeLimit, lang, players: [], createdAt: Date.now() },
   });
 
-  return NextResponse.json({ code, questions, timeLimit, seed });
+  return NextResponse.json({ code, questions, timeLimit, seed, maxPlayers });
 }

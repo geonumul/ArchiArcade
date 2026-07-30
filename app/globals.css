@@ -546,3 +546,16 @@ body.ov-open{overflow:hidden;}
 .aa-res i{position:absolute;inset:0 auto 0 0;background:var(--panel2);z-index:0;
   animation:aa-grow .4s steps(8) both}
 @keyframes aa-grow{from{width:0}}
+
+/* 정원 안내 — 일반 안내문과 구분되도록 경고색 */
+.aa-full{font-size:13px;color:var(--red,#ff6b81);text-align:center;margin:0;font-weight:bold}
+.aa-err{width:100%;max-width:560px;font-size:13px;color:var(--red,#ff6b81);text-align:center;
+  border:4px solid var(--red,#ff6b81);padding:10px;margin:0}
+.aa-in{font-family:var(--kfont);font-size:15px;background:var(--panel2);color:var(--ink);
+  border:4px solid var(--border);box-shadow:4px 4px 0 var(--shadow,#000);padding:10px}
+.aa-head{display:flex;justify-content:center;align-items:center;gap:10px}
+.aa-exit{font-family:var(--efont);font-size:12px;background:transparent;color:var(--dim);
+  border:4px solid var(--dim);padding:2px 6px;cursor:pointer;
+  transition:transform .08s steps(2),box-shadow .08s steps(2)}
+.aa-exit:hover{color:var(--red,#ff6b81);border-color:var(--red,#ff6b81)}
+.aa-exit:active{transform:translateY(3px)}
