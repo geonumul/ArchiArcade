@@ -545,12 +545,7 @@ a.top-back{text-decoration:none;display:inline-block;line-height:1;}
 .srow b{font-family:var(--efont);font-size:10px;color:var(--yellow);white-space:nowrap;}
 .slist{width:100%;display:flex;flex-direction:column;gap:8px;}
 
-/* 체크박스 한 줄 — 동문 공개 동의처럼 켜고 끄는 항목에 쓴다. */
-.checkrow{
-  width:100%;display:flex;gap:10px;align-items:flex-start;text-align:left;
-  font-size:13px;line-height:1.7;cursor:pointer;
-}
-.checkrow input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--yellow);}
+/* 체크박스 한 줄(.checkrow)은 public/arcade-ui.css 로 옮겼다 - 원본 페이지도 같은 모양을 쓴다. */
 
 /* .btn 을 <a> 로 쓸 때 — 원본은 전부 <button> 이라 링크용 보정이 없다. */
 a.btn{text-decoration:none;display:block;text-align:center;}
