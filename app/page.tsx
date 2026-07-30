@@ -7,8 +7,10 @@ import { drawRound, DEFAULT_ROUND_LENGTH, ROUND_LENGTHS } from "@/lib/game/round
 import { DEFAULT_ROOM_SIZE, ROOM_SIZES } from "@/lib/capacity";
 import { titleFor } from "@/lib/game/titles";
 import { useRoomPoll, useCountdown, patchRoom, closeRoom, type RoomState } from "@/lib/useRoom";
+import { Hub } from "./hub";
+import { bgm, sfx } from "@/lib/bgm";
 
-type View = "hub" | "solo" | "host" | "join" | "room" | "end";
+type View = "hub" | "menu" | "solo" | "host" | "join" | "room" | "end";
 type Choice = "a" | "b";
 type Mode = "solo" | "host" | "player";
 
@@ -118,9 +120,33 @@ export default function Home() {
 
   // ── 화면 ──────────────────────────────────────────────────
 
+  // 소리는 항상 꺼진 채로 시작한다 — 도서관에서 열었을 때 갑자기 울리지 않도록.
+  const [sound, setSound] = useState(false);
+  const toggleSound = useCallback(() => {
+    setSound((on) => {
+      const next = !on;
+      if (next) bgm().start();
+      else bgm().stop();
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    // 탭을 벗어나면 멈춘다(원본과 동일).
+    const onVis = () => {
+      if (document.hidden) bgm().stop();
+      else if (sound) bgm().start();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [sound]);
+
   const langBar = (
     <header className="aa-bar">
-      <span className="aa-brand">ARCHI ARCADE</span>
+      <span className="aa-brand">ARCHIARCADE</span>
+      <button className="aa-lang" onClick={toggleSound} aria-label="sound">
+        {sound ? "🎵 ON" : "🔇 OFF"}
+      </button>
       <select
         className="aa-lang"
         value={lang}
@@ -145,19 +171,45 @@ export default function Home() {
       {err && <p className="aa-err">{err}</p>}
 
       {view === "hub" && (
+        <>
+          <Hub
+            lang={lang}
+            onPlay={() => {
+              sfx("next");
+              setView("menu");
+            }}
+            onOpenBoards={() => {
+              window.location.href = "/boards";
+            }}
+          />
+          <section className="aa-panel">
+            <a className="aa-btn" href="/verify" style={{ textDecoration: "none", textAlign: "center" }}>
+              🎓 학교 인증
+            </a>
+            <a className="aa-btn" href="/schools" style={{ textDecoration: "none", textAlign: "center" }}>
+              🏫 학교 순위
+            </a>
+          </section>
+        </>
+      )}
+
+      {view === "menu" && (
         <section className="aa-panel">
-          <h1 className="aa-title">{t(lang, "hubLogo").replace(/<br\s*\/?>/g, " ")}</h1>
+          <h1 className="aa-title">{t(lang, "titleLogo").replace(/<br\s*\/?>/g, " ")}</h1>
           <p className="aa-note">
             {LANGS.length} langs · {BANK_SIZE} questions
           </p>
           <button className="aa-btn aa-btn-primary" onClick={startSolo}>
             SOLO ▶
           </button>
-          <button className="aa-btn" onClick={() => { setErr(""); setView("host"); }}>
+          <button className="aa-btn" onClick={() => { setErr(""); sfx("next"); setView("host"); }}>
             HOST ▶
           </button>
-          <button className="aa-btn" onClick={() => { setErr(""); setView("join"); }}>
+          <button className="aa-btn" onClick={() => { setErr(""); sfx("next"); setView("join"); }}>
             JOIN ▶
+          </button>
+          <button className="aa-btn" onClick={() => setView("hub")}>
+            ← HOME
           </button>
         </section>
       )}
