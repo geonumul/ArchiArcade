@@ -1658,7 +1658,19 @@ async function bankBump(bi,a,b){
     return await r.json();            // {a,b}
   }catch(e){ return null; }
 }
+/* 내가 던진 한 표를 기록한다(/api/votes).
+   위의 bankBump 은 화면에 띄울 A/B 카운터만 올리므로 "누가 던졌나"를 모른다.
+   학교 순위는 인증한 학생의 표만 세야 하니, 표 한 건 한 건을 학교와 함께 남겨야 한다.
+   뱃지가 없으면 학교 없이 익명 표로 남는다. 화면에 쓰지 않는 값이라 기다리지 않는다. */
+function recordMyVote(bi,choice){
+  fetch("/api/votes",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({idx:bi,choice,lang:LANG,roomCode:(room&&room.code)||null})
+  }).catch(()=>undefined);
+}
+
 async function soloVote(bi,pick){
+  recordMyVote(bi,pick);
   const e=await bankBump(bi, pick==="a"?1:0, pick==="b"?1:0);
   soloOK=!!e;
   if(e){ soloStats=soloStats||{}; soloStats[bi]=e; }
@@ -1825,6 +1837,9 @@ async function hostCloseVoting(){
   const pa=total?Math.round(a/total*100):50, pb=total?100-pa:50;
   // 방 투표를 전역 질문 통계에 합산 → 방 밖 사람들과 비교 가능
   const bi=ROUND[idx].bi;
+  // 호스트도 한 표를 던진다. 참가자는 playerPoll 의 공개 시점에 기록하지만
+  // 호스트는 그 경로를 지나지 않으므로 여기서 남긴다.
+  if(myPicks[idx]) recordMyVote(bi, myPicks[idx]);
   let ge={a:0,b:0};
   try{ const e=await bankBump(bi,a,b); if(e) ge=e; }catch(e){}
   hostState.ph="reveal"; hostState.res[idx]={a,b,ga:ge.a,gb:ge.b};
@@ -1910,6 +1925,9 @@ async function playerPoll(){
   if(st.ph==="reveal"){
     if(phaseKey!==lastPhaseKey){
       lastPhaseKey=phaseKey; idx=st.q; clearInterval(tickTimer);
+      // 마감된 지금이 내 최종 선택이다. 마감 전에는 몇 번이든 바꿀 수 있으므로
+      // 누르는 순간 기록하면 바꾼 표까지 남는다.
+      if(myPicks[idx] && ROUND[idx]) recordMyVote(ROUND[idx].bi, myPicks[idx]);
       const r=(st.res&&st.res[st.q])||{a:0,b:0};
       const total=r.a+r.b, pa=total?Math.round(r.a/total*100):50, pb=total?100-pa:50;
       show("vQuiz"); setCoins(idx);
@@ -3724,7 +3742,7 @@ Object.assign(UI.es,{modErr:"La IA consideró este contenido no publicable",modC
 
 /* ═══ 8-bit BGM — 자체 작곡 칩튠 루프 (외부 소스 0, 라이선스 클린) ═══ */
 const BGM={playing:false,timer:null,next:0,step:0,gain:null};
-const BPM=112, SPB=60/BPM/2; // 8분음표 단위
+const BPM=152, SPB=60/BPM/2; // 8분음표 단위 — 소유자 지정 템포(밤샘 중에도 손이 움직이는 속도)
 // A단조 16스텝 × 8마디 루프
 const B_BASS=["A2","A2","E3","A2","F2","F2","C3","F2","G2","G2","D3","G2","E2","E2","B2","E2"]; // 마디당 4스텝 × 4코스
 const B_LEAD=[
