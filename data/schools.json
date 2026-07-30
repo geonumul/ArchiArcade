@@ -7,129 +7,7315 @@
     "아래 목록은 건축학과가 있는 주요 대학 위주의 출발점이며, 신청을 받아 계속 늘려야 한다."
   ],
   "suffixRules": [
-    { "suffix": ".ac.kr", "country": "KR" },
-    { "suffix": ".ac.jp", "country": "JP" },
-    { "suffix": ".edu.cn", "country": "CN" },
-    { "suffix": ".edu.tw", "country": "TW" },
-    { "suffix": ".edu.hk", "country": "HK" },
-    { "suffix": ".ac.uk", "country": "GB" },
-    { "suffix": ".edu.au", "country": "AU" },
-    { "suffix": ".edu", "country": "US" }
+    {
+      "suffix": ".ac.kr",
+      "country": "KR"
+    },
+    {
+      "suffix": ".ac.jp",
+      "country": "JP"
+    },
+    {
+      "suffix": ".edu.cn",
+      "country": "CN"
+    },
+    {
+      "suffix": ".edu.tw",
+      "country": "TW"
+    },
+    {
+      "suffix": ".edu.hk",
+      "country": "HK"
+    },
+    {
+      "suffix": ".ac.uk",
+      "country": "GB"
+    },
+    {
+      "suffix": ".edu.au",
+      "country": "AU"
+    },
+    {
+      "suffix": ".edu",
+      "country": "US"
+    }
   ],
   "domains": {
-    "u-tokyo.ac.jp": { "name": "東京大学", "country": "JP" },
-
-    "snu.ac.kr": { "name": "서울대학교", "country": "KR" },
-    "yonsei.ac.kr": { "name": "연세대학교", "country": "KR" },
-    "korea.ac.kr": { "name": "고려대학교", "country": "KR" },
-    "hanyang.ac.kr": { "name": "한양대학교", "country": "KR" },
-    "hongik.ac.kr": { "name": "홍익대학교", "country": "KR" },
-    "skku.edu": { "name": "성균관대학교", "country": "KR" },
-    "cau.ac.kr": { "name": "중앙대학교", "country": "KR" },
-    "khu.ac.kr": { "name": "경희대학교", "country": "KR" },
-    "konkuk.ac.kr": { "name": "건국대학교", "country": "KR" },
-    "dongguk.edu": { "name": "동국대학교", "country": "KR" },
-    "kookmin.ac.kr": { "name": "국민대학교", "country": "KR" },
-    "ssu.ac.kr": { "name": "숭실대학교", "country": "KR" },
-    "sejong.ac.kr": { "name": "세종대학교", "country": "KR" },
-    "kw.ac.kr": { "name": "광운대학교", "country": "KR" },
-    "mju.ac.kr": { "name": "명지대학교", "country": "KR" },
-    "seoultech.ac.kr": { "name": "서울과학기술대학교", "country": "KR" },
-    "uos.ac.kr": { "name": "서울시립대학교", "country": "KR" },
-    "hansung.ac.kr": { "name": "한성대학교", "country": "KR" },
-    "smu.ac.kr": { "name": "상명대학교", "country": "KR" },
-    "ewha.ac.kr": { "name": "이화여자대학교", "country": "KR" },
-    "sookmyung.ac.kr": { "name": "숙명여자대학교", "country": "KR" },
-    "swu.ac.kr": { "name": "서울여자대학교", "country": "KR" },
-    "sungshin.ac.kr": { "name": "성신여자대학교", "country": "KR" },
-    "duksung.ac.kr": { "name": "덕성여자대학교", "country": "KR" },
-    "catholic.ac.kr": { "name": "가톨릭대학교", "country": "KR" },
-    "karts.ac.kr": { "name": "한국예술종합학교", "country": "KR" },
-
-    "ajou.ac.kr": { "name": "아주대학교", "country": "KR" },
-    "inha.ac.kr": { "name": "인하대학교", "country": "KR" },
-    "gachon.ac.kr": { "name": "가천대학교", "country": "KR" },
-    "dankook.ac.kr": { "name": "단국대학교", "country": "KR" },
-    "kyonggi.ac.kr": { "name": "경기대학교", "country": "KR" },
-    "inu.ac.kr": { "name": "인천대학교", "country": "KR" },
-    "suwon.ac.kr": { "name": "수원대학교", "country": "KR" },
-    "hknu.ac.kr": { "name": "한경국립대학교", "country": "KR" },
-    "kau.ac.kr": { "name": "한국항공대학교", "country": "KR" },
-
-    "kangwon.ac.kr": { "name": "강원대학교", "country": "KR" },
-    "hallym.ac.kr": { "name": "한림대학교", "country": "KR" },
-    "gwnu.ac.kr": { "name": "강릉원주대학교", "country": "KR" },
-
-    "kaist.ac.kr": { "name": "KAIST", "country": "KR" },
-    "cnu.ac.kr": { "name": "충남대학교", "country": "KR" },
-    "chungbuk.ac.kr": { "name": "충북대학교", "country": "KR" },
-    "hanbat.ac.kr": { "name": "한밭대학교", "country": "KR" },
-    "kongju.ac.kr": { "name": "공주대학교", "country": "KR" },
-    "sch.ac.kr": { "name": "순천향대학교", "country": "KR" },
-    "hoseo.edu": { "name": "호서대학교", "country": "KR" },
-    "hnu.kr": { "name": "한남대학교", "country": "KR" },
-    "pcu.ac.kr": { "name": "배재대학교", "country": "KR" },
-    "mokwon.ac.kr": { "name": "목원대학교", "country": "KR" },
-    "wsu.ac.kr": { "name": "우송대학교", "country": "KR" },
-    "cju.ac.kr": { "name": "청주대학교", "country": "KR" },
-    "konyang.ac.kr": { "name": "건양대학교", "country": "KR" },
-
-    "jnu.ac.kr": { "name": "전남대학교", "country": "KR" },
-    "jbnu.ac.kr": { "name": "전북대학교", "country": "KR" },
-    "chosun.ac.kr": { "name": "조선대학교", "country": "KR" },
-    "wku.ac.kr": { "name": "원광대학교", "country": "KR" },
-    "jj.ac.kr": { "name": "전주대학교", "country": "KR" },
-    "kunsan.ac.kr": { "name": "군산대학교", "country": "KR" },
-    "scnu.ac.kr": { "name": "순천대학교", "country": "KR" },
-    "mokpo.ac.kr": { "name": "목포대학교", "country": "KR" },
-
-    "pusan.ac.kr": { "name": "부산대학교", "country": "KR" },
-    "knu.ac.kr": { "name": "경북대학교", "country": "KR" },
-    "gnu.ac.kr": { "name": "경상국립대학교", "country": "KR" },
-    "pknu.ac.kr": { "name": "부경대학교", "country": "KR" },
-    "donga.ac.kr": { "name": "동아대학교", "country": "KR" },
-    "deu.ac.kr": { "name": "동의대학교", "country": "KR" },
-    "ks.ac.kr": { "name": "경성대학교", "country": "KR" },
-    "dongseo.ac.kr": { "name": "동서대학교", "country": "KR" },
-    "silla.ac.kr": { "name": "신라대학교", "country": "KR" },
-    "yu.ac.kr": { "name": "영남대학교", "country": "KR" },
-    "kmu.ac.kr": { "name": "계명대학교", "country": "KR" },
-    "daegu.ac.kr": { "name": "대구대학교", "country": "KR" },
-    "cu.ac.kr": { "name": "대구가톨릭대학교", "country": "KR" },
-    "anu.ac.kr": { "name": "안동대학교", "country": "KR" },
-    "changwon.ac.kr": { "name": "창원대학교", "country": "KR" },
-    "inje.ac.kr": { "name": "인제대학교", "country": "KR" },
-    "ulsan.ac.kr": { "name": "울산대학교", "country": "KR" },
-    "unist.ac.kr": { "name": "UNIST", "country": "KR" },
-    "postech.ac.kr": { "name": "POSTECH", "country": "KR" },
-    "handong.edu": { "name": "한동대학교", "country": "KR" },
-    "kumoh.ac.kr": { "name": "금오공과대학교", "country": "KR" },
-    "kyungnam.ac.kr": { "name": "경남대학교", "country": "KR" },
-
-    "jejunu.ac.kr": { "name": "제주대학교", "country": "KR" },
-
-    "polimi.it": { "name": "Politecnico di Milano", "country": "IT" },
-    "unibo.it": { "name": "Università di Bologna", "country": "IT" },
-    "uniroma1.it": { "name": "Sapienza Università di Roma", "country": "IT" },
-    "iuav.it": { "name": "Università Iuav di Venezia", "country": "IT" },
-    "tum.de": { "name": "Technische Universität München", "country": "DE" },
-    "rwth-aachen.de": { "name": "RWTH Aachen", "country": "DE" },
-    "tu-berlin.de": { "name": "Technische Universität Berlin", "country": "DE" },
-    "tu-darmstadt.de": { "name": "TU Darmstadt", "country": "DE" },
-    "uni-stuttgart.de": { "name": "Universität Stuttgart", "country": "DE" },
-    "ethz.ch": { "name": "ETH Zürich", "country": "CH" },
-    "epfl.ch": { "name": "EPFL", "country": "CH" },
-    "upc.edu": { "name": "Universitat Politècnica de Catalunya", "country": "ES" },
-    "upm.es": { "name": "Universidad Politécnica de Madrid", "country": "ES" },
-    "us.es": { "name": "Universidad de Sevilla", "country": "ES" },
-    "etsavega.net": { "name": "ETSA Valladolid", "country": "ES" },
-    "paris-malaquais.archi.fr": { "name": "ENSA Paris-Malaquais", "country": "FR" },
-    "paris-belleville.archi.fr": { "name": "ENSA Paris-Belleville", "country": "FR" },
-    "versailles.archi.fr": { "name": "ENSA Versailles", "country": "FR" },
-    "marseille.archi.fr": { "name": "ENSA Marseille", "country": "FR" },
-    "lyon.archi.fr": { "name": "ENSA Lyon", "country": "FR" },
-    "nantes.archi.fr": { "name": "ENSA Nantes", "country": "FR" },
-    "tudelft.nl": { "name": "TU Delft", "country": "NL" },
-    "kuleuven.be": { "name": "KU Leuven", "country": "BE" }
+    "a2.keio.jp": {
+      "name": "Keio University",
+      "country": "JP"
+    },
+    "aasa.ac.jp": {
+      "name": "Aichi Shukutoku University",
+      "country": "JP"
+    },
+    "absparis.com": {
+      "name": "American Business School of Paris",
+      "country": "FR"
+    },
+    "abu.ac.jp": {
+      "name": "Aichi Bunkyo University",
+      "country": "JP"
+    },
+    "ac-aix-marseille.fr": {
+      "name": "Académie d'Aix-Marseille",
+      "country": "FR"
+    },
+    "ac-besancon.fr": {
+      "name": "Académie de Besançon",
+      "country": "FR"
+    },
+    "ac-bordeaux.fr": {
+      "name": "Académie de Bordeaux",
+      "country": "FR"
+    },
+    "ac-creteil.fr": {
+      "name": "Académie de Créteil",
+      "country": "FR"
+    },
+    "ac-mayotte.fr": {
+      "name": "Académie de Mayotte",
+      "country": "FR"
+    },
+    "ac-orleans-tours.fr": {
+      "name": "Académie d'Orléans-Tours",
+      "country": "FR"
+    },
+    "ac-paris.fr": {
+      "name": "Académie de Paris",
+      "country": "FR"
+    },
+    "acts.ac.kr": {
+      "name": "Asian United Theological University",
+      "country": "KR"
+    },
+    "aea.asso.fr": {
+      "name": "Ecole de l'Air",
+      "country": "FR"
+    },
+    "afa.ac.kr": {
+      "name": "Republic of Korea Air Force Academy",
+      "country": "KR"
+    },
+    "agro.roazhon.inra.fr": {
+      "name": "Ecole Nationale Supérieure d'Agronomie de Rennes",
+      "country": "FR"
+    },
+    "agroparistech.fr": {
+      "name": "AgroParisTech",
+      "country": "FR"
+    },
+    "agrosupdijon.fr": {
+      "name": "AgroSup Dijon",
+      "country": "FR"
+    },
+    "ags.edu": {
+      "name": "American Graduate School in Paris",
+      "country": "FR"
+    },
+    "aichi-edu.ac.jp": {
+      "name": "Aichi University of Education",
+      "country": "JP"
+    },
+    "aichi-fam-u.ac.jp": {
+      "name": "Aichi Prefectural University of Fine Arts & Music",
+      "country": "JP"
+    },
+    "aichi-gakuin.ac.jp": {
+      "name": "Aichi Gakuin University",
+      "country": "JP"
+    },
+    "aichi-med-u.ac.jp": {
+      "name": "Aichi Medical University",
+      "country": "JP"
+    },
+    "aichi-pu.ac.jp": {
+      "name": "Aichi Prefectural University",
+      "country": "JP"
+    },
+    "aichi-u.ac.jp": {
+      "name": "Aichi University",
+      "country": "JP"
+    },
+    "aikoku-u.ac.jp": {
+      "name": "Aikoku Gakuen University",
+      "country": "JP"
+    },
+    "aitech.ac.jp": {
+      "name": "Aichi Institute of Technology",
+      "country": "JP"
+    },
+    "ajou.ac.kr": {
+      "name": "아주대학교",
+      "country": "KR"
+    },
+    "akad.de": {
+      "name": "AKAD Hochschulen für Berufstätige, Fachhochschule Leipzig",
+      "country": "DE"
+    },
+    "akeihou-u.ac.jp": {
+      "name": "Akita University of Economics and Law",
+      "country": "JP"
+    },
+    "akita-u.ac.jp": {
+      "name": "Akita University",
+      "country": "JP"
+    },
+    "alumnes.ub.edu": {
+      "name": "University of Barcelona",
+      "country": "ES"
+    },
+    "alumnos.ui1.es": {
+      "name": "Universidad Internacional Isabel I",
+      "country": "ES"
+    },
+    "andong.ac.kr": {
+      "name": "Andong National University",
+      "country": "KR"
+    },
+    "andrew.ac.jp": {
+      "name": "St. Andrew's University",
+      "country": "JP"
+    },
+    "angelicum.org": {
+      "name": "Pontificia Università S. Tommaso",
+      "country": "IT"
+    },
+    "antonianum.ofm.org": {
+      "name": "Pontificio Ateneo Antonianum",
+      "country": "IT"
+    },
+    "anu.ac.kr": {
+      "name": "안동대학교",
+      "country": "KR"
+    },
+    "aomori-u.ac.jp": {
+      "name": "Aomori University",
+      "country": "JP"
+    },
+    "aomoricgu.ac.jp": {
+      "name": "Aomori Chuoh Gakuin University",
+      "country": "JP"
+    },
+    "aoyama.ac.jp": {
+      "name": "Aoyama Gakuin University",
+      "country": "JP"
+    },
+    "apu.ac.jp": {
+      "name": "Ritsumeikan Asia Pacific University",
+      "country": "JP"
+    },
+    "asahi-u.ac.jp": {
+      "name": "Asahi University",
+      "country": "JP"
+    },
+    "asahikawa-med.ac.jp": {
+      "name": "Asahikawa Medical College",
+      "country": "JP"
+    },
+    "asahikawa-nct.ac.jp": {
+      "name": "National Institute of Technology, Asahikawa College",
+      "country": "JP"
+    },
+    "asahikawa-u.ac.jp": {
+      "name": "Asahikawa University",
+      "country": "JP"
+    },
+    "asfh-berlin.de": {
+      "name": "Alice-Salomon-Fachhochschule für Sozialarbeit und Sozialpädagogik Berlin",
+      "country": "DE"
+    },
+    "ashitech.ac.jp": {
+      "name": "Ashikaga Institute of Technology",
+      "country": "JP"
+    },
+    "ashiya-u.ac.jp": {
+      "name": "Ashiya University",
+      "country": "JP"
+    },
+    "asia-u.ac.jp": {
+      "name": "Asia University",
+      "country": "JP"
+    },
+    "asu.ac.jp": {
+      "name": "Aichi Sangyo University",
+      "country": "JP"
+    },
+    "atomi.ac.jp": {
+      "name": "Atomi College",
+      "country": "JP"
+    },
+    "au.edu.tw": {
+      "name": "Aletheia University",
+      "country": "TW"
+    },
+    "audencia.com": {
+      "name": "Audencia",
+      "country": "FR"
+    },
+    "aue-okinawa.ac.jp": {
+      "name": "American University Extension, Okinawa",
+      "country": "JP"
+    },
+    "augustana.de": {
+      "name": "Augustana Hochschule Neuendettelsau",
+      "country": "DE"
+    },
+    "auhw.ac.jp": {
+      "name": "Aomori University of Health and Welfare",
+      "country": "JP"
+    },
+    "aup.fr": {
+      "name": "American University of Paris",
+      "country": "FR"
+    },
+    "aur.edu": {
+      "name": "American University of Rome",
+      "country": "IT"
+    },
+    "azabu-u.ac.jp": {
+      "name": "Azabu University",
+      "country": "JP"
+    },
+    "b-tu.de": {
+      "name": "Brandenburg University of Technology Cottbus - Senftenberg",
+      "country": "DE"
+    },
+    "ba-bautzen.de": {
+      "name": "Staatliche Studienakademie Bautzen",
+      "country": "DE"
+    },
+    "baika.ac.jp": {
+      "name": "Baika Women's College",
+      "country": "JP"
+    },
+    "baiko.ac.jp": {
+      "name": "Baiko Women's College",
+      "country": "JP"
+    },
+    "barcelonagse.eu": {
+      "name": "Barcelona Graduate School of Economics",
+      "country": "ES"
+    },
+    "beppu-u.ac.jp": {
+      "name": "Beppu University",
+      "country": "JP"
+    },
+    "bethel.de": {
+      "name": "Kirchliche Hochschule Bethel",
+      "country": "DE"
+    },
+    "bgu.ac.jp": {
+      "name": "Bunkyo Gakuin University",
+      "country": "JP"
+    },
+    "bible.ac.kr": {
+      "name": "Korean Bible University",
+      "country": "KR"
+    },
+    "bircham.edu": {
+      "name": "Bircham International University",
+      "country": "ES"
+    },
+    "bits-iserlohn.de": {
+      "name": "BiTS - Business and Information Technology School gGmbH",
+      "country": "DE"
+    },
+    "bnue.ac.kr": {
+      "name": "Busan National University of Education",
+      "country": "KR"
+    },
+    "bpu.ac.kr": {
+      "name": "Busan Presbyterian University",
+      "country": "KR"
+    },
+    "bs.naist.jp": {
+      "name": "Nara Institute of Science and Technology",
+      "country": "JP"
+    },
+    "bu.ac.kr": {
+      "name": "Baekseok University",
+      "country": "KR"
+    },
+    "budo-u.ac.jp": {
+      "name": "International Budo University",
+      "country": "JP"
+    },
+    "bufs.ac.kr": {
+      "name": "Busan University of Foreign Studies",
+      "country": "KR"
+    },
+    "bukkyo-u.ac.jp": {
+      "name": "Bukkyo University",
+      "country": "JP"
+    },
+    "bunka-wu.ac.jp": {
+      "name": "Bunka Women's University",
+      "country": "JP"
+    },
+    "bunkyo.ac.jp": {
+      "name": "Bunkyo University",
+      "country": "JP"
+    },
+    "bunri-u.ac.jp": {
+      "name": "Tokushima Bunri University",
+      "country": "JP"
+    },
+    "campus-m-university.de": {
+      "name": "Hochschule Mittweida, University of Applied Sciences",
+      "country": "DE"
+    },
+    "campus-saint-marc.com": {
+      "name": "Campus Saint Marc",
+      "country": "FR"
+    },
+    "campus.udg.edu": {
+      "name": "University of Girona",
+      "country": "ES"
+    },
+    "campusm21.de": {
+      "name": "Hochschule Mittweida, University of Applied Sciences",
+      "country": "DE"
+    },
+    "cas.dhbw.de": {
+      "name": "Duale Hochschule Baden-Württemberg Center for Advanced Studies (CAS)",
+      "country": "DE"
+    },
+    "casa.unimo.it": {
+      "name": "University of Modena",
+      "country": "IT"
+    },
+    "cataegu.ac.kr": {
+      "name": "Catholic University of Taegu-Hyosung",
+      "country": "KR"
+    },
+    "catholic.ac.kr": {
+      "name": "가톨릭대학교",
+      "country": "KR"
+    },
+    "cau.ac.kr": {
+      "name": "중앙대학교",
+      "country": "KR"
+    },
+    "cbnu.ac.kr": {
+      "name": "Chungbuk National University",
+      "country": "KR"
+    },
+    "cbs.de": {
+      "name": "Cologne Business School",
+      "country": "DE"
+    },
+    "ccu.edu.tw": {
+      "name": "National Chung Cheng University",
+      "country": "TW"
+    },
+    "cdu.ac.kr": {
+      "name": "Chodang University",
+      "country": "KR"
+    },
+    "centrale-marseille.fr": {
+      "name": "Ecole Centrale de Marseille",
+      "country": "FR"
+    },
+    "centralesupelec.fr": {
+      "name": "Central Supélec",
+      "country": "FR"
+    },
+    "ceram.edu": {
+      "name": "Ecole Supérieure de Commerce de Sophia Antipolis",
+      "country": "FR"
+    },
+    "cesi.fr": {
+      "name": "Centre d'Etudes Supérieures Industrielles Paris",
+      "country": "FR"
+    },
+    "ceu.es": {
+      "name": "Universidad de San Pablo CEU",
+      "country": "ES"
+    },
+    "cfpj.com": {
+      "name": "Centre de Formation et de Perfectionnement des Journalistes",
+      "country": "FR"
+    },
+    "cgu.ac.jp": {
+      "name": "Chuo Gakuin University",
+      "country": "JP"
+    },
+    "cgu.edu.tw": {
+      "name": "Chang Gung University",
+      "country": "TW"
+    },
+    "cha.ac.kr": {
+      "name": "CHA University",
+      "country": "KR"
+    },
+    "changwon.ac.kr": {
+      "name": "창원대학교",
+      "country": "KR"
+    },
+    "charite.de": {
+      "name": "Charité – Universitätsmedizin Berlin",
+      "country": "DE"
+    },
+    "cheju-e.ac.kr": {
+      "name": "Cheju National University of Education",
+      "country": "KR"
+    },
+    "cheju.ac.kr": {
+      "name": "Cheju National University",
+      "country": "KR"
+    },
+    "chiba-u.ac.jp": {
+      "name": "Chiba University",
+      "country": "JP"
+    },
+    "chiba-u.jp": {
+      "name": "Chiba University",
+      "country": "JP"
+    },
+    "chikushi.ac.jp": {
+      "name": "Chikushi Jogakuen University",
+      "country": "JP"
+    },
+    "chinju-e.ac.kr": {
+      "name": "Chinju National University of Education",
+      "country": "KR"
+    },
+    "chinju.ac.kr": {
+      "name": "Chinju National University",
+      "country": "KR"
+    },
+    "chna.edu.tw": {
+      "name": "Chia Nana College of Pharmacy and Science",
+      "country": "TW"
+    },
+    "chodang.ac.kr": {
+      "name": "Chodang University",
+      "country": "KR"
+    },
+    "chonbuk.ac.kr": {
+      "name": "Chonbuk National University",
+      "country": "KR"
+    },
+    "chongju-e.ac.kr": {
+      "name": "Chongju National University of Education",
+      "country": "KR"
+    },
+    "chongju.ac.kr": {
+      "name": "Chongju University",
+      "country": "KR"
+    },
+    "chongshin.ac.kr": {
+      "name": "Chongshin University",
+      "country": "KR"
+    },
+    "chonju-e.ac.kr": {
+      "name": "Chonju National University of Education",
+      "country": "KR"
+    },
+    "chonnam.ac.kr": {
+      "name": "Chonnam National University",
+      "country": "KR"
+    },
+    "chosun.ac.kr": {
+      "name": "조선대학교",
+      "country": "KR"
+    },
+    "chu.edu.tw": {
+      "name": "Chung Hua University",
+      "country": "TW"
+    },
+    "chubu-gu.ac.jp": {
+      "name": "Chubu Gakuin University & Chubu Women's College",
+      "country": "JP"
+    },
+    "chubu.ac.jp": {
+      "name": "Chubu University",
+      "country": "JP"
+    },
+    "chugye.ac.kr": {
+      "name": "Chugye University for the Arts",
+      "country": "KR"
+    },
+    "chujo-u.ac.jp": {
+      "name": "Chukyo Women's University",
+      "country": "JP"
+    },
+    "chukyo-u.ac.jp": {
+      "name": "Chukyo University",
+      "country": "JP"
+    },
+    "chukyogakuin-u.ac.jp": {
+      "name": "Chukyo Gakuin University",
+      "country": "JP"
+    },
+    "chungbuk.ac.kr": {
+      "name": "충북대학교",
+      "country": "KR"
+    },
+    "chungju.ac.kr": {
+      "name": "Chung-Ju National University",
+      "country": "KR"
+    },
+    "chungnam.ac.kr": {
+      "name": "Chungnam National University",
+      "country": "KR"
+    },
+    "chungwoon.ac.kr": {
+      "name": "Chungwoon University",
+      "country": "KR"
+    },
+    "chuo-u.ac.jp": {
+      "name": "Chuo University",
+      "country": "JP"
+    },
+    "cje.ac.kr": {
+      "name": "Cheongju National University of Education",
+      "country": "KR"
+    },
+    "cju.ac.kr": {
+      "name": "청주대학교",
+      "country": "KR"
+    },
+    "cju.edu.tw": {
+      "name": "Chang Jung University",
+      "country": "TW"
+    },
+    "cku.ac.jp": {
+      "name": "Chiba Keizai University",
+      "country": "JP"
+    },
+    "cku.ac.kr": {
+      "name": "Catholic Kwandong University",
+      "country": "KR"
+    },
+    "cku.edu.tw": {
+      "name": "Ching Kuo Institue of Management & Health",
+      "country": "TW"
+    },
+    "clermont-sb.fr": {
+      "name": "Clermont School of Business",
+      "country": "FR"
+    },
+    "cmc.edu.tw": {
+      "name": "China Medical College",
+      "country": "TW"
+    },
+    "cnam.fr": {
+      "name": "Conservatoire National des Arts et Métiers",
+      "country": "FR"
+    },
+    "cnearc.fr": {
+      "name": "Centre National d'Etudes Agronomiques des Régions Chaudes",
+      "country": "FR"
+    },
+    "cnu.ac.kr": {
+      "name": "충남대학교",
+      "country": "KR"
+    },
+    "cnue-e.ac.kr": {
+      "name": "Chunchon National University of Education",
+      "country": "KR"
+    },
+    "cnue.ac.kr": {
+      "name": "Chuncheon National University of Education",
+      "country": "KR"
+    },
+    "code.berlin": {
+      "name": "CODE University of Applied Sciences Berlin",
+      "country": "DE"
+    },
+    "college-de-france.fr": {
+      "name": "Collège de France",
+      "country": "FR"
+    },
+    "cpe.fr": {
+      "name": "Ecole Supérieure de Chimie Physique Electronique de Lyon",
+      "country": "FR"
+    },
+    "cpu.edu.tw": {
+      "name": "Central Police University",
+      "country": "TW"
+    },
+    "cribx1.u-bordeaux.fr": {
+      "name": "Université Bordeaux I",
+      "country": "FR"
+    },
+    "cs.ac.kr": {
+      "name": "Changshin University",
+      "country": "KR"
+    },
+    "csmc.edu.tw": {
+      "name": "Chung Shan Medical and Dental College",
+      "country": "TW"
+    },
+    "csmrouen.com": {
+      "name": "Campus Saint Marc",
+      "country": "FR"
+    },
+    "csmrouen.net": {
+      "name": "Campus Saint Marc",
+      "country": "FR"
+    },
+    "cu.ac.kr": {
+      "name": "대구가톨릭대학교",
+      "country": "KR"
+    },
+    "cuc.ac.jp": {
+      "name": "Chiba University of Commerce",
+      "country": "JP"
+    },
+    "cue.ac.kr": {
+      "name": "Chinju National University of Education",
+      "country": "KR"
+    },
+    "cuk.ac.kr": {
+      "name": "Catholic University of Korea",
+      "country": "KR"
+    },
+    "cup.ac.kr": {
+      "name": "Catholic University of Pusan",
+      "country": "KR"
+    },
+    "cust.univ-bpclermont.fr": {
+      "name": "Institut des Sciences de l'Ingénieur de Clermont-Ferrand",
+      "country": "FR"
+    },
+    "cycu.edu.tw": {
+      "name": "Chung Yuan Christian University",
+      "country": "TW"
+    },
+    "cyut.edu.tw": {
+      "name": "Chao Yang University of Science and Technology",
+      "country": "TW"
+    },
+    "daebul.ac.kr": {
+      "name": "Daebul University",
+      "country": "KR"
+    },
+    "daegu.ac.kr": {
+      "name": "대구대학교",
+      "country": "KR"
+    },
+    "daejeon.ac.kr": {
+      "name": "Daejeon Theological University",
+      "country": "KR"
+    },
+    "daejin.ac.kr": {
+      "name": "Daejin University",
+      "country": "KR"
+    },
+    "daeshin.ac.kr": {
+      "name": "Daeshin University",
+      "country": "KR"
+    },
+    "daido-it.ac.jp": {
+      "name": "Daido Institute of Technology",
+      "country": "JP"
+    },
+    "daiichi-cps.ac.jp": {
+      "name": "Daiichi College of Pharmaceutical Sciences",
+      "country": "JP"
+    },
+    "daiichi-koudai.ac.jp": {
+      "name": "Dai Ichi University, College of Technology",
+      "country": "JP"
+    },
+    "daiichi-ue.ac.jp": {
+      "name": "Daiichi University of Economics",
+      "country": "JP"
+    },
+    "daion.ac.jp": {
+      "name": "Osaka College of Music",
+      "country": "JP"
+    },
+    "daishodai.ac.jp": {
+      "name": "Osaka University of Commerce",
+      "country": "JP"
+    },
+    "daito.ac.jp": {
+      "name": "Daito Bunka University",
+      "country": "JP"
+    },
+    "dankook.ac.kr": {
+      "name": "단국대학교",
+      "country": "KR"
+    },
+    "dauphine.fr": {
+      "name": "Université Paris-Dauphine (Paris IX)",
+      "country": "FR"
+    },
+    "dcatholic.ac.kr": {
+      "name": "Daejeon Catholic University",
+      "country": "KR"
+    },
+    "dendai.ac.jp": {
+      "name": "Tokyo Denki University",
+      "country": "JP"
+    },
+    "deu.ac.kr": {
+      "name": "동의대학교",
+      "country": "KR"
+    },
+    "deusto.es": {
+      "name": "Universidad de Deusto",
+      "country": "ES"
+    },
+    "devinci.fr": {
+      "name": "Ecole Superieur d'Ingenieurs Leonard de Vinci",
+      "country": "FR"
+    },
+    "dgist.ac.kr": {
+      "name": "Daegu Gyeongbuk Institute of Science and Technology",
+      "country": "KR"
+    },
+    "dhbw-karlsruhe.de": {
+      "name": "Duale Hochschule Baden-Württemberg Karlsruhe",
+      "country": "DE"
+    },
+    "dhbw-loerrach.de": {
+      "name": "Duale Hochschule Baden-Württemberg Lörrach",
+      "country": "DE"
+    },
+    "dhbw-mannheim.de": {
+      "name": "Duale Hochschule Baden-Wuerttemberg Mannheim",
+      "country": "DE"
+    },
+    "dhbw-mosbach.de": {
+      "name": "Duale Hochschule Baden-Württemberg Mosbach",
+      "country": "DE"
+    },
+    "dhbw-stuttgart.de": {
+      "name": "Duale Hochschule Baden-Württemberg Stuttgart",
+      "country": "DE"
+    },
+    "dhbw-vs.de": {
+      "name": "Duale Hochschule Baden-Württemberg Villingen-Schwenningen",
+      "country": "DE"
+    },
+    "dhbw.de": {
+      "name": "Duale Hochschule Baden-Württemberg",
+      "country": "DE"
+    },
+    "dhu.ac.kr": {
+      "name": "Daegu Haany University",
+      "country": "KR"
+    },
+    "dhv-speyer.de": {
+      "name": "Deutsche Hochschule für Verwaltungswissenschaften Speyer",
+      "country": "DE"
+    },
+    "diploma.de": {
+      "name": "DIPLOMA-Fachhochschule Ölsnitz/Vogtland",
+      "country": "DE"
+    },
+    "dju.ac.kr": {
+      "name": "Daejeon University",
+      "country": "KR"
+    },
+    "dnue.ac.kr": {
+      "name": "Daegu National University of Education",
+      "country": "KR"
+    },
+    "do-johodai.ac.jp": {
+      "name": "Hokkaido Information University",
+      "country": "JP"
+    },
+    "doho.ac.jp": {
+      "name": "Doho University",
+      "country": "JP"
+    },
+    "dohto.ac.jp": {
+      "name": "Dohto University",
+      "country": "JP"
+    },
+    "dokkyo.ac.jp": {
+      "name": "Dokkyo University",
+      "country": "JP"
+    },
+    "dokkyomed.ac.jp": {
+      "name": "Dokkyo University School of Medicine",
+      "country": "JP"
+    },
+    "donga.ac.kr": {
+      "name": "동아대학교",
+      "country": "KR"
+    },
+    "dongduk.ac.kr": {
+      "name": "Dongduk Women's University",
+      "country": "KR"
+    },
+    "dongeui.ac.kr": {
+      "name": "Dong Eui University",
+      "country": "KR"
+    },
+    "dongguk.ac.kr": {
+      "name": "Dongguk University",
+      "country": "KR"
+    },
+    "dongguk.edu": {
+      "name": "동국대학교",
+      "country": "KR"
+    },
+    "dongseo.ac.kr": {
+      "name": "동서대학교",
+      "country": "KR"
+    },
+    "dongshinu.ac.kr": {
+      "name": "Dongshin University",
+      "country": "KR"
+    },
+    "doshisha.ac.jp": {
+      "name": "Doshisha University",
+      "country": "JP"
+    },
+    "dpt-info.u-strasbg.fr": {
+      "name": "Université de Strasbourg",
+      "country": "FR"
+    },
+    "dshs-koeln.de": {
+      "name": "Deutsche Sporthochschule Köln",
+      "country": "DE"
+    },
+    "dsu.ac.kr": {
+      "name": "Dongshin University",
+      "country": "KR"
+    },
+    "dufs.ac.kr": {
+      "name": "Daegu University of Foreign Studies",
+      "country": "KR"
+    },
+    "duksung.ac.kr": {
+      "name": "덕성여자대학교",
+      "country": "KR"
+    },
+    "dwc.doshisha.ac.jp": {
+      "name": "Doshisha Women's College of Liberal Arts",
+      "country": "JP"
+    },
+    "dytc.ac.kr": {
+      "name": "Dong Yang University of Technology",
+      "country": "KR"
+    },
+    "dyu.ac.kr": {
+      "name": "Dongyang University",
+      "country": "KR"
+    },
+    "dyu.edu.tw": {
+      "name": "Da-Yeh University",
+      "country": "TW"
+    },
+    "e3i.univ-tours.fr": {
+      "name": "Ecole d'Ingénieurs en Informatique pour l'Industrie",
+      "country": "FR"
+    },
+    "eada.edu": {
+      "name": "Eada Business School Barcelona",
+      "country": "ES"
+    },
+    "eap.fr": {
+      "name": "Ecole Européen des Affaires",
+      "country": "FR"
+    },
+    "eap.net": {
+      "name": "E.A.P. Europäische Wirtschaftshochschule Berlin",
+      "country": "DE"
+    },
+    "eba-muenchen.de": {
+      "name": "Europäische Betriebswirtschafts-Akademie",
+      "country": "DE"
+    },
+    "ebs-paris.com": {
+      "name": "European Business School",
+      "country": "FR"
+    },
+    "ebs.de": {
+      "name": "European Business School Schloß Reichartshausen",
+      "country": "DE"
+    },
+    "ebs.edu": {
+      "name": "EBS Universität",
+      "country": "DE"
+    },
+    "ec-lille.fr": {
+      "name": "Ecole Centrale de Lille",
+      "country": "FR"
+    },
+    "ec-lyon.fr": {
+      "name": "Ecole Centrale de Lyon",
+      "country": "FR"
+    },
+    "ec-nantes.fr": {
+      "name": "Ecole Centrale de Nantes",
+      "country": "FR"
+    },
+    "ecam.fr": {
+      "name": "Ecole Catholique d'Arts & Metiers",
+      "country": "FR"
+    },
+    "ece.fr": {
+      "name": "Ecole Centrale d'Electronique - ECE",
+      "country": "FR"
+    },
+    "ecla.de": {
+      "name": "European College of Liberal Arts",
+      "country": "DE"
+    },
+    "ecoles-idrac.com": {
+      "name": "IDRAC (Institut de recherche en action commerciale)",
+      "country": "FR"
+    },
+    "edogawa-u.ac.jp": {
+      "name": "Edogawa University",
+      "country": "JP"
+    },
+    "edu.asahikawa-nct.ac.jp": {
+      "name": "National Institute of Technology, Asahikawa College",
+      "country": "JP"
+    },
+    "edu.edhec.com": {
+      "name": "Ecole des Hautes Etudes Commerciales du Nord",
+      "country": "FR"
+    },
+    "edu.escp.eu": {
+      "name": "Ecole Supérieure de Commerce de Paris",
+      "country": "FR"
+    },
+    "eerie.fr": {
+      "name": "Ecole pour les Etudes et la Recherche en Informatique et Electronique",
+      "country": "FR"
+    },
+    "efh-bochum.de": {
+      "name": "Evangelische Fachhochschule Rheinland-Westfalen-Lippe",
+      "country": "DE"
+    },
+    "efh-freiburg.de": {
+      "name": "Evangelische Fachhochschule Freiburg, Hochschule für Soziale Arbeit, Diakonie und Religionspädagogik",
+      "country": "DE"
+    },
+    "efh-hannover.de": {
+      "name": "Evangelische Fachhochschule Hannover",
+      "country": "DE"
+    },
+    "efh-reutlingen-ludwigsburg.de": {
+      "name": "Evangelische Fachhochschule Reutlingen-Ludwigsburg, Hochschule für Soziale Arbeit, Religionspädagogik und Diakonie",
+      "country": "DE"
+    },
+    "efhlu.de": {
+      "name": "Evangelische Fachhochschule Ludwigshafen Hochschule für Sozial- und Gesundheitswesen",
+      "country": "DE"
+    },
+    "efpg.inpg.fr": {
+      "name": "Ecole Française de Papeterie et des Industries Graphiques",
+      "country": "FR"
+    },
+    "efrei.fr": {
+      "name": "Ecole Française d'Electronique et d'Informatique",
+      "country": "FR"
+    },
+    "eh-darmstadt.de": {
+      "name": "Evangelische Fachhochschule Darmstadt",
+      "country": "DE"
+    },
+    "ehime-u.ac.jp": {
+      "name": "Ehime University",
+      "country": "JP"
+    },
+    "ehs-dresden.de": {
+      "name": "Evangelische Hochschule für Soziale Arbeit Dresden (FH)",
+      "country": "DE"
+    },
+    "ehu.es": {
+      "name": "Universidad del País Vasco",
+      "country": "ES"
+    },
+    "ehu.eus": {
+      "name": "Universidad del País Vasco",
+      "country": "ES"
+    },
+    "eichi-u.ac.jp": {
+      "name": "Eichi University",
+      "country": "JP"
+    },
+    "eigsi.fr": {
+      "name": "EIGSI La Rochelle",
+      "country": "FR"
+    },
+    "eivp-paris.fr": {
+      "name": "Ecole des Ingénieurs de la Ville de Paris",
+      "country": "FR"
+    },
+    "eiyo.ac.jp": {
+      "name": "Kagawa Institute of Nutrition",
+      "country": "JP"
+    },
+    "em-lyon.com": {
+      "name": "Ecole Supérieure de Commerce de Lyon",
+      "country": "FR"
+    },
+    "emc-campus.com": {
+      "name": "European Management Center Paris",
+      "country": "FR"
+    },
+    "ems-mainz.de": {
+      "name": "European Management School",
+      "country": "DE"
+    },
+    "emse.fr": {
+      "name": "Ecole Nationale Supérieure des Mines de St-Etienne",
+      "country": "FR"
+    },
+    "ena.fr": {
+      "name": "Ecole Nationale d'Administration",
+      "country": "FR"
+    },
+    "enac.fr": {
+      "name": "Ecole Nationale de l'Aviation Civile",
+      "country": "FR"
+    },
+    "enae.es": {
+      "name": "ENAE Business School",
+      "country": "ES"
+    },
+    "english.web.ncku.edu.tw": {
+      "name": "National Cheng Kung University",
+      "country": "TW"
+    },
+    "enic.fr": {
+      "name": "ENIC Telecom Lille 1",
+      "country": "FR"
+    },
+    "enim.fr": {
+      "name": "Ecole Nationale d'Ingénieurs de Metz",
+      "country": "FR"
+    },
+    "enise.fr": {
+      "name": "Ecole Nationale d'Ingénieurs de Saint-Etienne",
+      "country": "FR"
+    },
+    "enit.fr": {
+      "name": "Ecole Nationale d'Ingénieurs de Tarbes",
+      "country": "FR"
+    },
+    "enitab.fr": {
+      "name": "Ecole Nationale d'Ingénieurs des Travaux Agricoles de Bordeaux",
+      "country": "FR"
+    },
+    "enitac.fr": {
+      "name": "Ecole Nationale d'Ingénieurs des Travaux Agricoles de Clermont-Ferrand",
+      "country": "FR"
+    },
+    "enitiaa-nantes.fr": {
+      "name": "Ecole Nationale d'Ingénieurs des Techniques des Industries Agricoles et Alimentaires",
+      "country": "FR"
+    },
+    "enm.meteo.fr": {
+      "name": "Ecole Nationale de la Météorologie",
+      "country": "FR"
+    },
+    "enpc.fr": {
+      "name": "Ecole Nationale des Ponts et Chausees",
+      "country": "FR"
+    },
+    "ens-cachan.fr": {
+      "name": "École normale supérieure Paris-Saclay",
+      "country": "FR"
+    },
+    "ens-fcl.fr": {
+      "name": "Ecole Normale Supérieure de Fontenay-Saint Cloud",
+      "country": "FR"
+    },
+    "ens-lyon.fr": {
+      "name": "Ecole Normale Supérieure de Lyon",
+      "country": "FR"
+    },
+    "ens-paris-saclay.fr": {
+      "name": "École normale supérieure Paris-Saclay",
+      "country": "FR"
+    },
+    "ens.fr": {
+      "name": "Ecole Normale Supérieure de Paris",
+      "country": "FR"
+    },
+    "ens2m.fr": {
+      "name": "Ecole Nationale Supérieur de Mécaniques et des Microtechniques",
+      "country": "FR"
+    },
+    "ensae.fr": {
+      "name": "Ecole Nationale de la Statistique et de l'Administration Economique",
+      "country": "FR"
+    },
+    "ensai.fr": {
+      "name": "Ecole Nationale de la Statistique et de l'Analyse de l'information",
+      "country": "FR"
+    },
+    "ensaia.u-nancy.fr": {
+      "name": "Ecole Nationale Supérieure d'Agronomie et des Industries Alimentaires",
+      "country": "FR"
+    },
+    "ensait.fr": {
+      "name": "Ecole Nationale Supérieure des Arts et Industries Textiles",
+      "country": "FR"
+    },
+    "ensam.inra.fr": {
+      "name": "Ecole Nationale Supérieure d'Agronomie de Montpellier",
+      "country": "FR"
+    },
+    "ensat.fr": {
+      "name": "Ecole Nationale Supérieure Agronomique de Toulouse",
+      "country": "FR"
+    },
+    "ensc-lille.fr": {
+      "name": "Ecole Nationale Supérieure de Chimie de Lille",
+      "country": "FR"
+    },
+    "ensc-rennes.fr": {
+      "name": "Ecole Nationale Supérieure de Chimie de Rennes",
+      "country": "FR"
+    },
+    "ensccf.univ-bpclermont.fr": {
+      "name": "Ecole Nationale Supérieure de Chimie de Clermont-Ferrand",
+      "country": "FR"
+    },
+    "enscm.fr": {
+      "name": "Ecole Nationale Supérieure de Chimie de Montpellier",
+      "country": "FR"
+    },
+    "enscmu.univ-mulhouse.fr": {
+      "name": "Ecole Nationale Supérieure de Chimie de Mulhouse",
+      "country": "FR"
+    },
+    "enscp.jussieu.fr": {
+      "name": "Ecole Nationale Supérieure de Chimie de Paris",
+      "country": "FR"
+    },
+    "enscpb.u-bordeaux.fr": {
+      "name": "Ecole Nationale Supérieure de Chimie et de Physique de Bordeaux",
+      "country": "FR"
+    },
+    "ensea.fr": {
+      "name": "Ecole Nationale Supérieure de l'Electronique et de ses Applications",
+      "country": "FR"
+    },
+    "enseeiht.fr": {
+      "name": "Ecole Nationale Supérieure en Electrotechnique, Electronique, Informatique et Hydraulique de Toulouse",
+      "country": "FR"
+    },
+    "ensem.u-nancy.fr": {
+      "name": "Ecole Nationale Supérieure Electricité et Mécanique",
+      "country": "FR"
+    },
+    "enserb.u-bordeaux.fr": {
+      "name": "Ecole Nationale Supérieure d'Electronique et de Radioelectricite de Bordeaux",
+      "country": "FR"
+    },
+    "ensg.ign.fr": {
+      "name": "Ecole Nationale des Sciences Géographiques",
+      "country": "FR"
+    },
+    "ensg.u-nancy.fr": {
+      "name": "Ecole Nationale Supérieur de Géologie de Nancy",
+      "country": "FR"
+    },
+    "ensic.u-nancy.fr": {
+      "name": "Ecole Nationale Supérieure des Industries Chimiques de Nancy",
+      "country": "FR"
+    },
+    "ensica.fr": {
+      "name": "Ecole Nationale Supérieur d'Ingénieurs de Constructions Aéronautique",
+      "country": "FR"
+    },
+    "ensieta.fr": {
+      "name": "Ecole Nationale Supérieur des Ingénieur des Etudes et Techniques d'Armement",
+      "country": "FR"
+    },
+    "ensitm.fr": {
+      "name": "Ecole Nationale Supérieure des Industries Textiles de Mulhouse",
+      "country": "FR"
+    },
+    "ensm-ales.fr": {
+      "name": "Ecole Nationale Supérieure des Mines d'Alès",
+      "country": "FR"
+    },
+    "ensm-douai.fr": {
+      "name": "Ecole Nationale Supérieure des Mines de Douai",
+      "country": "FR"
+    },
+    "ensma.fr": {
+      "name": "Ecole Nationale Supérieur de Mécanique et d'Aéronautique",
+      "country": "FR"
+    },
+    "ensmp.fr": {
+      "name": "Ecole Nationale Supérieure des Mines de Paris",
+      "country": "FR"
+    },
+    "enspm.u-3mrs.fr": {
+      "name": "Ecole Nationale Supérieure de Physique de Marseille",
+      "country": "FR"
+    },
+    "enst-bretagne.fr": {
+      "name": "Ecole Nationale Supérieure des Telecommunications de Bretagne",
+      "country": "FR"
+    },
+    "enst.fr": {
+      "name": "Ecole Nationale Supérieure des Telecommunications de Paris",
+      "country": "FR"
+    },
+    "ensta.fr": {
+      "name": "Ecole Nationale Supérieure de Techniques Avancées",
+      "country": "FR"
+    },
+    "entpe.fr": {
+      "name": "Ecole Nationale des Travaux Publics de l'Etat",
+      "country": "FR"
+    },
+    "envt.fr": {
+      "name": "Ecole Nationale Vétérinaire de Toulouse",
+      "country": "FR"
+    },
+    "epf.fr": {
+      "name": "EPF Ecole d'Ingénieurs",
+      "country": "FR"
+    },
+    "epfl.ch": {
+      "name": "EPFL",
+      "country": "CH"
+    },
+    "epita.fr": {
+      "name": "Ecole Pour l'Informatique et les Techniques Avancees",
+      "country": "FR"
+    },
+    "epitech.eu": {
+      "name": "Ecole pour l'Informatique et les nouvelles Technologies",
+      "country": "FR"
+    },
+    "epitech.net": {
+      "name": "Ecole pour l'Informatique et les nouvelles Technologies",
+      "country": "FR"
+    },
+    "esa-purpan.fr": {
+      "name": "Ecole Supérieure d'Agriculture de Purpan",
+      "country": "FR"
+    },
+    "esade.edu": {
+      "name": "ESADE Business & Law School",
+      "country": "ES"
+    },
+    "esc-bordeaux.fr": {
+      "name": "Ecole Supérieure de Commerce de Bordeaux",
+      "country": "FR"
+    },
+    "esc-brest.fr": {
+      "name": "Ecole Supérieure de Commerce de Brest",
+      "country": "FR"
+    },
+    "esc-grenoble.fr": {
+      "name": "Grenoble Ecole de Management",
+      "country": "FR"
+    },
+    "esc-lille.fr": {
+      "name": "Ecole Supérieure de Commerce de Lille",
+      "country": "FR"
+    },
+    "esc-marseille.fr": {
+      "name": "Ecole Supérieure de Commerce de Marseille-Provence",
+      "country": "FR"
+    },
+    "esc-normandie.fr": {
+      "name": "Ecole Supérieure de Commerce de Le Havre/Caen",
+      "country": "FR"
+    },
+    "esc-pau.fr": {
+      "name": "Ecole Supérieure de Commerce de Pau",
+      "country": "FR"
+    },
+    "esc-reims.edu": {
+      "name": "Ecole Supérieure de Commerce de Reims",
+      "country": "FR"
+    },
+    "esc-rouen.fr": {
+      "name": "Ecole Supérieure de Commerce de Rouen",
+      "country": "FR"
+    },
+    "esc-toulouse.fr": {
+      "name": "Ecole Supérieure de Commerce de Toulouse",
+      "country": "FR"
+    },
+    "escdijon.com": {
+      "name": "Ecole Supérieure de Commerce de Dijon",
+      "country": "FR"
+    },
+    "escem.fr": {
+      "name": "Ecole Supérieure de Commerce et Management",
+      "country": "FR"
+    },
+    "escna.fr": {
+      "name": "Ecole Supérieure de Commerce de Nantes-Atlantique",
+      "country": "FR"
+    },
+    "escom.fr": {
+      "name": "Ecole Supérieure de Chimie Organique et Minérale",
+      "country": "FR"
+    },
+    "escp.eu": {
+      "name": "Ecole Supérieure de Commerce de Paris",
+      "country": "FR"
+    },
+    "escp.fr": {
+      "name": "Ecole Supérieure de Commerce de Paris",
+      "country": "FR"
+    },
+    "eseo.fr": {
+      "name": "Ecole Supérieure d'Electronique de l'Ouest",
+      "country": "FR"
+    },
+    "esiae.fr": {
+      "name": "Ecole Supérieure Internationale d'Administration des Entreprises",
+      "country": "FR"
+    },
+    "esic.es": {
+      "name": "Escuela Superior de Gestion Comercial y Marketing (ESIC)",
+      "country": "ES"
+    },
+    "esiea.fr": {
+      "name": "Ecole Supérieure d'Informatique-Electronique-Automatique",
+      "country": "FR"
+    },
+    "esiee.fr": {
+      "name": "Ecole Supérieure d'Ingénieurs en Electronique et Electrotechnique",
+      "country": "FR"
+    },
+    "esigelec.fr": {
+      "name": "Ecole Supérieure d'Ingénieurs en Génie Electrique",
+      "country": "FR"
+    },
+    "esim.imt-mrs.fr": {
+      "name": "Ecole Supérieure d'Ingénieurs de Marseille",
+      "country": "FR"
+    },
+    "esitpa.org": {
+      "name": "Ecole Supérieure d'Ingénieurs et de Techniciens pour l'Agriculture",
+      "country": "FR"
+    },
+    "eslsca.fr": {
+      "name": "ESLSCA Business School Paris",
+      "country": "FR"
+    },
+    "esme.fr": {
+      "name": "Ecole Spéciale de Mécanique et d'Electricité",
+      "country": "FR"
+    },
+    "espci.fr": {
+      "name": "Ecole Supérieure de Physique et de Chimie Industrielles",
+      "country": "FR"
+    },
+    "essca.asso.fr": {
+      "name": "Ecole Supérieure des Sciences Commerciales d'Angers",
+      "country": "FR"
+    },
+    "essec.fr": {
+      "name": "Ecole Supérieure des Sciences Economiques et Commerciales",
+      "country": "FR"
+    },
+    "esstin.u-nancy.fr": {
+      "name": "Ecole Supérieure des Sciences et Technologie de l'Ingénieur de Nancy",
+      "country": "FR"
+    },
+    "estp.fr": {
+      "name": "Ecole Spéciale des Travaux Publics du Bâtiment et de l'Industrie",
+      "country": "FR"
+    },
+    "ethz.ch": {
+      "name": "ETH Zürich",
+      "country": "CH"
+    },
+    "etna.io": {
+      "name": "Ecole des technologies numeriques appliquees",
+      "country": "FR"
+    },
+    "etsavega.net": {
+      "name": "ETSA Valladolid",
+      "country": "ES"
+    },
+    "etu.sorbonne-universite.fr": {
+      "name": "Sorbonne Université - Faculté des Sciences (Paris VI)",
+      "country": "FR"
+    },
+    "etu.unistra.fr": {
+      "name": "Université de Strasbourg",
+      "country": "FR"
+    },
+    "etu.upmc.fr": {
+      "name": "Sorbonne Université - Faculté des Sciences (Paris VI)",
+      "country": "FR"
+    },
+    "etud.u-pem.fr": {
+      "name": "Université Paris-Est Marne-la-Vallée",
+      "country": "FR"
+    },
+    "eudil.fr": {
+      "name": "Ecole Universitaire d'Ingénieurs de Lille",
+      "country": "FR"
+    },
+    "eufh.de": {
+      "name": "Europäische Fachhochschule",
+      "country": "DE"
+    },
+    "eulji.ac.kr": {
+      "name": "Eulji University",
+      "country": "KR"
+    },
+    "eum.ac.jp": {
+      "name": "Elisabeth University of Music",
+      "country": "JP"
+    },
+    "europa-uni.de": {
+      "name": "Europa-Universität Viadrina",
+      "country": "DE"
+    },
+    "euv-frankfurt-o.de": {
+      "name": "Europa-Universität Viadrina Frankfurt (Oder)",
+      "country": "DE"
+    },
+    "evfh-berlin.de": {
+      "name": "Evangelische Fachhochschule Berlin, Fachhochschule für Sozialarbeit und Sozialpädagogik",
+      "country": "DE"
+    },
+    "evfh-nuernberg.de": {
+      "name": "Evangelische Fachhochschule Nürnberg",
+      "country": "DE"
+    },
+    "ewha.ac.kr": {
+      "name": "이화여자대학교",
+      "country": "KR"
+    },
+    "fau.de": {
+      "name": "Friedrich-Alexander Universität Erlangen-Nürnberg",
+      "country": "DE"
+    },
+    "fcu.edu.tw": {
+      "name": "Feng Chia University",
+      "country": "TW"
+    },
+    "fdcnet.ac.jp": {
+      "name": "Fukuoka Dental College",
+      "country": "JP"
+    },
+    "fern-fh.de": {
+      "name": "Fern-Fachhochschule Hamburg",
+      "country": "DE"
+    },
+    "fernuni-hagen.de": {
+      "name": "Fernuniversität Gesamthochschule Hagen",
+      "country": "DE"
+    },
+    "ferris.ac.jp": {
+      "name": "Ferris University",
+      "country": "JP"
+    },
+    "fh-aachen.de": {
+      "name": "Fachhochschule Aachen",
+      "country": "DE"
+    },
+    "fh-aschaffenburg.de": {
+      "name": "Fachhochschule Aschaffenburg",
+      "country": "DE"
+    },
+    "fh-augsburg.de": {
+      "name": "Technical University of Applied Sciences Augsburg",
+      "country": "DE"
+    },
+    "fh-bad-honnef.de": {
+      "name": "Internationale Fachhochschule Bad Honnef",
+      "country": "DE"
+    },
+    "fh-biberach.de": {
+      "name": "Fachhochschule Biberach, Hochschule für Bauwesen und Wirtschaft",
+      "country": "DE"
+    },
+    "fh-bielefeld.de": {
+      "name": "Fachhochschule Bielefeld",
+      "country": "DE"
+    },
+    "fh-bingen.de": {
+      "name": "Fachhochschule Bingen",
+      "country": "DE"
+    },
+    "fh-bochum.de": {
+      "name": "Fachhochschule Bochum",
+      "country": "DE"
+    },
+    "fh-brandenburg.de": {
+      "name": "Fachhochschule Brandenburg",
+      "country": "DE"
+    },
+    "fh-dortmund.de": {
+      "name": "Fachhochschule Dortmund",
+      "country": "DE"
+    },
+    "fh-eberswalde.de": {
+      "name": "Fachhochschule Eberswalde",
+      "country": "DE"
+    },
+    "fh-erfurt.de": {
+      "name": "Fachhochschule Erfurt",
+      "country": "DE"
+    },
+    "fh-flensburg.de": {
+      "name": "Fachhochschule Flensburg",
+      "country": "DE"
+    },
+    "fh-frankfurt.de": {
+      "name": "Fachhochschule Frankfurt am Main",
+      "country": "DE"
+    },
+    "fh-fresenius.de": {
+      "name": "Europa Fachhochschule Fresenius",
+      "country": "DE"
+    },
+    "fh-furtwangen.de": {
+      "name": "Fachhochschule Furtwangen, Hochschule für Technik und Wirtschaft",
+      "country": "DE"
+    },
+    "fh-gelsenkirchen.de": {
+      "name": "Fachhochschule Gelsenkirchen",
+      "country": "DE"
+    },
+    "fh-giessen.de": {
+      "name": "Fachhochschule Gießen-Friedberg",
+      "country": "DE"
+    },
+    "fh-hamburg.de": {
+      "name": "Fachhochschule Hamburg",
+      "country": "DE"
+    },
+    "fh-hannover.de": {
+      "name": "Fachhochschule Hannover",
+      "country": "DE"
+    },
+    "fh-heidelberg.de": {
+      "name": "Fachhochschule Heidelberg",
+      "country": "DE"
+    },
+    "fh-heilbronn.de": {
+      "name": "Fachhochschule Heilbronn, Hochschule für Technik und Wirtschaft",
+      "country": "DE"
+    },
+    "fh-hildesheim.de": {
+      "name": "Fachhochschule Hildesheim/Holzminden/Göttingen, Hochschule für angewandte Wissenschaft und Kunst",
+      "country": "DE"
+    },
+    "fh-hof.de": {
+      "name": "Fachhochschule Hof",
+      "country": "DE"
+    },
+    "fh-isny.de": {
+      "name": "Fachhochschule und Berufskollegs NTA, Prof.Dr. Grübler gemein. GmbH",
+      "country": "DE"
+    },
+    "fh-jena.de": {
+      "name": "Fachhochschule Jena",
+      "country": "DE"
+    },
+    "fh-karlsruhe.de": {
+      "name": "Fachhochschule Karlsruhe, Hochschule für Technik",
+      "country": "DE"
+    },
+    "fh-kempten.de": {
+      "name": "Fachhochschule Kempten, Hochschule für Technik und Wirtschaft",
+      "country": "DE"
+    },
+    "fh-kiel.de": {
+      "name": "Fachhochschule Kiel",
+      "country": "DE"
+    },
+    "fh-kl.de": {
+      "name": "Fachhochschule Kaiserslautern",
+      "country": "DE"
+    },
+    "fh-koblenz.de": {
+      "name": "Fachhochschule Koblenz",
+      "country": "DE"
+    },
+    "fh-koeln.de": {
+      "name": "Technische Hochschule Köln",
+      "country": "DE"
+    },
+    "fh-konstanz.de": {
+      "name": "Fachhochschule Konstanz, Hochschule für Technik, Wirtschaft und Gestaltung",
+      "country": "DE"
+    },
+    "fh-landshut.de": {
+      "name": "Fachhochschule Landshut, Hochschule für Wirtschaft - Sozialwesen - Technik",
+      "country": "DE"
+    },
+    "fh-lausitz.de": {
+      "name": "Fachhochschule Lausitz",
+      "country": "DE"
+    },
+    "fh-lippe.de": {
+      "name": "Fachhochschule Lippe",
+      "country": "DE"
+    },
+    "fh-ludwigshafen.de": {
+      "name": "Fachhochschule Ludwigshafen, Hochschule für Wirtschaft",
+      "country": "DE"
+    },
+    "fh-luebeck.de": {
+      "name": "Fachhochschule Lübeck",
+      "country": "DE"
+    },
+    "fh-mainz.de": {
+      "name": "Fachhochschule Mainz",
+      "country": "DE"
+    },
+    "fh-mannheim.de": {
+      "name": "Fachhochschule Mannheim, Hochschule für Technik und Gestaltung",
+      "country": "DE"
+    },
+    "fh-merseburg.de": {
+      "name": "Fachhochschule Merseburg",
+      "country": "DE"
+    },
+    "fh-muenchen.de": {
+      "name": "Fachhochschule München",
+      "country": "DE"
+    },
+    "fh-muenster.de": {
+      "name": "Fachhochschule Münster",
+      "country": "DE"
+    },
+    "fh-nb.de": {
+      "name": "Fachhochschule Neubrandenburg",
+      "country": "DE"
+    },
+    "fh-niederrhein.de": {
+      "name": "Fachhochschule Niederrhein",
+      "country": "DE"
+    },
+    "fh-nordhausen.de": {
+      "name": "Fachhochschule Nordhausen",
+      "country": "DE"
+    },
+    "fh-nuernberg.de": {
+      "name": "Georg-Simon-Ohm-Fachhochschule Nürnberg",
+      "country": "DE"
+    },
+    "fh-nuertingen.de": {
+      "name": "Fachhochschule Nürtingen, Hochschule für Wirtschaft, Landwirtschaft und Landespflege",
+      "country": "DE"
+    },
+    "fh-offenburg.de": {
+      "name": "Fachhochschule Offenburg, Hochschule für Technik und Wirtschaft",
+      "country": "DE"
+    },
+    "fh-oow.de": {
+      "name": "Fachhochschule Oldenburg/Ostfriesland/Wilhelmshaven",
+      "country": "DE"
+    },
+    "fh-osnabrueck.de": {
+      "name": "Fachhochschule Osnabrück",
+      "country": "DE"
+    },
+    "fh-ottersberg.de": {
+      "name": "Freie Kunst-Studienstätte Ottersberg",
+      "country": "DE"
+    },
+    "fh-pforzheim.de": {
+      "name": "Fachhochschule Pforzheim, Hochschule für Gestaltung, Technik und Wirtschaft",
+      "country": "DE"
+    },
+    "fh-potsdam.de": {
+      "name": "Fachhochschule Potsdam",
+      "country": "DE"
+    },
+    "fh-regensburg.de": {
+      "name": "Fachhochschule Regensburg",
+      "country": "DE"
+    },
+    "fh-reutlingen.de": {
+      "name": "Fachhochschule Reutlingen, Hochschule für Technik und Wirtschaft",
+      "country": "DE"
+    },
+    "fh-riedlingen.de": {
+      "name": "Deutsch-Ordens Fachhochschule Riedlingen, Hochschule für Wirtschaft",
+      "country": "DE"
+    },
+    "fh-rosenheim.de": {
+      "name": "Fachhochschule Rosenheim, Hochschule für Technik und Wirtschaft",
+      "country": "DE"
+    },
+    "fh-rottenburg.de": {
+      "name": "Fachhochschule Rottenburg, Hochschule für Forstwirtschaft",
+      "country": "DE"
+    },
+    "fh-schmalkalden.de": {
+      "name": "Fachhochschule Schmalkalden",
+      "country": "DE"
+    },
+    "fh-schwaebischhall.de": {
+      "name": "Fachhochschule Schwäbisch Hall, Hochschule für Gestaltung",
+      "country": "DE"
+    },
+    "fh-stralsund.de": {
+      "name": "Fachhochschule Stralsund",
+      "country": "DE"
+    },
+    "fh-telekom-leipzig.de": {
+      "name": "Deutsche Telekom Fachhochschule Leipzig",
+      "country": "DE"
+    },
+    "fh-trier.de": {
+      "name": "Fachhochschule Trier, Hochschule für Technik, Wirtschaft und Gestaltung",
+      "country": "DE"
+    },
+    "fh-wedel.de": {
+      "name": "Fachhochschule Wedel",
+      "country": "DE"
+    },
+    "fh-weihenstephan.de": {
+      "name": "Fachhochschule Weihenstephan",
+      "country": "DE"
+    },
+    "fh-weingarten.de": {
+      "name": "Fachhochschule Ravensburg-Weingarten",
+      "country": "DE"
+    },
+    "fh-westkueste.de": {
+      "name": "Fachhochschule Westküste, Hochschule für Wirtschaft und Technik",
+      "country": "DE"
+    },
+    "fh-wiesbaden.de": {
+      "name": "Fachhochschule Wiesbaden",
+      "country": "DE"
+    },
+    "fh-wolfenbuettel.de": {
+      "name": "Ostfalia Hochschule für angewandte Wissenschaften",
+      "country": "DE"
+    },
+    "fh-worms.de": {
+      "name": "Fachhochschule Worms",
+      "country": "DE"
+    },
+    "fh-wuerzburg.de": {
+      "name": "Fachhochschule Würzburg - Schweinfurt",
+      "country": "DE"
+    },
+    "fh-zwickau.de": {
+      "name": "Westsächsische Hochschule Zwickau (FH)",
+      "country": "DE"
+    },
+    "fhdw.bib.de": {
+      "name": "Fachhochschule für die Wirtschaft",
+      "country": "DE"
+    },
+    "fhdw.de": {
+      "name": "Fachhochschule der Wirtschaft",
+      "country": "DE"
+    },
+    "fhkt.de": {
+      "name": "Staatlich anerkannte Fachhochschule für Kunsttherapie",
+      "country": "DE"
+    },
+    "fhm-mittelstand.de": {
+      "name": "Fachhochschule des Mittelstandes (FHM)",
+      "country": "DE"
+    },
+    "fhnon.de": {
+      "name": "Fachhochschule Nordostniedersachsen",
+      "country": "DE"
+    },
+    "fhoebb.de": {
+      "name": "Fachhochschule für das öffentliche Bibliothekswesen Bonn",
+      "country": "DE"
+    },
+    "fhs-mannheim.de": {
+      "name": "Fachhochschule Mannheim, Hochschule für Sozialwesen",
+      "country": "DE"
+    },
+    "fhs-moritzburg.de": {
+      "name": "Evangelische Fachhochschule für Religionspädagogik, und Gemeindediakonie Moritzburg",
+      "country": "DE"
+    },
+    "fht-stuttgart.de": {
+      "name": "Fachhochschule Stuttgart, Hochschule für Technik",
+      "country": "DE"
+    },
+    "fhtw-berlin.de": {
+      "name": "Hochschule für Technik und Wirtschaft Berlin",
+      "country": "DE"
+    },
+    "fhvr.berlin.de": {
+      "name": "Fachhochschule für Verwaltung und Rechtspflege Berlin",
+      "country": "DE"
+    },
+    "fhw-berlin.de": {
+      "name": "Fachhochschule für Wirtschaft Berlin",
+      "country": "DE"
+    },
+    "fhwt.de": {
+      "name": "Private Fachhochschule für Wirtschaft und Technik Vechta/Diepholz",
+      "country": "DE"
+    },
+    "fish-u.ac.jp": {
+      "name": "National Fisheries University",
+      "country": "JP"
+    },
+    "fit.ac.jp": {
+      "name": "Fukuoka Institute of Technology",
+      "country": "JP"
+    },
+    "fju.edu.tw": {
+      "name": "Fu Jen Catholic University",
+      "country": "TW"
+    },
+    "floridauniversitaria.es": {
+      "name": "Florida Universitaria",
+      "country": "ES"
+    },
+    "fmu.ac.jp": {
+      "name": "Fukushima Medical College",
+      "country": "JP"
+    },
+    "fom.de": {
+      "name": "Fachhochschule für Oekonomie und Management (FOM)",
+      "country": "DE"
+    },
+    "fpu.ac.jp": {
+      "name": "Fukui Prefectural University",
+      "country": "JP"
+    },
+    "fs-students.de": {
+      "name": "Frankfurt School of Finance & Management",
+      "country": "DE"
+    },
+    "fs.de": {
+      "name": "Frankfurt School of Finance & Management",
+      "country": "DE"
+    },
+    "fu-berlin.de": {
+      "name": "Freie Universität Berlin",
+      "country": "DE"
+    },
+    "fujijoshi.ac.jp": {
+      "name": "Fuji Women's College",
+      "country": "JP"
+    },
+    "fujita-hu.ac.jp": {
+      "name": "Fujita Health University",
+      "country": "JP"
+    },
+    "fukui-med.ac.jp": {
+      "name": "Fukui Medical School",
+      "country": "JP"
+    },
+    "fukui-u.ac.jp": {
+      "name": "Fukui University",
+      "country": "JP"
+    },
+    "fukui-ut.ac.jp": {
+      "name": "Fukui University of Technology",
+      "country": "JP"
+    },
+    "fukuoka-edu.ac.jp": {
+      "name": "Fukuoka University of Education",
+      "country": "JP"
+    },
+    "fukuoka-int-u.ac.jp": {
+      "name": "Fukuoka International University",
+      "country": "JP"
+    },
+    "fukuoka-pu.ac.jp": {
+      "name": "Fukuoka Prefectural University",
+      "country": "JP"
+    },
+    "fukuoka-u.ac.jp": {
+      "name": "Fukuoka University",
+      "country": "JP"
+    },
+    "fukushima-u.ac.jp": {
+      "name": "Fukushima University",
+      "country": "JP"
+    },
+    "fukuyama-u.ac.jp": {
+      "name": "Fukuyama University",
+      "country": "JP"
+    },
+    "fupl.asso.fr": {
+      "name": "Université Catholique de Lille",
+      "country": "FR"
+    },
+    "fwu.ac.jp": {
+      "name": "Fukuoka Women's University",
+      "country": "JP"
+    },
+    "gachon.ac.kr": {
+      "name": "가천대학교",
+      "country": "KR"
+    },
+    "gakusen.ac.jp": {
+      "name": "Aichi Gakusen University",
+      "country": "JP"
+    },
+    "gakushuin.ac.jp": {
+      "name": "Gakushuin University",
+      "country": "JP"
+    },
+    "gapps.ntust.edu.tw": {
+      "name": "National Taiwan University of Science and Technology",
+      "country": "TW"
+    },
+    "geidai.ac.jp": {
+      "name": "Tokyo National University of Fine Arts and Music",
+      "country": "JP"
+    },
+    "ggu.ac.kr": {
+      "name": "Geumgang University",
+      "country": "KR"
+    },
+    "gifu-keizai.ac.jp": {
+      "name": "Gifu Keizai University",
+      "country": "JP"
+    },
+    "gifu-kyoiku.ac.jp": {
+      "name": "Gifu University for Education and Languages",
+      "country": "JP"
+    },
+    "gifu-pu.ac.jp": {
+      "name": "Gifu Pharmaceutical University",
+      "country": "JP"
+    },
+    "gifu-u.ac.jp": {
+      "name": "Gifu University",
+      "country": "JP"
+    },
+    "gijodai.ac.jp": {
+      "name": "Gifu Women's University",
+      "country": "JP"
+    },
+    "gimcheon.ac.kr": {
+      "name": "Gimcheon University",
+      "country": "KR"
+    },
+    "ginue.ac.kr": {
+      "name": "Gyeongin National University of Education",
+      "country": "KR"
+    },
+    "gist.ac.kr": {
+      "name": "Gwangju Institute of Science and Technology",
+      "country": "KR"
+    },
+    "gjcatholic.ac.kr": {
+      "name": "Gwangju Catholic University",
+      "country": "KR"
+    },
+    "gjue.ac.kr": {
+      "name": "Gongju National University of Education",
+      "country": "KR"
+    },
+    "global-business-school.org": {
+      "name": "Global Business School Barcelona",
+      "country": "ES"
+    },
+    "gntech.ac.kr": {
+      "name": "Gyeongnam National University of Science and Technology",
+      "country": "KR"
+    },
+    "gnu.ac.kr": {
+      "name": "경상국립대학교",
+      "country": "KR"
+    },
+    "gnue.ac.kr": {
+      "name": "Gwangju National University of Education",
+      "country": "KR"
+    },
+    "gpwu.ac.jp": {
+      "name": "Gunma Prefectural Women's University",
+      "country": "JP"
+    },
+    "grenoble-em.com": {
+      "name": "Grenoble Ecole de Management",
+      "country": "FR"
+    },
+    "grenoble-inp.fr": {
+      "name": "Institut polytechnique de Grenoble",
+      "country": "FR"
+    },
+    "groupe-esa.com": {
+      "name": "Ecole Supérieure d'Agriculture d'Angers",
+      "country": "FR"
+    },
+    "gsnu.ac.kr": {
+      "name": "Gyeongsang National University",
+      "country": "KR"
+    },
+    "gsyc.es": {
+      "name": "Universidad Rey Juan Carlos",
+      "country": "ES"
+    },
+    "gunma-u.ac.jp": {
+      "name": "Gunma University",
+      "country": "JP"
+    },
+    "gwangju.ac.kr": {
+      "name": "Kwangju University",
+      "country": "KR"
+    },
+    "gwnu.ac.kr": {
+      "name": "강릉원주대학교",
+      "country": "KR"
+    },
+    "h-brs.de": {
+      "name": "Hochschule Bonn-Rhein-Sieg",
+      "country": "DE"
+    },
+    "h-bunkyo.ac.jp": {
+      "name": "Hiroshima Bunkyo Women's University",
+      "country": "JP"
+    },
+    "h-da.de": {
+      "name": "Hochschule Darmstadt",
+      "country": "DE"
+    },
+    "hachinohe-u.ac.jp": {
+      "name": "Hachinohe University",
+      "country": "JP"
+    },
+    "hakodate-u.ac.jp": {
+      "name": "Hakodate University",
+      "country": "JP"
+    },
+    "hakuoh.ac.jp": {
+      "name": "Hakuoh University",
+      "country": "JP"
+    },
+    "halla.ac.kr": {
+      "name": "Halla University",
+      "country": "KR"
+    },
+    "hallym.ac.kr": {
+      "name": "한림대학교",
+      "country": "KR"
+    },
+    "hama-med.ac.jp": {
+      "name": "Hamamatsu University School of Medicine",
+      "country": "JP"
+    },
+    "hamamatsu-u.ac.jp": {
+      "name": "Hamamatsu University",
+      "country": "JP"
+    },
+    "hanazono.ac.jp": {
+      "name": "Hanazono University",
+      "country": "JP"
+    },
+    "hanbat.ac.kr": {
+      "name": "한밭대학교",
+      "country": "KR"
+    },
+    "handong.edu": {
+      "name": "한동대학교",
+      "country": "KR"
+    },
+    "hangkong.ac.kr": {
+      "name": "Hankuk Aviation University",
+      "country": "KR"
+    },
+    "hanil.ac.kr": {
+      "name": "Hanil University and Presbyterian Theological Seminary",
+      "country": "KR"
+    },
+    "hanlyo.ac.kr": {
+      "name": "Hanlyo University",
+      "country": "KR"
+    },
+    "hannam.ac.kr": {
+      "name": "Hannam University",
+      "country": "KR"
+    },
+    "hannan-u.ac.jp": {
+      "name": "Hannan University",
+      "country": "JP"
+    },
+    "hansei.ac.kr": {
+      "name": "Hansei University",
+      "country": "KR"
+    },
+    "hanseo.ac.kr": {
+      "name": "Hanseo University",
+      "country": "KR"
+    },
+    "hanseuni.de": {
+      "name": "Private Hanseuniversität",
+      "country": "DE"
+    },
+    "hanshin.ac.kr": {
+      "name": "Hanshin University",
+      "country": "KR"
+    },
+    "hansung.ac.kr": {
+      "name": "한성대학교",
+      "country": "KR"
+    },
+    "hanyang.ac.kr": {
+      "name": "한양대학교",
+      "country": "KR"
+    },
+    "hanzhong.ac.kr": {
+      "name": "Hanzhong University",
+      "country": "KR"
+    },
+    "haw-hamburg.de": {
+      "name": "Hamburg University of Applied Sciences (HAW Hamburg)",
+      "country": "DE"
+    },
+    "hcu-hamburg.de": {
+      "name": "Hafencity Universität Hamburg",
+      "country": "DE"
+    },
+    "hcu.edu.tw": {
+      "name": "Hsuan Chuang University",
+      "country": "TW"
+    },
+    "hdm-stuttgart.de": {
+      "name": "Fachhochschule Stuttgart, Hochschule der Medien",
+      "country": "DE"
+    },
+    "hec.edu": {
+      "name": "École des Hautes Études Commerciales (HEC Business School)",
+      "country": "FR"
+    },
+    "hec.fr": {
+      "name": "École des Hautes Études Commerciales (HEC Business School)",
+      "country": "FR"
+    },
+    "hei.fr": {
+      "name": "Ecole des Hautes Etudes Industrielles de Lille",
+      "country": "FR"
+    },
+    "heidenheim.dhbw.de": {
+      "name": "Duale Hochschule Baden-Württemberg Heidenheim",
+      "country": "DE"
+    },
+    "heilbronn.dhbw.de": {
+      "name": "Duale Hochschule Baden-Württemberg Heilbronn",
+      "country": "DE"
+    },
+    "heisei-u.ac.jp": {
+      "name": "Fukuyama Heisei University",
+      "country": "JP"
+    },
+    "hertie-school.org": {
+      "name": "Hertie School of Governance",
+      "country": "DE"
+    },
+    "hesperides.edu.es": {
+      "name": "Universidad de las Hespérides",
+      "country": "ES"
+    },
+    "hfb.de": {
+      "name": "Hochschule für Bankwirtschaft (HfB), Private Fachhochschule der Bankakademie",
+      "country": "DE"
+    },
+    "hff-muenchen.de": {
+      "name": "Hochschule für Fernsehen und Film München",
+      "country": "DE"
+    },
+    "hfg-gmuend.de": {
+      "name": "Fachhochschule Schwäbisch Gmünd, Hochschule für Gestaltung",
+      "country": "DE"
+    },
+    "hfk-bremen.de": {
+      "name": "Hochschule für Künste Bremen",
+      "country": "DE"
+    },
+    "hfk2020.de": {
+      "name": "Hochschule für Künste Bremen",
+      "country": "DE"
+    },
+    "hfm-detmold.de": {
+      "name": "Hochschule für Musik Detmold",
+      "country": "DE"
+    },
+    "hfmdd.de": {
+      "name": "Hochschule für Musik Carl Maria von Weber",
+      "country": "DE"
+    },
+    "hfmt-koeln.de": {
+      "name": "Hochschule für Musik und Tanz Köln",
+      "country": "DE"
+    },
+    "hfp.mhn.de": {
+      "name": "Hochschule für Politik (HFP)",
+      "country": "DE"
+    },
+    "hfph.mwn.de": {
+      "name": "Hochschule für Philosophie München",
+      "country": "DE"
+    },
+    "hfu.edu.tw": {
+      "name": "Huafan University",
+      "country": "TW"
+    },
+    "hhl.de": {
+      "name": "Handelshochschule Leipzig",
+      "country": "DE"
+    },
+    "hhu.de": {
+      "name": "Heinrich-Heine Universität Düsseldorf",
+      "country": "DE"
+    },
+    "hi-tech.ac.jp": {
+      "name": "Hachinohe Institute of Technology",
+      "country": "JP"
+    },
+    "hijiyama-u.ac.jp": {
+      "name": "Hijiyama University",
+      "country": "JP"
+    },
+    "himeji-du.ac.jp": {
+      "name": "Himeji Dokkyo University",
+      "country": "JP"
+    },
+    "himeji-tech.ac.jp": {
+      "name": "Himeji Institute of Technology",
+      "country": "JP"
+    },
+    "himh.de": {
+      "name": "Hochschule für Internationales Management",
+      "country": "DE"
+    },
+    "hirogaku-u.ac.jp": {
+      "name": "Hirosaki Gakuin University",
+      "country": "JP"
+    },
+    "hirojo-u.ac.jp": {
+      "name": "Hiroshima Women's University",
+      "country": "JP"
+    },
+    "hirokoku-u.ac.jp": {
+      "name": "Hiroshima International University",
+      "country": "JP"
+    },
+    "hirosaki-u.ac.jp": {
+      "name": "Hirosaki University",
+      "country": "JP"
+    },
+    "hiroshima-cu.ac.jp": {
+      "name": "Hiroshima City University",
+      "country": "JP"
+    },
+    "hiroshima-pu.ac.jp": {
+      "name": "Hiroshima Prefectural University",
+      "country": "JP"
+    },
+    "hiroshima-u.ac.jp": {
+      "name": "Hiroshima University",
+      "country": "JP"
+    },
+    "hit-u.ac.jp": {
+      "name": "Hitotsubashi University",
+      "country": "JP"
+    },
+    "hit.ac.jp": {
+      "name": "Hokkaido Institute of Technology",
+      "country": "JP"
+    },
+    "hiu.ac.jp": {
+      "name": "Heisei International University",
+      "country": "JP"
+    },
+    "hjs.uni-heidelberg.de": {
+      "name": "Hochschule für Jüdische Studien Heidelberg",
+      "country": "DE"
+    },
+    "hju.ac.jp": {
+      "name": "Hiroshima Jogakuin University",
+      "country": "JP"
+    },
+    "hkg.ac.jp": {
+      "name": "Hiroshima Kokusai Gakuin University",
+      "country": "JP"
+    },
+    "hknu.ac.kr": {
+      "name": "한경국립대학교",
+      "country": "KR"
+    },
+    "hm.edu": {
+      "name": "Hochschule München",
+      "country": "DE"
+    },
+    "hmdk-stuttgart.de": {
+      "name": "Hochschule für Musik und Darstellende Kunst Stuttgart",
+      "country": "DE"
+    },
+    "hmt-leipzig.de": {
+      "name": "Hochschule für Musik und Theater „Felix Mendelssohn Bartholdy“ Leipzig",
+      "country": "DE"
+    },
+    "hmtm-hannover.de": {
+      "name": "Hochschule für Musik, Theater und Medien Hannover",
+      "country": "DE"
+    },
+    "hmtm.de": {
+      "name": "Hochschule für Musik und Theater München",
+      "country": "DE"
+    },
+    "hnu.kr": {
+      "name": "한남대학교",
+      "country": "KR"
+    },
+    "hochschule-bonn-rhein-sieg.de": {
+      "name": "Hochschule Bonn-Rhein-Sieg",
+      "country": "DE"
+    },
+    "hokkai-k-u.ac.jp": {
+      "name": "Hokkaigakuen University of Kitami",
+      "country": "JP"
+    },
+    "hokkai-s-u.ac.jp": {
+      "name": "Hokkaigakuen University",
+      "country": "JP"
+    },
+    "hokkyodai.ac.jp": {
+      "name": "Hokkaido University of Education",
+      "country": "JP"
+    },
+    "hoku-iryo-u.ac.jp": {
+      "name": "Hokkaido University of Health Sciences",
+      "country": "JP"
+    },
+    "hokudai.ac.jp": {
+      "name": "Hokkaido University",
+      "country": "JP"
+    },
+    "hokuriku-u.ac.jp": {
+      "name": "Hokuriku University",
+      "country": "JP"
+    },
+    "hokusei.ac.jp": {
+      "name": "Hokusei Gakuen University",
+      "country": "JP"
+    },
+    "hokuyakudai.ac.jp": {
+      "name": "Hokkaido Institute of Pharmaceutical Sciences",
+      "country": "JP"
+    },
+    "honam.ac.kr": {
+      "name": "Honam University",
+      "country": "KR"
+    },
+    "hongik.ac.kr": {
+      "name": "홍익대학교",
+      "country": "KR"
+    },
+    "hosei.ac.jp": {
+      "name": "Hosei University",
+      "country": "JP"
+    },
+    "hoseo.ac.kr": {
+      "name": "Hoseo University",
+      "country": "KR"
+    },
+    "hoseo.edu": {
+      "name": "호서대학교",
+      "country": "KR"
+    },
+    "hoshi.ac.jp": {
+      "name": "Hoshi University",
+      "country": "JP"
+    },
+    "howon.ac.kr": {
+      "name": "Chonbuk Sanup University of Technology (Howon University)",
+      "country": "KR"
+    },
+    "hs-albsig.de": {
+      "name": "Hochschule Albstadt-Sigmaringen",
+      "country": "DE"
+    },
+    "hs-anhalt.de": {
+      "name": "Hochschule Anhalt (FH), Hochschule für angewandte Wissenschaften",
+      "country": "DE"
+    },
+    "hs-bremen.de": {
+      "name": "Hochschule Bremen",
+      "country": "DE"
+    },
+    "hs-bremerhaven.de": {
+      "name": "Hochschule Bremerhaven",
+      "country": "DE"
+    },
+    "hs-coburg.de": {
+      "name": "Hochschule Coburg",
+      "country": "DE"
+    },
+    "hs-duesseldorf.de": {
+      "name": "Hochschule Düsseldorf",
+      "country": "DE"
+    },
+    "hs-esslingen.de": {
+      "name": "Hochschule Esslingen",
+      "country": "DE"
+    },
+    "hs-fulda.de": {
+      "name": "Hochschule Fulda",
+      "country": "DE"
+    },
+    "hs-hannover.de": {
+      "name": "Hochschule Hannover",
+      "country": "DE"
+    },
+    "hs-harz.de": {
+      "name": "Hochschule Harz, Hochschule für angewandte Wissenschaften (FH)",
+      "country": "DE"
+    },
+    "hs-magdeburg.de": {
+      "name": "Hochschule Magdeburg-Stendal (FH)",
+      "country": "DE"
+    },
+    "hs-mittweida.de": {
+      "name": "Hochschule Mittweida, University of Applied Sciences",
+      "country": "DE"
+    },
+    "hs-neu-ulm.de": {
+      "name": "Hochschule Neu-Ulm, Hochschule Neu-Ulm University of applied sciences",
+      "country": "DE"
+    },
+    "hs-rm.de": {
+      "name": "Hochschule RheinMain",
+      "country": "DE"
+    },
+    "hs-ulm.de": {
+      "name": "Hochschule Ulm, Hochschule für Angewandte Wissenschaft",
+      "country": "DE"
+    },
+    "hs-wismar.de": {
+      "name": "Hochschule Wismar, Fachhochschule für Technik, Wirtschaft und Gestaltung",
+      "country": "DE"
+    },
+    "hs-zigr.de": {
+      "name": "Hochschule Zittau/Görlitz (FH)",
+      "country": "DE"
+    },
+    "hs.ac.kr": {
+      "name": "Hanshin University",
+      "country": "KR"
+    },
+    "htus.ac.kr": {
+      "name": "Honam Theological University and Seminary",
+      "country": "KR"
+    },
+    "htw-berlin.de": {
+      "name": "Hochschule für Technik und Wirtschaft Berlin",
+      "country": "DE"
+    },
+    "htw-dresden.de": {
+      "name": "Hochschule für Technik und Wirtschaft Dresden (FH)",
+      "country": "DE"
+    },
+    "htw-saarland.de": {
+      "name": "Hochschule für Technik und Wirtschaft des Saarlandes",
+      "country": "DE"
+    },
+    "htwk-leipzig.de": {
+      "name": "Hochschule für Technik, Wirtschaft und Kultur Leipzig (FH)",
+      "country": "DE"
+    },
+    "htwm.de": {
+      "name": "Hochschule Mittweida, University of Applied Sciences",
+      "country": "DE"
+    },
+    "hu-berlin.de": {
+      "name": "Humboldt Universität Berlin",
+      "country": "DE"
+    },
+    "hue.ac.jp": {
+      "name": "Hiroshima University of Economics",
+      "country": "JP"
+    },
+    "hufs.ac.kr": {
+      "name": "Hankuk University of Foreign Studies",
+      "country": "KR"
+    },
+    "hwg-lu.de": {
+      "name": "Hochschule für Wirtschaft und Gesellschaft Ludwigshafen",
+      "country": "DE"
+    },
+    "hwp-hamburg.de": {
+      "name": "HWP - Hamburger Universität für Wirtschaft und Politik",
+      "country": "DE"
+    },
+    "hyo-med.ac.jp": {
+      "name": "Hyogo College of Medicine",
+      "country": "JP"
+    },
+    "hyogo-dai.ac.jp": {
+      "name": "Hyogo University",
+      "country": "JP"
+    },
+    "hyogo-u.ac.jp": {
+      "name": "Hyogo University of Education",
+      "country": "JP"
+    },
+    "hytu.ac.kr": {
+      "name": "Seoul Hanyoung University",
+      "country": "KR"
+    },
+    "hyupsung.ac.kr": {
+      "name": "Hyupsung University",
+      "country": "KR"
+    },
+    "i-u.de": {
+      "name": "International University in Germany",
+      "country": "DE"
+    },
+    "iae-france.fr": {
+      "name": "IAE France",
+      "country": "FR"
+    },
+    "ibaraki.ac.jp": {
+      "name": "Ibaraki University",
+      "country": "JP"
+    },
+    "icam.fr": {
+      "name": "Institut Catholique d'Arts et Métiers Lille",
+      "country": "FR"
+    },
+    "icc.ac.jp": {
+      "name": "Ibaraki Christian College",
+      "country": "JP"
+    },
+    "iccu.ac.kr": {
+      "name": "Incheon Catholic University",
+      "country": "KR"
+    },
+    "icn-nancy.com": {
+      "name": "Institut Commercial de Nancy",
+      "country": "FR"
+    },
+    "icp.fr": {
+      "name": "Institut Catholique de Paris",
+      "country": "FR"
+    },
+    "ict-toulouse.asso.fr": {
+      "name": "Institut Catholique de Toulouse",
+      "country": "FR"
+    },
+    "ictp.trieste.it": {
+      "name": "Abdus Salam international centre for theoretical physics",
+      "country": "IT"
+    },
+    "icu.ac.jp": {
+      "name": "International Christian University",
+      "country": "JP"
+    },
+    "icu.ac.kr": {
+      "name": "Information and Communications University",
+      "country": "KR"
+    },
+    "ie.edu": {
+      "name": "IE University",
+      "country": "ES"
+    },
+    "iep.u-bordeaux.fr": {
+      "name": "Institut d'Etudes Politiques de Bordeaux",
+      "country": "FR"
+    },
+    "iese.edu": {
+      "name": "IESE Business School",
+      "country": "ES"
+    },
+    "ieseg.fr": {
+      "name": "IÉSEG School of Management",
+      "country": "FR"
+    },
+    "ifmparis.fr": {
+      "name": "Institute Français de la Mode",
+      "country": "FR"
+    },
+    "ifp.fr": {
+      "name": "Ecole Nationale Supérieure du Pétrole et des Monteurs",
+      "country": "FR"
+    },
+    "ihi-zittau.de": {
+      "name": "Internationales Hochschulinstitut Zittau",
+      "country": "DE"
+    },
+    "ihteamlingue.it": {
+      "name": "Team Lingue International House",
+      "country": "IT"
+    },
+    "ikw.ac.kr": {
+      "name": "Kyungwoon University",
+      "country": "KR"
+    },
+    "imt-atlantique.net": {
+      "name": "IMT Atlantique",
+      "country": "FR"
+    },
+    "imtlucca.it": {
+      "name": "Institute for Advanced Studies Lucca",
+      "country": "IT"
+    },
+    "inchon-e.ac.kr": {
+      "name": "Inchon National University of Education",
+      "country": "KR"
+    },
+    "inchon.ac.kr": {
+      "name": "Inchon University",
+      "country": "KR"
+    },
+    "inha.ac.kr": {
+      "name": "인하대학교",
+      "country": "KR"
+    },
+    "inje.ac.kr": {
+      "name": "인제대학교",
+      "country": "KR"
+    },
+    "inp-fc.fr": {
+      "name": "Institut National Polytechnique de Toulouse",
+      "country": "FR"
+    },
+    "inpg.fr": {
+      "name": "Institut polytechnique de Grenoble",
+      "country": "FR"
+    },
+    "inpl-nancy.fr": {
+      "name": "Institut National Polytechnique de Lorraine",
+      "country": "FR"
+    },
+    "insa-lyon.fr": {
+      "name": "Institut National des Sciences Appliquées de Lyon",
+      "country": "FR"
+    },
+    "insa-rennes.fr": {
+      "name": "Institut National des Sciences Appliquées de Rennes",
+      "country": "FR"
+    },
+    "insa-rouen.fr": {
+      "name": "Institut National des Sciences Appliquées de Rouen",
+      "country": "FR"
+    },
+    "insa-tlse.fr": {
+      "name": "Institut National des Sciences Appliquées de Toulouse",
+      "country": "FR"
+    },
+    "insa-toulouse.fr": {
+      "name": "National Institute of Applied Sciences of Toulouse",
+      "country": "FR"
+    },
+    "insead.edu": {
+      "name": "INSEAD",
+      "country": "FR"
+    },
+    "inseec.fr": {
+      "name": "Institut des hautes études économiques et commerciales",
+      "country": "FR"
+    },
+    "int-evry.fr": {
+      "name": "Institut National des Télécommunications",
+      "country": "FR"
+    },
+    "international.fh-aalen.de": {
+      "name": "Internationale Fachhochschule Aalen",
+      "country": "DE"
+    },
+    "inu.ac.kr": {
+      "name": "인천대학교",
+      "country": "KR"
+    },
+    "ip.kyusan-u.ac.jp": {
+      "name": "Kyushu Sangyo University",
+      "country": "JP"
+    },
+    "ipsa.fr": {
+      "name": "Institut polytechnique des sciences avancees",
+      "country": "FR"
+    },
+    "ipu.ac.jp": {
+      "name": "Ibaraki Prefectural University of Health Sciences",
+      "country": "JP"
+    },
+    "ircam.fr": {
+      "name": "Institut de Recherche et Coordination Acoustique/Musique",
+      "country": "FR"
+    },
+    "ireste.fr": {
+      "name": "Institut de Recherche et d'Enseignement Supérieur aux Techniques de l'électronique",
+      "country": "FR"
+    },
+    "isa.fupl.asso.fr": {
+      "name": "Institut Supérieur d'Agriculture Lille",
+      "country": "FR"
+    },
+    "isab.fr": {
+      "name": "Institut Supérieur Agricole de Beauvais",
+      "country": "FR"
+    },
+    "isara.fr": {
+      "name": "Institut Supérieur d'Agriculture Rhone-Alpes",
+      "country": "FR"
+    },
+    "isen.fr": {
+      "name": "Institut Supérieure d'Electronique du Nord",
+      "country": "FR"
+    },
+    "isenshu-u.ac.jp": {
+      "name": "Ishinomaki Senshu University",
+      "country": "JP"
+    },
+    "isep.fr": {
+      "name": "Institut Supérieure d'Electronique de Paris",
+      "country": "FR"
+    },
+    "isim.univ-montp2.fr": {
+      "name": "Institut des Sciences de l'Ingénieur de Montpellier",
+      "country": "FR"
+    },
+    "ism-dortmund.de": {
+      "name": "International School of Management ISM Dortmund",
+      "country": "DE"
+    },
+    "ismcm-cesti.fr": {
+      "name": "Centre d'Etudes Supérieures des Techniques Industrielles",
+      "country": "FR"
+    },
+    "ismra.fr": {
+      "name": "Institut des Sciences de la Matière et du Rayonnement",
+      "country": "FR"
+    },
+    "isnm.de": {
+      "name": "International School of New Media, University of Lübeck",
+      "country": "DE"
+    },
+    "iso.fr": {
+      "name": "Ecole Supérieure d'Optique",
+      "country": "FR"
+    },
+    "ist-hochschule.de": {
+      "name": "IST-Hochschule fur Management",
+      "country": "DE"
+    },
+    "istp.fr": {
+      "name": "Institut Supérieur des Techniques Productiques (ISTP)",
+      "country": "FR"
+    },
+    "isu.edu.tw": {
+      "name": "I-Shou University",
+      "country": "TW"
+    },
+    "it-chiba.ac.jp": {
+      "name": "Chiba Institute of Technology",
+      "country": "JP"
+    },
+    "it-hiroshima.ac.jp": {
+      "name": "Hiroshima Institute of Technology",
+      "country": "JP"
+    },
+    "itech.fr": {
+      "name": "Institut Textile et Chimique de Lyon",
+      "country": "FR"
+    },
+    "iuav.it": {
+      "name": "Università Iuav di Venezia",
+      "country": "IT"
+    },
+    "iuav.unive.it": {
+      "name": "University Institute of Architecture Venice",
+      "country": "IT"
+    },
+    "iubh-fernstudium.de": {
+      "name": "IU Internationale Hochschule GmbH",
+      "country": "DE"
+    },
+    "iue.it": {
+      "name": "European University Institute",
+      "country": "IT"
+    },
+    "iuhw.ac.jp": {
+      "name": "International University of Health and Welfare",
+      "country": "JP"
+    },
+    "iuj.ac.jp": {
+      "name": "International University of Japan",
+      "country": "JP"
+    },
+    "iuk.ac.jp": {
+      "name": "International University of Kagoshima",
+      "country": "JP"
+    },
+    "iuk.ac.kr": {
+      "name": "International University of Korea",
+      "country": "KR"
+    },
+    "iulm.it": {
+      "name": "University Institute of Modern Languages",
+      "country": "IT"
+    },
+    "iuo.it": {
+      "name": "University Institute of Oriental Studies",
+      "country": "IT"
+    },
+    "iuoart.org": {
+      "name": "Dutch University Institute for Art History (DUIA)",
+      "country": "IT"
+    },
+    "iuse.edu.es": {
+      "name": "International University of Southern Europe",
+      "country": "ES"
+    },
+    "iusspavia.it": {
+      "name": "Istituto Universitario di Studi Superiori",
+      "country": "IT"
+    },
+    "iwakimu.ac.jp": {
+      "name": "Iwaki Meisei University",
+      "country": "JP"
+    },
+    "iwate-med.ac.jp": {
+      "name": "Iwate Medical University",
+      "country": "JP"
+    },
+    "iwate-pu.ac.jp": {
+      "name": "Iwate Prefectural University",
+      "country": "JP"
+    },
+    "iwate-u.ac.jp": {
+      "name": "Iwate University",
+      "country": "JP"
+    },
+    "jacobs-university.de": {
+      "name": "Jacobs University Bremen",
+      "country": "DE"
+    },
+    "jaist.ac.jp": {
+      "name": "Japan Advanced Institute of Science and Technology",
+      "country": "JP"
+    },
+    "jbnu.ac.kr": {
+      "name": "전북대학교",
+      "country": "KR"
+    },
+    "jeju.ac.kr": {
+      "name": "Jeju International University",
+      "country": "KR"
+    },
+    "jejunu.ac.kr": {
+      "name": "제주대학교",
+      "country": "KR"
+    },
+    "jeonju.ac.kr": {
+      "name": "Jeonju University",
+      "country": "KR"
+    },
+    "jesus.ac.kr": {
+      "name": "Jesus University",
+      "country": "KR"
+    },
+    "jhubc.it": {
+      "name": "Johns Hopkins University, SAIS Bologna Center",
+      "country": "IT"
+    },
+    "jichi.ac.jp": {
+      "name": "Jichi Medical School",
+      "country": "JP"
+    },
+    "jikei.ac.jp": {
+      "name": "Jikei University School of Medicine",
+      "country": "JP"
+    },
+    "jissen.ac.jp": {
+      "name": "Jissen Women's University",
+      "country": "JP"
+    },
+    "jiu.ac.jp": {
+      "name": "Josai International University",
+      "country": "JP"
+    },
+    "jj.ac.kr": {
+      "name": "전주대학교",
+      "country": "KR"
+    },
+    "jnu.ac.kr": {
+      "name": "전남대학교",
+      "country": "KR"
+    },
+    "jnue.ac.kr": {
+      "name": "Jeonju National University of Education",
+      "country": "KR"
+    },
+    "jobu.ac.jp": {
+      "name": "Jobu University",
+      "country": "JP"
+    },
+    "johncabot.edu": {
+      "name": "John Cabot University",
+      "country": "IT"
+    },
+    "joongbu.ac.kr": {
+      "name": "Joongbu University",
+      "country": "KR"
+    },
+    "josai.ac.jp": {
+      "name": "Josai University",
+      "country": "JP"
+    },
+    "joshibi.ac.jp": {
+      "name": "Women's College of Fine Arts",
+      "country": "JP"
+    },
+    "juen.ac.jp": {
+      "name": "Joetsu University of Education",
+      "country": "JP"
+    },
+    "juntendo.ac.jp": {
+      "name": "Juntendo University",
+      "country": "JP"
+    },
+    "jussieu.fr": {
+      "name": "Sorbonne Université - Faculté des Sciences (Paris VI)",
+      "country": "FR"
+    },
+    "jwu.ac.jp": {
+      "name": "Japan Women's University",
+      "country": "JP"
+    },
+    "jwu.ac.kr": {
+      "name": "Jungwon University",
+      "country": "KR"
+    },
+    "k-junshin.ac.jp": {
+      "name": "Kagoshima Immaculate Heart University",
+      "country": "JP"
+    },
+    "kafna.ac.kr": {
+      "name": "Korea Armed Forces Nursing Academy",
+      "country": "KR"
+    },
+    "kagawa-u.ac.jp": {
+      "name": "Kagawa University",
+      "country": "JP"
+    },
+    "kagoshima-u.ac.jp": {
+      "name": "Kagoshima University",
+      "country": "JP"
+    },
+    "kaist.ac.kr": {
+      "name": "KAIST",
+      "country": "KR"
+    },
+    "kaist.edu": {
+      "name": "Korea Advanced Institute of Science & Technology",
+      "country": "KR"
+    },
+    "kamakura-u.ac.jp": {
+      "name": "Kamakura Women's College",
+      "country": "JP"
+    },
+    "kanagawa-it.ac.jp": {
+      "name": "Kanagawa Institute of Technology",
+      "country": "JP"
+    },
+    "kanagawa-u.ac.jp": {
+      "name": "Kanagawa University",
+      "country": "JP"
+    },
+    "kanazawa-bidai.ac.jp": {
+      "name": "Kanazawa College of Art",
+      "country": "JP"
+    },
+    "kanazawa-eco.ac.jp": {
+      "name": "Kanazawa College of Economics",
+      "country": "JP"
+    },
+    "kanazawa-gu.ac.jp": {
+      "name": "Kanazawa Gakuin University",
+      "country": "JP"
+    },
+    "kanazawa-it.ac.jp": {
+      "name": "Kanazawa Institute of Technology",
+      "country": "JP"
+    },
+    "kanazawa-med.ac.jp": {
+      "name": "Kanazawa Medical University",
+      "country": "JP"
+    },
+    "kanazawa-u.ac.jp": {
+      "name": "Kanazawa University",
+      "country": "JP"
+    },
+    "kangnam.ac.kr": {
+      "name": "Kangnam University",
+      "country": "KR"
+    },
+    "kangnung.ac.kr": {
+      "name": "Kangnung National University",
+      "country": "KR"
+    },
+    "kangwon.ac.kr": {
+      "name": "강원대학교",
+      "country": "KR"
+    },
+    "kankyo-u.ac.jp": {
+      "name": "Tottori University of Environmental Studies",
+      "country": "JP"
+    },
+    "kansai-gaidai-u.ac.jp": {
+      "name": "Kansai Gaidai University",
+      "country": "JP"
+    },
+    "kansai-u.ac.jp": {
+      "name": "Kansai University",
+      "country": "JP"
+    },
+    "kanto-gakuen.ac.jp": {
+      "name": "Kanto Gakuen University",
+      "country": "JP"
+    },
+    "kanto-gakuin.ac.jp": {
+      "name": "Kanto Gakuin University",
+      "country": "JP"
+    },
+    "karlshochschule.de": {
+      "name": "Karlshochschule International University",
+      "country": "DE"
+    },
+    "karlsruhe.dhbw.de": {
+      "name": "Duale Hochschule Baden-Württemberg Karlsruhe",
+      "country": "DE"
+    },
+    "karts.ac.kr": {
+      "name": "한국예술종합학교",
+      "country": "KR"
+    },
+    "kath-fh-nord.de": {
+      "name": "Katholische Fachhochschule Norddeutschland",
+      "country": "DE"
+    },
+    "kau.ac.kr": {
+      "name": "한국항공대학교",
+      "country": "KR"
+    },
+    "kawasaki-m.ac.jp": {
+      "name": "Kawasaki Medical School",
+      "country": "JP"
+    },
+    "kaya.ac.kr": {
+      "name": "Kaya University",
+      "country": "KR"
+    },
+    "kbtus.ac.kr": {
+      "name": "Korea Baptist Theological University and Seminary",
+      "country": "KR"
+    },
+    "kbu.ac.jp": {
+      "name": "Kyoto Bunkyo University",
+      "country": "JP"
+    },
+    "kcu.ac.kr": {
+      "name": "KC University",
+      "country": "KR"
+    },
+    "kcua.ac.jp": {
+      "name": "Kyoto City University of Arts",
+      "country": "JP"
+    },
+    "kdcnet.ac.jp": {
+      "name": "Kanagawa Dental College",
+      "country": "JP"
+    },
+    "kdischool.ac.kr": {
+      "name": "KDI School of Public Policy and Management",
+      "country": "KR"
+    },
+    "kdu.ac.kr": {
+      "name": "Far East University",
+      "country": "KR"
+    },
+    "kduniv.ac.kr": {
+      "name": "Kyungdong University",
+      "country": "KR"
+    },
+    "keiho-u.ac.jp": {
+      "name": "Osaka University of Economics & Law",
+      "country": "JP"
+    },
+    "keimyung.ac.kr": {
+      "name": "Keimyung University",
+      "country": "KR"
+    },
+    "keio.ac.jp": {
+      "name": "Keio University",
+      "country": "JP"
+    },
+    "keisen.ac.jp": {
+      "name": "Keisen Jogaku-en College",
+      "country": "JP"
+    },
+    "keiwa-c.ac.jp": {
+      "name": "Keiwa College",
+      "country": "JP"
+    },
+    "kfb-berlin.de": {
+      "name": "Katholische Fachhochschule Berlin (KFB)",
+      "country": "DE"
+    },
+    "kfh-freiburg.de": {
+      "name": "Katholische Fachhochschule Freiburg, Hochschule für Sozialwesen, Religionspädagogik und Pflege",
+      "country": "DE"
+    },
+    "kfh-mainz.de": {
+      "name": "Katholische Fachhochschule Mainz",
+      "country": "DE"
+    },
+    "kfhnw.de": {
+      "name": "Katholische Fachhochschule Nordrhein-Westfalen",
+      "country": "DE"
+    },
+    "kgwu.ac.jp": {
+      "name": "Kawamura Gakuen Woman's University",
+      "country": "JP"
+    },
+    "kh-berlin.de": {
+      "name": "Kunsthochschule Berlin-Weissensee, Hochschule für Gestaltung",
+      "country": "DE"
+    },
+    "khsa.de": {
+      "name": "Katholische Hochschule für Soziale Arbeit Saarbrücken",
+      "country": "DE"
+    },
+    "khu.ac.kr": {
+      "name": "경희대학교",
+      "country": "KR"
+    },
+    "kindai.ac.jp": {
+      "name": "Kinki University",
+      "country": "JP"
+    },
+    "kinjo-u.ac.jp": {
+      "name": "Kinjo Gakuin University",
+      "country": "JP"
+    },
+    "kit.ac.jp": {
+      "name": "Kyoto Institute of Technology",
+      "country": "JP"
+    },
+    "kit.edu": {
+      "name": "Karlsruher Institut für Technologie",
+      "country": "DE"
+    },
+    "kitakyu-u.ac.jp": {
+      "name": "Kitakyushu University",
+      "country": "JP"
+    },
+    "kitami-it.ac.jp": {
+      "name": "Kitami Institute of Technology",
+      "country": "JP"
+    },
+    "kitasato-u.ac.jp": {
+      "name": "Kitasato University",
+      "country": "JP"
+    },
+    "kiu.ac.jp": {
+      "name": "Kyushu International University",
+      "country": "JP"
+    },
+    "kiu.ac.kr": {
+      "name": "Kyungil University",
+      "country": "KR"
+    },
+    "kiui.ac.jp": {
+      "name": "Kibi International University",
+      "country": "JP"
+    },
+    "kkot.ac.kr": {
+      "name": "Kkottongnae University",
+      "country": "KR"
+    },
+    "kma.ac.kr": {
+      "name": "Korea Military Academy",
+      "country": "KR"
+    },
+    "kmaritime.ac.kr": {
+      "name": "Korea Maritime University",
+      "country": "KR"
+    },
+    "kmc.edu.tw": {
+      "name": "Kaohsiung Medical College",
+      "country": "TW"
+    },
+    "kmou.ac.kr": {
+      "name": "Korea Maritime and Ocean University",
+      "country": "KR"
+    },
+    "kms.ac.jp": {
+      "name": "Kagawa Medical School",
+      "country": "JP"
+    },
+    "kmu.ac.jp": {
+      "name": "Kansai Medical University",
+      "country": "JP"
+    },
+    "kmu.ac.kr": {
+      "name": "계명대학교",
+      "country": "KR"
+    },
+    "knct.ac.jp": {
+      "name": "Kumamoto Institute of Technology",
+      "country": "JP"
+    },
+    "knou.ac.kr": {
+      "name": "Korea National Open University",
+      "country": "KR"
+    },
+    "knsu.ac.kr": {
+      "name": "Korea National Sport University",
+      "country": "KR"
+    },
+    "knu.ac.kr": {
+      "name": "경북대학교",
+      "country": "KR"
+    },
+    "knua.ac.kr": {
+      "name": "Korea National University of Arts",
+      "country": "KR"
+    },
+    "knue.ac.kr": {
+      "name": "Korea National University of Education",
+      "country": "KR"
+    },
+    "knupe.ac.kr": {
+      "name": "Korea National University of Physical Education",
+      "country": "KR"
+    },
+    "kobe-c.ac.jp": {
+      "name": "Kobe Jogakuin University",
+      "country": "JP"
+    },
+    "kobe-cufs.ac.jp": {
+      "name": "Kobe City University of ForeignStudies",
+      "country": "JP"
+    },
+    "kobe-du.ac.jp": {
+      "name": "Kobe Design University",
+      "country": "JP"
+    },
+    "kobe-kiu.ac.jp": {
+      "name": "Kobe International University",
+      "country": "JP"
+    },
+    "kobe-shinwa.ac.jp": {
+      "name": "Kobe Shinwa Women's University",
+      "country": "JP"
+    },
+    "kobe-u.ac.jp": {
+      "name": "Kobe University",
+      "country": "JP"
+    },
+    "kobegakuin.ac.jp": {
+      "name": "Kobe Gakuin University",
+      "country": "JP"
+    },
+    "kobepharma-u.ac.jp": {
+      "name": "Kobe Pharmaceutical University",
+      "country": "JP"
+    },
+    "kochi-ms.ac.jp": {
+      "name": "Kochi Medical School",
+      "country": "JP"
+    },
+    "kochi-tech.ac.jp": {
+      "name": "Kochi University of Technology",
+      "country": "JP"
+    },
+    "kochi-u.ac.jp": {
+      "name": "Kochi University",
+      "country": "JP"
+    },
+    "kochi-wu.ac.jp": {
+      "name": "Kochi Women's University",
+      "country": "JP"
+    },
+    "kogakkan-u.ac.jp": {
+      "name": "Kogakkan University",
+      "country": "JP"
+    },
+    "kogakuin.ac.jp": {
+      "name": "Kogakuin University",
+      "country": "JP"
+    },
+    "koka.ac.jp": {
+      "name": "Koka Women's College",
+      "country": "JP"
+    },
+    "kokugakuin.ac.jp": {
+      "name": "Kokugakuin University",
+      "country": "JP"
+    },
+    "kokushikan.ac.jp": {
+      "name": "Kokushikan University",
+      "country": "JP"
+    },
+    "komazawa-u.ac.jp": {
+      "name": "Komazawa University",
+      "country": "JP"
+    },
+    "konan-u.ac.jp": {
+      "name": "Konan University",
+      "country": "JP"
+    },
+    "konan-wu.ac.jp": {
+      "name": "Konan Women's University",
+      "country": "JP"
+    },
+    "kongju-e.ac.kr": {
+      "name": "Kongju National University of Education",
+      "country": "KR"
+    },
+    "kongju.ac.kr": {
+      "name": "공주대학교",
+      "country": "KR"
+    },
+    "konkuk.ac.kr": {
+      "name": "건국대학교",
+      "country": "KR"
+    },
+    "konyang.ac.kr": {
+      "name": "건양대학교",
+      "country": "KR"
+    },
+    "kookmin.ac.kr": {
+      "name": "국민대학교",
+      "country": "KR"
+    },
+    "korea-u.ac.jp": {
+      "name": "Korea University",
+      "country": "JP"
+    },
+    "korea.ac.kr": {
+      "name": "고려대학교",
+      "country": "KR"
+    },
+    "koreatech.ac.kr": {
+      "name": "Korea University of Technology and Education",
+      "country": "KR"
+    },
+    "koriyama-kgc.ac.jp": {
+      "name": "Koriyama Women's University and College",
+      "country": "JP"
+    },
+    "kornu.ac.kr": {
+      "name": "Korea Nazarene University",
+      "country": "KR"
+    },
+    "koshien.ac.jp": {
+      "name": "Koshien University",
+      "country": "JP"
+    },
+    "kosin.ac.kr": {
+      "name": "Kosin University",
+      "country": "KR"
+    },
+    "koyasan-u.ac.jp": {
+      "name": "Koyasan University",
+      "country": "JP"
+    },
+    "kpu-m.ac.jp": {
+      "name": "Kyoto Prefectural University of Medicine",
+      "country": "JP"
+    },
+    "kpu.ac.jp": {
+      "name": "Kyoto Prefectural University",
+      "country": "JP"
+    },
+    "kpu.ac.kr": {
+      "name": "Korea Polytechnic University",
+      "country": "KR"
+    },
+    "ks.ac.kr": {
+      "name": "경성대학교",
+      "country": "KR"
+    },
+    "ksbk-do.de": {
+      "name": "Karl-Schiller-Berufskolleg (KSBK)",
+      "country": "DE"
+    },
+    "ksfh.de": {
+      "name": "Katholische Stiftungsfachhochschule München",
+      "country": "DE"
+    },
+    "kshosen.ac.jp": {
+      "name": "Kobe University of Mercantile Marine",
+      "country": "JP"
+    },
+    "ksit.edu.tw": {
+      "name": "Kung Shan Institute of Technology",
+      "country": "TW"
+    },
+    "ksu.ac.jp": {
+      "name": "Kurashiki Sakuyo University",
+      "country": "JP"
+    },
+    "ksu.edu.tw": {
+      "name": "Kun Shan University",
+      "country": "TW"
+    },
+    "ktokai-u.ac.jp": {
+      "name": "Kyushu Tokai University",
+      "country": "JP"
+    },
+    "ku-eichstaett.de": {
+      "name": "Katholische Universität Eichstätt",
+      "country": "DE"
+    },
+    "kufs.ac.jp": {
+      "name": "Kyoto University of Foreign Studies",
+      "country": "JP"
+    },
+    "kuins.ac.jp": {
+      "name": "Kansai University of International Studies",
+      "country": "JP"
+    },
+    "kuis.ac.jp": {
+      "name": "Kanda University of International Studies",
+      "country": "JP"
+    },
+    "kuleuven.be": {
+      "name": "KU Leuven",
+      "country": "BE"
+    },
+    "kumagaku.ac.jp": {
+      "name": "Kumamoto Gakuen University",
+      "country": "JP"
+    },
+    "kumamoto-u.ac.jp": {
+      "name": "Kumamoto University",
+      "country": "JP"
+    },
+    "kumoh.ac.kr": {
+      "name": "금오공과대학교",
+      "country": "KR"
+    },
+    "kunitachi.ac.jp": {
+      "name": "Kunitachi College of Music",
+      "country": "JP"
+    },
+    "kunsan.ac.kr": {
+      "name": "군산대학교",
+      "country": "KR"
+    },
+    "kunstakademie-duesseldorf.de": {
+      "name": "Kunstakademie Düsseldorf.",
+      "country": "DE"
+    },
+    "kure-u.ac.jp": {
+      "name": "Kure University",
+      "country": "JP"
+    },
+    "kurume-it.ac.jp": {
+      "name": "Kurume Institute of Technology",
+      "country": "JP"
+    },
+    "kurume-u.ac.jp": {
+      "name": "Kurume University",
+      "country": "JP"
+    },
+    "kusa.ac.jp": {
+      "name": "Kurashiki University of Science and the Arts",
+      "country": "JP"
+    },
+    "kushiro-pu.ac.jp": {
+      "name": "Kushiro Public University of Economics",
+      "country": "JP"
+    },
+    "kusw.ac.jp": {
+      "name": "Kansai University of Social Welfare",
+      "country": "JP"
+    },
+    "kw.ac.kr": {
+      "name": "광운대학교",
+      "country": "KR"
+    },
+    "kwandong.ac.kr": {
+      "name": "Kwan Dong University",
+      "country": "KR"
+    },
+    "kwangju-e.ac.kr": {
+      "name": "Kwangju National University of Education",
+      "country": "KR"
+    },
+    "kwangju.ac.kr": {
+      "name": "Kwangju University",
+      "country": "KR"
+    },
+    "kwangshin.ac.kr": {
+      "name": "Kwangshin University",
+      "country": "KR"
+    },
+    "kwangwoon.ac.kr": {
+      "name": "Kwangwoon University",
+      "country": "KR"
+    },
+    "kwansei.ac.jp": {
+      "name": "Kwansei Gakuin University",
+      "country": "JP"
+    },
+    "kwassui.ac.jp": {
+      "name": "Kwassui Women's College",
+      "country": "JP"
+    },
+    "kwc-u.ac.jp": {
+      "name": "Kagoshima Women's College",
+      "country": "JP"
+    },
+    "kwu.ac.kr": {
+      "name": "Kwangju Women's University",
+      "country": "KR"
+    },
+    "kwuc.ac.jp": {
+      "name": "Kyushu Women's University",
+      "country": "JP"
+    },
+    "kyokyo-u.ac.jp": {
+      "name": "Kyoto University of Education",
+      "country": "JP"
+    },
+    "kyonggi.ac.kr": {
+      "name": "경기대학교",
+      "country": "KR"
+    },
+    "kyongju.ac.kr": {
+      "name": "Kongju National University",
+      "country": "KR"
+    },
+    "kyorin-u.ac.jp": {
+      "name": "Kyorin University",
+      "country": "JP"
+    },
+    "kyoritsu-ph.ac.jp": {
+      "name": "Kyoritsu Pharmaceutical University",
+      "country": "JP"
+    },
+    "kyoritsu-wu.ac.jp": {
+      "name": "Kyoritsu Woman's University",
+      "country": "JP"
+    },
+    "kyoto-art.ac.jp": {
+      "name": "Kyoto University of Art and Design",
+      "country": "JP"
+    },
+    "kyoto-phu.ac.jp": {
+      "name": "Kyoto Pharmaceutical University",
+      "country": "JP"
+    },
+    "kyoto-seika.ac.jp": {
+      "name": "Kyoto Seika University",
+      "country": "JP"
+    },
+    "kyoto-su.ac.jp": {
+      "name": "Kyoto Sangyo University",
+      "country": "JP"
+    },
+    "kyoto-u.ac.jp": {
+      "name": "Kyoto University",
+      "country": "JP"
+    },
+    "kyoto-wu.ac.jp": {
+      "name": "Kyoto Women's University",
+      "country": "JP"
+    },
+    "kyotogakuen-u.ac.jp": {
+      "name": "Kyoto Gakuen University",
+      "country": "JP"
+    },
+    "kyu-dent.ac.jp": {
+      "name": "Kyushu Dental College",
+      "country": "JP"
+    },
+    "kyukyo-u.ac.jp": {
+      "name": "Kyushu Kyoritsu University",
+      "country": "JP"
+    },
+    "kyunghee.ac.kr": {
+      "name": "Kyunghee University",
+      "country": "KR"
+    },
+    "kyungil.ac.kr": {
+      "name": "Kyungil University",
+      "country": "KR"
+    },
+    "kyungnam.ac.kr": {
+      "name": "경남대학교",
+      "country": "KR"
+    },
+    "kyungpook.ac.kr": {
+      "name": "Kyungpook National University",
+      "country": "KR"
+    },
+    "kyungsung.ac.kr": {
+      "name": "Kyungsung University",
+      "country": "KR"
+    },
+    "kyungwon.ac.kr": {
+      "name": "Kyungwon University",
+      "country": "KR"
+    },
+    "kyushu-id.ac.jp": {
+      "name": "Kyushu Institute of Design",
+      "country": "JP"
+    },
+    "kyushu-ns.ac.jp": {
+      "name": "Kyushu University of Nursing and SocialWelfare",
+      "country": "JP"
+    },
+    "kyushu-u.ac.jp": {
+      "name": "Kyushu University",
+      "country": "JP"
+    },
+    "kyutech.ac.jp": {
+      "name": "Kyushu Institute of Technology",
+      "country": "JP"
+    },
+    "lasalleuniversities.net": {
+      "name": "La Salle Universities - International Programmes",
+      "country": "ES"
+    },
+    "leuphana.de": {
+      "name": "Leuphana Universität Lüneburg",
+      "country": "DE"
+    },
+    "lhu.edu.tw": {
+      "name": "LungHwa University of Science and Technology",
+      "country": "TW"
+    },
+    "liuc.it": {
+      "name": "Free University Institute \"Carlo Cattaneo\"",
+      "country": "IT"
+    },
+    "lmu.de": {
+      "name": "Ludwig-Maximilians-Universität München",
+      "country": "DE"
+    },
+    "ltc.edu.tw": {
+      "name": "Ling Tung University",
+      "country": "TW"
+    },
+    "ltu.edu.tw": {
+      "name": "Lingdong University of Science and Technology",
+      "country": "TW"
+    },
+    "luiss.it": {
+      "name": "Luiss Guido Carli University",
+      "country": "IT"
+    },
+    "lumsa.it": {
+      "name": "Free University \"Maria Santissima Assunta\"",
+      "country": "IT"
+    },
+    "lyon.archi.fr": {
+      "name": "ENSA Lyon",
+      "country": "FR"
+    },
+    "mail.polimi.it": {
+      "name": "Polytechnic Institute of Milan",
+      "country": "IT"
+    },
+    "mannheim.dhbw.de": {
+      "name": "Duale Hochschule Baden-Wuerttemberg Mannheim",
+      "country": "DE"
+    },
+    "marianna-u.ac.jp": {
+      "name": "St. Marianna University School of Medicine",
+      "country": "JP"
+    },
+    "marseille.archi.fr": {
+      "name": "ENSA Marseille",
+      "country": "FR"
+    },
+    "matsuyama-u.ac.jp": {
+      "name": "Matsuyama University",
+      "country": "JP"
+    },
+    "mcu.ac.kr": {
+      "name": "Mokpo Catholic University",
+      "country": "KR"
+    },
+    "mcu.edu.tw": {
+      "name": "Ming Chuan University",
+      "country": "TW"
+    },
+    "mdu.ac.jp": {
+      "name": "Matsumoto Dental University",
+      "country": "JP"
+    },
+    "meiji-u.ac.jp": {
+      "name": "Meiji University of Oriental Medicine",
+      "country": "JP"
+    },
+    "meiji.ac.jp": {
+      "name": "Meiji University",
+      "country": "JP"
+    },
+    "meijigakuin.ac.jp": {
+      "name": "Meiji Gakuin University",
+      "country": "JP"
+    },
+    "meijo-u.ac.jp": {
+      "name": "Meijo University",
+      "country": "JP"
+    },
+    "meikai.ac.jp": {
+      "name": "Meikai University",
+      "country": "JP"
+    },
+    "meio-u.ac.jp": {
+      "name": "Meio University",
+      "country": "JP"
+    },
+    "meisei-u.ac.jp": {
+      "name": "Meisei University",
+      "country": "JP"
+    },
+    "mejiro.ac.jp": {
+      "name": "Mejiro University",
+      "country": "JP"
+    },
+    "merkur-fh.org": {
+      "name": "Merkur Internationale FH Karlsruhe",
+      "country": "DE"
+    },
+    "merz-akademie.de": {
+      "name": "Merz Akademie, Hochschule für Gestaltung Stuttgart",
+      "country": "DE"
+    },
+    "metro-hs.ac.jp": {
+      "name": "Tokyo Metropolitan University of Health Sciences",
+      "country": "JP"
+    },
+    "metro-u.ac.jp": {
+      "name": "Tokyo Metropolitan University",
+      "country": "JP"
+    },
+    "mfh-iserlohn.de": {
+      "name": "Märkische Fachhochschule Iserlohn",
+      "country": "DE"
+    },
+    "mgu.ac.jp": {
+      "name": "Miyagi Gakuin Women's College",
+      "country": "JP"
+    },
+    "mh-hannover.de": {
+      "name": "Medizinische Hochschule Hannover",
+      "country": "DE"
+    },
+    "mh-luebeck.de": {
+      "name": "Musikhochschule Lübeck",
+      "country": "DE"
+    },
+    "mh-trossingen.de": {
+      "name": "Staatliche Hochschule für Musik",
+      "country": "DE"
+    },
+    "mie-chukyo-u.ac.jp": {
+      "name": "Matsusaka University",
+      "country": "JP"
+    },
+    "mie-u.ac.jp": {
+      "name": "Mie University",
+      "country": "JP"
+    },
+    "mimasaka.ac.jp": {
+      "name": "Mimasaka Women's College",
+      "country": "JP"
+    },
+    "mines-ales.fr": {
+      "name": "Ecole Nationale Supérieure des Mines d'Alès",
+      "country": "FR"
+    },
+    "mines-ales.org": {
+      "name": "Ecole Nationale Supérieure des Mines d'Alès",
+      "country": "FR"
+    },
+    "mines.u-nancy.fr": {
+      "name": "Ecole Nationale Supérieure des Mines de Nancy",
+      "country": "FR"
+    },
+    "miryang.ac.kr": {
+      "name": "Miryang National University",
+      "country": "KR"
+    },
+    "miyakyo-u.ac.jp": {
+      "name": "Miyagi University of Education",
+      "country": "JP"
+    },
+    "miyasankei-u.ac.jp": {
+      "name": "Sankei University",
+      "country": "JP"
+    },
+    "miyazaki-med.ac.jp": {
+      "name": "Miyazaki Medical College",
+      "country": "JP"
+    },
+    "miyazaki-mu.ac.jp": {
+      "name": "Miyazaki Municipal University",
+      "country": "JP"
+    },
+    "miyazaki-u.ac.jp": {
+      "name": "Miyazaki University",
+      "country": "JP"
+    },
+    "mju.ac.kr": {
+      "name": "명지대학교",
+      "country": "KR"
+    },
+    "mmibordeaux.com": {
+      "name": "DUT MMI - Université Bordeaux Montaigne",
+      "country": "FR"
+    },
+    "mmu.ac.kr": {
+      "name": "Mokpo National Maritime University",
+      "country": "KR"
+    },
+    "mokpo.ac.kr": {
+      "name": "목포대학교",
+      "country": "KR"
+    },
+    "mokwon.ac.kr": {
+      "name": "목원대학교",
+      "country": "KR"
+    },
+    "montaigne.u-bordeaux.fr": {
+      "name": "Université Michel de Montaigne (Bordeaux III )",
+      "country": "FR"
+    },
+    "montesquieu.u-bordeaux.fr": {
+      "name": "Université Montesquieu (Bordeaux IV)",
+      "country": "FR"
+    },
+    "morioka-u.ac.jp": {
+      "name": "Morioka College",
+      "country": "JP"
+    },
+    "mosbach.dhbw.de": {
+      "name": "Duale Hochschule Baden-Württemberg Mosbach",
+      "country": "DE"
+    },
+    "mpu.ac.jp": {
+      "name": "Miyazaki Prefectural Nursing University",
+      "country": "JP"
+    },
+    "mtu.ac.kr": {
+      "name": "Methodist Theological University",
+      "country": "KR"
+    },
+    "mu-luebeck.de": {
+      "name": "Medizinische Universität Lübeck",
+      "country": "DE"
+    },
+    "mukogawa-u.ac.jp": {
+      "name": "Mukogawa Women's University",
+      "country": "JP"
+    },
+    "mundragon.edu": {
+      "name": "Mondragon Univertsitatea",
+      "country": "ES"
+    },
+    "muni.es": {
+      "name": "Mondragon Univertsitatea",
+      "country": "ES"
+    },
+    "muroran-it.ac.jp": {
+      "name": "Muroran Institute of Technology",
+      "country": "JP"
+    },
+    "musabi.ac.jp": {
+      "name": "Musashino Art University",
+      "country": "JP"
+    },
+    "musashi-tech.ac.jp": {
+      "name": "Musashi Institute of Technology",
+      "country": "JP"
+    },
+    "musashi.ac.jp": {
+      "name": "Musashi University",
+      "country": "JP"
+    },
+    "musashino-music.ac.jp": {
+      "name": "Musashino Academy of Music",
+      "country": "JP"
+    },
+    "musashino-wu.ac.jp": {
+      "name": "Musashino Women's University",
+      "country": "JP"
+    },
+    "musikhochschule-muenchen.de": {
+      "name": "Hochschule für Musik und Theater München",
+      "country": "DE"
+    },
+    "muthesius.de": {
+      "name": "Muthesius-Hochschule, Fachhochschule für Kunst und Gestaltung",
+      "country": "DE"
+    },
+    "my-pharm.ac.jp": {
+      "name": "Meiji College of Pharmacy",
+      "country": "JP"
+    },
+    "myongji.ac.kr": {
+      "name": "Myongji University",
+      "country": "KR"
+    },
+    "mytum.de": {
+      "name": "Technische Universität München",
+      "country": "DE"
+    },
+    "myu.ac.jp": {
+      "name": "Miyagi University",
+      "country": "JP"
+    },
+    "n-fukushi.ac.jp": {
+      "name": "Nihon Fukushi University",
+      "country": "JP"
+    },
+    "naba.it": {
+      "name": "NABA - Nuova Accademia di Belle Arti, Milan",
+      "country": "IT"
+    },
+    "nagano.ac.jp": {
+      "name": "Nagano University",
+      "country": "JP"
+    },
+    "nagaokaut.ac.jp": {
+      "name": "Nagaoka University of Technology",
+      "country": "JP"
+    },
+    "nagasaki-u.ac.jp": {
+      "name": "Nagasaki University",
+      "country": "JP"
+    },
+    "nagasakipu.ac.jp": {
+      "name": "Nagasaki Prefectural University",
+      "country": "JP"
+    },
+    "nagoya-cu.ac.jp": {
+      "name": "Nagoya City University",
+      "country": "JP"
+    },
+    "nagoya-ku.ac.jp": {
+      "name": "Nagoya Economics University",
+      "country": "JP"
+    },
+    "nagoya-u.ac.jp": {
+      "name": "Nagoya University",
+      "country": "JP"
+    },
+    "nagoya-wu.ac.jp": {
+      "name": "Nagoya Women's University",
+      "country": "JP"
+    },
+    "nakamura-u.ac.jp": {
+      "name": "Nakamura Gakuen University",
+      "country": "JP"
+    },
+    "nambu.ac.kr": {
+      "name": "Nambu University",
+      "country": "KR"
+    },
+    "nancy.archi.fr": {
+      "name": "Ecole d'Architecture de Nancy",
+      "country": "FR"
+    },
+    "nankyudai.ac.jp": {
+      "name": "Minamikyushu University",
+      "country": "JP"
+    },
+    "nantes.archi.fr": {
+      "name": "ENSA Nantes",
+      "country": "FR"
+    },
+    "nanzan-u.ac.jp": {
+      "name": "Nanzan University",
+      "country": "JP"
+    },
+    "nara-edu.ac.jp": {
+      "name": "Nara University of Education",
+      "country": "JP"
+    },
+    "nara-su.ac.jp": {
+      "name": "Nara Sangyo University",
+      "country": "JP"
+    },
+    "nara-u.ac.jp": {
+      "name": "Nara University",
+      "country": "JP"
+    },
+    "nara-wu.ac.jp": {
+      "name": "Nara Women's University",
+      "country": "JP"
+    },
+    "naramed-u.ac.jp": {
+      "name": "Nara Medical University",
+      "country": "JP"
+    },
+    "narauc.ac.jp": {
+      "name": "Nara University of Commerce",
+      "country": "JP"
+    },
+    "naruto-u.ac.jp": {
+      "name": "Naruto University of Education",
+      "country": "JP"
+    },
+    "navy.ac.kr": {
+      "name": "Republic of Korea Naval Academy",
+      "country": "KR"
+    },
+    "nbu.ac.jp": {
+      "name": "Nippon Bunri University",
+      "country": "JP"
+    },
+    "nccu.edu.tw": {
+      "name": "National Chengchi University",
+      "country": "TW"
+    },
+    "nchu.edu.tw": {
+      "name": "National Chung Hsing University, Taichung",
+      "country": "TW"
+    },
+    "nchulc.edu.tw": {
+      "name": "National Chung Hsing University, Taipei",
+      "country": "TW"
+    },
+    "ncnu.edu.tw": {
+      "name": "National Chi Nan University",
+      "country": "TW"
+    },
+    "ncpes.edu.tw": {
+      "name": "National College of Physical Education and Sports",
+      "country": "TW"
+    },
+    "ncu.edu.tw": {
+      "name": "National Central University",
+      "country": "TW"
+    },
+    "ncue.edu.tw": {
+      "name": "National Changhua University of Education",
+      "country": "TW"
+    },
+    "ncyu.edu.tw": {
+      "name": "National Chiayi University",
+      "country": "TW"
+    },
+    "ndhu.edu.tw": {
+      "name": "National Dong Hwa University",
+      "country": "TW"
+    },
+    "ndmc.ac.jp": {
+      "name": "National Defence Medical College",
+      "country": "JP"
+    },
+    "ndsu.ac.jp": {
+      "name": "Nortre Dame Seishin University",
+      "country": "JP"
+    },
+    "ndu.ac.jp": {
+      "name": "Nippon Dental University",
+      "country": "JP"
+    },
+    "nebuta.ac.jp": {
+      "name": "Aomori Public College",
+      "country": "JP"
+    },
+    "nfu.edu.tw": {
+      "name": "National Formosa University",
+      "country": "TW"
+    },
+    "ngu.ac.jp": {
+      "name": "Nagoya Gakuin University",
+      "country": "JP"
+    },
+    "nhctc.edu.tw": {
+      "name": "National Hsin-Chu Teachers College",
+      "country": "TW"
+    },
+    "nhltc.edu.tw": {
+      "name": "National Hualien Teachers College",
+      "country": "TW"
+    },
+    "nhu.edu.tw": {
+      "name": "Nanhua University",
+      "country": "TW"
+    },
+    "nia.edu.tw": {
+      "name": "National Institute of the Arts",
+      "country": "TW"
+    },
+    "nias.ac.jp": {
+      "name": "Nagasaki Institute of Applied Science",
+      "country": "JP"
+    },
+    "nifs-k.ac.jp": {
+      "name": "National Institute of Fitness and Sports Kanoya",
+      "country": "JP"
+    },
+    "nihon-u.ac.jp": {
+      "name": "Nihon University",
+      "country": "JP"
+    },
+    "niigata-pharm.ac.jp": {
+      "name": "Niigata College of Pharmacy",
+      "country": "JP"
+    },
+    "niigata-u.ac.jp": {
+      "name": "Niigata University",
+      "country": "JP"
+    },
+    "niigataum.ac.jp": {
+      "name": "Niigata University of Management",
+      "country": "JP"
+    },
+    "nishitech.ac.jp": {
+      "name": "Nishinippon Institute of Technology",
+      "country": "JP"
+    },
+    "nishogakusha-u.ac.jp": {
+      "name": "Nisho Gakusha University",
+      "country": "JP"
+    },
+    "nisikyu-u.ac.jp": {
+      "name": "Nishikyushu University",
+      "country": "JP"
+    },
+    "nit.ac.jp": {
+      "name": "Nippon Institute of Technology",
+      "country": "JP"
+    },
+    "nitech.ac.jp": {
+      "name": "Nagoya Institute of Technology",
+      "country": "JP"
+    },
+    "nittai.ac.jp": {
+      "name": "Nippon Sport Science University",
+      "country": "JP"
+    },
+    "niu.edu.tw": {
+      "name": "National Ilan University",
+      "country": "TW"
+    },
+    "nknu.edu.tw": {
+      "name": "National Kaohsiung Normal University",
+      "country": "TW"
+    },
+    "nkust.edu.tw": {
+      "name": "National Kaohsiung University of Science and Technology",
+      "country": "TW"
+    },
+    "nms.ac.jp": {
+      "name": "Nippon Medical School",
+      "country": "JP"
+    },
+    "nodai.ac.jp": {
+      "name": "Tokyo University of Agriculture",
+      "country": "JP"
+    },
+    "nordakademie.de": {
+      "name": "Nordakademie, Staatlich anerkannte private Fachhochschule mit dualen Studiengängen",
+      "country": "DE"
+    },
+    "notredame.ac.jp": {
+      "name": "Kyoto Notre Dame University",
+      "country": "JP"
+    },
+    "nou.edu.tw": {
+      "name": "National Open University",
+      "country": "TW"
+    },
+    "npttc.edu.tw": {
+      "name": "National Pingtung Teachers College",
+      "country": "TW"
+    },
+    "npust.edu.tw": {
+      "name": "National Pingtung University of Science and Technology",
+      "country": "TW"
+    },
+    "nsu.ac.jp": {
+      "name": "Niigata Sangyo University",
+      "country": "JP"
+    },
+    "nsu.ac.kr": {
+      "name": "Namseoul University",
+      "country": "KR"
+    },
+    "nsysu.edu.tw": {
+      "name": "National Sun Yat-Sen University",
+      "country": "TW"
+    },
+    "ntca.edu.tw": {
+      "name": "National Taiwan College of the Arts",
+      "country": "TW"
+    },
+    "ntcn.edu.tw": {
+      "name": "National Taipei College of Nursing",
+      "country": "TW"
+    },
+    "ntcpe.edu.tw": {
+      "name": "National Taiwan College of Physical Education and Sports",
+      "country": "TW"
+    },
+    "ntctc.edu.tw": {
+      "name": "National Taichung Teachers College",
+      "country": "TW"
+    },
+    "nthu.edu.tw": {
+      "name": "National Tsinghua University",
+      "country": "TW"
+    },
+    "ntntc.edu.tw": {
+      "name": "National Tainan Teachers College",
+      "country": "TW"
+    },
+    "ntnu.edu.tw": {
+      "name": "National Taiwan Normal University",
+      "country": "TW"
+    },
+    "ntou.edu.tw": {
+      "name": "National Taiwan Ocean University",
+      "country": "TW"
+    },
+    "ntptc.edu.tw": {
+      "name": "National Taipei Teachers College",
+      "country": "TW"
+    },
+    "ntpu.edu.tw": {
+      "name": "National Taipei University",
+      "country": "TW"
+    },
+    "ntttc.edu.tw": {
+      "name": "National Taitung Teachers College",
+      "country": "TW"
+    },
+    "ntu.ac.jp": {
+      "name": "Teikyo University of Science and Technology",
+      "country": "JP"
+    },
+    "ntu.edu.tw": {
+      "name": "National Taiwan University",
+      "country": "TW"
+    },
+    "ntue.edu.tw": {
+      "name": "National Taipei University of Education",
+      "country": "TW"
+    },
+    "ntust.edu.tw": {
+      "name": "National Taiwan University of Science and Technology",
+      "country": "TW"
+    },
+    "ntut.edu.tw": {
+      "name": "National Taipei University of Technology",
+      "country": "TW"
+    },
+    "nua.ac.jp": {
+      "name": "Nagoya University of Arts",
+      "country": "JP"
+    },
+    "nucba.ac.jp": {
+      "name": "Nagoya University of Commerce and Business Administration",
+      "country": "JP"
+    },
+    "nuch.ac.kr": {
+      "name": "Korea National University of Cultural Heritage",
+      "country": "KR"
+    },
+    "nufs.nakanishi.ac.jp": {
+      "name": "Nagoya University of Foreign Studies",
+      "country": "JP"
+    },
+    "nuis.ac.jp": {
+      "name": "Niigata University of International and Information Studies",
+      "country": "JP"
+    },
+    "nuk.edu.tw": {
+      "name": "National University of Kaohsiung",
+      "country": "TW"
+    },
+    "nuu.edu.tw": {
+      "name": "National United University",
+      "country": "TW"
+    },
+    "nvau.ac.jp": {
+      "name": "Nippon Veterinary and Animalscience University",
+      "country": "JP"
+    },
+    "nycu.edu.tw": {
+      "name": "National Yang Ming Chiao Tung University",
+      "country": "TW"
+    },
+    "nyuniversity.net": {
+      "name": "Yorker International University, Milano",
+      "country": "IT"
+    },
+    "obihiro.ac.jp": {
+      "name": "Obihiro University of Agriculture and Veterinary Medicine",
+      "country": "JP"
+    },
+    "obirin.ac.jp": {
+      "name": "Obirin University",
+      "country": "JP"
+    },
+    "ocha.ac.jp": {
+      "name": "Ochanomizu Women's University",
+      "country": "JP"
+    },
+    "oecu.jp": {
+      "name": "Osaka Electro-Communication University",
+      "country": "JP"
+    },
+    "ohkagakuen-u.ac.jp": {
+      "name": "Ohka Gakuen University",
+      "country": "JP"
+    },
+    "ohtani-w.ac.jp": {
+      "name": "Ohtani Women's University",
+      "country": "JP"
+    },
+    "ohu-u.ac.jp": {
+      "name": "Ohu University",
+      "country": "JP"
+    },
+    "oist.jp": {
+      "name": "Okinawa Institute of Science and Technology",
+      "country": "JP"
+    },
+    "oit.ac.jp": {
+      "name": "Osaka Institute of Technology",
+      "country": "JP"
+    },
+    "oita-med.ac.jp": {
+      "name": "Oita Medical University",
+      "country": "JP"
+    },
+    "oita-nhs.ac.jp": {
+      "name": "Oita University of Nursing and Health Sciences",
+      "country": "JP"
+    },
+    "oita-u.ac.jp": {
+      "name": "Oita University",
+      "country": "JP"
+    },
+    "oiu.oiu.ac.jp": {
+      "name": "Osaka International University",
+      "country": "JP"
+    },
+    "oiuw.oiu.ac.jp": {
+      "name": "Osaka International University for Women",
+      "country": "JP"
+    },
+    "oka-pu.ac.jp": {
+      "name": "Okayama Prefectural University",
+      "country": "JP"
+    },
+    "okayama-u.ac.jp": {
+      "name": "Okayama University",
+      "country": "JP"
+    },
+    "okigei.ac.jp": {
+      "name": "Okinawa Prefectural University of Fine Arts",
+      "country": "JP"
+    },
+    "okinawa-u.ac.jp": {
+      "name": "Okinawa University",
+      "country": "JP"
+    },
+    "okiu.ac.jp": {
+      "name": "Okinawa International University",
+      "country": "JP"
+    },
+    "osaka-cu.ac.jp": {
+      "name": "Osaka City University",
+      "country": "JP"
+    },
+    "osaka-dent.ac.jp": {
+      "name": "Osaka Dental University",
+      "country": "JP"
+    },
+    "osaka-gaidai.ac.jp": {
+      "name": "Osaka University of Foreign Studies",
+      "country": "JP"
+    },
+    "osaka-geidai.ac.jp": {
+      "name": "Osaka University of Arts",
+      "country": "JP"
+    },
+    "osaka-gu.ac.jp": {
+      "name": "Osaka Gakuin University",
+      "country": "JP"
+    },
+    "osaka-kyoiku.ac.jp": {
+      "name": "Osaka University of Education",
+      "country": "JP"
+    },
+    "osaka-med.ac.jp": {
+      "name": "Osaka Medical College",
+      "country": "JP"
+    },
+    "osaka-sandai.ac.jp": {
+      "name": "Osaka Sangyo University",
+      "country": "JP"
+    },
+    "osaka-shoin.ac.jp": {
+      "name": "Osaka Shoin Women's College",
+      "country": "JP"
+    },
+    "osaka-u.ac.jp": {
+      "name": "Osaka University",
+      "country": "JP"
+    },
+    "osaka-ue.ac.jp": {
+      "name": "Osaka University of Economics",
+      "country": "JP"
+    },
+    "osaka-wu.ac.jp": {
+      "name": "Osaka Women's University",
+      "country": "JP"
+    },
+    "osakac.ac.jp": {
+      "name": "Osaka Electro-Communication University",
+      "country": "JP"
+    },
+    "osakafu-u.ac.jp": {
+      "name": "Osaka Prefectural University",
+      "country": "JP"
+    },
+    "ostfalia.de": {
+      "name": "Ostfalia Hochschule für angewandte Wissenschaften",
+      "country": "DE"
+    },
+    "osu.ac.jp": {
+      "name": "Okayama Shoka University",
+      "country": "JP"
+    },
+    "otani.ac.jp": {
+      "name": "Otani University",
+      "country": "JP"
+    },
+    "otaru-uc.ac.jp": {
+      "name": "Otaru University of Commerce",
+      "country": "JP"
+    },
+    "otemae.ac.jp": {
+      "name": "Otemae University",
+      "country": "JP"
+    },
+    "otemon.ac.jp": {
+      "name": "Otemon Gakuin University",
+      "country": "JP"
+    },
+    "oth-aw.de": {
+      "name": "Ostbayerische Technische Hochschule Amberg-Weiden",
+      "country": "DE"
+    },
+    "otsuma.ac.jp": {
+      "name": "Otsuma Women's University",
+      "country": "JP"
+    },
+    "ouhs.ac.jp": {
+      "name": "Osaka University of Health and Sport Sciences",
+      "country": "JP"
+    },
+    "ouk.edu.tw": {
+      "name": "Kaohsuing Open University",
+      "country": "TW"
+    },
+    "oups.ac.jp": {
+      "name": "Osaka University of Pharmaceutical Sciences",
+      "country": "JP"
+    },
+    "ous.ac.jp": {
+      "name": "Okayama University of Science",
+      "country": "JP"
+    },
+    "paderborn.de": {
+      "name": "Theologische Fakultät Paderborn",
+      "country": "DE"
+    },
+    "paichai.ac.kr": {
+      "name": "Paichai University",
+      "country": "KR"
+    },
+    "paris-belleville.archi.fr": {
+      "name": "ENSA Paris-Belleville",
+      "country": "FR"
+    },
+    "paris-malaquais.archi.fr": {
+      "name": "ENSA Paris-Malaquais",
+      "country": "FR"
+    },
+    "paris-sorbonne.fr": {
+      "name": "Université de Paris IV Sorbonne",
+      "country": "FR"
+    },
+    "paris.ensam.fr": {
+      "name": "Ecole Nationale Supérieure d'Arts et Métiers de Paris",
+      "country": "FR"
+    },
+    "paris4.sorbonne.fr": {
+      "name": "Université Paris-Sorbonne (Paris IV)",
+      "country": "FR"
+    },
+    "parisnanterre.fr": {
+      "name": "Université Paris Ouest Paris X Nanterre",
+      "country": "FR"
+    },
+    "pccu.edu.tw": {
+      "name": "Chinese Culture University",
+      "country": "TW"
+    },
+    "pcu.ac.kr": {
+      "name": "배재대학교",
+      "country": "KR"
+    },
+    "pfh-goettingen.de": {
+      "name": "Private Fachhochschule Göttingen",
+      "country": "DE"
+    },
+    "ph-erfurt.de": {
+      "name": "Pädagogische Hochschule Erfurt/Mühlhausen",
+      "country": "DE"
+    },
+    "ph-freiburg.de": {
+      "name": "Pädagogische Hochschule Freiburg",
+      "country": "DE"
+    },
+    "ph-gmuend.de": {
+      "name": "Pädagogische Hochschule Schwäbisch Gmünd",
+      "country": "DE"
+    },
+    "ph-heidelberg.de": {
+      "name": "Pädagogische Hochschule Heidelberg",
+      "country": "DE"
+    },
+    "ph-karlsruhe.de": {
+      "name": "Pädagogische Hochschule Karlsruhe",
+      "country": "DE"
+    },
+    "ph-ludwigsburg.de": {
+      "name": "Pädagogische Hochschule Ludwigsburg",
+      "country": "DE"
+    },
+    "ph-weingarten.de": {
+      "name": "Pädagogische Hochschule Weingarten",
+      "country": "DE"
+    },
+    "philtheol-augustin.de": {
+      "name": "Philosophisch-Theologische Hochschule SVD Sankt Augustin",
+      "country": "DE"
+    },
+    "pio.urbe.it": {
+      "name": "Pontificio Istituto Orientale",
+      "country": "IT"
+    },
+    "pknu.ac.kr": {
+      "name": "부경대학교",
+      "country": "KR"
+    },
+    "poliba.it": {
+      "name": "Polytechnic Institute of Bari",
+      "country": "IT"
+    },
+    "police.ac.kr": {
+      "name": "Korean National Police University",
+      "country": "KR"
+    },
+    "polimi.it": {
+      "name": "Politecnico di Milano",
+      "country": "IT"
+    },
+    "polito.it": {
+      "name": "Polytechnic Institute of Turin",
+      "country": "IT"
+    },
+    "polytech-lille.fr": {
+      "name": "Ecole Polytechnique Universitaire de Lille",
+      "country": "FR"
+    },
+    "polytech-marseille.fr": {
+      "name": "Ecole Polytechnique Marseille",
+      "country": "FR"
+    },
+    "polytechnique.edu": {
+      "name": "École Polytechnique",
+      "country": "FR"
+    },
+    "polytechnique.fr": {
+      "name": "École Polytechnique",
+      "country": "FR"
+    },
+    "poole.ac.jp": {
+      "name": "Poole Gakuin University",
+      "country": "JP"
+    },
+    "popakademie.de": {
+      "name": "Popakademie Baden-Württemberg",
+      "country": "DE"
+    },
+    "postech.ac.kr": {
+      "name": "POSTECH",
+      "country": "KR"
+    },
+    "postech.edu": {
+      "name": "Pohang University of Science and Technology",
+      "country": "KR"
+    },
+    "pref.shiga.lg.jp": {
+      "name": "Shiga Prefecture Agricultural Technology Promotion Center",
+      "country": "JP"
+    },
+    "privatfh-da.de": {
+      "name": "Private FernFachhochschule Darmstadt",
+      "country": "DE"
+    },
+    "pth-bb.de": {
+      "name": "Philosophisch-Theologische Hochschule der Salesianer Don Boscos",
+      "country": "DE"
+    },
+    "pth-muenster.de": {
+      "name": "Philosophisch-Theologische Hochschule Münster",
+      "country": "DE"
+    },
+    "pthv.de": {
+      "name": "Philosophisch-Theologische Hochschule Vallendar der Gesellschaft des Katholischen Apostolates (Pallottiner)",
+      "country": "DE"
+    },
+    "ptu.ac.kr": {
+      "name": "Pyeongtaek University",
+      "country": "KR"
+    },
+    "ptuniv.ac.kr": {
+      "name": "Pyongtaek University",
+      "country": "KR"
+    },
+    "pu-kumamoto.ac.jp": {
+      "name": "Kumamoto Prefectural University",
+      "country": "JP"
+    },
+    "pu-toyama.ac.jp": {
+      "name": "Toyama Prefectural University",
+      "country": "JP"
+    },
+    "pu.edu.tw": {
+      "name": "Providence University",
+      "country": "TW"
+    },
+    "pufs.ac.kr": {
+      "name": "Pusan University of Foreign Studies",
+      "country": "KR"
+    },
+    "pukyong.ac.kr": {
+      "name": "Pukyong National University",
+      "country": "KR"
+    },
+    "pul.it": {
+      "name": "Pontificia Università Lateranense",
+      "country": "IT"
+    },
+    "pusan-e.ac.kr": {
+      "name": "Pusan National University of Education",
+      "country": "KR"
+    },
+    "pusan.ac.kr": {
+      "name": "부산대학교",
+      "country": "KR"
+    },
+    "pusc.it": {
+      "name": "Pontificia Università della Santa Croce",
+      "country": "IT"
+    },
+    "puts.ac.kr": {
+      "name": "Presbyterian University and Theological Seminary",
+      "country": "KR"
+    },
+    "pwc.ac.kr": {
+      "name": "Pusan Women's University",
+      "country": "KR"
+    },
+    "rakuno.ac.jp": {
+      "name": "Rakuno Gakuen University",
+      "country": "JP"
+    },
+    "rauheshaus.de": {
+      "name": "Evangelische Fachhochschule für Sozialpädagogik der \"Diakonenanstalt des Rauhen Hauses\" Hamburg",
+      "country": "DE"
+    },
+    "ravensburg.dhbw.de": {
+      "name": "Duale Hochschule Baden-Württemberg Ravensburg",
+      "country": "DE"
+    },
+    "redcross.ac.jp": {
+      "name": "Japanese Red Cross College of Nursing",
+      "country": "JP"
+    },
+    "reitaku-u.ac.jp": {
+      "name": "Reitaku University",
+      "country": "JP"
+    },
+    "rennes-sb.com": {
+      "name": "Rennes School of Business",
+      "country": "FR"
+    },
+    "rfh-koeln.de": {
+      "name": "Rheinische Fachhochschule Köln",
+      "country": "DE"
+    },
+    "rikkyo.ac.jp": {
+      "name": "Rikkyo University (St. Paul's University)",
+      "country": "JP"
+    },
+    "ris.ac.jp": {
+      "name": "Rissho University",
+      "country": "JP"
+    },
+    "ritsumei.ac.jp": {
+      "name": "Ritsumeikan University",
+      "country": "JP"
+    },
+    "rku.ac.jp": {
+      "name": "Ryutsu Keizai University",
+      "country": "JP"
+    },
+    "ruhr-uni-bochum.de": {
+      "name": "Ruhr-Universität Bochum",
+      "country": "DE"
+    },
+    "rwth-aachen.de": {
+      "name": "RWTH Aachen",
+      "country": "DE"
+    },
+    "ryukoku.ac.jp": {
+      "name": "Ryukoku University",
+      "country": "JP"
+    },
+    "sacrocuore.org": {
+      "name": "Fondazione Sacro Cuore",
+      "country": "IT"
+    },
+    "saga-med.ac.jp": {
+      "name": "Saga Medical School",
+      "country": "JP"
+    },
+    "saga-u.ac.jp": {
+      "name": "Saga University",
+      "country": "JP"
+    },
+    "sagami-wu.ac.jp": {
+      "name": "Sagami Women's University",
+      "country": "JP"
+    },
+    "saitama-med.ac.jp": {
+      "name": "Saitama Medical School",
+      "country": "JP"
+    },
+    "saitama-u.ac.jp": {
+      "name": "Saitama University",
+      "country": "JP"
+    },
+    "sakushin-u.ac.jp": {
+      "name": "Sakushin Gakuin University",
+      "country": "JP"
+    },
+    "salleurl.edu": {
+      "name": "La Salle - Universitat Ramon Llull",
+      "country": "ES"
+    },
+    "samchok.ac.kr": {
+      "name": "Samchok National University",
+      "country": "KR"
+    },
+    "sangha.ac.kr": {
+      "name": "Joong-Ang Sangha University",
+      "country": "KR"
+    },
+    "sangji.ac.kr": {
+      "name": "Sang Ji University",
+      "country": "KR"
+    },
+    "sangmyung.ac.kr": {
+      "name": "Sang Myung University",
+      "country": "KR"
+    },
+    "sanno.ac.jp": {
+      "name": "Sanno University",
+      "country": "JP"
+    },
+    "sapmed.ac.jp": {
+      "name": "Sapporo Medical University",
+      "country": "JP"
+    },
+    "sapporo-u.ac.jp": {
+      "name": "Sapporo University",
+      "country": "JP"
+    },
+    "scc.edu.tw": {
+      "name": "Shih Chien University",
+      "country": "TW"
+    },
+    "sch.ac.kr": {
+      "name": "순천향대학교",
+      "country": "KR"
+    },
+    "schillermadrid.edu": {
+      "name": "Schiller International University, Madrid",
+      "country": "ES"
+    },
+    "schillerparis.com": {
+      "name": "Schiller International University, Paris",
+      "country": "FR"
+    },
+    "schillerstrasbourg.com": {
+      "name": "Schiller International University, Strasbourg",
+      "country": "FR"
+    },
+    "sciences-po.fr": {
+      "name": "Institut d'Etudes Politiques de Paris (Sciences Po)",
+      "country": "FR"
+    },
+    "sciencespo-rennes.fr": {
+      "name": "Institut d'études politiques de Rennes",
+      "country": "FR"
+    },
+    "sciencespo.fr": {
+      "name": "Institut d'Etudes Politiques de Paris (Sciences Po)",
+      "country": "FR"
+    },
+    "scnu.ac.kr": {
+      "name": "순천대학교",
+      "country": "KR"
+    },
+    "scu.ac.kr": {
+      "name": "Seoul Christian University",
+      "country": "KR"
+    },
+    "scu.edu.tw": {
+      "name": "Soochow University",
+      "country": "TW"
+    },
+    "sehan.ac.kr": {
+      "name": "Sehan University",
+      "country": "KR"
+    },
+    "seian.ac.jp": {
+      "name": "Seian University of Art & Design",
+      "country": "JP"
+    },
+    "seigakuin-univ.ac.jp": {
+      "name": "Seigakuin University",
+      "country": "JP"
+    },
+    "seijo.ac.jp": {
+      "name": "Seijo University",
+      "country": "JP"
+    },
+    "seikei.ac.jp": {
+      "name": "Seikei University",
+      "country": "JP"
+    },
+    "seinan-gu.ac.jp": {
+      "name": "Seinan Gakuin University",
+      "country": "JP"
+    },
+    "seisen-u.ac.jp": {
+      "name": "Seisen University",
+      "country": "JP"
+    },
+    "seiwa-u.ac.jp": {
+      "name": "Seiwa College",
+      "country": "JP"
+    },
+    "sejong.ac.kr": {
+      "name": "세종대학교",
+      "country": "KR"
+    },
+    "selk.de": {
+      "name": "Lutherische Theologische Hochschule Oberursel",
+      "country": "DE"
+    },
+    "semyung.ac.kr": {
+      "name": "Semyung University",
+      "country": "KR"
+    },
+    "sendaidaigaku.jp": {
+      "name": "Sendai University",
+      "country": "JP"
+    },
+    "senshu-u.ac.jp": {
+      "name": "Senshu University",
+      "country": "JP"
+    },
+    "senzoku.ac.jp": {
+      "name": "Senzoku Gakuen College",
+      "country": "JP"
+    },
+    "seokyeong.ac.kr": {
+      "name": "Seokyeong University",
+      "country": "KR"
+    },
+    "seonam.ac.kr": {
+      "name": "Seonam University",
+      "country": "KR"
+    },
+    "seoul-e.ac.kr": {
+      "name": "Seoul National University of Education",
+      "country": "KR"
+    },
+    "seoultech.ac.kr": {
+      "name": "서울과학기술대학교",
+      "country": "KR"
+    },
+    "seowon.ac.kr": {
+      "name": "Seowon University",
+      "country": "KR"
+    },
+    "setsunan.ac.jp": {
+      "name": "Setsunan University",
+      "country": "JP"
+    },
+    "sg-u.ac.jp": {
+      "name": "Shikoku Christian College",
+      "country": "JP"
+    },
+    "sgu.ac.jp": {
+      "name": "Sapporo Gakuin University",
+      "country": "JP"
+    },
+    "sgu.ac.kr": {
+      "name": "Shingyeong University",
+      "country": "KR"
+    },
+    "sguc.ac.jp": {
+      "name": "Sanyo Gakuen University",
+      "country": "JP"
+    },
+    "shakaijigyo.ac.jp": {
+      "name": "Japan College of Social Work",
+      "country": "JP"
+    },
+    "shibaura-it.ac.jp": {
+      "name": "Shibaura Institute of Technology",
+      "country": "JP"
+    },
+    "shiga-med.ac.jp": {
+      "name": "Shiga University of Medical Science",
+      "country": "JP"
+    },
+    "shiga-u.ac.jp": {
+      "name": "Shiga University",
+      "country": "JP"
+    },
+    "shikoku-u.ac.jp": {
+      "name": "Shikoku University",
+      "country": "JP"
+    },
+    "shimane-med.ac.jp": {
+      "name": "Shimane University, Faculty of Medicine",
+      "country": "JP"
+    },
+    "shimane-u.ac.jp": {
+      "name": "Shimane University",
+      "country": "JP"
+    },
+    "shimonoseki-cu.ac.jp": {
+      "name": "Shimonoseki City University",
+      "country": "JP"
+    },
+    "shinhan.ac.kr": {
+      "name": "Shinhan University",
+      "country": "KR"
+    },
+    "shinshu-u.ac.jp": {
+      "name": "Shinshu University",
+      "country": "JP"
+    },
+    "shirayuri.ac.jp": {
+      "name": "Shirayuri Women's College",
+      "country": "JP"
+    },
+    "shitennoji.ac.jp": {
+      "name": "International Buddhist University",
+      "country": "JP"
+    },
+    "shizuoka.ac.jp": {
+      "name": "Shizuoka University",
+      "country": "JP"
+    },
+    "shodai.ac.jp": {
+      "name": "Yokohama College of Commerce",
+      "country": "JP"
+    },
+    "shoin.ac.jp": {
+      "name": "Kobe Shoin Women's University",
+      "country": "JP"
+    },
+    "shokei-gakuen.ac.jp": {
+      "name": "Shokei College",
+      "country": "JP"
+    },
+    "shonan-it.ac.jp": {
+      "name": "Shonan Institute of Technology",
+      "country": "JP"
+    },
+    "shotoku.ac.jp": {
+      "name": "Gifu Shotoku Gakuen University",
+      "country": "JP"
+    },
+    "showa-u.ac.jp": {
+      "name": "Showa University",
+      "country": "JP"
+    },
+    "shoyaku.ac.jp": {
+      "name": "Showa College of Pharmaceutical Sciences",
+      "country": "JP"
+    },
+    "shu.edu.tw": {
+      "name": "Shih Hsin University",
+      "country": "TW"
+    },
+    "shuchiin.ac.jp": {
+      "name": "Shuchiin College",
+      "country": "JP"
+    },
+    "shudo-u.ac.jp": {
+      "name": "Hiroshima Shudo University",
+      "country": "JP"
+    },
+    "shujitsu.ac.jp": {
+      "name": "Shujitsu Women's University",
+      "country": "JP"
+    },
+    "shukutoku.ac.jp": {
+      "name": "Shukutoku University",
+      "country": "JP"
+    },
+    "shumei-u.ac.jp": {
+      "name": "Shumei University",
+      "country": "JP"
+    },
+    "siewerth-akademie.de": {
+      "name": "Gustav-Siewerth-Akademie",
+      "country": "DE"
+    },
+    "sigu7.jussieu.fr": {
+      "name": "Université Denis Diderot (Paris VII)",
+      "country": "FR"
+    },
+    "silla.ac.kr": {
+      "name": "신라대학교",
+      "country": "KR"
+    },
+    "sissa.it": {
+      "name": "International Higher School for Advanced Studies Trieste",
+      "country": "IT"
+    },
+    "sit.ac.jp": {
+      "name": "Saitama Institute of Technology",
+      "country": "JP"
+    },
+    "siu-heidelberg.de": {
+      "name": "Schiller International University, Heidelberg",
+      "country": "DE"
+    },
+    "siu.ac.jp": {
+      "name": "Sapporo International University",
+      "country": "JP"
+    },
+    "sjs.ac.kr": {
+      "name": "Seoul Jangsin University",
+      "country": "KR"
+    },
+    "sjsmit.edu.tw": {
+      "name": "St. John's & St. Mary's Institute of Technology",
+      "country": "TW"
+    },
+    "skema.edu": {
+      "name": "SKEMA Business School",
+      "country": "FR"
+    },
+    "skhu.ac.kr": {
+      "name": "Sungkonghoe University",
+      "country": "KR"
+    },
+    "skku.ac.kr": {
+      "name": "Sung Kyun Kwan University",
+      "country": "KR"
+    },
+    "skku.edu": {
+      "name": "성균관대학교",
+      "country": "KR"
+    },
+    "skuniv.ac.kr": {
+      "name": "Seokyeong University",
+      "country": "KR"
+    },
+    "slcn.ac.jp": {
+      "name": "St. Luke' s College of Nursing",
+      "country": "JP"
+    },
+    "smu.ac.kr": {
+      "name": "상명대학교",
+      "country": "KR"
+    },
+    "sns.it": {
+      "name": "School of Education Pisa",
+      "country": "IT"
+    },
+    "snu.ac.kr": {
+      "name": "서울대학교",
+      "country": "KR"
+    },
+    "snue.ac.kr": {
+      "name": "Seoul National University of Education",
+      "country": "KR"
+    },
+    "snut.ac.kr": {
+      "name": "Seoul National University of Technology",
+      "country": "KR"
+    },
+    "soai.ac.jp": {
+      "name": "Soai University",
+      "country": "JP"
+    },
+    "sogang.ac.kr": {
+      "name": "Sogang University",
+      "country": "KR"
+    },
+    "soka.ac.jp": {
+      "name": "Soka University",
+      "country": "JP"
+    },
+    "soken.ac.jp": {
+      "name": "Graduate University for Advanced Studies",
+      "country": "JP"
+    },
+    "songwon.ac.kr": {
+      "name": "Songwon University",
+      "country": "KR"
+    },
+    "sonoda-u.ac.jp": {
+      "name": "Sonoda Women's University",
+      "country": "JP"
+    },
+    "sookmyung.ac.kr": {
+      "name": "숙명여자대학교",
+      "country": "KR"
+    },
+    "soongsil.ac.kr": {
+      "name": "Soongsil University",
+      "country": "KR"
+    },
+    "sophia.ac.jp": {
+      "name": "Sophia University",
+      "country": "JP"
+    },
+    "sorbon.fr": {
+      "name": "Ecole Superieure Robert de Sorbon",
+      "country": "FR"
+    },
+    "sorbonne-universite.fr": {
+      "name": "Sorbonne Université - Faculté des Sciences (Paris VI)",
+      "country": "FR"
+    },
+    "spu.ac.jp": {
+      "name": "Saitama Prefectural University",
+      "country": "JP"
+    },
+    "srh-berlin.de": {
+      "name": "SRH University of Applied Sciences",
+      "country": "DE"
+    },
+    "sssup.it": {
+      "name": "Higher School of University and Advanced Studies Pisa",
+      "country": "IT"
+    },
+    "ssu.ac.jp": {
+      "name": "Shizuoka Sangyo University",
+      "country": "JP"
+    },
+    "ssu.ac.kr": {
+      "name": "숭실대학교",
+      "country": "KR"
+    },
+    "st-georgen.uni-frankfurt.de": {
+      "name": "Philosophisch-Theologische Hochschule Sankt Georgen",
+      "country": "DE"
+    },
+    "stu.ac.kr": {
+      "name": "Seoul Teological University",
+      "country": "KR"
+    },
+    "stud.hs-hannover.de": {
+      "name": "Hochschule Hannover",
+      "country": "DE"
+    },
+    "studbocconi.it": {
+      "name": "Bocconi University",
+      "country": "IT"
+    },
+    "student.42.fr": {
+      "name": "42 FR",
+      "country": "FR"
+    },
+    "student.hs-anhalt.de": {
+      "name": "Hochschule Anhalt (FH), Hochschule für angewandte Wissenschaften",
+      "country": "DE"
+    },
+    "stut.edu.tw": {
+      "name": "Southern Taiwan University of Technology",
+      "country": "TW"
+    },
+    "stw.de": {
+      "name": "Steinbeis-Hochschule-Berlin",
+      "country": "DE"
+    },
+    "sugino.ac.jp": {
+      "name": "Sugino Women's College",
+      "country": "JP"
+    },
+    "sugiyama-u.ac.jp": {
+      "name": "Sugiyama Jogakuen University",
+      "country": "JP"
+    },
+    "suma.kobe-wu.ac.jp": {
+      "name": "Kobe Women's University",
+      "country": "JP"
+    },
+    "sun.ac.jp": {
+      "name": "Siebold University of Nagasaki",
+      "country": "JP"
+    },
+    "sunchon.ac.kr": {
+      "name": "Sunchon National University",
+      "country": "KR"
+    },
+    "sungkyul.ac.kr": {
+      "name": "Sungkyul University",
+      "country": "KR"
+    },
+    "sungshin.ac.kr": {
+      "name": "성신여자대학교",
+      "country": "KR"
+    },
+    "sunmoon.ac.kr": {
+      "name": "Sunmoon University",
+      "country": "KR"
+    },
+    "supaero.fr": {
+      "name": "Ecole Nationale Supérieure de l'Aéronautique et de l'Espace",
+      "country": "FR"
+    },
+    "supbiotech.fr": {
+      "name": "Institut Sup'Biotech de Paris",
+      "country": "FR"
+    },
+    "supco-amiens.fr": {
+      "name": "Groupe Sup de Co Amiens Picardie",
+      "country": "FR"
+    },
+    "supco-montpellier.fr": {
+      "name": "Groupe Sup de Co Montpellier",
+      "country": "FR"
+    },
+    "supelec.fr": {
+      "name": "Ecole Supérieure d'Electricité",
+      "country": "FR"
+    },
+    "surugadai.ac.jp": {
+      "name": "Surugadai University",
+      "country": "JP"
+    },
+    "sut.ac.jp": {
+      "name": "Science University of Tokyo",
+      "country": "JP"
+    },
+    "suwon.ac.kr": {
+      "name": "수원대학교",
+      "country": "KR"
+    },
+    "suwoncatholic.ac.kr": {
+      "name": "Suwon Catholic University",
+      "country": "KR"
+    },
+    "suzuka-iu.ac.jp": {
+      "name": "Suzuka International University",
+      "country": "JP"
+    },
+    "suzuka-u.ac.jp": {
+      "name": "Suzuka University of Medical Science",
+      "country": "JP"
+    },
+    "swu.ac.jp": {
+      "name": "Showa Women's University",
+      "country": "JP"
+    },
+    "swu.ac.kr": {
+      "name": "서울여자대학교",
+      "country": "KR"
+    },
+    "syu.ac.kr": {
+      "name": "Sahmyook University",
+      "country": "KR"
+    },
+    "t-komazawa.ac.jp": {
+      "name": "Tomakomai Komazawa University",
+      "country": "JP"
+    },
+    "t-kougei.ac.jp": {
+      "name": "Tokyo Institute of Polytechnics",
+      "country": "JP"
+    },
+    "tachibana-u.ac.jp": {
+      "name": "Kyoto Tachibana Women's University",
+      "country": "JP"
+    },
+    "taegu-e.ac.kr": {
+      "name": "Taegu National University of Education",
+      "country": "KR"
+    },
+    "taegu.ac.kr": {
+      "name": "Taegu University",
+      "country": "KR"
+    },
+    "taejae.ac.kr": {
+      "name": "Taejae University",
+      "country": "KR"
+    },
+    "taejon.ac.kr": {
+      "name": "Taejon University",
+      "country": "KR"
+    },
+    "taeshin.ac.kr": {
+      "name": "Taeshin Christian University",
+      "country": "KR"
+    },
+    "tais.ac.jp": {
+      "name": "Taisho University",
+      "country": "JP"
+    },
+    "takachiho.ac.jp": {
+      "name": "Takachiho University",
+      "country": "JP"
+    },
+    "takamatsu-u.ac.jp": {
+      "name": "Takamatsu University",
+      "country": "JP"
+    },
+    "takara-univ.ac.jp": {
+      "name": "Takarazuka University of Art and Design",
+      "country": "JP"
+    },
+    "takushoku-u.ac.jp": {
+      "name": "Takushoku University",
+      "country": "JP"
+    },
+    "tamabi.ac.jp": {
+      "name": "Tama Art University",
+      "country": "JP"
+    },
+    "tamagawa.ac.jp": {
+      "name": "Tamagawa University",
+      "country": "JP"
+    },
+    "tau.ac.kr": {
+      "name": "Daegu Arts University",
+      "country": "KR"
+    },
+    "tbgu.ac.jp": {
+      "name": "Tohoku Bunka Gakuen University",
+      "country": "JP"
+    },
+    "tcu.edu.tw": {
+      "name": "Tzu Chi College of Medicine and Humanities",
+      "country": "TW"
+    },
+    "tcue.ac.jp": {
+      "name": "Takasaki City University of Economics",
+      "country": "JP"
+    },
+    "tdc.ac.jp": {
+      "name": "Tokyo Dental College",
+      "country": "JP"
+    },
+    "teikyo-u.ac.jp": {
+      "name": "Teikyo Heisei University",
+      "country": "JP"
+    },
+    "tenri-u.ac.jp": {
+      "name": "Tenri University",
+      "country": "JP"
+    },
+    "termnet.co.jp": {
+      "name": "Fuji University",
+      "country": "JP"
+    },
+    "teu.ac.jp": {
+      "name": "Tokyo Engineering University",
+      "country": "JP"
+    },
+    "tezuka-gu.ac.jp": {
+      "name": "Tezukayama Gakuin University",
+      "country": "JP"
+    },
+    "tezukayama-u.ac.jp": {
+      "name": "Tezukayama University",
+      "country": "JP"
+    },
+    "tfh-berlin.de": {
+      "name": "Technische Fachhochschule Berlin",
+      "country": "DE"
+    },
+    "tfh-bochum.de": {
+      "name": "Technische Fachhochschule Georg Agricola für Rohstoff, Energie und, Umwelt zu Bochum",
+      "country": "DE"
+    },
+    "tfh-wildau.de": {
+      "name": "Technische Fachhochschule Wildau",
+      "country": "DE"
+    },
+    "tfu.ac.jp": {
+      "name": "Tohoku Fukushi University",
+      "country": "JP"
+    },
+    "th-brandenburg.de": {
+      "name": "Technische Hochschule Brandenburg",
+      "country": "DE"
+    },
+    "th-deg.de": {
+      "name": "Technische Hochschule Deggendorf",
+      "country": "DE"
+    },
+    "th-koeln.de": {
+      "name": "Technische Hochschule Köln",
+      "country": "DE"
+    },
+    "th-rosenheim.de": {
+      "name": "Rosenheim University of Applied Sciences",
+      "country": "DE"
+    },
+    "tha.de": {
+      "name": "Technical University of Applied Sciences Augsburg",
+      "country": "DE"
+    },
+    "thh-friedensau.de": {
+      "name": "Theologische Hochschule Friedensau",
+      "country": "DE"
+    },
+    "thi.de": {
+      "name": "Technische Hochschule Ingolstadt",
+      "country": "DE"
+    },
+    "thm.de": {
+      "name": "Technische Hochschule Mittelhessen",
+      "country": "DE"
+    },
+    "thmu.edu.tw": {
+      "name": "TaiChung Healthcare and Management University",
+      "country": "TW"
+    },
+    "thu.de": {
+      "name": "Technische Hochschule Ulm",
+      "country": "DE"
+    },
+    "thu.edu.tw": {
+      "name": "Tunghai University",
+      "country": "TW"
+    },
+    "tiho-hannover.de": {
+      "name": "Tierärztliche Hochschule Hannover",
+      "country": "DE"
+    },
+    "timis.ac.jp": {
+      "name": "Tama Institute of Management and Information Sciences",
+      "country": "JP"
+    },
+    "tit.ac.kr": {
+      "name": "Tongmyung University of Information Technology",
+      "country": "KR"
+    },
+    "titech.ac.jp": {
+      "name": "Tokyo Institute of Technology",
+      "country": "JP"
+    },
+    "tiu.ac.jp": {
+      "name": "Tokyo International University",
+      "country": "JP"
+    },
+    "tku.ac.jp": {
+      "name": "Tokyo Keizai University",
+      "country": "JP"
+    },
+    "tku.edu.tw": {
+      "name": "Tamkang University",
+      "country": "TW"
+    },
+    "tmc.edu.tw": {
+      "name": "Taipei Medical College",
+      "country": "TW"
+    },
+    "tmd.ac.jp": {
+      "name": "Tokyo Medical and Dental University",
+      "country": "JP"
+    },
+    "tmit.ac.jp": {
+      "name": "Tokyo Metropolitan Institute of Technology",
+      "country": "JP"
+    },
+    "tmtc.edu.tw": {
+      "name": "Taipei Municipal Teachers College",
+      "country": "TW"
+    },
+    "tnca.edu.tw": {
+      "name": "Tainan National College of the Arts",
+      "country": "TW"
+    },
+    "tnut.ac.kr": {
+      "name": "Taejon National University of Technology",
+      "country": "KR"
+    },
+    "toho-music.ac.jp": {
+      "name": "Toho College of Music",
+      "country": "JP"
+    },
+    "toho-u.ac.jp": {
+      "name": "Toho University",
+      "country": "JP"
+    },
+    "tohoku-gakuin.ac.jp": {
+      "name": "Tohoku Gakuin University",
+      "country": "JP"
+    },
+    "tohoku-pharm.ac.jp": {
+      "name": "Tohoku College of Pharmacy",
+      "country": "JP"
+    },
+    "tohoku.ac.jp": {
+      "name": "Tohoku University",
+      "country": "JP"
+    },
+    "tohomusic.ac.jp": {
+      "name": "Toho Gakuen School of Music",
+      "country": "JP"
+    },
+    "tohtech.ac.jp": {
+      "name": "Tohoku Institute of Technology",
+      "country": "JP"
+    },
+    "tohwa-u.ac.jp": {
+      "name": "Tohwa University",
+      "country": "JP"
+    },
+    "toin.ac.jp": {
+      "name": "Toin University of Yokohama",
+      "country": "JP"
+    },
+    "tojo.ac.jp": {
+      "name": "Tohoku Women's College",
+      "country": "JP"
+    },
+    "tokai.ac.jp": {
+      "name": "Tokai University Educational System",
+      "country": "JP"
+    },
+    "tokaigakuen-u.ac.jp": {
+      "name": "Tokai Gakuen University",
+      "country": "JP"
+    },
+    "tokaijoshi-u.ac.jp": {
+      "name": "Tokai Women's College",
+      "country": "JP"
+    },
+    "tokiwa.ac.jp": {
+      "name": "Tokiwa University",
+      "country": "JP"
+    },
+    "tokoha-u.ac.jp": {
+      "name": "Tokoha Gakuen University",
+      "country": "JP"
+    },
+    "tokushima-u.ac.jp": {
+      "name": "Tokushima University",
+      "country": "JP"
+    },
+    "tokuyama-u.ac.jp": {
+      "name": "Tokuyama University",
+      "country": "JP"
+    },
+    "tokyo-kasei.ac.jp": {
+      "name": "Tokyo Kasei University",
+      "country": "JP"
+    },
+    "tokyo-med.ac.jp": {
+      "name": "Tokyo Medical College",
+      "country": "JP"
+    },
+    "tokyo-ondai.ac.jp": {
+      "name": "Tokyo College of Music",
+      "country": "JP"
+    },
+    "tokyo-u-fish.ac.jp": {
+      "name": "Tokyo University of Fisheries",
+      "country": "JP"
+    },
+    "tonichi-kokusai-u.ac.jp": {
+      "name": "Higashi Nippon International University",
+      "country": "JP"
+    },
+    "tosho-u.ac.jp": {
+      "name": "Tokyo University of Mercantile Marine",
+      "country": "JP"
+    },
+    "tottori-u.ac.jp": {
+      "name": "Tottori University",
+      "country": "JP"
+    },
+    "toua-u.ac.jp": {
+      "name": "University of East Asia",
+      "country": "JP"
+    },
+    "toyaku.ac.jp": {
+      "name": "Tokyo University of Pharmacy and Life Science",
+      "country": "JP"
+    },
+    "toyama-mpu.ac.jp": {
+      "name": "Toyama Medical and Pharmaceutical University",
+      "country": "JP"
+    },
+    "toyama-u.ac.jp": {
+      "name": "Toyama University",
+      "country": "JP"
+    },
+    "toyo.ac.jp": {
+      "name": "Toyo University",
+      "country": "JP"
+    },
+    "toyoeiwa.ac.jp": {
+      "name": "Toyo Eiwa Women's University",
+      "country": "JP"
+    },
+    "toyogakuen-u.ac.jp": {
+      "name": "Toyo Gakuen University",
+      "country": "JP"
+    },
+    "toyota-ti.ac.jp": {
+      "name": "Toyota Technological Institute",
+      "country": "JP"
+    },
+    "tpec.edu.tw": {
+      "name": "Taipei Physical Education College",
+      "country": "TW"
+    },
+    "tsuda.ac.jp": {
+      "name": "Tsuda College",
+      "country": "JP"
+    },
+    "tsukuba.ac.jp": {
+      "name": "Tsukuba University",
+      "country": "JP"
+    },
+    "tsuru.ac.jp": {
+      "name": "Tsuru University",
+      "country": "JP"
+    },
+    "tsurumi-u.ac.jp": {
+      "name": "Tsurumi University",
+      "country": "JP"
+    },
+    "ttit.edu.tw": {
+      "name": "Tatung Institute of Technology",
+      "country": "TW"
+    },
+    "ttu.edu.tw": {
+      "name": "TaTung University",
+      "country": "TW"
+    },
+    "tu-berlin.de": {
+      "name": "Technische Universität Berlin",
+      "country": "DE"
+    },
+    "tu-braunschweig.de": {
+      "name": "Technische Universität Carolo-Wilhelmina zu Braunschweig",
+      "country": "DE"
+    },
+    "tu-bs.de": {
+      "name": "Technische Universität Carolo-Wilhelmina zu Braunschweig",
+      "country": "DE"
+    },
+    "tu-chemnitz.de": {
+      "name": "Technische Universität Chemnitz",
+      "country": "DE"
+    },
+    "tu-clausthal.de": {
+      "name": "Technische Universität Clausthal",
+      "country": "DE"
+    },
+    "tu-cottbus.de": {
+      "name": "Brandenburgische Technische Universität Cottbus",
+      "country": "DE"
+    },
+    "tu-darmstadt.de": {
+      "name": "TU Darmstadt",
+      "country": "DE"
+    },
+    "tu-dortmund.de": {
+      "name": "Technische Universität Dortmund",
+      "country": "DE"
+    },
+    "tu-dresden.de": {
+      "name": "Technische Universität Dresden",
+      "country": "DE"
+    },
+    "tu-freiberg.de": {
+      "name": "Technische Universität Bergakademie Freiberg",
+      "country": "DE"
+    },
+    "tu-ilmenau.de": {
+      "name": "Technische Universität Ilmenau",
+      "country": "DE"
+    },
+    "tuad.ac.jp": {
+      "name": "Tohoku University of Art and Design",
+      "country": "JP"
+    },
+    "tuat.ac.jp": {
+      "name": "Tokyo University of Agriculture and Technology",
+      "country": "JP"
+    },
+    "tudelft.nl": {
+      "name": "TU Delft",
+      "country": "NL"
+    },
+    "tufs.ac.jp": {
+      "name": "Tokyo University of Foreign Studies",
+      "country": "JP"
+    },
+    "tuhh.de": {
+      "name": "Technische Universität Hamburg",
+      "country": "DE"
+    },
+    "tuins.ac.jp": {
+      "name": "Toyama University of International Studies",
+      "country": "JP"
+    },
+    "tuis.ac.jp": {
+      "name": "Tokyo University of Information Sciences",
+      "country": "JP"
+    },
+    "tuj.ac.jp": {
+      "name": "Temple University Japan",
+      "country": "JP"
+    },
+    "tum.de": {
+      "name": "Technische Universität München",
+      "country": "DE"
+    },
+    "tum.edu": {
+      "name": "Technische Universität München",
+      "country": "DE"
+    },
+    "tut.ac.jp": {
+      "name": "Toyohashi University of Technology",
+      "country": "JP"
+    },
+    "twcpe.ac.jp": {
+      "name": "Tokyo Women's College of Physical Education",
+      "country": "JP"
+    },
+    "twcu.ac.jp": {
+      "name": "Tokyo Woman's Christian University",
+      "country": "JP"
+    },
+    "twmu.ac.jp": {
+      "name": "Tokyo Women's Medial College",
+      "country": "JP"
+    },
+    "u-3mrs.fr": {
+      "name": "Université d'Aix-Marseille III",
+      "country": "FR"
+    },
+    "u-air.ac.jp": {
+      "name": "University of the Air",
+      "country": "JP"
+    },
+    "u-aizu.ac.jp": {
+      "name": "University of Aizu",
+      "country": "JP"
+    },
+    "u-bordeaux2.fr": {
+      "name": "Université Victor Segalen (Bordeaux II)",
+      "country": "FR"
+    },
+    "u-bourgogne.fr": {
+      "name": "University of Burgundy",
+      "country": "FR"
+    },
+    "u-bunkyo.ac.jp": {
+      "name": "University of Bunkyo",
+      "country": "JP"
+    },
+    "u-cergy.fr": {
+      "name": "Université de Cergy-Pontoise",
+      "country": "FR"
+    },
+    "u-clermont1.fr": {
+      "name": "Université d'Auvergne (Clermont-Ferrand I)",
+      "country": "FR"
+    },
+    "u-gakugei.ac.jp": {
+      "name": "Tokyo Gakugei University",
+      "country": "JP"
+    },
+    "u-grenoble3.fr": {
+      "name": "Université Grenoble Alpes",
+      "country": "FR"
+    },
+    "u-keiai.ac.jp": {
+      "name": "Keiai University",
+      "country": "JP"
+    },
+    "u-paris10.fr": {
+      "name": "Université Paris Nanterre (Paris X)",
+      "country": "FR"
+    },
+    "u-paris2.fr": {
+      "name": "Université Panthéon-Assas (Paris II)",
+      "country": "FR"
+    },
+    "u-pec.fr": {
+      "name": "Université Paris est Créteil Val de Marne Paris XII",
+      "country": "FR"
+    },
+    "u-pem.fr": {
+      "name": "Université Paris-Est Marne-la-Vallée",
+      "country": "FR"
+    },
+    "u-picardie.fr": {
+      "name": "Université de Picardie Jules-Verne",
+      "country": "FR"
+    },
+    "u-psud.fr": {
+      "name": "Université Paris Sud (Paris XI)",
+      "country": "FR"
+    },
+    "u-ryukyu.ac.jp": {
+      "name": "University of the Ryukyus",
+      "country": "JP"
+    },
+    "u-sacred-heart.ac.jp": {
+      "name": "University of the Sacred Heart Tokyo",
+      "country": "JP"
+    },
+    "u-shizuoka-ken.ac.jp": {
+      "name": "Shizuoka Prefectural University",
+      "country": "JP"
+    },
+    "u-tokai.ac.jp": {
+      "name": "Hokkaido Tokai University",
+      "country": "JP"
+    },
+    "u-tokyo.ac.jp": {
+      "name": "東京大学",
+      "country": "JP"
+    },
+    "u1.ac.kr": {
+      "name": "U1 University",
+      "country": "KR"
+    },
+    "ua.es": {
+      "name": "Universidad de Alicante",
+      "country": "ES"
+    },
+    "uab.es": {
+      "name": "Universitat Autónoma de Barcelona",
+      "country": "ES"
+    },
+    "uah.es": {
+      "name": "Universidad de Alcalá de Henares",
+      "country": "ES"
+    },
+    "ualm.es": {
+      "name": "Universidad de Almería",
+      "country": "ES"
+    },
+    "uam.es": {
+      "name": "Universidad Autónoma de Madrid",
+      "country": "ES"
+    },
+    "uax.es": {
+      "name": "Universidad Alfonso X El Sabio",
+      "country": "ES"
+    },
+    "ub.es": {
+      "name": "Universitat de Barcelona",
+      "country": "ES"
+    },
+    "ubfc.fr": {
+      "name": "Université Bourgogne - Franche-Comté",
+      "country": "FR"
+    },
+    "ubu.es": {
+      "name": "Universidad de Burgos",
+      "country": "ES"
+    },
+    "uc3m.es": {
+      "name": "Universidad Carlos III de Madrid",
+      "country": "ES"
+    },
+    "uca.es": {
+      "name": "Universidad de Cádiz",
+      "country": "ES"
+    },
+    "uca.fr": {
+      "name": "Université Clermont Auvergne",
+      "country": "FR"
+    },
+    "ucam.edu": {
+      "name": "Universidad Católica San Antonio",
+      "country": "ES"
+    },
+    "ucavila.es": {
+      "name": "Universidad Católica de Ávila",
+      "country": "ES"
+    },
+    "uchceu.es": {
+      "name": "Universidad Cardenal Herrera-CEU",
+      "country": "ES"
+    },
+    "uclm.es": {
+      "name": "Universidad de Castilla La Mancha",
+      "country": "ES"
+    },
+    "ucm.es": {
+      "name": "Universidad Complutense de Madrid",
+      "country": "ES"
+    },
+    "uco.es": {
+      "name": "Universidad de Córdoba",
+      "country": "ES"
+    },
+    "uco.fr": {
+      "name": "Université Catholique de l' Ouest",
+      "country": "FR"
+    },
+    "ucv.es": {
+      "name": "Universidad Católica de Valencia",
+      "country": "ES"
+    },
+    "udc.es": {
+      "name": "Universidade da Coruña",
+      "country": "ES"
+    },
+    "udc.gal": {
+      "name": "Universidade da Coruña",
+      "country": "ES"
+    },
+    "udg.es": {
+      "name": "Universidad de Gerona",
+      "country": "ES"
+    },
+    "udk-berlin.de": {
+      "name": "Universität der Künste Berlin",
+      "country": "DE"
+    },
+    "udl.es": {
+      "name": "Universitat de Lleida",
+      "country": "ES"
+    },
+    "udo.edu": {
+      "name": "Technische Universität Dortmund",
+      "country": "DE"
+    },
+    "uec.ac.jp": {
+      "name": "University of Electro-Communications",
+      "country": "JP"
+    },
+    "uem.es": {
+      "name": "Universidad Europea de Madrid",
+      "country": "ES"
+    },
+    "uenogakuen.ac.jp": {
+      "name": "Ueno Gakuen College",
+      "country": "JP"
+    },
+    "uf3ceu.es": {
+      "name": "Universidad CEU Fernando III",
+      "country": "ES"
+    },
+    "ufv.es": {
+      "name": "Universidad Francisco de Vitoria",
+      "country": "ES"
+    },
+    "ugr.es": {
+      "name": "Universidad de Granada",
+      "country": "ES"
+    },
+    "uha.fr": {
+      "name": "Université de Haute-Alsace",
+      "country": "FR"
+    },
+    "uhb.fr": {
+      "name": "Université Rennes II - Haute-Bretagne",
+      "country": "FR"
+    },
+    "uhp-nancy.fr": {
+      "name": "Université Henri Poincaré (Nancy I)",
+      "country": "FR"
+    },
+    "uhs.ac.kr": {
+      "name": "Hyupsung University",
+      "country": "KR"
+    },
+    "uhu.es": {
+      "name": "Universidad de Huelva",
+      "country": "ES"
+    },
+    "ui1.es": {
+      "name": "Universidad Internacional Isabel I",
+      "country": "ES"
+    },
+    "uia.es": {
+      "name": "Universidad Internacional de Andalucía",
+      "country": "ES"
+    },
+    "uib.es": {
+      "name": "Universitat de les Illes Balears",
+      "country": "ES"
+    },
+    "uic.es": {
+      "name": "Universitat Internacional de Catalunya",
+      "country": "ES"
+    },
+    "uimp.es": {
+      "name": "Universidad Internacional Menéndez Pelayo",
+      "country": "ES"
+    },
+    "uitec.ac.jp": {
+      "name": "Polytechnic University",
+      "country": "JP"
+    },
+    "ujaen.es": {
+      "name": "Universidad de Jaén",
+      "country": "ES"
+    },
+    "ujf-grenoble.fr": {
+      "name": "Université Grenoble Alpes",
+      "country": "FR"
+    },
+    "uji.es": {
+      "name": "Universitat Jaume I de Castellón",
+      "country": "ES"
+    },
+    "ull.es": {
+      "name": "Universidad de La Laguna",
+      "country": "ES"
+    },
+    "uloyola.es": {
+      "name": "Universidad Loyola Andalucía",
+      "country": "ES"
+    },
+    "ulpgc.es": {
+      "name": "Universidad de Las Palmas de Gran Canaria",
+      "country": "ES"
+    },
+    "ulsan.ac.kr": {
+      "name": "울산대학교",
+      "country": "KR"
+    },
+    "um.es": {
+      "name": "Universidad de Murcia",
+      "country": "ES"
+    },
+    "uma.es": {
+      "name": "Universidad de Málaga",
+      "country": "ES"
+    },
+    "umds.ac.jp": {
+      "name": "University of Marketing and Distribution Sciences",
+      "country": "JP"
+    },
+    "umh.es": {
+      "name": "Universidad Miguel Hernández de Elche",
+      "country": "ES"
+    },
+    "umontpellier.fr": {
+      "name": "Université de Montpellier",
+      "country": "FR"
+    },
+    "unav.es": {
+      "name": "Universidad de Navarra",
+      "country": "ES"
+    },
+    "unavarra.es": {
+      "name": "Universidad Pública de Navarra",
+      "country": "ES"
+    },
+    "uneatlantico.es": {
+      "name": "Universidad Europea del Atlántico",
+      "country": "ES"
+    },
+    "uned.es": {
+      "name": "Universidad Nacional de Educación a Distancia",
+      "country": "ES"
+    },
+    "unex.es": {
+      "name": "Universidad de Extremadura",
+      "country": "ES"
+    },
+    "uni-augsburg.de": {
+      "name": "Universität Augsburg",
+      "country": "DE"
+    },
+    "uni-bamberg.de": {
+      "name": "Otto-Friedrich Universität Bamberg",
+      "country": "DE"
+    },
+    "uni-bayreuth.de": {
+      "name": "Universität Bayreuth",
+      "country": "DE"
+    },
+    "uni-bielefeld.de": {
+      "name": "Universität Bielefeld",
+      "country": "DE"
+    },
+    "uni-bonn.de": {
+      "name": "Rheinische Friedrich-Wilhelms Universität Bonn",
+      "country": "DE"
+    },
+    "uni-bremen.de": {
+      "name": "Universität Bremen",
+      "country": "DE"
+    },
+    "uni-duesseldorf.de": {
+      "name": "Heinrich-Heine Universität Düsseldorf",
+      "country": "DE"
+    },
+    "uni-duisburg-essen.de": {
+      "name": "Universität Duisburg-Essen",
+      "country": "DE"
+    },
+    "uni-erfurt.de": {
+      "name": "Universität Erfurt",
+      "country": "DE"
+    },
+    "uni-erlangen.de": {
+      "name": "Friedrich-Alexander Universität Erlangen-Nürnberg",
+      "country": "DE"
+    },
+    "uni-flensburg.de": {
+      "name": "Universität Flensburg",
+      "country": "DE"
+    },
+    "uni-frankfurt.de": {
+      "name": "Johann Wolfgang Goethe Universität Frankfurt am Main",
+      "country": "DE"
+    },
+    "uni-freiburg.de": {
+      "name": "Albert-Ludwigs-Universität Freiburg",
+      "country": "DE"
+    },
+    "uni-giessen.de": {
+      "name": "Justus Liebig Universität Gießen",
+      "country": "DE"
+    },
+    "uni-goettingen.de": {
+      "name": "Georg-August Universität Göttingen",
+      "country": "DE"
+    },
+    "uni-greifswald.de": {
+      "name": "Ernst-Moritz-Arndt Universität Greifswald",
+      "country": "DE"
+    },
+    "uni-halle.de": {
+      "name": "Martin-Luther Universität Halle-Wittenberg",
+      "country": "DE"
+    },
+    "uni-hamburg.de": {
+      "name": "Universität Hamburg",
+      "country": "DE"
+    },
+    "uni-hannover.de": {
+      "name": "Universität Hannover",
+      "country": "DE"
+    },
+    "uni-heidelberg.de": {
+      "name": "Ruprecht-Karls-Universität Heidelberg",
+      "country": "DE"
+    },
+    "uni-hildesheim.de": {
+      "name": "Universität Hildesheim",
+      "country": "DE"
+    },
+    "uni-hohenheim.de": {
+      "name": "Universität Hohenheim",
+      "country": "DE"
+    },
+    "uni-jena.de": {
+      "name": "Friedrich-Schiller Universität Jena",
+      "country": "DE"
+    },
+    "uni-kassel.de": {
+      "name": "Universität Kassel",
+      "country": "DE"
+    },
+    "uni-kiel.de": {
+      "name": "Christian-Albrechts-Universität Kiel",
+      "country": "DE"
+    },
+    "uni-kl.de": {
+      "name": "Universität Kaiserslautern",
+      "country": "DE"
+    },
+    "uni-koblenz-landau.de": {
+      "name": "Universität Koblenz-Landau",
+      "country": "DE"
+    },
+    "uni-koeln.de": {
+      "name": "Universität Köln",
+      "country": "DE"
+    },
+    "uni-konstanz.de": {
+      "name": "Universität Konstanz",
+      "country": "DE"
+    },
+    "uni-leipzig.de": {
+      "name": "Universität Leipzig",
+      "country": "DE"
+    },
+    "uni-lueneburg.de": {
+      "name": "Universität Lüneburg",
+      "country": "DE"
+    },
+    "uni-magdeburg.de": {
+      "name": "Otto-von-Guericke Universität Magdeburg",
+      "country": "DE"
+    },
+    "uni-mainz.de": {
+      "name": "Johannes-Gutenberg Universität Mainz",
+      "country": "DE"
+    },
+    "uni-mannheim.de": {
+      "name": "Universität Mannheim",
+      "country": "DE"
+    },
+    "uni-marburg.de": {
+      "name": "Phillips-Universität Marburg",
+      "country": "DE"
+    },
+    "uni-muenchen.de": {
+      "name": "Ludwig-Maximilians-Universität München",
+      "country": "DE"
+    },
+    "uni-muenster.de": {
+      "name": "Westfälische Wilhelms-Universität Münster",
+      "country": "DE"
+    },
+    "uni-oldenburg.de": {
+      "name": "Carl von Ossietzky Universität Oldenburg",
+      "country": "DE"
+    },
+    "uni-osnabrueck.de": {
+      "name": "Universität Osnabrück",
+      "country": "DE"
+    },
+    "uni-paderborn.de": {
+      "name": "Universität Paderborn",
+      "country": "DE"
+    },
+    "uni-passau.de": {
+      "name": "Universität Passau",
+      "country": "DE"
+    },
+    "uni-potsdam.de": {
+      "name": "Universität Potsdam",
+      "country": "DE"
+    },
+    "uni-regensburg.de": {
+      "name": "Universität Regensburg",
+      "country": "DE"
+    },
+    "uni-rostock.de": {
+      "name": "Universität Rostock",
+      "country": "DE"
+    },
+    "uni-saarland.de": {
+      "name": "Universität des Saarlandes",
+      "country": "DE"
+    },
+    "uni-siegen.de": {
+      "name": "Universität Siegen",
+      "country": "DE"
+    },
+    "uni-speyer.de": {
+      "name": "Deutsche Universität für Verwaltungswissenschaften Speyer",
+      "country": "DE"
+    },
+    "uni-stuttgart.de": {
+      "name": "Universität Stuttgart",
+      "country": "DE"
+    },
+    "uni-trier.de": {
+      "name": "Universität Trier",
+      "country": "DE"
+    },
+    "uni-tuebingen.de": {
+      "name": "Eberhard-Karls-Universität Tübingen",
+      "country": "DE"
+    },
+    "uni-ulm.de": {
+      "name": "Universität Ulm",
+      "country": "DE"
+    },
+    "uni-vechta.de": {
+      "name": "Hochschule Vechta",
+      "country": "DE"
+    },
+    "uni-weimar.de": {
+      "name": "Bauhaus Universität Weimar",
+      "country": "DE"
+    },
+    "uni-wh.de": {
+      "name": "Private Universität Witten/Herdecke",
+      "country": "DE"
+    },
+    "uni-wuerzburg.de": {
+      "name": "Bayerische Julius-Maximilians-Universität Würzburg",
+      "country": "DE"
+    },
+    "uni-wuppertal.de": {
+      "name": "Bergische Universität Gesamthochschule Wuppertal",
+      "country": "DE"
+    },
+    "uniaam.uia.es": {
+      "name": "Universidad Internacional de Andalucía, Sede Antonio Machado de Baeza",
+      "country": "ES"
+    },
+    "uniactiva.com": {
+      "name": "Universidad Abierta Interactiva",
+      "country": "ES"
+    },
+    "unian.it": {
+      "name": "University of Ancona",
+      "country": "IT"
+    },
+    "uniara.uia.es": {
+      "name": "Universidad Internacional de Andalucía, Sede La Rábida",
+      "country": "ES"
+    },
+    "uniba.it": {
+      "name": "University of Bari",
+      "country": "IT"
+    },
+    "unibas.it": {
+      "name": "Basilicata University Potenza",
+      "country": "IT"
+    },
+    "unibg.it": {
+      "name": "University of Bergamo",
+      "country": "IT"
+    },
+    "unibo.it": {
+      "name": "Università di Bologna",
+      "country": "IT"
+    },
+    "unibocconi.it": {
+      "name": "Bocconi University",
+      "country": "IT"
+    },
+    "unibs.it": {
+      "name": "University of Brescia",
+      "country": "IT"
+    },
+    "unibw-hamburg.de": {
+      "name": "Universität der Bundeswehr Hamburg",
+      "country": "DE"
+    },
+    "unibw-muenchen.de": {
+      "name": "Universität der Bundeswehr München",
+      "country": "DE"
+    },
+    "unibz.it": {
+      "name": "Free University of Bozen",
+      "country": "IT"
+    },
+    "unica.it": {
+      "name": "University of Cagliari",
+      "country": "IT"
+    },
+    "unicaen.fr": {
+      "name": "Université de Caen Basse Normandie",
+      "country": "FR"
+    },
+    "unical.it": {
+      "name": "University of Calabria",
+      "country": "IT"
+    },
+    "unicam.it": {
+      "name": "University of Camerino",
+      "country": "IT"
+    },
+    "unicampus.it": {
+      "name": "Campus Bio-Medico University of Rome",
+      "country": "IT"
+    },
+    "unican.es": {
+      "name": "Universidad de Cantabria",
+      "country": "ES"
+    },
+    "unicas.it": {
+      "name": "University of Cassino",
+      "country": "IT"
+    },
+    "unicatt.it": {
+      "name": "Catholic University of the Sacred Heart",
+      "country": "IT"
+    },
+    "unice.fr": {
+      "name": "Université de Nice-Sophia Antipolis",
+      "country": "FR"
+    },
+    "unich.it": {
+      "name": "University of Chieti",
+      "country": "IT"
+    },
+    "unict.it": {
+      "name": "University of Catania",
+      "country": "IT"
+    },
+    "uniecampus.it": {
+      "name": "Università eCampus",
+      "country": "IT"
+    },
+    "uniese.it": {
+      "name": "European School of Economics",
+      "country": "IT"
+    },
+    "unife.it": {
+      "name": "University of Ferrara",
+      "country": "IT"
+    },
+    "unifg.it": {
+      "name": "University of Foggia",
+      "country": "IT"
+    },
+    "unifi.it": {
+      "name": "University of Florence",
+      "country": "IT"
+    },
+    "unige.it": {
+      "name": "University of Genoa",
+      "country": "IT"
+    },
+    "unigre.it": {
+      "name": "Pontifica Università Gregoriana",
+      "country": "IT"
+    },
+    "unilasalle.fr": {
+      "name": "UniLaSalle",
+      "country": "FR"
+    },
+    "unile.it": {
+      "name": "University of Lecce",
+      "country": "IT"
+    },
+    "unileon.es": {
+      "name": "Universidad de León",
+      "country": "ES"
+    },
+    "unilim.fr": {
+      "name": "Université de Limoges",
+      "country": "FR"
+    },
+    "unilink.it": {
+      "name": "Link Campus University of Malta",
+      "country": "IT"
+    },
+    "unimc.it": {
+      "name": "University of Macerata",
+      "country": "IT"
+    },
+    "unime.it": {
+      "name": "University of Messina",
+      "country": "IT"
+    },
+    "unimes.fr": {
+      "name": "Université de Nimes",
+      "country": "FR"
+    },
+    "unimi.it": {
+      "name": "University of Milan",
+      "country": "IT"
+    },
+    "unimib.it": {
+      "name": "University of Milan - Bicocca",
+      "country": "IT"
+    },
+    "unimol.it": {
+      "name": "University of Molise",
+      "country": "IT"
+    },
+    "unina.it": {
+      "name": "University of Naples Federico II",
+      "country": "IT"
+    },
+    "unina2.it": {
+      "name": "Second University of Naples",
+      "country": "IT"
+    },
+    "uninav.it": {
+      "name": "University Institute of Naval Studies",
+      "country": "IT"
+    },
+    "uninsubria.it": {
+      "name": "University of Insubria",
+      "country": "IT"
+    },
+    "uniovi.es": {
+      "name": "Universidad de Oviedo",
+      "country": "ES"
+    },
+    "unipa.it": {
+      "name": "University of Palermo",
+      "country": "IT"
+    },
+    "unipd.it": {
+      "name": "University of Padua",
+      "country": "IT"
+    },
+    "unipg.it": {
+      "name": "University of Perugia",
+      "country": "IT"
+    },
+    "unipi.it": {
+      "name": "University of Pisa",
+      "country": "IT"
+    },
+    "unipr.it": {
+      "name": "University of Parma",
+      "country": "IT"
+    },
+    "unipv.it": {
+      "name": "University of Pavia",
+      "country": "IT"
+    },
+    "unirc.it": {
+      "name": "University of Reggio Calabria",
+      "country": "IT"
+    },
+    "unirioja.es": {
+      "name": "Universidad de La Rioja",
+      "country": "ES"
+    },
+    "uniroma1.it": {
+      "name": "Sapienza Università di Roma",
+      "country": "IT"
+    },
+    "uniroma2.eu": {
+      "name": "University of Roma \"Tor Vergata\"",
+      "country": "IT"
+    },
+    "uniroma3.it": {
+      "name": "Third University of Rome",
+      "country": "IT"
+    },
+    "unisa.it": {
+      "name": "University of Salerno",
+      "country": "IT"
+    },
+    "unisal.it": {
+      "name": "Università Pontificia Salesiana",
+      "country": "IT"
+    },
+    "unisannio.it": {
+      "name": "University of Sannio",
+      "country": "IT"
+    },
+    "unisg.it": {
+      "name": "University of Gastronomic Sciences",
+      "country": "IT"
+    },
+    "unisi.it": {
+      "name": "University of Siena",
+      "country": "IT"
+    },
+    "unisob.na.it": {
+      "name": "University Institute of Teacher Training \"Suor Orsola Benincasa\"",
+      "country": "IT"
+    },
+    "uniss.it": {
+      "name": "University of Sassari",
+      "country": "IT"
+    },
+    "unist.ac.kr": {
+      "name": "UNIST",
+      "country": "KR"
+    },
+    "unistra.fr": {
+      "name": "Université de Strasbourg",
+      "country": "FR"
+    },
+    "unistrapg.it": {
+      "name": "University of Italian Studies for Foreigners of Perugia",
+      "country": "IT"
+    },
+    "unistrasi.it": {
+      "name": "University of Italian Studies for Foreigners of Siena",
+      "country": "IT"
+    },
+    "unite.it": {
+      "name": "University of Teramo",
+      "country": "IT"
+    },
+    "unitn.it": {
+      "name": "University of Trento",
+      "country": "IT"
+    },
+    "unito.it": {
+      "name": "University of Turin",
+      "country": "IT"
+    },
+    "units.it": {
+      "name": "University of Trieste",
+      "country": "IT"
+    },
+    "unitus.it": {
+      "name": "Viterbo State University",
+      "country": "IT"
+    },
+    "uniud.it": {
+      "name": "University of Udine",
+      "country": "IT"
+    },
+    "uniurb.it": {
+      "name": "University of Urbino",
+      "country": "IT"
+    },
+    "univ-amu.fr": {
+      "name": "Université d'Aix-Marseille",
+      "country": "FR"
+    },
+    "univ-angers.fr": {
+      "name": "Université d'Angers",
+      "country": "FR"
+    },
+    "univ-artois.fr": {
+      "name": "Université d'Artois",
+      "country": "FR"
+    },
+    "univ-avignon.fr": {
+      "name": "Université d'Avignon",
+      "country": "FR"
+    },
+    "univ-bpclermont.fr": {
+      "name": "Université Blaise Pascal (Clermont-Ferrand II)",
+      "country": "FR"
+    },
+    "univ-brest.fr": {
+      "name": "Université de Bretagne Occidentale",
+      "country": "FR"
+    },
+    "univ-catholyon.fr": {
+      "name": "Université Catholique de Lyon",
+      "country": "FR"
+    },
+    "univ-corse.fr": {
+      "name": "Université de Corse Pascal Paoli",
+      "country": "FR"
+    },
+    "univ-evry.fr": {
+      "name": "Université d'Evry Val d'Essonne",
+      "country": "FR"
+    },
+    "univ-fcomte.fr": {
+      "name": "Université de Franche Comté",
+      "country": "FR"
+    },
+    "univ-grenoble-alpes.fr": {
+      "name": "Université Grenoble Alpes",
+      "country": "FR"
+    },
+    "univ-jfc.fr": {
+      "name": "Université Champollion",
+      "country": "FR"
+    },
+    "univ-lehavre.fr": {
+      "name": "Université du Havre",
+      "country": "FR"
+    },
+    "univ-lemans.fr": {
+      "name": "Université du Maine",
+      "country": "FR"
+    },
+    "univ-lille1.fr": {
+      "name": "Université des Sciences et Technologies de Lille (Lille I)",
+      "country": "FR"
+    },
+    "univ-lille2.fr": {
+      "name": "Université du Droit et de la Sante (Lille II)",
+      "country": "FR"
+    },
+    "univ-lille3.fr": {
+      "name": "Université Charles-de-Gaulle (Lille III)",
+      "country": "FR"
+    },
+    "univ-littoral.fr": {
+      "name": "Université du Littoral Cote d'Opale",
+      "country": "FR"
+    },
+    "univ-lorraine.fr": {
+      "name": "Université de Lorraine",
+      "country": "FR"
+    },
+    "univ-lr.fr": {
+      "name": "Université de La Rochelle",
+      "country": "FR"
+    },
+    "univ-lyon1.fr": {
+      "name": "Université Claude Bernard (Lyon I)",
+      "country": "FR"
+    },
+    "univ-lyon2.fr": {
+      "name": "Université Lumiére (Lyon II)",
+      "country": "FR"
+    },
+    "univ-lyon3.fr": {
+      "name": "Université Jean Moulin (Lyon III)",
+      "country": "FR"
+    },
+    "univ-metz.fr": {
+      "name": "Université de Metz",
+      "country": "FR"
+    },
+    "univ-mlv.fr": {
+      "name": "Université Paris-Est Marne-la-Vallée",
+      "country": "FR"
+    },
+    "univ-montp1.fr": {
+      "name": "Université de Montpellier",
+      "country": "FR"
+    },
+    "univ-montp2.fr": {
+      "name": "Université de Montpellier",
+      "country": "FR"
+    },
+    "univ-montp3.fr": {
+      "name": "Université Paul Valéry (Montpellier III)",
+      "country": "FR"
+    },
+    "univ-mulhouse.fr": {
+      "name": "Université de Haute-Alsace",
+      "country": "FR"
+    },
+    "univ-nancy2.fr": {
+      "name": "Université Nancy II",
+      "country": "FR"
+    },
+    "univ-nantes.fr": {
+      "name": "Université de Nantes",
+      "country": "FR"
+    },
+    "univ-orleans.fr": {
+      "name": "Université d'Orléans",
+      "country": "FR"
+    },
+    "univ-paris-diderot.fr": {
+      "name": "Université Diderot Paris 7",
+      "country": "FR"
+    },
+    "univ-paris1.fr": {
+      "name": "Université Panthéon-Sorbonne (Paris I)",
+      "country": "FR"
+    },
+    "univ-paris12.fr": {
+      "name": "Université Val-de-Marne (Paris XII)",
+      "country": "FR"
+    },
+    "univ-paris13.fr": {
+      "name": "Université Paris Nord (Paris XIII)",
+      "country": "FR"
+    },
+    "univ-paris3.fr": {
+      "name": "Université Sorbonne-Nouvelle (Paris III)",
+      "country": "FR"
+    },
+    "univ-paris5.fr": {
+      "name": "Université René Descartes (Paris V)",
+      "country": "FR"
+    },
+    "univ-paris8.fr": {
+      "name": "Université Vincennes Saint-Denis (Paris VIII)",
+      "country": "FR"
+    },
+    "univ-pau.fr": {
+      "name": "Université de Pau et des Pays de l'Adour",
+      "country": "FR"
+    },
+    "univ-perp.fr": {
+      "name": "Université de Perpignan",
+      "country": "FR"
+    },
+    "univ-poitiers.fr": {
+      "name": "Université de Poitiers",
+      "country": "FR"
+    },
+    "univ-reims.fr": {
+      "name": "Université de Reims Champagne-Ardenne",
+      "country": "FR"
+    },
+    "univ-rennes1.fr": {
+      "name": "Université Rennes I",
+      "country": "FR"
+    },
+    "univ-rennes2.fr": {
+      "name": "Université de Rennes 2",
+      "country": "FR"
+    },
+    "univ-rouen.fr": {
+      "name": "Université de Rouen - Haute Normandie",
+      "country": "FR"
+    },
+    "univ-savoie.fr": {
+      "name": "Université de Savoie",
+      "country": "FR"
+    },
+    "univ-st-etienne.fr": {
+      "name": "Université Jean Monnet",
+      "country": "FR"
+    },
+    "univ-tln.fr": {
+      "name": "Université du Sud, Toulon et Var",
+      "country": "FR"
+    },
+    "univ-tlse1.fr": {
+      "name": "Université des Sciences Sociales (Toulouse I)",
+      "country": "FR"
+    },
+    "univ-tlse2.fr": {
+      "name": "Université de Toulouse-le-Mirail (Toulouse II)",
+      "country": "FR"
+    },
+    "univ-tlse3.fr": {
+      "name": "Université de Toulouse-le-Mirail (Toulouse III)",
+      "country": "FR"
+    },
+    "univ-toulouse.fr": {
+      "name": "Université de Toulouse",
+      "country": "FR"
+    },
+    "univ-tours.fr": {
+      "name": "Université François Rabelais de Tours",
+      "country": "FR"
+    },
+    "univ-ubs.fr": {
+      "name": "Université de Bretagne Sud",
+      "country": "FR"
+    },
+    "univ-valenciennes.fr": {
+      "name": "Université de Valenciennes et du Hainaut-Cambrésis",
+      "country": "FR"
+    },
+    "univaq.it": {
+      "name": "University of Aquila",
+      "country": "IT"
+    },
+    "unive.it": {
+      "name": "University of Venice",
+      "country": "IT"
+    },
+    "universidadatlantico.org": {
+      "name": "Iniciativa Universidad del Atlantico",
+      "country": "ES"
+    },
+    "universite-paris-saclay.fr": {
+      "name": "Université Paris-Saclay",
+      "country": "FR"
+    },
+    "univmed.fr": {
+      "name": "Université de la Méditerranée (Aix Marseille II)",
+      "country": "FR"
+    },
+    "univr.it": {
+      "name": "University of Verona",
+      "country": "IT"
+    },
+    "unizar.es": {
+      "name": "Universidad de Zaragoza",
+      "country": "ES"
+    },
+    "unnet.es": {
+      "name": "Universidad Antonio de Nebrija",
+      "country": "ES"
+    },
+    "unu.edu": {
+      "name": "United Nations University",
+      "country": "JP"
+    },
+    "uoc.edu": {
+      "name": "Universitat Oberta de Catalunya",
+      "country": "ES"
+    },
+    "uoc.es": {
+      "name": "Universitat Oberta de Catalunya",
+      "country": "ES"
+    },
+    "uoeh-u.ac.jp": {
+      "name": "University of Occupational and Environmental Health, Japan",
+      "country": "JP"
+    },
+    "uol.de": {
+      "name": "Carl von Ossietzky Universität Oldenburg",
+      "country": "DE"
+    },
+    "uos.ac.kr": {
+      "name": "서울시립대학교",
+      "country": "KR"
+    },
+    "up.univ-mrs.fr": {
+      "name": "Université de Provence (Aix-Marseille I)",
+      "country": "FR"
+    },
+    "upc.edu": {
+      "name": "Universitat Politècnica de Catalunya",
+      "country": "ES"
+    },
+    "upco.es": {
+      "name": "Universidad Pontificia Comillas",
+      "country": "ES"
+    },
+    "upct.es": {
+      "name": "Universidad Politécnica de Cartagena",
+      "country": "ES"
+    },
+    "upf.edu": {
+      "name": "Universitat Pompeu Fabra",
+      "country": "ES"
+    },
+    "upf.es": {
+      "name": "Universitat Pompeu Fabra",
+      "country": "ES"
+    },
+    "upm.es": {
+      "name": "Universidad Politécnica de Madrid",
+      "country": "ES"
+    },
+    "upmc.fr": {
+      "name": "Sorbonne Université - Faculté des Sciences (Paris VI)",
+      "country": "FR"
+    },
+    "upmf-grenoble.fr": {
+      "name": "Université Pierre Mendès France",
+      "country": "FR"
+    },
+    "upo.es": {
+      "name": "Universidad Pablo de Olavide",
+      "country": "ES"
+    },
+    "ups-tlse.fr": {
+      "name": "Université Paul Sabatier (Toulouse III)",
+      "country": "FR"
+    },
+    "upsa.es": {
+      "name": "Universidad Pontificia de Salamanca",
+      "country": "ES"
+    },
+    "upv.es": {
+      "name": "Universidad Politécnica de Valencia",
+      "country": "ES"
+    },
+    "urjc.es": {
+      "name": "Universidad Rey Juan Carlos",
+      "country": "ES"
+    },
+    "url.es": {
+      "name": "Universitat Ramon Llull",
+      "country": "ES"
+    },
+    "urv.es": {
+      "name": "Universitat Rovira I Virgili Tarragona",
+      "country": "ES"
+    },
+    "us.es": {
+      "name": "Universidad de Sevilla",
+      "country": "ES"
+    },
+    "usal.es": {
+      "name": "Universidad de Salamanca",
+      "country": "ES"
+    },
+    "usc.es": {
+      "name": "Universidade de Santiago de Compostela",
+      "country": "ES"
+    },
+    "usc.gal": {
+      "name": "Universidade de Santiago de Compostela",
+      "country": "ES"
+    },
+    "ushs.u-strasbg.fr": {
+      "name": "Université des Sciences Humaines (Strasbourg II)",
+      "country": "FR"
+    },
+    "usj.es": {
+      "name": "Universidad San Jorge",
+      "country": "ES"
+    },
+    "usp.ac.jp": {
+      "name": "University of Shiga Prefecture",
+      "country": "JP"
+    },
+    "ust.ac.kr": {
+      "name": "University of Science and Technology",
+      "country": "KR"
+    },
+    "utaipei.edu.tw": {
+      "name": "University of Taipei",
+      "country": "TW"
+    },
+    "utbm.fr": {
+      "name": "Université de Technologie de Belfort Montbéliard",
+      "country": "FR"
+    },
+    "utc.fr": {
+      "name": "Université de Technologie de Compiègne",
+      "country": "FR"
+    },
+    "utsunomiya-u.ac.jp": {
+      "name": "Utsunomiya University",
+      "country": "JP"
+    },
+    "utt.fr": {
+      "name": "Université de Technologie de Troyes",
+      "country": "FR"
+    },
+    "uu.ac.kr": {
+      "name": "Uiduk University",
+      "country": "KR"
+    },
+    "uv.es": {
+      "name": "Universidad de Valencia",
+      "country": "ES"
+    },
+    "uva.es": {
+      "name": "Universidad de Valladolid",
+      "country": "ES"
+    },
+    "uvic.es": {
+      "name": "Universitat de Vic",
+      "country": "ES"
+    },
+    "uvigo.es": {
+      "name": "Universidade de Vigo",
+      "country": "ES"
+    },
+    "uvigo.gal": {
+      "name": "Universidade de Vigo",
+      "country": "ES"
+    },
+    "uvsq.fr": {
+      "name": "Université de Versailles Saint-Quentin-en-Yvelines",
+      "country": "FR"
+    },
+    "versailles.archi.fr": {
+      "name": "ENSA Versailles",
+      "country": "FR"
+    },
+    "vet-alfort.fr": {
+      "name": "Ecole Nationale Vétérinaire d'Alfort",
+      "country": "FR"
+    },
+    "vet-lyon.fr": {
+      "name": "Ecole Nationale Vétérinaire de Lyon",
+      "country": "FR"
+    },
+    "vet-nantes.fr": {
+      "name": "Ecole Nationale Vétérinaire de Nantes",
+      "country": "FR"
+    },
+    "villanueva.edu": {
+      "name": "Centro Universitario Villanueva",
+      "country": "ES"
+    },
+    "viu.es": {
+      "name": "Universidad Internacional de Valencia",
+      "country": "ES"
+    },
+    "w-hs.de": {
+      "name": "Westphalian University of Applied Sciences",
+      "country": "DE"
+    },
+    "wakayama-med.ac.jp": {
+      "name": "Wakayama Medical College",
+      "country": "JP"
+    },
+    "wakayama-u.ac.jp": {
+      "name": "Wakayama University",
+      "country": "JP"
+    },
+    "wakhok.ac.jp": {
+      "name": "Wakkanai Hokusei Gakuen University",
+      "country": "JP"
+    },
+    "wako.ac.jp": {
+      "name": "Wako University",
+      "country": "JP"
+    },
+    "waseda.ac.jp": {
+      "name": "Waseda University",
+      "country": "JP"
+    },
+    "wayo.ac.jp": {
+      "name": "Wayo Women's University",
+      "country": "JP"
+    },
+    "whu-koblenz.de": {
+      "name": "WHU – Otto Beisheim School of Management",
+      "country": "DE"
+    },
+    "whu.edu": {
+      "name": "WHU – Otto Beisheim School of Management",
+      "country": "DE"
+    },
+    "wilmina.ac.jp": {
+      "name": "Osaka Jogakuin University",
+      "country": "JP"
+    },
+    "wku.ac.kr": {
+      "name": "원광대학교",
+      "country": "KR"
+    },
+    "wonkwang.ac.kr": {
+      "name": "Wonkwang University",
+      "country": "KR"
+    },
+    "woosuk.ac.kr": {
+      "name": "Woosuk University",
+      "country": "KR"
+    },
+    "wsu.ac.kr": {
+      "name": "우송대학교",
+      "country": "KR"
+    },
+    "wwu.de": {
+      "name": "Westfälische Wilhelms-Universität Münster",
+      "country": "DE"
+    },
+    "www-ecpm.u-strasbg.fr": {
+      "name": "Ecole Européenne de Chimie, Polymères et Matériaux de Strasbourg",
+      "country": "FR"
+    },
+    "www-engees.u-strasbg.fr": {
+      "name": "Ecole Nationale du Génie de l'Eau et de l'Environnement de Strasbourg",
+      "country": "FR"
+    },
+    "www-ensais.u-strasbg.fr": {
+      "name": "Ecole Nationale Supérieure des Arts et Industries de Strasbourg",
+      "country": "FR"
+    },
+    "www-ensps.u-strasbg.fr": {
+      "name": "Ecole Nationale Supérieure de Physique de Strasbourg",
+      "country": "FR"
+    },
+    "www-ulp.u-strasbg.fr": {
+      "name": "Université Louis Pasteur (Strasbourg I)",
+      "country": "FR"
+    },
+    "www-urs.u-strasbg.fr": {
+      "name": "Université Robert Schuman (Strasbourg III)",
+      "country": "FR"
+    },
+    "www.yewon.ac.kr": {
+      "name": "Yewon Arts University",
+      "country": "KR"
+    },
+    "www.yongin.ac.kr": {
+      "name": "Yong In University",
+      "country": "KR"
+    },
+    "www.youngsan.ac.kr": {
+      "name": "Youngsan University of Son Studies",
+      "country": "KR"
+    },
+    "www.ysu.ac.kr": {
+      "name": "Youngsan University",
+      "country": "KR"
+    },
+    "yama.sut.ac.jp": {
+      "name": "Science University of Tokyo in Yamaguchi",
+      "country": "JP"
+    },
+    "yamagata-u.ac.jp": {
+      "name": "Yamagata University",
+      "country": "JP"
+    },
+    "yamaguchi-pu.ac.jp": {
+      "name": "Yamaguchi Prefectural University",
+      "country": "JP"
+    },
+    "yamaguchi-u.ac.jp": {
+      "name": "Yamaguchi University",
+      "country": "JP"
+    },
+    "yamanashi-med.ac.jp": {
+      "name": "Yamanashi Medical University",
+      "country": "JP"
+    },
+    "yamanashi.ac.jp": {
+      "name": "Yamanashi University",
+      "country": "JP"
+    },
+    "yasuda-u.ac.jp": {
+      "name": "Yasuda Women's University",
+      "country": "JP"
+    },
+    "yeungnam.ac.kr": {
+      "name": "Yeungnam University",
+      "country": "KR"
+    },
+    "ygu.ac.jp": {
+      "name": "Yamanashi Gakuin University",
+      "country": "JP"
+    },
+    "yncrea.fr": {
+      "name": "Yncrea",
+      "country": "FR"
+    },
+    "ynu.ac.jp": {
+      "name": "Yokohama National University",
+      "country": "JP"
+    },
+    "yokkaichi-u.ac.jp": {
+      "name": "Yokkaichi University",
+      "country": "JP"
+    },
+    "yokohama-cu.ac.jp": {
+      "name": "Yokohama City University",
+      "country": "JP"
+    },
+    "yonsei.ac.kr": {
+      "name": "연세대학교",
+      "country": "KR"
+    },
+    "yosu.ac.kr": {
+      "name": "Yosu National University",
+      "country": "KR"
+    },
+    "yu.ac.kr": {
+      "name": "영남대학교",
+      "country": "KR"
+    },
+    "yuntech.edu.tw": {
+      "name": "National Yunlin University of Science and Technology",
+      "country": "TW"
+    },
+    "yzu.edu.tw": {
+      "name": "Yuan Ze University",
+      "country": "TW"
+    },
+    "zokei.ac.jp": {
+      "name": "Tokyo University of Art and Design",
+      "country": "JP"
+    }
   }
 }
