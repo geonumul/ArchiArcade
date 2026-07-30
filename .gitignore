@@ -2,3 +2,8 @@
 node_modules/
 *.log
 .env
+
+# 로컬 전용 — 공개 리포에 올리지 않음
+CLAUDE.md
+.claude/
+*.zip

@@ -2544,7 +2544,12 @@ $("btnSwapQ").addEventListener("click",()=>hostSwapQuestion());
 
 
 /* ═══════════ 회원(플레이어 카드) · 관리자 · PC 독 · 허브 i18n — v1.3 ═══════════ */
-const ADMIN_HASH="af34f57c9faec1f06fd021ad2315b9f3246c3706d56dfe1a8e258d8769ddcf90"; // 소스 열람 가능 환경 — 억제용. 실서비스는 서버 인증 필요
+const ADMIN_HASH="af34f57c9faec1f06fd021ad2315b9f3246c3706d56dfe1a8e258d8769ddcf90"; // 레거시(SHA-256 1회) — ADMIN_PBK 설정 시 무시됨
+/* 관리자 해시 강화: 아래 salt/ph를 채우면 PBKDF2(120k) 경로로 검증한다(레거시는 자동 무시).
+   생성법 — 브라우저 콘솔에서 실행 후 출력값을 그대로 붙여넣기:
+     (async()=>{const s=randHex(16);console.log(JSON.stringify({salt:s,ph:await pbkdf2(prompt("관리자 비밀번호"),s,PBK_IT)}));})()
+   ※ 정적 SPA인 이상 클라이언트 게이트는 우회 가능 — 진짜 해결은 DEV_HANDOFF STEP 2(서버 인증). */
+const ADMIN_PBK={salt:"",ph:""};
 let USER=null;
 const uKey=n=>"abg-user-"+n.toLowerCase();
 const TITLES=[
@@ -2676,8 +2681,10 @@ async function doLogin(){
   if(!n||!p){ $("auErr").textContent=UI[LANG].auErrPin; return; }
   $("auErr").textContent="...";
   if(n.toLowerCase()==="admin"){
-    const ph=await hashPw("user::"+p);
-    if(ph===ADMIN_HASH){ $("auErr").textContent=""; sfxClear(); openAdmin(); }
+    const ok=(ADMIN_PBK.salt&&ADMIN_PBK.ph)
+      ? (await pbkdf2(p,ADMIN_PBK.salt,PBK_IT))===ADMIN_PBK.ph
+      : (await hashPw("user::"+p))===ADMIN_HASH;
+    if(ok){ $("auErr").textContent=""; sfxClear(); openAdmin(); }
     else $("auErr").textContent=UI[LANG].auErrPw;
     return;
   }
@@ -3673,7 +3680,7 @@ Object.assign(UI.de,{exitAsk:"Wirklich aussteigen?",exitAskHost:"Beim Verlassen 
 Object.assign(UI.es,{exitAsk:"¿Salir de la partida?",exitAskHost:"Al salir se cierra la sala. ¿Salir?",exitYes:"SALIR ✕",exitNo:"SEGUIR ▶"});
 
 const _showEx=show;
-const EXIT_SLOT={vWait:"wtTitle", vHostLobby:"lobbyCode"};
+const EXIT_SLOT={vWait:"waitCode", vHostLobby:"lobbyCode"};
 show=function(id){
   _showEx(id);
   const w=$("topExit").parentNode; // lang-wrap(버튼+팝오버)
@@ -3708,6 +3715,6 @@ $("exitYes").addEventListener("click",async()=>{
 
 
 
-</script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script>
+</script>
 </body>
 </html>
