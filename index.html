@@ -121,8 +121,14 @@ body::after{
 }
 .top-back:hover{color:var(--ink);border-color:var(--ink);}
 .top-back:active{transform:translateY(3px);box-shadow:0 0 0 var(--shadow);}
-.exit-btn{color:var(--red);border-color:#7a3040;}
+.qcount-wrap{display:inline-flex;align-items:center;gap:10px;}
+.exit-btn{
+  font-family:var(--efont);font-size:11px;color:var(--red);
+  background:transparent;border:3px solid #7a3040;padding:5px 8px;cursor:pointer;
+  box-shadow:0 3px 0 var(--shadow);vertical-align:middle;
+}
 .exit-btn:hover{color:#ff8a9b;border-color:var(--red);}
+.exit-btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--shadow);}
 .exit-pop{right:0;left:auto;top:calc(100% + 8px);min-width:168px;}
 .exit-ask{font-family:var(--kfont);font-weight:700;font-size:13px;color:var(--yellow);padding:10px 14px;border-bottom:2px dashed #565b86;}
 .exit-pop button#exitYes{color:var(--red);}
@@ -538,18 +544,9 @@ body.ov-open{overflow:hidden;}
     <span id="hudR">LIVE</span>
     <span class="hud-ctl">
       <span class="lang-wrap">
-        <button class="crt-btn exit-btn hidden" id="topExit">✕</button>
-        <div class="lang-pop hidden exit-pop" id="exitPop">
-          <div class="exit-ask" id="exitAsk">정말 나갈까요?</div>
-          <button id="exitYes">나가기 ✕</button>
-          <button id="exitNo">계속하기 ▶</button>
-        </div>
-      </span>
-      <span class="lang-wrap">
-        <button class="crt-btn" id="sndBtn">🎵</button>
+        <button class="crt-btn" id="sndBtn">🔇</button>
         <div class="lang-pop hidden snd-pop" id="sndPop">
-          <button id="bgmToggle">BGM: ON</button>
-          <button id="sfxToggle">SFX: ON</button>
+          <button id="bgmToggle">SOUND: OFF</button>
           <div class="vol-row"><span>VOL</span><input type="range" id="volSlider" min="0" max="100" value="70"></div>
         </div>
       </span>
@@ -750,7 +747,14 @@ body.ov-open{overflow:hidden;}
     <div class="hidden" id="vQuiz">
       <div class="stage-head">
         <span class="stg" id="stgLabel">STAGE 1-1</span>
-        <span id="qCount">01 / 20</span>
+        <span class="qcount-wrap"><span id="qCount">01 / 20</span><span class="lang-wrap">
+          <button class="exit-btn hidden" id="topExit">✕</button>
+          <div class="lang-pop hidden exit-pop" id="exitPop">
+            <div class="exit-ask" id="exitAsk">정말 나갈까요?</div>
+            <button id="exitYes">나가기 ✕</button>
+            <button id="exitNo">계속하기 ▶</button>
+          </div>
+        </span></span>
       </div>
       <div id="timerWrap">
         <div class="timerbar"><div class="timerfill" id="timerFill"></div></div>
@@ -841,6 +845,7 @@ body.ov-open{overflow:hidden;}
 </div>
 
 <script>
+
 
 
 
@@ -1569,12 +1574,12 @@ async function bumpStats(field){
 
 /* ── 8비트 효과음 ── */
 let audioCtx=null, masterGain=null;
-let SND={vol:0.7, bgm:true, sfx:true};
+let SND={vol:0.7, on:false}; // 기본 무음 — 토글 하나로 BGM+SFX 동시 제어
 function busOut(){
   masterGain=masterGain||(()=>{ const g=audioCtx.createGain(); g.gain.value=SND.vol; g.connect(audioCtx.destination); return g; })();
   return masterGain;
 }
-function beep(f,d,t){try{if(!SND.sfx)return;audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+function beep(f,d,t){try{if(!SND.on)return;audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
   const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=t||"square";o.frequency.value=f;
   g.gain.setValueAtTime(.06,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);
   o.connect(g);g.connect(busOut());o.start();o.stop(audioCtx.currentTime+d);}catch(e){}}
@@ -3621,7 +3626,7 @@ function bgmSchedule(){
   }
 }
 function bgmStart(){
-  if(BGM.playing||!SND.bgm) return;
+  if(BGM.playing||!SND.on) return;
   try{
     audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
     if(audioCtx.state==="suspended") audioCtx.resume();
@@ -3640,25 +3645,18 @@ $("sndBtn").addEventListener("click",e=>{
 $("sndPop").addEventListener("click",e=>e.stopPropagation());
 document.addEventListener("click",()=>$("sndPop").classList.add("hidden"));
 $("bgmToggle").addEventListener("click",()=>{
-  SND.bgm=!SND.bgm;
-  $("bgmToggle").textContent="BGM: "+(SND.bgm?"ON":"OFF");
-  $("sndBtn").textContent=(!SND.bgm&&!SND.sfx)?"🔇":"🎵";
-  if(SND.bgm) bgmStart(); else bgmStop();
-  sfxNext();
-});
-$("sfxToggle").addEventListener("click",()=>{
-  SND.sfx=!SND.sfx;
-  $("sfxToggle").textContent="SFX: "+(SND.sfx?"ON":"OFF");
-  $("sndBtn").textContent=(!SND.bgm&&!SND.sfx)?"🔇":"🎵";
-  if(SND.sfx) sfxNext();
+  SND.on=!SND.on;
+  $("bgmToggle").textContent="SOUND: "+(SND.on?"ON":"OFF");
+  $("sndBtn").textContent=SND.on?"🎵":"🔇";
+  if(SND.on){ bgmStart(); sfxNext(); } else bgmStop();
 });
 $("volSlider").addEventListener("input",()=>{
   SND.vol=$("volSlider").value/100;
   if(masterGain) masterGain.gain.value=SND.vol;
 });
 /* 브라우저 정책: 첫 상호작용 후 자동 시작 · 탭 이탈 시 일시정지 */
-document.addEventListener("click",function first(){ document.removeEventListener("click",first); bgmStart(); },{once:false});
-document.addEventListener("visibilitychange",()=>{ if(document.hidden) bgmStop(); else if(SND.bgm) bgmStart(); });
+// 기본 무음 — 자동 시작 없음. 사용자가 SOUND: ON 시에만 재생
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) bgmStop(); else if(SND.on) bgmStart(); });
 
 
 
@@ -3675,9 +3673,17 @@ Object.assign(UI.de,{exitAsk:"Wirklich aussteigen?",exitAskHost:"Beim Verlassen 
 Object.assign(UI.es,{exitAsk:"¿Salir de la partida?",exitAskHost:"Al salir se cierra la sala. ¿Salir?",exitYes:"SALIR ✕",exitNo:"SEGUIR ▶"});
 
 const _showEx=show;
+const EXIT_SLOT={vWait:"wtTitle", vHostLobby:"lobbyCode"};
 show=function(id){
   _showEx(id);
-  $("topExit").classList.toggle("hidden",!EXIT_VIEWS[id]);
+  const w=$("topExit").parentNode; // lang-wrap(버튼+팝오버)
+  if(EXIT_VIEWS[id]){
+    const slot=EXIT_SLOT[id]?$(EXIT_SLOT[id]).parentNode:null;
+    const home=document.querySelector(".qcount-wrap");
+    if(id==="vQuiz"){ if(w.parentNode!==home) home.appendChild(w); }
+    else if(slot){ if(w.parentNode!==slot) $(EXIT_SLOT[id]).after(w); }
+    $("topExit").classList.remove("hidden");
+  } else $("topExit").classList.add("hidden");
   $("exitPop").classList.add("hidden");
 };
 $("topExit").addEventListener("click",e=>{
@@ -3701,6 +3707,7 @@ $("exitYes").addEventListener("click",async()=>{
 });
 
 
-</script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script>
+
+</script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script></script>
 </body>
 </html>
