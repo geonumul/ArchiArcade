@@ -339,3 +339,21 @@ model ReportExport {
 
   @@index([year, scope])
 }
+
+// ─────────────────────────────────────────────────────────────
+// 원본 index.html 이 쓰는 공용 키-값 저장소
+// ─────────────────────────────────────────────────────────────
+
+/// 원본 SPA 는 `window.storage` 하나로 방 상태·투표·게시글·회원을 전부 다룬다.
+/// 화면을 원본 그대로 두기 위해 그 인터페이스를 여기에 그대로 받아 준다.
+/// 도메인 테이블(Room, Vote, Post …)은 정규화된 집계용이고, 이쪽은 원본 호환용이다.
+model Kv {
+  key       String    @id
+  value     String
+  /// 방·투표처럼 수명이 있는 키는 만료 시각을 달아 cleanup 크론이 걷어 간다.
+  expiresAt DateTime?
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
+
+  @@index([expiresAt])
+}

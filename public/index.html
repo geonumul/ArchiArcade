@@ -8,6 +8,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>설계실 오락실 — ARCHI ARCADE</title>
+<!-- window.storage 를 서버(/api/kv)에 연결한다. 아래 인라인 스크립트보다 먼저 실행돼야 한다. -->
+<script src="/arcade-bridge.js"></script>
+<!-- 로딩 표시·선택창 — 원본 <style> 은 그대로 두고 새 규칙만 따로 싣는다. -->
+<link rel="stylesheet" href="/arcade-ui.css">
 <style>
 /* ── 폰트: 한글 Galmuri11(+Neo둥근모/둥근모 폴백), 영문·숫자 Press Start 2P ── */
 @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
@@ -539,9 +543,9 @@ body.ov-open{overflow:hidden;}
     <span id="hudR">LIVE</span>
     <span class="hud-ctl">
       <span class="lang-wrap">
-        <button class="crt-btn" id="sndBtn">🔇</button>
+        <button class="crt-btn" id="sndBtn">🎵</button>
         <div class="lang-pop hidden snd-pop" id="sndPop">
-          <button id="bgmToggle">SOUND: OFF</button>
+          <button id="bgmToggle">SOUND: ON</button>
           <div class="vol-row"><span>VOL</span><input type="range" id="volSlider" min="0" max="100" value="70"></div>
         </div>
       </span>
@@ -702,6 +706,14 @@ body.ov-open{overflow:hidden;}
           <option value="30">30문항 (풀코스)</option>
         </select>
       </div>
+      <div class="field"><label id="hcapLabel">최대 인원</label>
+        <select id="hostCap">
+          <option value="10">10명 (소모임)</option>
+          <option value="30" selected>30명 (한 반)</option>
+          <option value="50">50명 (설계실 전체)</option>
+          <option value="100">100명 (학년 전체)</option>
+        </select>
+      </div>
       <div class="err" id="hostErr"></div>
       <button class="btn kr" id="btnCreate">방 생성</button>
       <button class="btn kr gray" data-back>← 뒤로</button>
@@ -713,7 +725,7 @@ body.ov-open{overflow:hidden;}
       <div class="roomcode" id="lobbyCode">----</div>
       <div class="note">PW <b id="lobbyPw" style="color:var(--yellow)"></b> · TIME <b id="lobbyTm" style="color:var(--yellow)"></b>s · Q<b id="lobbyQn" style="color:var(--yellow)">20</b></div>
       <div class="playerlist" id="lobbyPlayers">참가자 대기 중...</div>
-      <div class="note">JOINED <span id="lobbyCount" style="color:var(--yellow)">0</span></div>
+      <div class="note">JOINED <span id="lobbyCount" style="color:var(--yellow)">0</span> / <span id="lobbyCap" style="color:var(--yellow)">30</span></div>
       <button class="btn kr gray" id="btnReroll">질문 세트 다시 뽑기</button>
       <button class="btn" id="btnStartGame">GAME START</button>
       <div class="note" id="ntStart">시작하면 문항이 모든 참가자 화면에 동시에 뜹니다</div>
@@ -1550,15 +1562,17 @@ function drawRound(seedIdxs){
 }
 
 /* ── 오락실 전체 통계 ── */
-const STATS_KEY="arcade-stats-v1";
 async function bumpStats(field){
+  /* 읽고-1더하고-쓰기를 클라이언트에서 하면 두 방문이 겹칠 때 증가분이 사라진다.
+     증가는 서버가 한 문장으로 처리하고(/api/stats), 여기서는 결과만 받는다.
+     저장 위치는 여전히 arcade-stats-v1 이라 그 키를 읽는 경로도 같은 값을 본다. */
   try{
-    const r=await window.storage.get(STATS_KEY,true).catch(()=>null);
-    let s={visits:0,plays:0};
-    if(r){ try{ s=JSON.parse(r.value)||s; }catch(e){} }
-    if(field) s[field]=(s[field]||0)+1;
-    await window.storage.set(STATS_KEY,JSON.stringify(s),true);
-    return s;
+    const r=await fetch("/api/stats",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({field:field||null})
+    });
+    if(!r.ok) return null;
+    return await r.json();
   }catch(e){ return null; }
 }
 (async()=>{
@@ -1569,7 +1583,7 @@ async function bumpStats(field){
 
 /* ── 8비트 효과음 ── */
 let audioCtx=null, masterGain=null;
-let SND={vol:0.7, on:false}; // 기본 무음 — 토글 하나로 BGM+SFX 동시 제어
+let SND={vol:0.7, on:true}; // 기본 소리 켬 — 토글 하나로 BGM+SFX 동시 제어
 function busOut(){
   masterGain=masterGain||(()=>{ const g=audioCtx.createGain(); g.gain.value=SND.vol; g.connect(audioCtx.destination); return g; })();
   return masterGain;
@@ -1613,11 +1627,23 @@ async function soloLoad(){
   const v=await sGet(SOLO_KEY);
   try{ const p=JSON.parse(v); return (p&&typeof p==="object"&&!Array.isArray(p))?p:{}; }catch(e){ return {}; }
 }
+/* 집계 전체를 읽어 한 칸 고쳐 다시 쓰면, 동시에 답한 사람들의 표가 서로를 덮어
+   사라진다. 더하는 일만 서버에 맡기고(/api/bank) 그 문항의 합계만 받아 온다.
+   저장 위치·형식은 SOLO_KEY 그대로라 읽기 경로는 바뀌지 않는다. */
+async function bankBump(bi,a,b){
+  try{
+    const r=await fetch("/api/bank",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({bi,a,b})
+    });
+    if(!r.ok) return null;
+    return await r.json();            // {a,b}
+  }catch(e){ return null; }
+}
 async function soloVote(bi,pick){
-  const latest=await soloLoad();
-  const e=latest[bi]||{a:0,b:0}; e[pick]=(e[pick]||0)+1; latest[bi]=e;
-  soloStats=latest;
-  soloOK=await sSet(SOLO_KEY,JSON.stringify(latest));
+  const e=await bankBump(bi, pick==="a"?1:0, pick==="b"?1:0);
+  soloOK=!!e;
+  if(e){ soloStats=soloStats||{}; soloStats[bi]=e; }
 }
 
 /* ═══ 렌더 ═══ */
@@ -1707,6 +1733,7 @@ async function hostCreate(){
   $("hostErr").textContent=UI[LANG].err.creating;
   const tm=parseInt($("hostTimer").value,10);
   NQ=parseInt($("hostCount").value,10)||20;
+  const cap=parseInt($("hostCap").value,10)||30;
   const pwh=await hashPw(pw);
   // 코드 충돌 검사: 살아있는 방과 겹치면 재추첨 (최대 5회)
   let code=null;
@@ -1721,13 +1748,13 @@ async function hostCreate(){
   if(!code){ $("hostErr").textContent=UI[LANG].err.noCode; return; }
   $("hostErr").textContent="";
   const qs=drawRound();               // 이 방 전용 랜덤 20문항
-  room={code,tm,qs};
-  const st={ph:"lobby",pwh,tm,qs,q:0,dl:0,n:0,vc:0,names:[],res:[],ts:Date.now(),v:APP_VER,g:0};
+  room={code,tm,qs,cap};
+  const st={ph:"lobby",pwh,tm,qs,cap,q:0,dl:0,n:0,vc:0,names:[],res:[],ts:Date.now(),v:APP_VER,g:0};
   hostState=st;
   const ok=await sSet(stKey(code),JSON.stringify(st));
   if(!ok){ $("hostErr").textContent=UI[LANG].err.createFail; return; }
   sfxNext();
-  $("lobbyCode").textContent=code; $("lobbyPw").textContent=pw; $("lobbyTm").textContent=tm; $("lobbyQn").textContent=NQ; // pw는 호스트 화면 표시용, 저장소에는 해시만
+  $("lobbyCode").textContent=code; $("lobbyPw").textContent=pw; $("lobbyTm").textContent=tm; $("lobbyQn").textContent=NQ; $("lobbyCap").textContent=cap; // pw는 호스트 화면 표시용, 저장소에는 해시만
   $("hudM").textContent="ROOM "+code; $("hudR").textContent="HOST";
   show("vHostLobby");
   pollTimer=setInterval(hostLobbyPoll,2000); hostLobbyPoll();
@@ -1781,11 +1808,7 @@ async function hostCloseVoting(){
   // 방 투표를 전역 질문 통계에 합산 → 방 밖 사람들과 비교 가능
   const bi=ROUND[idx].bi;
   let ge={a:0,b:0};
-  try{
-    const m=await soloLoad();
-    const e=m[bi]||{a:0,b:0}; e.a=(e.a||0)+a; e.b=(e.b||0)+b; m[bi]=e; ge=e;
-    await sSet(SOLO_KEY,JSON.stringify(m));
-  }catch(e){}
+  try{ const e=await bankBump(bi,a,b); if(e) ge=e; }catch(e){}
   hostState.ph="reveal"; hostState.res[idx]={a,b,ga:ge.a,gb:ge.b};
   await sSet(stKey(room.code),JSON.stringify(hostState));
   renderResult(pa,pb,total,myPicks[idx]||null, UI[LANG].roomMeta(total,hostState.n||0)+globalLine(ge));
@@ -1828,6 +1851,12 @@ async function playerJoin(){
   const inputHash=await hashPw(pw);
   const okPw = st.pwh ? (st.pwh===inputHash) : (st.pw===pw); // 구버전 방 호환
   if(!okPw){ $("joinErr").textContent=UI[LANG].err.badPw; return; }
+  // 정원은 호스트가 2초마다 갱신하는 st.n 대신 참가자 키를 직접 세서 확인한다.
+  // 입장은 한 번뿐이라 요청 하나가 더 나가도 되고, 동시에 몰릴 때 초과 입장을 막는다.
+  if(st.cap){
+    const joined=await sList(jKey(code));
+    if(joined.length>=st.cap){ $("joinErr").textContent=UI[LANG].err.roomFull; return; }
+  }
   $("joinErr").textContent="";
   room={code,tm:st.tm};
   if(st.qs) drawRound(st.qs);         // 호스트가 뽑은 문항 세트 동기화
@@ -3527,14 +3556,13 @@ Object.assign(UI.tw,{modErr:"AI判定此內容不適合釋出",modChecking:"AI�
 /* ═══ AI 콘텐츠 검열 — 키워드가 아닌 문맥으로 판단 ═══ */
 async function moderateText(txt){
   try{
-    const p=fetch("https://api.anthropic.com/v1/messages",{
+    /* 판정은 서버(/api/moderate)가 한다. 브라우저에서 직접 부르면 API 키가 노출되고,
+       키 없이 부르면 매번 실패해 검열이 사실상 꺼진 것과 같아진다. */
+    const p=fetch("/api/moderate",{
       method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:
-        "You moderate a global architecture-student community board. Judge CONTEXT, not keywords: slang, game banter, harsh critique of quiz questions, and architecture jokes are all FINE. Block only: hate/racism, harassment or threats, sexual content, praising or facilitating crime, doxxing/personal info. Text may be Korean, English, Chinese (simplified or traditional), Japanese, French, Italian, German or Spanish. Reply ONLY minified JSON, no markdown: {\"ok\":true} or {\"ok\":false,\"reason\":\"<max 8 words, in the text language>\"}\n\nTEXT: "+txt}]})
+      body:JSON.stringify({text:txt,lang:LANG})
     }).then(r=>r.json());
-    const data=await Promise.race([p,new Promise((_,rj)=>setTimeout(()=>rj(new Error("timeout")),9000))]);
-    const raw=(data.content||[]).filter(i=>i.type==="text").map(i=>i.text).join("");
-    const j=JSON.parse(raw.replace(/```json|```/g,"").trim());
+    const j=await Promise.race([p,new Promise((_,rj)=>setTimeout(()=>rj(new Error("timeout")),9000))]);
     return {ok:!!j.ok, reason:j.reason||""};
   }catch(e){ return {ok:true, reason:""}; } /* 판정 불가 시 통과 — 룰베이스식 오탐 방지 우선 */
 }
@@ -3657,7 +3685,20 @@ $("volSlider").addEventListener("input",()=>{
   if(masterGain) masterGain.gain.value=SND.vol;
 });
 /* 브라우저 정책: 첫 상호작용 후 자동 시작 · 탭 이탈 시 일시정지 */
-// 기본 무음 — 자동 시작 없음. 사용자가 SOUND: ON 시에만 재생
+// 기본은 소리 켬. 다만 브라우저는 사용자 조작 없이 오디오를 시작하지 못하게 막으므로,
+// 첫 클릭·터치·키 입력에서 한 번만 붙잡아 시작한다. 그 전에는 조용한 게 정상이다.
+(function(){
+  const kick=()=>{
+    if(!SND.on) return;
+    try{
+      audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+      if(audioCtx.state==="suspended") audioCtx.resume();
+    }catch(e){}
+    bgmStart();
+  };
+  const once=()=>{ kick(); ["pointerdown","keydown","touchstart"].forEach(ev=>document.removeEventListener(ev,once)); };
+  ["pointerdown","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,once,{passive:true}));
+})();
 document.addEventListener("visibilitychange",()=>{ if(document.hidden) bgmStop(); else if(SND.on) bgmStart(); });
 
 
@@ -3711,5 +3752,9 @@ $("exitYes").addEventListener("click",async()=>{
 
 
 </script>
+<!-- 로딩 표시와 선택창. 원본 인라인 스크립트가 만든 UI/applyLang 을 이어받는다. -->
+<script src="/arcade-ui.js"></script>
+<!-- 허브에 학교 인증·학교 순위·동문 섹션을 붙인다(원본 마크업은 그대로 둔다). -->
+<script src="/arcade-school.js"></script>
 </body>
 </html>

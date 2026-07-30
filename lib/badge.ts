@@ -17,6 +17,16 @@ export interface Badge {
   schoolName: string;
   country: string;
   major: string;
+  /**
+   * StudentVerification 행의 id.
+   *
+   * 동문 디렉터리에서 "내 항목"을 고치려면 서버가 어느 행인지 알아야 하는데,
+   * 이메일을 쿠키에 넣지 않기로 했으므로 대신 이 id 를 담는다. id 만으로는
+   * 이메일을 역산할 수 없고, 서명이 있어 남의 id 로 바꿔치기할 수도 없다.
+   *
+   * 이 필드가 생기기 전에 발급된 쿠키에는 없다 — 없으면 재인증을 요구한다.
+   */
+  vid?: string;
 }
 
 function secret(): Uint8Array {
@@ -39,13 +49,14 @@ export async function readBadge(token: string | undefined): Promise<Badge | null
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, secret());
-    const { schoolDomain, schoolName, country, major } = payload as Record<string, unknown>;
+    const { schoolDomain, schoolName, country, major, vid } = payload as Record<string, unknown>;
     if (typeof schoolDomain !== "string" || typeof major !== "string") return null;
     return {
       schoolDomain,
       schoolName: String(schoolName ?? schoolDomain),
       country: String(country ?? ""),
       major,
+      vid: typeof vid === "string" ? vid : undefined,
     };
   } catch {
     return null;

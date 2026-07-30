@@ -30,6 +30,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
+      <head>
+        {/* 원본 페이지(public/index.html)와 같은 로딩 표시·선택창 스타일을 공유한다. */}
+        <link rel="stylesheet" href="/arcade-ui.css" />
+      </head>
       <body>{children}</body>
     </html>
   );
