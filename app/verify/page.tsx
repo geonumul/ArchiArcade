@@ -54,7 +54,8 @@ export default function VerifyPage() {
       });
       const d = await res.json();
       if (!res.ok) {
-        setErr(d.error ?? t.errNet);
+        // 서버 문구는 한국어라, 화면이 아는 상황이면 현재 언어로 바꿔 보여 준다.
+        setErr(d.mailNotReady ? t.vMailSoon : (d.error ?? t.errNet));
         return;
       }
       setSchool(d.school);
@@ -115,7 +116,7 @@ export default function VerifyPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="hong@hongik.ac.kr"
+              placeholder="archiarcade@snu.ac.kr"
               autoComplete="email"
               inputMode="email"
             />

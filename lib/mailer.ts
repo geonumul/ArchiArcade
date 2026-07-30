@@ -12,8 +12,13 @@ export const MAIL_ENABLED = Boolean(API_KEY);
 
 export interface MailResult {
   sent: boolean;
-  /// 발송이 꺼져 있을 때만 채워진다. 개발 중 코드를 확인하는 용도이며
-  /// 프로덕션에서는 절대 응답에 실어 보내지 않는다.
+  /**
+   * 발송이 꺼져 있을 때만 채워진다. 개발 중 코드를 확인하는 용도다.
+   *
+   * 이 값을 응답에 실을지는 호출하는 쪽이 판단한다 — /api/verify/request 는
+   * 로컬 개발에서만 내보내고, 프로덕션에서는 메일을 못 보내면 인증 자체를 닫는다.
+   * 여기서 채워졌다는 것만으로 안전하다고 보면 안 된다.
+   */
   devCode?: string;
 }
 
