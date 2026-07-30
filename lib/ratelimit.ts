@@ -45,14 +45,27 @@ export interface RateLimitResult {
 export async function rateLimit(key: string, limit: number, windowSec: number): Promise<RateLimitResult> {
   if (hasUpstash) {
     try {
+      // 무료 한도가 월 50만 "커맨드" 기준이라 호출 수를 아낀다.
+      //   창의 첫 요청  : INCR + EXPIRE (2)
+      //   통과하는 요청 : INCR only     (1)
+      //   차단된 요청   : INCR + TTL    (2, 재시도 안내에 남은 시간이 필요할 때만)
       const count = Number(await upstash(["INCR", key]));
-      if (count === 1) await upstash(["EXPIRE", key, windowSec]);
+
+      if (count === 1) {
+        await upstash(["EXPIRE", key, windowSec]);
+        return { allowed: true, remaining: limit - 1, retryAfterSec: 0 };
+      }
+      if (count <= limit) {
+        return { allowed: true, remaining: limit - count, retryAfterSec: 0 };
+      }
+
       const ttl = Number(await upstash(["TTL", key]));
-      return {
-        allowed: count <= limit,
-        remaining: Math.max(0, limit - count),
-        retryAfterSec: count <= limit ? 0 : Math.max(1, ttl),
-      };
+      // TTL 이 -1(만료 없음)이면 EXPIRE 가 유실된 것이므로 다시 걸어 영구 잠금을 막는다.
+      if (ttl < 0) {
+        await upstash(["EXPIRE", key, windowSec]);
+        return { allowed: false, remaining: 0, retryAfterSec: windowSec };
+      }
+      return { allowed: false, remaining: 0, retryAfterSec: Math.max(1, ttl) };
     } catch {
       // Upstash 장애 시 서비스를 막지 않는다 — 메모리로 폴백
     }
