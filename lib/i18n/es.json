@@ -1,0 +1,222 @@
+{
+  "titleLogo": "EL GRAN<br>DILEMA ARQUI",
+  "subdesc": "Elige tu partida: <b>¡10 · 20 · 30 STAGES!</b><br>Preguntas nuevas del banco arqui en cada partida.<br>Votos anónimos, contados en todo el mundo.",
+  "btnSolo": "Jugar en solitario",
+  "btnHost": "Crear sala (anfitrión)",
+  "btnJoin": "Unirse a una sala",
+  "btnLobby": "← Volver al salón",
+  "back": "← Atrás",
+  "hsTitle": "Crear sala",
+  "pwLabel": "Contraseña (para entrar)",
+  "tmLabel": "Tiempo de voto por pregunta",
+  "tmOpts": [
+    "5 s (esprint)",
+    "10 s",
+    "15 s",
+    "20 s",
+    "30 s (con calma)"
+  ],
+  "btnCreate": "Crear",
+  "ntShare": "Para compartir — número de sala y contraseña",
+  "ntStart": "Al empezar, la pregunta aparece a la vez en todas las pantallas",
+  "btnReroll": "Volver a sortear preguntas",
+  "waitingPlayers": "Esperando jugadores...",
+  "jnTitle": "Unirse a una sala",
+  "jnLabels": [
+    "Número de sala (4 cifras)",
+    "Contraseña",
+    "Apodo"
+  ],
+  "btnEnter": "Entrar",
+  "wtTitle": "¡Ya estás dentro!",
+  "wtWait": "Esperando a que el anfitrión empiece...",
+  "npc": "▶ La pregunta del Jefe Final de la Crítica",
+  "waitReveal": "¡Votación cerrada! Recuento...",
+  "btnCloseNow": "Cerrar ya",
+  "btnSwapQ": "Cambiar pregunta",
+  "lblA": "Opción A",
+  "lblB": "Opción B",
+  "lblM": "Veces a contracorriente",
+  "globalPre": "Todo el mundo: ",
+  "hostPreparing": "El anfitrión prepara la siguiente pregunta",
+  "netErr": "Error de red — solo se muestra tu elección",
+  "err": {
+    "needPw": "Escribe una contraseña",
+    "creating": "Creando...",
+    "noCode": "No hay números libres — inténtalo de nuevo",
+    "createFail": "Fallo al crear — inténtalo más tarde",
+    "code4": "El número tiene 4 cifras",
+    "checking": "Comprobando...",
+    "noRoom": "Esa sala no existe",
+    "badRead": "No se puede leer la sala",
+    "expired": "Sala caducada (más de 24 h)",
+    "badPw": "Contraseña incorrecta"
+  },
+  "hubLogo": "EL SALÓN RECREATIVO<br>DEL TALLER",
+  "marquee": "El espacio oficial de procrastinación para estudiantes de arquitectura agotados ··· una partida todos juntos y de vuelta a las maquetas ··· nuevos juegos en camino ···",
+  "cartNames": [
+    "EL GRAN<br>DILEMA ARQUI",
+    "¿QUIÉN DISEÑÓ<br>ESTE EDIFICIO?",
+    "TÉRMINOS ARQUI<br>QUIZ RELÁMPAGO",
+    "HOMBRE LOBO<br>DEL TALLER",
+    "BUSCA EL ERROR<br>DEL PLANO",
+    "TEST DEL<br>SENTIDO DE ESCALA"
+  ],
+  "sugName": "¿Qué metemos en el próximo cartucho?",
+  "sugSmall": "Deja tu idea de juego y será candidata a la próxima actualización",
+  "sugTag": "PROPONER JUEGO ▶",
+  "repName": "¡Esta pregunta está rota!",
+  "repSmall": "Denuncia preguntas injustas, propón nuevas, sugiere mejoras",
+  "repTag": "ENTRAR AL TALLER ▶",
+  "sgTitle": "TABLÓN DE PETICIONES",
+  "sgNote": "¿A qué queremos jugar todos juntos en el taller?<br>¡Los juegos más pedidos se construyen primero!",
+  "sgLabels": [
+    "Apodo",
+    "Idea de juego"
+  ],
+  "btnPostIdea": "INSERTAR PETICIÓN",
+  "wsTitle": "TALLER DE PREGUNTAS",
+  "wsNote": "Ayúdanos a mejorar las preguntas.<br>Desequilibrios, ideas nuevas, todo es bienvenido.",
+  "wsTypeL": "TIPO",
+  "wsOpts": [
+    "⚖️ Desequilibrio (un lado gana siempre)",
+    "💡 Idea de pregunta nueva",
+    "✨ Sería más divertido si..."
+  ],
+  "wsLabels": [
+    "Apodo",
+    "Detalles"
+  ],
+  "btnPostBug": "ENVIAR",
+  "emptyIdeas": "Aún no hay peticiones. ¡Echa la primera moneda!",
+  "emptyBugs": "Aún no hay avisos. ¡Empieza el primer apaño!",
+  "needIdea": "Escribe una idea de juego",
+  "needBug": "Escribe los detalles",
+  "throttle": "¡Demasiado rápido! Prueba en 15 s (antispam)",
+  "saveFail": "Fallo al guardar — inténtalo de nuevo",
+  "auTitle": "CARNÉ DE JUGADOR",
+  "auDesc": "Con apodo y PIN basta para guardar tu historial y título.<br>Sin registrarte puedes jugar a todo igualmente.",
+  "auNameL": "APODO (2-8 caracteres)",
+  "auPinL": "Contraseña (8+, letras+números)",
+  "btnLogin": "ENTRAR",
+  "btnRegister": "REGISTRARSE",
+  "btnLogout": "SALIR",
+  "auErrName": "Apodo: 2-8 letras/números/_",
+  "auErrPin": "PIN: mínimo 4 caracteres",
+  "auErrDup": "Ese apodo ya existe",
+  "auErrNo": "Apodo no encontrado — pulsa REGISTRARSE",
+  "auErrPw": "PIN incorrecto",
+  "auErrNet": "Error de red — inténtalo de nuevo",
+  "cardPlays": "Partidas completadas",
+  "cardMinor": "Elecciones minoritarias (total)",
+  "cardTitle": "Título actual",
+  "cardMax": "¡Rango máximo alcanzado!",
+  "dkT1": "NOW OPEN",
+  "dkB1": "Un salón recreativo online para estudiantes de arquitectura agotados.<br>Preguntas aleatorias, estadísticas mundiales, salas en directo.",
+  "dkGuest": "Estás jugando como invitado.<br>Regístrate para guardar historial y título.",
+  "rHot": "TOP",
+  "rMeh": "MEH",
+  "lenLabel": "DURACIÓN",
+  "hcLabel": "PREGUNTAS",
+  "hcOpts": [
+    "10 (corta e intensa)",
+    "20 (estándar)",
+    "30 (menú completo)"
+  ],
+  "anon": "Anónimo",
+  "dkQuiet": "Todo tranquilo por ahora...",
+  "phHostPw": "p. ej. 1234",
+  "phJoinCode": "p. ej. 7842",
+  "phJoinName": "p. ej. Trasnochador",
+  "phSgName": "p. ej. FantasmaB4",
+  "phSgText": "p. ej. Adivinar el edificio por su silueta",
+  "phBgName": "p. ej. Manitas",
+  "phBgText": "p. ej. Aquí siempre gana la A",
+  "moreGames": "VER TODOS<br>LOS JUEGOS",
+  "gcatT": "CATÁLOGO DE JUEGOS",
+  "gcatGhost": "Este hueco está vacío — ¡pide el juego que quieras!",
+  "gameCat": [
+    [
+      "El Gran Dilema Arqui",
+      "El duelo definitivo que zanja los debates del taller por voto mundial"
+    ],
+    [
+      "¿Quién diseñó este edificio?",
+      "Adivina el arquitecto por una silueta o una foto"
+    ],
+    [
+      "Términos Arqui Quiz Relámpago",
+      "Del voladizo a la cornisa, responde contra el reloj"
+    ],
+    [
+      "Hombre Lobo del Taller",
+      "Solo uno recibe otra consigna — farolea a tu taller"
+    ],
+    [
+      "Busca el Error del Plano",
+      "Gana quien antes encuentre los fallos ocultos de un plano impecable"
+    ],
+    [
+      "Test del Sentido de Escala",
+      "¿Cuántos mm tiene esa puerta? Mide tu memoria corporal"
+    ],
+    [
+      "Bingo del taller",
+      "Bingo 5×5 de momentos dolorosamente reales — «repítelo todo» incluido"
+    ],
+    [
+      "Ajedrez estructural",
+      "Las piezas son pilares, vigas y arcos — ajedrez para mentes estructurales"
+    ],
+    [
+      "Mafia del taller",
+      "Cada noche alguien rompe un plano. Debate de día y desenmascara a la mafia"
+    ]
+  ],
+  "commHead": "▼ COMUNIDAD · APERTURA PRÓXIMA ▼",
+  "commSoonTag": "En preparación · registrando interés",
+  "btnInterest": "¡Lo quiero! ♥",
+  "interestDone": "Registrado ✔ Nos vemos en la apertura",
+  "commOrder": [
+    "match",
+    "team",
+    "crit",
+    "res"
+  ],
+  "commCat": {
+    "team": {
+      "icon": "🤝",
+      "t": "Compañeros de concurso",
+      "d": "Forma equipos de concurso y estudio con estudiantes de todo el mundo. La IA traduce con naturalidad."
+    },
+    "crit": {
+      "icon": "🖼️",
+      "t": "Crits de porfolio y maqueta",
+      "d": "Sube tu porfolio y fotos de maqueta y recibe crits de estudiantes de todas partes. Modo solo elogios en camino."
+    },
+    "res": {
+      "icon": "🧱",
+      "t": "Materiales y recursos",
+      "d": "Combos de materiales, canales de YouTube y comunidades arqui de cada país, archivados por país."
+    },
+    "match": {
+      "icon": "✨",
+      "t": "Match astral de taller",
+      "d": "Encuentra el compañero de proyecto o el veterano de intercambio que encaja contigo. Criterios adaptados por país."
+    }
+  },
+  "auPw2L": "Confirmar contraseña",
+  "auErrPw8": "Mínimo 8 caracteres con letras y números",
+  "auErrPw2": "Las contraseñas no coinciden",
+  "auStrength": [
+    "Débil",
+    "Media",
+    "Fuerte"
+  ],
+  "modErr": "La IA consideró este contenido no publicable",
+  "modChecking": "Verificación IA...",
+  "exitAsk": "¿Salir de la partida?",
+  "exitAskHost": "Al salir se cierra la sala. ¿Salir?",
+  "exitYes": "SALIR ✕",
+  "exitNo": "SEGUIR ▶"
+}

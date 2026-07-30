@@ -1,0 +1,222 @@
+{
+  "titleLogo": "ARCHI<br>BALANCE GAME",
+  "subdesc": "Pick your run: <b>10 · 20 · 30 STAGES</b>!<br>Fresh questions from the architecture bank every time.<br>All votes counted anonymously, worldwide.",
+  "btnSolo": "SOLO PLAY",
+  "btnHost": "CREATE ROOM (HOST)",
+  "btnJoin": "JOIN ROOM",
+  "btnLobby": "← ARCADE",
+  "back": "← BACK",
+  "hsTitle": "CREATE ROOM",
+  "pwLabel": "PASSWORD (players use this to join)",
+  "tmLabel": "TIME LIMIT PER QUESTION",
+  "tmOpts": [
+    "5s (speedrun)",
+    "10s",
+    "15s",
+    "20s",
+    "30s (relaxed)"
+  ],
+  "btnCreate": "CREATE",
+  "ntShare": "Share with players — room code & password",
+  "ntStart": "Questions appear on every player screen at once",
+  "btnReroll": "REROLL QUESTION SET",
+  "waitingPlayers": "Waiting for players...",
+  "jnTitle": "JOIN ROOM",
+  "jnLabels": [
+    "ROOM CODE (4 digits)",
+    "PASSWORD",
+    "NICKNAME"
+  ],
+  "btnEnter": "ENTER",
+  "wtTitle": "YOU ARE IN!",
+  "wtWait": "Waiting for the host to start...",
+  "npc": "▶ THE CRIT DEMON ASKS",
+  "waitReveal": "Voting closed! Counting...",
+  "btnCloseNow": "CLOSE NOW",
+  "btnSwapQ": "SWAP QUESTION",
+  "lblA": "Chose A",
+  "lblB": "Chose B",
+  "lblM": "Went against the majority",
+  "globalPre": "All users:",
+  "hostPreparing": "Host is preparing the next question",
+  "netErr": "NETWORK ERROR — showing your pick only",
+  "err": {
+    "needPw": "Enter a password",
+    "creating": "Creating...",
+    "noCode": "No free room code found — try again",
+    "createFail": "Failed to create room — try again shortly",
+    "code4": "Room code is 4 digits",
+    "checking": "Checking...",
+    "noRoom": "Room not found",
+    "badRead": "Could not read room data",
+    "expired": "Room expired (24h passed)",
+    "badPw": "Wrong password"
+  },
+  "hubLogo": "ARCHI<br>ARCADE",
+  "marquee": "The official procrastination arcade for exhausted architecture students ··· gather round, play one round, then back to your models ··· new games keep coming ···",
+  "cartNames": [
+    "ARCHI<br>BALANCE GAME",
+    "GUESS THE<br>ARCHITECT",
+    "ARCHI TERMS<br>SPEED QUIZ",
+    "STUDIO<br>LIAR GAME",
+    "SPOT THE<br>DRAWING ERROR",
+    "SCALE<br>SENSE TEST"
+  ],
+  "sugName": "What goes in the next slot?",
+  "sugSmall": "Drop a game idea and it becomes an update candidate",
+  "sugTag": "SUGGEST A GAME ▶",
+  "repName": "This question is BROKEN!",
+  "repSmall": "Report unfair questions, pitch new ones, or suggest improvements",
+  "repTag": "ENTER WORKSHOP ▶",
+  "sgTitle": "GAME REQUEST BOARD",
+  "sgNote": "What should we all play in studio?<br>The most requested games get built first!",
+  "sgLabels": [
+    "NICKNAME",
+    "Game idea"
+  ],
+  "btnPostIdea": "INSERT REQUEST",
+  "wsTitle": "QUESTION WORKSHOP",
+  "wsNote": "Help make the questions better.<br>Report broken balance, pitch new questions, suggest anything.",
+  "wsTypeL": "TYPE",
+  "wsOpts": [
+    "⚖️ Broken balance (one side always wins)",
+    "💡 New question idea",
+    "✨ It would be more fun if..."
+  ],
+  "wsLabels": [
+    "NICKNAME",
+    "Details"
+  ],
+  "btnPostBug": "SUBMIT",
+  "emptyIdeas": "No requests yet. Insert the first coin!",
+  "emptyBugs": "No reports yet. Start the first tinkering!",
+  "needIdea": "Enter a game idea",
+  "needBug": "Enter details",
+  "throttle": "Too fast! Try again in 15s (anti-spam)",
+  "saveFail": "Save failed — try again shortly",
+  "auTitle": "PLAYER CARD",
+  "auDesc": "A nickname and PIN save your record and title.<br>Everything is still playable without logging in.",
+  "auNameL": "NICKNAME (2-8 chars)",
+  "auPinL": "Password (8+, letters+numbers)",
+  "btnLogin": "LOG IN",
+  "btnRegister": "SIGN UP",
+  "btnLogout": "LOG OUT",
+  "auErrName": "Nickname: 2-8 letters/numbers/_",
+  "auErrPin": "PIN must be 4+ chars",
+  "auErrDup": "Nickname already taken",
+  "auErrNo": "Nickname not found — press SIGN UP",
+  "auErrPw": "Wrong PIN",
+  "auErrNet": "Network error — try again",
+  "cardPlays": "Games completed",
+  "cardMinor": "Minority picks (total)",
+  "cardTitle": "Current title",
+  "cardMax": "Max rank achieved!",
+  "dkT1": "NOW OPEN",
+  "dkB1": "An online arcade for exhausted architecture students.<br>Random questions each run, global stats, live rooms.",
+  "dkGuest": "Playing as guest.<br>Log in to save your record and title.",
+  "rHot": "HOT",
+  "rMeh": "MEH",
+  "lenLabel": "ROUND LENGTH",
+  "hcLabel": "QUESTIONS",
+  "hcOpts": [
+    "10 (short & sweet)",
+    "20 (standard)",
+    "30 (full course)"
+  ],
+  "anon": "Anon",
+  "dkQuiet": "Quiet for now...",
+  "phHostPw": "e.g. 1234",
+  "phJoinCode": "e.g. 7842",
+  "phJoinName": "e.g. NightOwl",
+  "phSgName": "e.g. StudioGhost",
+  "phSgText": "e.g. Guess the building silhouette",
+  "phBgName": "e.g. Tinkerer",
+  "phBgText": "e.g. Option A always wins on this one",
+  "moreGames": "SEE ALL<br>GAMES",
+  "gcatT": "GAME CATALOG",
+  "gcatGhost": "This slot is empty — request the game you want!",
+  "gameCat": [
+    [
+      "Archi Balance Game",
+      "The ultimate either/or that settles studio debates by global vote"
+    ],
+    [
+      "Guess the Architect",
+      "Name the architect from a silhouette or photo"
+    ],
+    [
+      "Archi Terms Speed Quiz",
+      "From cantilever to cornice — beat the clock"
+    ],
+    [
+      "Studio Liar Game",
+      "One player gets a different prompt — bluff your studio"
+    ],
+    [
+      "Spot the Drawing Error",
+      "Find the hidden mistakes in a clean-looking drawing"
+    ],
+    [
+      "Scale Sense Test",
+      "How many mm is that door? Test your body memory"
+    ],
+    [
+      "Studio Bingo",
+      "A 5×5 bingo of painfully real studio moments — \"redo everything\" included"
+    ],
+    [
+      "Structure Chess",
+      "Pieces are columns, beams and arches — chess for structural minds"
+    ],
+    [
+      "Studio Mafia",
+      "Every night a drawing gets shredded. Debate by day, unmask the mafia"
+    ]
+  ],
+  "commHead": "▼ COMMUNITY · OPENING SOON ▼",
+  "commSoonTag": "In prep · collecting interest",
+  "btnInterest": "I want this! ♥",
+  "interestDone": "Registered ✔ See you at launch",
+  "commOrder": [
+    "team",
+    "crit",
+    "match",
+    "res"
+  ],
+  "commCat": {
+    "team": {
+      "icon": "🤝",
+      "t": "Competition Teammates",
+      "d": "Build competition and study teams with archi students worldwide. AI translates naturally across languages."
+    },
+    "crit": {
+      "icon": "🖼️",
+      "t": "Portfolio & Model Crits",
+      "d": "Upload portfolios and model photos, get crits from students everywhere. A praise-only mode is coming too."
+    },
+    "res": {
+      "icon": "🧱",
+      "t": "Materials & Resources",
+      "d": "Model material combos, YouTube channels, and each country's archi communities in one archive."
+    },
+    "match": {
+      "icon": "✨",
+      "t": "Zodiac Studio Match",
+      "d": "Find a design partner or exchange buddy who fits you. Matching criteria adapt by country (zodiac, MBTI...)."
+    }
+  },
+  "auPw2L": "Confirm password",
+  "auErrPw8": "Password needs 8+ chars with letters and numbers",
+  "auErrPw2": "Passwords don't match",
+  "auStrength": [
+    "Weak",
+    "Okay",
+    "Strong"
+  ],
+  "modErr": "AI flagged this as not postable",
+  "modChecking": "AI checking...",
+  "exitAsk": "Leave the game?",
+  "exitAskHost": "Leaving ends the room. Leave?",
+  "exitYes": "LEAVE ✕",
+  "exitNo": "KEEP PLAYING ▶"
+}

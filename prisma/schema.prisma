@@ -1,0 +1,290 @@
+// ARCHI ARCADE — STEP 1 (핵심 도메인) + STEP 1.5 (수익화) 통합 스키마
+// 설계 근거는 docs/PHASE2.md 의 "저장 키 → 테이블 매핑" 및 docs/DEV_HANDOFF.md 참고.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────
+// STEP 1 — 핵심 도메인
+// ─────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  pwHash    String
+  locale    String   @default("ko")
+  createdAt DateTime @default(now())
+
+  profile      Profile?
+  memberships  OrgMember[]
+  applications JobApplication[]
+  hostedRooms  Room[]
+}
+
+model Profile {
+  userId     String @id
+  plays      Int    @default(0)
+  minorPicks Int    @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// 문항 원본. 9개 언어가 같은 idx 를 공유하는 것이 전역 투표 합산의 기반이다.
+/// idx 정렬이 깨지면 통계 전체가 무의미해지므로 (idx, lang) 유니크로 강제한다.
+model Question {
+  id             Int     @id @default(autoincrement())
+  idx            Int
+  lang           String
+  q              String
+  a              String
+  b              String
+  /// 국가별 현지화 문항(거장·답사지·야식 등). 글로벌 비교 리포트에서 분리 집계한다.
+  isLocalVariant Boolean @default(false)
+
+  @@unique([idx, lang])
+  @@index([lang])
+}
+
+model Vote {
+  id          BigInt   @id @default(autoincrement())
+  questionIdx Int
+  choice      String // "a" | "b"
+  lang        String
+  roomCode    String?
+  createdAt   DateTime @default(now())
+
+  @@index([questionIdx])
+  @@index([createdAt])
+  @@index([lang, questionIdx])
+}
+
+model Room {
+  code      String   @id
+  pwHash    String
+  hostId    String?
+  state     Json
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  // STEP 1.5 — 조직 방 여부. 둘 다 null 이면 개인 방(무료).
+  orgId         String?
+  sponsorId     String?
+  questionSetId String?
+
+  host        User?        @relation(fields: [hostId], references: [id], onDelete: SetNull)
+  org         Org?         @relation(fields: [orgId], references: [id], onDelete: SetNull)
+  sponsor     Sponsor?     @relation(fields: [sponsorId], references: [id], onDelete: SetNull)
+  questionSet QuestionSet? @relation(fields: [questionSetId], references: [id], onDelete: SetNull)
+
+  @@index([expiresAt])
+  @@index([orgId, createdAt])
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  board     String // "ideas" | "qfeedback"
+  author    String
+  body      String
+  type      String?
+  lang      String
+  createdAt DateTime @default(now())
+
+  translations TranslationCache[]
+
+  @@index([board, createdAt])
+}
+
+model QuestionReact {
+  questionIdx Int @id
+  hot         Int @default(0)
+  meh         Int @default(0)
+}
+
+/// 커뮤니티 카드 ♥ 관심도 — 어느 시장에 어떤 기능부터 낼지 판단하는 근거 데이터.
+model FeatureInterest {
+  feature String
+  lang    String
+  count   Int    @default(0)
+
+  @@id([feature, lang])
+}
+
+// ─────────────────────────────────────────────────────────────
+// STEP 3 — AI 프록시 부속 테이블
+// ─────────────────────────────────────────────────────────────
+
+model TranslationCache {
+  postId    Int
+  lang      String
+  body      String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([postId, lang])
+}
+
+/// 검열 감사 로그. 원문 전체가 아니라 해시와 판정만 남긴다.
+model ModerationLog {
+  id        BigInt   @id @default(autoincrement())
+  bodyHash  String
+  lang      String
+  engine    String // "rules" | "ai"
+  ok        Boolean
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────
+// STEP 1.5 — 수익화 (개인 학생은 무료·무광고, 과금은 Org 단위)
+// ─────────────────────────────────────────────────────────────
+
+model Org {
+  id           String   @id @default(cuid())
+  name         String
+  kind         String // "university" | "firm" | "society"
+  seats        Int      @default(0)
+  billingEmail String
+  createdAt    DateTime @default(now())
+
+  members      OrgMember[]
+  licenses     License[]
+  usage        SessionUsage[]
+  questionSets QuestionSet[]
+  jobPosts     JobPost[]
+  rooms        Room[]
+}
+
+model OrgMember {
+  orgId    String
+  userId   String
+  role     String   @default("member") // "owner" | "admin" | "member"
+  joinedAt DateTime @default(now())
+
+  org  Org  @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([orgId, userId])
+}
+
+model License {
+  id          String   @id @default(cuid())
+  orgId       String
+  plan        String // "session" | "seat" | "annual"
+  seatsMax    Int
+  sessionsMax Int?
+  startsAt    DateTime
+  endsAt      DateTime
+  status      String   @default("active") // "active" | "expired" | "suspended"
+
+  org Org @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, status])
+}
+
+/// 세션 라이선스 과금의 근거. 방이 열릴 때마다 한 줄씩 쌓인다.
+model SessionUsage {
+  id        BigInt    @id @default(autoincrement())
+  orgId     String
+  roomCode  String
+  players   Int
+  startedAt DateTime
+  endedAt   DateTime?
+  billable  Boolean   @default(true)
+
+  org Org @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, startedAt])
+}
+
+/// 조직 커스텀 문항셋. 기본 154문항 위에 얹는 형태.
+model QuestionSet {
+  id        String   @id @default(cuid())
+  orgId     String
+  name      String
+  logoUrl   String?
+  items     Json
+  createdAt DateTime @default(now())
+
+  org   Org    @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  rooms Room[]
+
+  @@index([orgId])
+}
+
+model Sponsor {
+  id            String   @id @default(cuid())
+  name          String
+  cartridgeSlug String   @unique
+  logoUrl       String?
+  cpmCents      Int
+  activeFrom    DateTime
+  activeTo      DateTime
+  status        String   @default("draft") // "draft" | "live" | "ended"
+
+  impressions SponsorImpression[]
+  rooms       Room[]
+}
+
+model SponsorImpression {
+  id        BigInt   @id @default(autoincrement())
+  sponsorId String
+  lang      String
+  roomCode  String?
+  shownAt   DateTime @default(now())
+
+  sponsor Sponsor @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  @@index([sponsorId, shownAt])
+}
+
+model JobPost {
+  id        String   @id @default(cuid())
+  orgId     String
+  title     String
+  body      String
+  lang      String
+  feeCents  Int
+  status    String   @default("open") // "open" | "filled" | "closed"
+  createdAt DateTime @default(now())
+
+  org          Org              @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  applications JobApplication[]
+
+  @@index([orgId, status])
+}
+
+model JobApplication {
+  id        String    @id @default(cuid())
+  jobPostId String
+  userId    String
+  status    String    @default("sent") // "sent" | "interview" | "placed" | "rejected"
+  /// 성사 시각 = 수수료 청구 트리거
+  placedAt  DateTime?
+  createdAt DateTime  @default(now())
+
+  jobPost JobPost @relation(fields: [jobPostId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([jobPostId, userId])
+}
+
+/// 연간 "국가별 건축학도 인식 비교" 리포트 산출물.
+model ReportExport {
+  id          String   @id @default(cuid())
+  year        Int
+  scope       String // "global" | "lang" | "org"
+  scopeKey    String?
+  fileUrl     String
+  generatedAt DateTime @default(now())
+
+  @@index([year, scope])
+}

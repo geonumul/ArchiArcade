@@ -1,0 +1,86 @@
+[
+  {
+    "plays": 0,
+    "name": {
+      "ko": "견습 제도사",
+      "en": "Apprentice Drafter",
+      "zh": "见习制图员",
+      "ja": "見習い製図士",
+      "fr": "Apprenti dessinateur",
+      "it": "Disegnatore apprendista",
+      "de": "Zeichenlehrling",
+      "es": "Delineante aprendiz",
+      "tw": "見習製圖員"
+    }
+  },
+  {
+    "plays": 3,
+    "name": {
+      "ko": "도면 요정",
+      "en": "Drawing Fairy",
+      "zh": "图纸精灵",
+      "ja": "図面の妖精",
+      "fr": "Fée du dessin",
+      "it": "Fata del disegno",
+      "de": "Planfee",
+      "es": "Hada del plano",
+      "tw": "圖紙精靈"
+    }
+  },
+  {
+    "plays": 7,
+    "name": {
+      "ko": "모형 장인",
+      "en": "Model Artisan",
+      "zh": "模型匠人",
+      "ja": "模型職人",
+      "fr": "Artisan maquettiste",
+      "it": "Artigiano dei plastici",
+      "de": "Modellbaumeister",
+      "es": "Artesano de maquetas",
+      "tw": "模型匠人"
+    }
+  },
+  {
+    "plays": 15,
+    "name": {
+      "ko": "크리틱 생존자",
+      "en": "Crit Survivor",
+      "zh": "评图幸存者",
+      "ja": "エスキス生還者",
+      "fr": "Survivant du jury",
+      "it": "Sopravvissuto alla revisione",
+      "de": "Kritik-Überlebender",
+      "es": "Superviviente de la crítica",
+      "tw": "評圖倖存者"
+    }
+  },
+  {
+    "plays": 30,
+    "name": {
+      "ko": "설계실 지박령",
+      "en": "Studio Ghost",
+      "zh": "工作室地缚灵",
+      "ja": "製図室の地縛霊",
+      "fr": "Fantôme de l'atelier",
+      "it": "Fantasma dell'aula studio",
+      "de": "Atelier-Geist",
+      "es": "Fantasma del taller",
+      "tw": "工作室地縛靈"
+    }
+  },
+  {
+    "plays": 50,
+    "name": {
+      "ko": "마스터 아키텍트",
+      "en": "Master Architect",
+      "zh": "建筑大师",
+      "ja": "マスターアーキテクト",
+      "fr": "Maître architecte",
+      "it": "Maestro architetto",
+      "de": "Meisterarchitekt",
+      "es": "Maestro arquitecto",
+      "tw": "建築大師"
+    }
+  }
+]

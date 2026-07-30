@@ -1,0 +1,926 @@
+[
+  {
+    "idx": 0,
+    "q": "La veille du rendu, l'un des deux arrive forcément :",
+    "a": "Tous tes fichiers de travail disparaissent",
+    "b": "Le traceur tombe en panne le matin du rendu"
+  },
+  {
+    "idx": 1,
+    "q": "Une seule arme jusqu'au diplôme :",
+    "a": "Dessin à la main uniquement, à vie",
+    "b": "Maquettes uniquement (dispensé de plans)"
+  },
+  {
+    "idx": 2,
+    "q": "Au jury, le plus dur à supporter :",
+    "a": "20 minutes de critique point par point",
+    "b": "3 minutes de silence... puis « Suivant »"
+  },
+  {
+    "idx": 3,
+    "q": "Le prix de la nuit blanche, choisis :",
+    "a": "Une semaine de nuits blanches et un 18/20",
+    "b": "Rentrer à l'heure chaque jour et un 10/20"
+  },
+  {
+    "idx": 4,
+    "q": "Un seul matériau pour toute ta carrière :",
+    "a": "Tout en verre (vie de mur-rideau)",
+    "b": "Tout en béton brut"
+  },
+  {
+    "idx": 5,
+    "q": "Ta relation avec l'atelier :",
+    "a": "Y vivre carrément (duvet fourni)",
+    "b": "Interdiction d'y entrer à vie (travail à la maison)"
+  },
+  {
+    "idx": 6,
+    "q": "Transporter la maquette finale :",
+    "a": "Métro bondé aux heures de pointe",
+    "b": "30 min à pied sous l'orage (parapluie dans une main)"
+  },
+  {
+    "idx": 7,
+    "q": "Choisis ta malédiction :",
+    "a": "Oublier tous les raccourcis CAO (souris seulement)",
+    "b": "Tous les PSD reçus ont les calques fusionnés"
+  },
+  {
+    "idx": 8,
+    "q": "Méthode de maquette, un seul choix :",
+    "a": "100 maquettes d'étude",
+    "b": "UNE seule maquette finale, aucune erreur permise"
+  },
+  {
+    "idx": 9,
+    "q": "Ton style est verrouillé à vie :",
+    "a": "Courbes interdites (angles droits seulement)",
+    "b": "Droites interdites (tout en courbes)"
+  },
+  {
+    "idx": 10,
+    "q": "Le destin de ton projet de diplôme :",
+    "a": "Il est vraiment construit (aucune modification)",
+    "b": "Il reste à jamais sur le papier"
+  },
+  {
+    "idx": 11,
+    "q": "Un seul outil 3D pour la vie :",
+    "a": "SketchUp uniquement",
+    "b": "Rhino uniquement"
+  },
+  {
+    "idx": 12,
+    "q": "Choisis ta pédagogie :",
+    "a": "Voyage d'étude chaque semaine (compte rendu à rendre)",
+    "b": "Zéro visite, 4 ans de théorie pure"
+  },
+  {
+    "idx": 13,
+    "q": "Ton directeur d'atelier :",
+    "a": "Adorable mais te fait tout refaire chaque semaine",
+    "b": "Zéro retour, indifférent à tout ce que tu rends"
+  },
+  {
+    "idx": 14,
+    "q": "Un équipement gratuit à vie :",
+    "a": "Imprimante 3D illimitée",
+    "b": "Découpe laser illimitée"
+  },
+  {
+    "idx": 15,
+    "q": "Un seul sujet de projet à vie :",
+    "a": "Tours de grande hauteur uniquement",
+    "b": "Maisons individuelles uniquement"
+  },
+  {
+    "idx": 16,
+    "q": "Lendemain de nuit blanche, le moins pire :",
+    "a": "Interro de structure à 8 h",
+    "b": "Jury à 9 h pile, tu passes en premier"
+  },
+  {
+    "idx": 17,
+    "q": "Ta croix avec la colle, choisis :",
+    "a": "La colle à bois ne part jamais de tes mains",
+    "b": "Découper le polystyrène sans cutter"
+  },
+  {
+    "idx": 18,
+    "q": "Ton avenir d'architecte :",
+    "a": "Célèbre dans le monde entier mais fauché à vie",
+    "b": "Inconnu de tous mais riche"
+  },
+  {
+    "idx": 19,
+    "q": "4 h du matin à l'atelier, ton état :",
+    "a": "Envie soudaine de tout renverser le concept",
+    "b": "Le concept tient mais la main ne suit plus"
+  },
+  {
+    "idx": 20,
+    "q": "Première phrase du jury, la plus effrayante :",
+    "a": "« J'ai déjà vu ça quelque part, non ? »",
+    "b": "« Euh... c'est quoi, ça ? »"
+  },
+  {
+    "idx": 21,
+    "q": "Une odeur à supporter à vie :",
+    "a": "Calque + marqueurs",
+    "b": "Colle en bombe"
+  },
+  {
+    "idx": 22,
+    "q": "Un seul matériau de maquette à vie :",
+    "a": "Carton plume uniquement",
+    "b": "Balsa uniquement"
+  },
+  {
+    "idx": 23,
+    "q": "Une seule échelle pour toujours :",
+    "a": "1:500 uniquement (que du volume)",
+    "b": "1:20 uniquement (enfer du détail)"
+  },
+  {
+    "idx": 24,
+    "q": "Tu n'excelles qu'en un seul :",
+    "a": "Dieu du plan (coupes catastrophiques)",
+    "b": "Dieu de la coupe (plans catastrophiques)"
+  },
+  {
+    "idx": 25,
+    "q": "Deviens maître d'une seule chose :",
+    "a": "Maître des diagrammes",
+    "b": "Maître du rendu"
+  },
+  {
+    "idx": 26,
+    "q": "À finir en une journée :",
+    "a": "Portfolio de 40 pages",
+    "b": "Maquette finale au 1:50"
+  },
+  {
+    "idx": 27,
+    "q": "Le retour de jury le plus désespérant :",
+    "a": "« À refaire. »",
+    "b": "« Hmm...... (silence) Bon, continue comme ça. »"
+  },
+  {
+    "idx": 28,
+    "q": "Ton rôle en projet de groupe :",
+    "a": "Responsable CAO/plans à vie",
+    "b": "Responsable maquette à vie"
+  },
+  {
+    "idx": 29,
+    "q": "Panneaux récupérés à l'imprimerie, le moins pire :",
+    "a": "Couleurs complètement différentes de l'écran",
+    "b": "Pages dans le désordre"
+  },
+  {
+    "idx": 30,
+    "q": "Choisis ta place à l'atelier :",
+    "a": "Coin fenêtre (soleil, mais glacial l'hiver)",
+    "b": "Face à la porte (tout le monde voit ton écran)"
+  },
+  {
+    "idx": 31,
+    "q": "L'habitude du voisin, la plus pénible :",
+    "a": "Ronflements pendant la nuit blanche",
+    "b": "Appels téléphoniques à l'aube"
+  },
+  {
+    "idx": 32,
+    "q": "Un stage se présente !",
+    "a": "Agence célèbre, non payé, un an",
+    "b": "Petite agence de quartier, payé, un an"
+  },
+  {
+    "idx": 33,
+    "q": "Tu perds une chose à vie :",
+    "a": "Écrire les cartouches à la main",
+    "b": "Calculer les cotes de tête"
+  },
+  {
+    "idx": 34,
+    "q": "Une confusion maudite à vie :",
+    "a": "Emprise au sol et COS toujours mélangés",
+    "b": "Le nord du plan toujours introuvable"
+  },
+  {
+    "idx": 35,
+    "q": "Une seule structure pour la vie :",
+    "a": "Poteaux-poutres uniquement",
+    "b": "Murs porteurs uniquement"
+  },
+  {
+    "idx": 36,
+    "q": "Le seul détail que tu dessineras à vie :",
+    "a": "Détail d'escalier uniquement",
+    "b": "Détail de salle de bain uniquement"
+  },
+  {
+    "idx": 37,
+    "q": "Choisis la fin de ton jury :",
+    "a": "Idée brillante mais présentation ratée",
+    "b": "Idée banale mais présentation triomphale"
+  },
+  {
+    "idx": 38,
+    "q": "En voyage d'étude, une seule option :",
+    "a": "Photos uniquement (croquis interdits)",
+    "b": "Croquis uniquement (photos interdites)"
+  },
+  {
+    "idx": 39,
+    "q": "Ton style de maquette à vie :",
+    "a": "Maquettes blanches immaculées",
+    "b": "Maquettes matériaux et couleurs"
+  },
+  {
+    "idx": 40,
+    "q": "Composition du groupe :",
+    "a": "Même équipe pendant 4 ans (qu'on s'aime ou pas)",
+    "b": "Tirage au sort complet chaque semestre"
+  },
+  {
+    "idx": 41,
+    "q": "Ta maladie chronique de conception :",
+    "a": "Bon concept mais incapable de le développer",
+    "b": "Bon développement mais concept ennuyeux"
+  },
+  {
+    "idx": 42,
+    "q": "1 h avant le rendu, il reste :",
+    "a": "3 rendus 3D",
+    "b": "Coter tous les plans"
+  },
+  {
+    "idx": 43,
+    "q": "Ton avenir est scellé :",
+    "a": "Master recherche garanti",
+    "b": "Agence directe garantie"
+  },
+  {
+    "idx": 44,
+    "q": "Ton bâtiment se construit à condition :",
+    "a": "Nom de l'architecte non divulgué",
+    "b": "Ton nom reste mais honoraires à zéro"
+  },
+  {
+    "idx": 45,
+    "q": "Un seul métier à vie :",
+    "a": "Concours uniquement",
+    "b": "Intérieur uniquement"
+  },
+  {
+    "idx": 46,
+    "q": "Tes plans sont maudits :",
+    "a": "Tout le texte passe en Comic Sans",
+    "b": "Toutes les épaisseurs de trait deviennent identiques"
+  },
+  {
+    "idx": 47,
+    "q": "Un mois de vacances, choisis :",
+    "a": "Un mois sur un chantier",
+    "b": "Un mois d'heures sup en agence"
+  },
+  {
+    "idx": 48,
+    "q": "Une règle absurde s'impose à tes projets :",
+    "a": "Nombre de poteaux toujours impair",
+    "b": "Toutes les fenêtres carrées"
+  },
+  {
+    "idx": 49,
+    "q": "Défi des 100, tu choisis :",
+    "a": "Calquer 100 plans de maîtres",
+    "b": "100 maquettes de volumétrie"
+  },
+  {
+    "idx": 50,
+    "q": "La malédiction de ta présentation :",
+    "a": "Toutes les polices s'affichent cassées",
+    "b": "Toutes les images en basse résolution"
+  },
+  {
+    "idx": 51,
+    "q": "Un seul carburant de nuit blanche :",
+    "a": "Boissons énergisantes illimitées (café interdit)",
+    "b": "Café illimité (énergisantes interdites)"
+  },
+  {
+    "idx": 52,
+    "q": "Ta nourriture a disparu du frigo de l'atelier...",
+    "a": "Tu connais le coupable mais ne peux rien dire",
+    "b": "Tu ne sauras jamais qui c'est"
+  },
+  {
+    "idx": 53,
+    "q": "Mode de rendu à vie :",
+    "a": "Jury oral à vie (tremblements)",
+    "b": "Rendu écrit à vie (une ligne de retour)"
+  },
+  {
+    "idx": 54,
+    "q": "Accident pendant le transport de maquette !",
+    "a": "Le toit s'envole (le corps est intact)",
+    "b": "Le RDC est écrasé (le toit est intact)"
+  },
+  {
+    "idx": 55,
+    "q": "La malédiction de ton fichier CAO :",
+    "a": "Tout est dessiné sur le calque 0",
+    "b": "Tous les blocs sont décomposés"
+  },
+  {
+    "idx": 56,
+    "q": "Vivre sans un logiciel à vie :",
+    "a": "Sans Photoshop",
+    "b": "Sans Illustrator"
+  },
+  {
+    "idx": 57,
+    "q": "Le sujet le plus dur :",
+    "a": "Maison de 3 m de large",
+    "b": "Gymnase sans poteaux"
+  },
+  {
+    "idx": 58,
+    "q": "Choisis ton binôme de nuit blanche :",
+    "a": "Le bavard (drôle mais rien n'avance)",
+    "b": "Le silencieux (seul mais concentré)"
+  },
+  {
+    "idx": 59,
+    "q": "Tu gagnes un pouvoir :",
+    "a": "Proportions parfaites en 3 s sur tout croquis",
+    "b": "Mémoriser le plan de tout bâtiment vu une fois"
+  },
+  {
+    "idx": 60,
+    "q": "Le destin de ton portfolio :",
+    "a": "Design moche mais contenu solide",
+    "b": "Design stylé mais contenu vide"
+  },
+  {
+    "idx": 61,
+    "q": "Résultat de ton concours :",
+    "a": "Recalé mais commentaires détaillés",
+    "b": "Mentionné mais aucun commentaire"
+  },
+  {
+    "idx": 62,
+    "q": "Ton environnement de travail à vie :",
+    "a": "1 écran + fauteuil haut de gamme",
+    "b": "3 écrans + banc en bois"
+  },
+  {
+    "idx": 63,
+    "q": "Un dîner avec :",
+    "a": "Le Corbusier",
+    "b": "Zaha Hadid"
+  },
+  {
+    "idx": 64,
+    "q": "Un ticket de machine à remonter le temps :",
+    "a": "Chantier du Panthéon",
+    "b": "Chantier des Pyramides"
+  },
+  {
+    "idx": 65,
+    "q": "Une nuit dans une maison culte :",
+    "a": "La Maison sur la cascade (ASMR de chute d'eau)",
+    "b": "La Villa Savoye (modernisme pur)"
+  },
+  {
+    "idx": 66,
+    "q": "Apprendre auprès d'un maître :",
+    "a": "Mies van der Rohe",
+    "b": "Frank Lloyd Wright"
+  },
+  {
+    "idx": 67,
+    "q": "Une seule esthétique à vie :",
+    "a": "Minimalisme (Less is more)",
+    "b": "Maximalisme (Less is bore)"
+  },
+  {
+    "idx": 68,
+    "q": "Un seul matériau structurel à vie :",
+    "a": "Bois uniquement",
+    "b": "Acier uniquement"
+  },
+  {
+    "idx": 69,
+    "q": "La maison de ta vie :",
+    "a": "Vieille maison de village (charme, mais glaciale l'hiver)",
+    "b": "Appartement neuf (pratique mais sans âme)"
+  },
+  {
+    "idx": 70,
+    "q": "Participer à un projet national :",
+    "a": "Concevoir un monument futuriste pour le Grand Paris",
+    "b": "Restaurer Notre-Dame"
+  },
+  {
+    "idx": 71,
+    "q": "Un mois de voyage d'architecture :",
+    "a": "L'Europe (du classique au contemporain)",
+    "b": "Le Japon (pays du détail et de la finition)"
+  },
+  {
+    "idx": 72,
+    "q": "Posséder un chef-d'œuvre :",
+    "a": "L'Église de la Lumière",
+    "b": "La Maison Farnsworth"
+  },
+  {
+    "idx": 73,
+    "q": "Habitat extrême, choisis :",
+    "a": "Penthouse en très grande hauteur (peur de la panne d'ascenseur)",
+    "b": "Bunker souterrain confortable (sans fenêtre)"
+  },
+  {
+    "idx": 74,
+    "q": "Un seul style à défendre à vie :",
+    "a": "Brutalisme",
+    "b": "Baroque"
+  },
+  {
+    "idx": 75,
+    "q": "Un seul programme à vie :",
+    "a": "Musées et galeries uniquement",
+    "b": "Architecture religieuse uniquement"
+  },
+  {
+    "idx": 76,
+    "q": "Le style gravé dans ta main :",
+    "a": "Les courbes fluides de Zaha",
+    "b": "Les lignes parfaites de Mies"
+  },
+  {
+    "idx": 77,
+    "q": "Un seul type d'expert à vie :",
+    "a": "Concepteur de ponts",
+    "b": "Concepteur de tours"
+  },
+  {
+    "idx": 78,
+    "q": "Choisis un pouvoir mystique :",
+    "a": "Parler aux bâtisseurs des Sept Merveilles",
+    "b": "Voir l'architecture dans 100 ans"
+  },
+  {
+    "idx": 79,
+    "q": "Un chef-d'œuvre de lumière, un seul :",
+    "a": "La chapelle de Ronchamp",
+    "b": "Le musée Kimbell"
+  },
+  {
+    "idx": 80,
+    "q": "Ta gloire d'architecte :",
+    "a": "Le monument emblématique de ta ville",
+    "b": "Un chef-d'œuvre caché quelque part dans le monde"
+  },
+  {
+    "idx": 81,
+    "q": "Un seul métier à vie :",
+    "a": "Réhabilitation et reconversion uniquement",
+    "b": "Neuf uniquement"
+  },
+  {
+    "idx": 82,
+    "q": "Hériter d'une paire de mains :",
+    "a": "Les mains froissantes de Gehry",
+    "b": "Les mains à ossatures de Calatrava"
+  },
+  {
+    "idx": 83,
+    "q": "L'héritage de l'architecte :",
+    "a": "1 bâtiment qui dure 100 ans",
+    "b": "100 bâtiments qui durent 10 ans"
+  },
+  {
+    "idx": 84,
+    "q": "Terrain extrême, choisis :",
+    "a": "30 m² en plein centre de Paris",
+    "b": "3 hectares au fond de la montagne"
+  },
+  {
+    "idx": 85,
+    "q": "Un grand prix mondial :",
+    "a": "Le Pritzker (Nobel de l'architecture)",
+    "b": "Le Lion d'or de la Biennale de Venise"
+  },
+  {
+    "idx": 86,
+    "q": "Un lieu t'est interdit à vie :",
+    "a": "Toutes les cathédrales d'Europe",
+    "b": "Tous les observatoires de gratte-ciel"
+  },
+  {
+    "idx": 87,
+    "q": "L'identité de ton agence :",
+    "a": "Atelier solo (libre mais précaire)",
+    "b": "Associé d'une grande agence (stable mais corporate)"
+  },
+  {
+    "idx": 88,
+    "q": "Ta façon de voyager :",
+    "a": "Cocher les monuments célèbres au pas de course",
+    "b": "Flâner dans les ruelles et l'architecture ordinaire"
+  },
+  {
+    "idx": 89,
+    "q": "Un seul toit à vie :",
+    "a": "Toit-terrasse végétalisé (enfer d'entretien)",
+    "b": "Toit à deux pentes (avec combles)"
+  },
+  {
+    "idx": 90,
+    "q": "Ton goût spatial :",
+    "a": "5 m sous plafond (facture de chauffage explosive)",
+    "b": "2,2 m cosy (un peu oppressant)"
+  },
+  {
+    "idx": 91,
+    "q": "Ton goût de fenêtre :",
+    "a": "Baie vitrée du sol au plafond (rideaux obligatoires)",
+    "b": "Plein de petites fenêtres (la lumière comme un tableau)"
+  },
+  {
+    "idx": 92,
+    "q": "Ton goût d'escalier :",
+    "a": "Escalier hélicoïdal (beau mais enfer du déménagement)",
+    "b": "Escalier droit (pratique mais ennuyeux)"
+  },
+  {
+    "idx": 93,
+    "q": "Une seule saison à vie :",
+    "a": "Été éternel (clim à fond à l'atelier)",
+    "b": "Hiver éternel (la colle sèche vite)"
+  },
+  {
+    "idx": 94,
+    "q": "La malédiction du déplacement :",
+    "a": "Escaliers uniquement à vie (ascenseur interdit)",
+    "b": "Ascenseur uniquement à vie (escaliers interdits)"
+  },
+  {
+    "idx": 95,
+    "q": "Un outil s'incarne en toi :",
+    "a": "Ta main droite devient un kutch",
+    "b": "Ta main gauche devient un cutter"
+  },
+  {
+    "idx": 96,
+    "q": "Un seul en-cas de nuit blanche :",
+    "a": "Nouilles instantanées + sandwich de supérette",
+    "b": "Kebab livré (30 min d'attente)"
+  },
+  {
+    "idx": 97,
+    "q": "Le goûter de l'atelier est verrouillé :",
+    "a": "Bonbons illimités",
+    "b": "Chips illimitées"
+  },
+  {
+    "idx": 98,
+    "q": "Seul dans l'ascenseur avec ton prof !",
+    "a": "Tu lances la conversation sur le projet",
+    "b": "Silence parfait jusqu'au rez-de-chaussée"
+  },
+  {
+    "idx": 99,
+    "q": "Personne devant ton panneau...",
+    "a": "Tu hèles toi-même les passants",
+    "b": "Tu tiens bon en silence"
+  },
+  {
+    "idx": 100,
+    "q": "Le prof semble s'endormir pendant ton jury !",
+    "a": "Tu hausses la voix",
+    "b": "Tu écourtes discrètement"
+  },
+  {
+    "idx": 101,
+    "q": "Un camarade arrive avec un concept proche du tien !",
+    "a": "Tu en parles tout de suite pour clarifier",
+    "b": "Tu changes ton concept"
+  },
+  {
+    "idx": 102,
+    "q": "Ton voisin de nuit blanche se met à pleurer...",
+    "a": "Tu lui tends une barre chocolatée sans un mot",
+    "b": "Tu pleures avec lui"
+  },
+  {
+    "idx": 103,
+    "q": "10 min avant le rendu, 5 personnes avant toi au traceur !",
+    "a": "Tu supplies pour passer devant",
+    "b": "Tu acceptes ton destin et fais la queue"
+  },
+  {
+    "idx": 104,
+    "q": "Le prof secoue ta maquette dans tous les sens !",
+    "a": "Tu dis « Attention, s'il vous plaît »",
+    "b": "Tu pries pour qu'elle ne casse pas"
+  },
+  {
+    "idx": 105,
+    "q": "Tu trouves un portefeuille. Il est à l'atelier rival...",
+    "a": "Tu le rends immédiatement (évidemment)",
+    "b": "Tu le rends en te faisant bien mousser"
+  },
+  {
+    "idx": 106,
+    "q": "« Des questions ? » Silence, 5 secondes...",
+    "a": "Tu poses n'importe quoi pour briser le silence",
+    "b": "Tu fixes le sol (croiser son regard = fin)"
+  },
+  {
+    "idx": 107,
+    "q": "Tout refaire ou continuer, rendu dans 3 jours !",
+    "a": "Tu renverses tout (sans regret)",
+    "b": "Tu mises tout sur le développement"
+  },
+  {
+    "idx": 108,
+    "q": "Pendant la présentation : « euh... c'est-à-dire... »",
+    "a": "Tu dis honnêtement « un instant » et te ressaisis",
+    "b": "Tu enchaînes n'importe quoi et tentes le coup"
+  },
+  {
+    "idx": 109,
+    "q": "Un ami trouve ton projet « un peu banal »...",
+    "a": "Tu l'admets et demandes conseil",
+    "b": "Tu prêches 3 minutes l'esthétique de la banalité"
+  },
+  {
+    "idx": 110,
+    "q": "Coupure de courant totale à l'atelier, à l'aube !",
+    "a": "Lampe du téléphone et tu continues",
+    "b": "C'est le destin, tu rentres"
+  },
+  {
+    "idx": 111,
+    "q": "Le prof adore la maquette d'étude que tu avais jetée !",
+    "a": "Tu avoues « en fait je l'avais jetée »",
+    "b": "Tu déclares « c'est mon vrai projet » et la ressuscites"
+  },
+  {
+    "idx": 112,
+    "q": "Au jury public, un invité demande : « Pourquoi ? »",
+    "a": "Tu fonces avec ta logique préparée",
+    "b": "« Excellente question ! » pour gagner du temps"
+  },
+  {
+    "idx": 113,
+    "q": "Un seul matériau de façade à vie :",
+    "a": "Brique rouge uniquement",
+    "b": "Panneaux métalliques uniquement"
+  },
+  {
+    "idx": 114,
+    "q": "Un dîner avec un maître français :",
+    "a": "Jean Nouvel",
+    "b": "Christian de Portzamparc"
+  },
+  {
+    "idx": 115,
+    "q": "Une seule visite d'étude possible :",
+    "a": "Le Mont-Saint-Michel",
+    "b": "La Sainte-Chapelle"
+  },
+  {
+    "idx": 116,
+    "q": "La langue de tes panneaux est verrouillée :",
+    "a": "Tout en anglais (classe, mais gare aux fautes)",
+    "b": "Tout en français (honnête, mais casse-tête typographique)"
+  },
+  {
+    "idx": 117,
+    "q": "La malédiction du plan-masse, choisis :",
+    "a": "Dessiner 1000 arbres à la main",
+    "b": "Refaire tout le plan de stationnement"
+  },
+  {
+    "idx": 118,
+    "q": "Ton temps de présentation à vie :",
+    "a": "3 minutes (enfer de la compression)",
+    "b": "30 minutes (enfer du silence)"
+  },
+  {
+    "idx": 119,
+    "q": "Photo de maquette, renonce à un :",
+    "a": "Sans éclairage (lampe de téléphone seulement)",
+    "b": "Sans retouche (rendu tel quel)"
+  },
+  {
+    "idx": 120,
+    "q": "Trahison de l'ordi avant le rendu, le moins pire :",
+    "a": "Mise à jour forcée du système",
+    "b": "Découvrir que la sauvegarde auto était désactivée"
+  },
+  {
+    "idx": 121,
+    "q": "L'erreur repérée par le prof, la moins douloureuse :",
+    "a": "Une faute d'orthographe en plein milieu du panneau",
+    "b": "Une erreur d'échelle sur la coupe"
+  },
+  {
+    "idx": 122,
+    "q": "Ton outil de croquis à vie :",
+    "a": "Calque + feutre uniquement",
+    "b": "iPad uniquement"
+  },
+  {
+    "idx": 123,
+    "q": "Ta carrière de concours :",
+    "a": "UN grand prix (tout le reste recalé)",
+    "b": "Dix mentions (aucun grand prix)"
+  },
+  {
+    "idx": 124,
+    "q": "Choisis ta chaise d'atelier :",
+    "a": "Moelleuse mais grince au moindre mouvement",
+    "b": "Dure comme la pierre mais silencieuse"
+  },
+  {
+    "idx": 125,
+    "q": "Une contrainte te suit à vie :",
+    "a": "Orientation sud interdite",
+    "b": "Ouvertures limitées à 20 %"
+  },
+  {
+    "idx": 126,
+    "q": "La poisse du jour de visite, choisis :",
+    "a": "Pluie battante toute la journée",
+    "b": "Fermé à l'arrivée"
+  },
+  {
+    "idx": 127,
+    "q": "Le nom de ta future agence :",
+    "a": "Ton propre nom (Agence Untel)",
+    "b": "Un mot abstrait stylé (à expliquer toute ta vie)"
+  },
+  {
+    "idx": 128,
+    "q": "Le style du sujet :",
+    "a": "100 pages d'analyse + liberté totale",
+    "b": "Zéro analyse + cahier des charges étouffant"
+  },
+  {
+    "idx": 129,
+    "q": "Choisis ton terrain :",
+    "a": "Pente à 30 degrés",
+    "b": "Triangle aigu minuscule"
+  },
+  {
+    "idx": 130,
+    "q": "Format de jury à vie :",
+    "a": "Jury public en amphi devant toute l'école",
+    "b": "Huis clos en tête-à-tête avec le prof"
+  },
+  {
+    "idx": 131,
+    "q": "Petite malédiction de dessin :",
+    "a": "Les courbes de niveau jamais tout à fait raccord",
+    "b": "L'échelle graphique toujours oubliée"
+  },
+  {
+    "idx": 132,
+    "q": "La bande-son de la nuit blanche est imposée :",
+    "a": "Lo-fi forcé 24 h/24",
+    "b": "Silence absolu forcé (écouteurs interdits)"
+  },
+  {
+    "idx": 133,
+    "q": "Le destin de ton portfolio :",
+    "a": "Figé dans la plaquette de l'école (non modifiable)",
+    "b": "Scellé à jamais (personne ne le voit)"
+  },
+  {
+    "idx": 134,
+    "q": "Ton stand aux diplômes :",
+    "a": "Entrée en or (foule et vacarme)",
+    "b": "Coin tranquille (calme mais désert)"
+  },
+  {
+    "idx": 135,
+    "q": "Un cours de maître, un seul :",
+    "a": "La conférence mitraillette de Rem Koolhaas",
+    "b": "L'atelier silencieux de Peter Zumthor"
+  },
+  {
+    "idx": 136,
+    "q": "Échange de capacités, choisis :",
+    "a": "Cœur de verre + mains de génie",
+    "b": "Cœur d'acier + mains ordinaires"
+  },
+  {
+    "idx": 137,
+    "q": "Petite malédiction d'impression :",
+    "a": "Tout sort réduit de 1 %",
+    "b": "Toutes les marges légèrement de travers"
+  },
+  {
+    "idx": 138,
+    "q": "Une seule asso étudiante :",
+    "a": "Club de visites d'architecture",
+    "b": "Club de menuiserie"
+  },
+  {
+    "idx": 139,
+    "q": "Ton premier chantier :",
+    "a": "Rénovation d'une maison",
+    "b": "Tour de grande hauteur"
+  },
+  {
+    "idx": 140,
+    "q": "Sujet du studio de dernière année :",
+    "a": "Plan directeur à l'échelle urbaine",
+    "b": "Prototype de détail à l'échelle 1"
+  },
+  {
+    "idx": 141,
+    "q": "Petite malédiction CAO :",
+    "a": "Lignes de cote invisibles à l'écran",
+    "b": "Tous les styles de texte corrompus"
+  },
+  {
+    "idx": 142,
+    "q": "Une vidéo à voir 100 fois :",
+    "a": "Un documentaire d'architecture",
+    "b": "La scène de la ville qui se plie dans Inception"
+  },
+  {
+    "idx": 143,
+    "q": "Un seul mode de représentation à vie :",
+    "a": "Axonométrie uniquement",
+    "b": "Perspective à un point uniquement"
+  },
+  {
+    "idx": 144,
+    "q": "Le job d'été :",
+    "a": "Porter des briques un mois",
+    "b": "Plier 1000 plans A1"
+  },
+  {
+    "idx": 145,
+    "q": "La malédiction des affaires :",
+    "a": "Tu perds sans cesse ton kutch",
+    "b": "Tes mines cassent sans cesse"
+  },
+  {
+    "idx": 146,
+    "q": "Un seul type d'implantation à vie :",
+    "a": "Plans à cour uniquement",
+    "b": "Plans sur pilotis uniquement"
+  },
+  {
+    "idx": 147,
+    "q": "Le dilemme du toit :",
+    "a": "Toit-terrasse (angoisse de fuite à vie)",
+    "b": "Toit en pente (combles sauna à vie)"
+  },
+  {
+    "idx": 148,
+    "q": "Vérification réglementaire à vie :",
+    "a": "Ensoleillement uniquement",
+    "b": "Distances d'évacuation uniquement"
+  },
+  {
+    "idx": 149,
+    "q": "Ton langage de conception à vie :",
+    "a": "Les 5 points de Le Corbusier uniquement",
+    "b": "L'espace universel de Mies uniquement"
+  },
+  {
+    "idx": 150,
+    "q": "Choisis ta muse de conception :",
+    "a": "Tes rêves étranges de chaque nuit",
+    "b": "Les gens observés dans le métro"
+  },
+  {
+    "idx": 151,
+    "q": "Un seul compliment du prof, pour la vie :",
+    "a": "« Belle main » (le geste reconnu)",
+    "b": "« Belle pensée » (le concept reconnu)"
+  },
+  {
+    "idx": 152,
+    "q": "Le destin de ton bâtiment :",
+    "a": "Célèbre grâce à un surnom moqueur du public",
+    "b": "Sans surnom, respecté en silence"
+  },
+  {
+    "idx": 153,
+    "q": "Veille du rendu, un cheat code :",
+    "a": "Arrêter le temps 3 h (toi seul bouges)",
+    "b": "Invoquer un camarade (assistant 3 h)"
+  }
+]

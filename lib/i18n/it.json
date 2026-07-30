@@ -1,0 +1,222 @@
+{
+  "titleLogo": "IL GRANDE<br>DILEMMA ARCHI",
+  "subdesc": "Scegli la tua partita: <b>10 · 20 · 30 STAGE</b>!<br>Nuove domande dalla banca archi a ogni partita.<br>Voti anonimi, contati in tutto il mondo.",
+  "btnSolo": "Gioca da solo",
+  "btnHost": "Crea stanza (host)",
+  "btnJoin": "Entra in stanza",
+  "btnLobby": "← Torna alla sala giochi",
+  "back": "← Indietro",
+  "hsTitle": "Crea stanza",
+  "pwLabel": "Password (per entrare)",
+  "tmLabel": "Tempo di voto per domanda",
+  "tmOpts": [
+    "5 s (sprint)",
+    "10 s",
+    "15 s",
+    "20 s",
+    "30 s (con calma)"
+  ],
+  "btnCreate": "Crea",
+  "ntShare": "Da condividere — numero stanza e password",
+  "ntStart": "All'avvio la domanda appare a tutti in contemporanea",
+  "btnReroll": "Ripesca le domande",
+  "waitingPlayers": "In attesa di giocatori...",
+  "jnTitle": "Entra in stanza",
+  "jnLabels": [
+    "Numero stanza (4 cifre)",
+    "Password",
+    "Nickname"
+  ],
+  "btnEnter": "Entra",
+  "wtTitle": "Sei dentro!",
+  "wtWait": "In attesa che l'host inizi...",
+  "npc": "▶ La domanda del Boss della Revisione",
+  "waitReveal": "Voto chiuso! Spoglio in corso...",
+  "btnCloseNow": "Chiudi subito",
+  "btnSwapQ": "Cambia domanda",
+  "lblA": "Scelta A",
+  "lblB": "Scelta B",
+  "lblM": "Volte controcorrente",
+  "globalPre": "Tutto il mondo: ",
+  "hostPreparing": "L'host prepara la prossima domanda",
+  "netErr": "Errore di rete — mostrata solo la tua scelta",
+  "err": {
+    "needPw": "Inserisci una password",
+    "creating": "Creazione...",
+    "noCode": "Nessun numero libero — riprova",
+    "createFail": "Creazione fallita — riprova più tardi",
+    "code4": "Il numero ha 4 cifre",
+    "checking": "Verifica...",
+    "noRoom": "La stanza non esiste",
+    "badRead": "Impossibile leggere la stanza",
+    "expired": "Stanza scaduta (oltre 24 h)",
+    "badPw": "Password errata"
+  },
+  "hubLogo": "LA SALA GIOCHI<br>DELL'AULA STUDIO",
+  "marquee": "Lo spazio ufficiale di procrastinazione per studenti di architettura esausti ··· una partita tutti insieme, poi di nuovo ai plastici ··· nuovi giochi in arrivo ···",
+  "cartNames": [
+    "IL GRANDE<br>DILEMMA ARCHI",
+    "CHI HA PROGETTATO<br>QUESTO EDIFICIO?",
+    "TERMINI ARCHI<br>QUIZ LAMPO",
+    "LUPUS<br>DELL'AULA STUDIO",
+    "TROVA L'ERRORE<br>NEL DISEGNO",
+    "TEST DEL<br>SENSO DI SCALA"
+  ],
+  "sugName": "Cosa mettiamo nella prossima cartuccia?",
+  "sugSmall": "Proponi un gioco e diventa candidato al prossimo aggiornamento",
+  "sugTag": "PROPONI UN GIOCO ▶",
+  "repName": "Questa domanda è sbilanciata!",
+  "repSmall": "Segnala domande ingiuste, proponi le nuove, suggerisci migliorie",
+  "repTag": "ENTRA IN OFFICINA ▶",
+  "sgTitle": "BACHECA RICHIESTE",
+  "sgNote": "A cosa vogliamo giocare tutti insieme in aula studio?<br>I giochi più richiesti verranno costruiti per primi!",
+  "sgLabels": [
+    "Nickname",
+    "Idea di gioco"
+  ],
+  "btnPostIdea": "INSERISCI RICHIESTA",
+  "wsTitle": "OFFICINA DELLE DOMANDE",
+  "wsNote": "Aiutaci a migliorare le domande.<br>Squilibri, nuove idee, tutto è benvenuto.",
+  "wsTypeL": "TIPO",
+  "wsOpts": [
+    "⚖️ Squilibrio (un lato vince sempre)",
+    "💡 Idea per nuova domanda",
+    "✨ Sarebbe più divertente se..."
+  ],
+  "wsLabels": [
+    "Nickname",
+    "Dettagli"
+  ],
+  "btnPostBug": "INVIA",
+  "emptyIdeas": "Nessuna richiesta. Inserisci il primo gettone!",
+  "emptyBugs": "Nessuna segnalazione. Inizia il primo lavoretto!",
+  "needIdea": "Inserisci un'idea di gioco",
+  "needBug": "Inserisci i dettagli",
+  "throttle": "Troppo veloce! Riprova tra 15 s (anti-spam)",
+  "saveFail": "Salvataggio fallito — riprova",
+  "auTitle": "TESSERA GIOCATORE",
+  "auDesc": "Bastano nickname e PIN per salvare record e titolo.<br>Tutto resta giocabile senza accesso.",
+  "auNameL": "NICKNAME (2-8 car.)",
+  "auPinL": "Password (8+, lettere+numeri)",
+  "btnLogin": "ACCEDI",
+  "btnRegister": "REGISTRATI",
+  "btnLogout": "ESCI",
+  "auErrName": "Nickname: 2-8 lettere/numeri/_",
+  "auErrPin": "PIN: minimo 4 caratteri",
+  "auErrDup": "Nickname già in uso",
+  "auErrNo": "Nickname non trovato — premi REGISTRATI",
+  "auErrPw": "PIN errato",
+  "auErrNet": "Errore di rete — riprova",
+  "cardPlays": "Partite completate",
+  "cardMinor": "Scelte di minoranza (totale)",
+  "cardTitle": "Titolo attuale",
+  "cardMax": "Rango massimo raggiunto!",
+  "dkT1": "NOW OPEN",
+  "dkB1": "Una sala giochi online per studenti di architettura esausti.<br>Domande casuali, statistiche mondiali, stanze live.",
+  "dkGuest": "Stai giocando come ospite.<br>Accedi per salvare record e titolo.",
+  "rHot": "TOP",
+  "rMeh": "NOIA",
+  "lenLabel": "LUNGHEZZA",
+  "hcLabel": "DOMANDE",
+  "hcOpts": [
+    "10 (corta e intensa)",
+    "20 (standard)",
+    "30 (menu completo)"
+  ],
+  "anon": "Anonimo",
+  "dkQuiet": "Tutto tranquillo per ora...",
+  "phHostPw": "es. 1234",
+  "phJoinCode": "es. 7842",
+  "phJoinName": "es. Nottambulo",
+  "phSgName": "es. FantasmaB4",
+  "phSgText": "es. Indovina l'edificio dalla sagoma",
+  "phBgName": "es. Aggiustatutto",
+  "phBgText": "es. Qui vince sempre la A",
+  "moreGames": "VEDI TUTTI<br>I GIOCHI",
+  "gcatT": "CATALOGO GIOCHI",
+  "gcatGhost": "Questo slot è vuoto — richiedi il gioco che vuoi!",
+  "gameCat": [
+    [
+      "Il Grande Dilemma Archi",
+      "Il duello definitivo che chiude i dibattiti d'aula col voto mondiale"
+    ],
+    [
+      "Chi ha progettato questo edificio?",
+      "Indovina l'architetto da una sagoma o una foto"
+    ],
+    [
+      "Termini Archi Quiz Lampo",
+      "Dallo sbalzo al cornicione, rispondi prima del gong"
+    ],
+    [
+      "Lupus dell'Aula Studio",
+      "Un solo giocatore riceve un tema diverso — bluffa i colleghi"
+    ],
+    [
+      "Trova l'Errore nel Disegno",
+      "Scova gli errori nascosti in una tavola all'apparenza pulita"
+    ],
+    [
+      "Test del Senso di Scala",
+      "Quanti mm è quella porta? Misura la memoria del corpo"
+    ],
+    [
+      "Bingo dell'aula",
+      "Bingo 5×5 dei momenti fin troppo veri — «rifai tutto» compreso"
+    ],
+    [
+      "Scacchi strutturali",
+      "I pezzi sono pilastri, travi e archi — scacchi per menti strutturali"
+    ],
+    [
+      "Mafia dell'aula",
+      "Ogni notte una tavola viene strappata. Dibattito di giorno, smascherate la mafia"
+    ]
+  ],
+  "commHead": "▼ COMMUNITY · APERTURA IN ARRIVO ▼",
+  "commSoonTag": "In preparazione · interesse in raccolta",
+  "btnInterest": "Lo voglio! ♥",
+  "interestDone": "Registrato ✔ Ci vediamo all'apertura",
+  "commOrder": [
+    "team",
+    "match",
+    "crit",
+    "res"
+  ],
+  "commCat": {
+    "team": {
+      "icon": "🤝",
+      "t": "Compagni di concorso",
+      "d": "Forma squadre di concorso e studio con studenti di tutto il mondo. L'IA traduce in modo naturale."
+    },
+    "crit": {
+      "icon": "🖼️",
+      "t": "Crit di portfolio e plastici",
+      "d": "Carica portfolio e foto dei plastici, ricevi critiche da studenti ovunque. In arrivo anche la modalità solo complimenti."
+    },
+    "res": {
+      "icon": "🧱",
+      "t": "Materiali e risorse",
+      "d": "Combinazioni di materiali, canali YouTube e community archi di ogni paese, archiviati per paese."
+    },
+    "match": {
+      "icon": "✨",
+      "t": "Match astrale di studio",
+      "d": "Trova il partner di progetto o il senior in Erasmus che fa per te. Criteri adattati per paese (astrologia, MBTI...)."
+    }
+  },
+  "auPw2L": "Conferma password",
+  "auErrPw8": "Minimo 8 caratteri con lettere e numeri",
+  "auErrPw2": "Le password non coincidono",
+  "auStrength": [
+    "Debole",
+    "Media",
+    "Forte"
+  ],
+  "modErr": "L'IA ha giudicato questo contenuto non pubblicabile",
+  "modChecking": "Verifica IA...",
+  "exitAsk": "Uscire dalla partita?",
+  "exitAskHost": "Uscendo la stanza termina. Uscire?",
+  "exitYes": "ESCI ✕",
+  "exitNo": "CONTINUA ▶"
+}

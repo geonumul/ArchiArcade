@@ -1,0 +1,926 @@
+[
+  {
+    "idx": 0,
+    "q": "The night before deadline, one WILL happen:",
+    "a": "Your files get corrupted",
+    "b": "Printer dies on submission morning"
+  },
+  {
+    "idx": 1,
+    "q": "Until graduation, pick your only weapon:",
+    "a": "Hand drafting only, forever",
+    "b": "Models only, forever (no drawings due)"
+  },
+  {
+    "idx": 2,
+    "q": "Which crit is harder to survive?",
+    "a": "20 minutes of detailed roasting",
+    "b": "3 minutes of silence... then: NEXT"
+  },
+  {
+    "idx": 3,
+    "q": "Price of the all-nighter:",
+    "a": "All-nighters for a week, get an A+",
+    "b": "Leave on time daily, get a C+"
+  },
+  {
+    "idx": 4,
+    "q": "You must design with ONE material forever:",
+    "a": "All glass (curtain wall life)",
+    "b": "All exposed concrete"
+  },
+  {
+    "idx": 5,
+    "q": "Define your studio relationship:",
+    "a": "Literally live in studio (sleeping bag included)",
+    "b": "Banned from studio forever (work from home)"
+  },
+  {
+    "idx": 6,
+    "q": "Final model transport, pick one:",
+    "a": "Rush-hour packed subway",
+    "b": "30-min walk in a rainstorm, one umbrella hand"
+  },
+  {
+    "idx": 7,
+    "q": "Pick your curse:",
+    "a": "Forget every CAD shortcut (mouse only)",
+    "b": "Every PSD you receive is flattened"
+  },
+  {
+    "idx": 8,
+    "q": "Model-making style, choose:",
+    "a": "Build 100 study models",
+    "b": "ONE final model, zero mistakes allowed"
+  },
+  {
+    "idx": 9,
+    "q": "Your design style is locked forever:",
+    "a": "No curves ever (right angles only)",
+    "b": "No straight lines ever (all curves)"
+  },
+  {
+    "idx": 10,
+    "q": "Fate of your thesis project:",
+    "a": "It gets built (no revisions allowed)",
+    "b": "It stays on paper forever"
+  },
+  {
+    "idx": 11,
+    "q": "Only one 3D tool survives:",
+    "a": "SketchUp forever",
+    "b": "Rhino forever"
+  },
+  {
+    "idx": 12,
+    "q": "Pick your curriculum:",
+    "a": "Weekly site trips (with reports due)",
+    "b": "Zero trips, 4 years of pure lectures"
+  },
+  {
+    "idx": 13,
+    "q": "Pick your studio professor:",
+    "a": "Caring, but makes you restart weekly",
+    "b": "Zero feedback, zero interest"
+  },
+  {
+    "idx": 14,
+    "q": "One machine is free forever:",
+    "a": "Unlimited 3D printing",
+    "b": "Unlimited laser cutting"
+  },
+  {
+    "idx": 15,
+    "q": "Your design briefs are locked forever:",
+    "a": "Skyscrapers only",
+    "b": "Single-family houses only"
+  },
+  {
+    "idx": 16,
+    "q": "Morning after all-nighter, lesser evil:",
+    "a": "8am structures pop quiz",
+    "b": "9am crit, you present FIRST"
+  },
+  {
+    "idx": 17,
+    "q": "Glue curse, pick one:",
+    "a": "Wood glue on your hands, permanently",
+    "b": "Cut foam board without a knife, forever"
+  },
+  {
+    "idx": 18,
+    "q": "Your future as an architect:",
+    "a": "World famous but forever broke",
+    "b": "Unknown but rich"
+  },
+  {
+    "idx": 19,
+    "q": "4am in studio, your state:",
+    "a": "Suddenly want to flip the whole concept",
+    "b": "Concept is fine but hands stop working"
+  },
+  {
+    "idx": 20,
+    "q": "Scarier first words at crit:",
+    "a": "I have seen this somewhere before...",
+    "b": "Hmm... what is this?"
+  },
+  {
+    "idx": 21,
+    "q": "A smell follows you forever:",
+    "a": "Tracing paper + markers",
+    "b": "Spray adhesive"
+  },
+  {
+    "idx": 22,
+    "q": "One model material forever:",
+    "a": "Foam board only",
+    "b": "Balsa wood only"
+  },
+  {
+    "idx": 23,
+    "q": "One scale forever:",
+    "a": "1:500 only (massing land)",
+    "b": "1:20 only (detail hell)"
+  },
+  {
+    "idx": 24,
+    "q": "You master exactly one:",
+    "a": "God of plans (sections are tragic)",
+    "b": "God of sections (plans are tragic)"
+  },
+  {
+    "idx": 25,
+    "q": "Become a master of one:",
+    "a": "Diagram wizard",
+    "b": "Rendering wizard"
+  },
+  {
+    "idx": 26,
+    "q": "One day. Finish it:",
+    "a": "40-page portfolio",
+    "b": "1:50 final model"
+  },
+  {
+    "idx": 27,
+    "q": "The most devastating feedback:",
+    "a": "Again.",
+    "b": "Hmm...... just proceed."
+  },
+  {
+    "idx": 28,
+    "q": "Your team role, forever:",
+    "a": "CAD & drawings duty",
+    "b": "Model duty"
+  },
+  {
+    "idx": 29,
+    "q": "Print shop hands you the boards:",
+    "a": "Colors are completely wrong",
+    "b": "Pages are in the wrong order"
+  },
+  {
+    "idx": 30,
+    "q": "Pick your studio desk:",
+    "a": "Window corner (sunny, freezing in winter)",
+    "b": "Right by the door (everyone sees your screen)"
+  },
+  {
+    "idx": 31,
+    "q": "Deskmate habit, which is worse?",
+    "a": "Snoring during all-nighters",
+    "b": "Phone calls at 3am"
+  },
+  {
+    "idx": 32,
+    "q": "Internship offer arrives:",
+    "a": "Famous atelier, unpaid, 1 year",
+    "b": "Local firm, paid, 1 year"
+  },
+  {
+    "idx": 33,
+    "q": "Lose one ability forever:",
+    "a": "Hand lettering on drawings",
+    "b": "Mental math for dimensions"
+  },
+  {
+    "idx": 34,
+    "q": "A lifelong confusion curse:",
+    "a": "Coverage ratio vs FAR, always mixed up",
+    "b": "North arrow, always mixed up"
+  },
+  {
+    "idx": 35,
+    "q": "One structural system forever:",
+    "a": "Rigid frame only",
+    "b": "Bearing wall only"
+  },
+  {
+    "idx": 36,
+    "q": "One detail drawing, for life:",
+    "a": "Stair details only",
+    "b": "Bathroom details only"
+  },
+  {
+    "idx": 37,
+    "q": "Pick your crit ending:",
+    "a": "Brilliant idea, botched the presentation",
+    "b": "Average idea, legendary presentation"
+  },
+  {
+    "idx": 38,
+    "q": "On site visits you may only:",
+    "a": "Take photos (no sketching)",
+    "b": "Sketch (no photos)"
+  },
+  {
+    "idx": 39,
+    "q": "Your models forever:",
+    "a": "Pure white models only",
+    "b": "Full material & color models only"
+  },
+  {
+    "idx": 40,
+    "q": "Team assignment for 4 years:",
+    "a": "Same team forever, like it or not",
+    "b": "Completely random every semester"
+  },
+  {
+    "idx": 41,
+    "q": "Your chronic design disease:",
+    "a": "Great concepts, cannot develop them",
+    "b": "Great development, boring concepts"
+  },
+  {
+    "idx": 42,
+    "q": "One hour before deadline, still left:",
+    "a": "3 renders",
+    "b": "Dimensions on every drawing"
+  },
+  {
+    "idx": 43,
+    "q": "Your path is decided:",
+    "a": "Grad school, locked in",
+    "b": "Straight to practice, locked in"
+  },
+  {
+    "idx": 44,
+    "q": "Your building gets built if:",
+    "a": "Your name is left off",
+    "b": "Your name stays, fee is zero"
+  },
+  {
+    "idx": 45,
+    "q": "One job forever:",
+    "a": "Competitions only",
+    "b": "Interiors only"
+  },
+  {
+    "idx": 46,
+    "q": "A drawing curse befalls you:",
+    "a": "All text becomes Comic Sans",
+    "b": "All lineweights become identical"
+  },
+  {
+    "idx": 47,
+    "q": "One month of break, pick:",
+    "a": "Construction site job",
+    "b": "Design office overtime"
+  },
+  {
+    "idx": 48,
+    "q": "A weird rule infects your designs:",
+    "a": "Column count must be odd",
+    "b": "All windows must be square"
+  },
+  {
+    "idx": 49,
+    "q": "The 100 challenge:",
+    "a": "Trace 100 master drawings",
+    "b": "Build 100 massing studies"
+  },
+  {
+    "idx": 50,
+    "q": "Presentation curse:",
+    "a": "All your fonts break on screen",
+    "b": "All your images turn low-res"
+  },
+  {
+    "idx": 51,
+    "q": "All-nighter fuel, one only:",
+    "a": "Energy drinks only (no coffee)",
+    "b": "Coffee only (no energy drinks)"
+  },
+  {
+    "idx": 52,
+    "q": "Your food vanished from the studio fridge:",
+    "a": "You know who did it but cannot say",
+    "b": "You never find out"
+  },
+  {
+    "idx": 53,
+    "q": "Submission format forever:",
+    "a": "Live crits forever (the trembling)",
+    "b": "Written feedback only (one line)"
+  },
+  {
+    "idx": 54,
+    "q": "Model accident! Choose:",
+    "a": "Roof flies off (body intact)",
+    "b": "Ground floor crushed (roof intact)"
+  },
+  {
+    "idx": 55,
+    "q": "Your CAD file curse:",
+    "a": "Everything drawn on layer 0",
+    "b": "Every block exploded"
+  },
+  {
+    "idx": 56,
+    "q": "Live without one forever:",
+    "a": "No Photoshop",
+    "b": "No Illustrator"
+  },
+  {
+    "idx": 57,
+    "q": "Harder design brief:",
+    "a": "3m-wide micro house",
+    "b": "Column-free giant gymnasium"
+  },
+  {
+    "idx": 58,
+    "q": "Pick your all-nighter partner:",
+    "a": "Chatty friend (fun, zero progress)",
+    "b": "Silent friend (lonely, max focus)"
+  },
+  {
+    "idx": 59,
+    "q": "Gain one power:",
+    "a": "Perfect proportions in any sketch, 3 seconds",
+    "b": "Memorize any plan after one look"
+  },
+  {
+    "idx": 60,
+    "q": "Your portfolio destiny:",
+    "a": "Ugly design, solid content",
+    "b": "Slick design, empty content"
+  },
+  {
+    "idx": 61,
+    "q": "Competition results are in:",
+    "a": "Lost, but detailed jury feedback",
+    "b": "Placed, but zero feedback"
+  },
+  {
+    "idx": 62,
+    "q": "Your setup forever:",
+    "a": "1 monitor + amazing chair",
+    "b": "3 monitors + wooden bench"
+  },
+  {
+    "idx": 63,
+    "q": "Dinner with a legend:",
+    "a": "Le Corbusier",
+    "b": "Zaha Hadid"
+  },
+  {
+    "idx": 64,
+    "q": "One time-travel field trip:",
+    "a": "Pantheon under construction",
+    "b": "Pyramids under construction"
+  },
+  {
+    "idx": 65,
+    "q": "Sleep one night in a masterpiece:",
+    "a": "Fallingwater (waterfall ASMR)",
+    "b": "Villa Savoye (pure modernism)"
+  },
+  {
+    "idx": 66,
+    "q": "Apprentice under:",
+    "a": "Mies van der Rohe",
+    "b": "Frank Lloyd Wright"
+  },
+  {
+    "idx": 67,
+    "q": "One aesthetic for life:",
+    "a": "Minimalism (Less is more)",
+    "b": "Maximalism (Less is a bore)"
+  },
+  {
+    "idx": 68,
+    "q": "One structure material forever:",
+    "a": "Timber only",
+    "b": "Steel only"
+  },
+  {
+    "idx": 69,
+    "q": "Live forever in:",
+    "a": "A traditional courtyard house (garden, cold winters)",
+    "b": "A new apartment (easy, identical)"
+  },
+  {
+    "idx": 70,
+    "q": "Join a national project:",
+    "a": "Design a futuristic landmark",
+    "b": "Restore an ancient palace"
+  },
+  {
+    "idx": 71,
+    "q": "One month of architecture travel:",
+    "a": "Europe (classics to contemporary)",
+    "b": "Japan (land of details)"
+  },
+  {
+    "idx": 72,
+    "q": "Own one masterpiece:",
+    "a": "Church of the Light",
+    "b": "Farnsworth House"
+  },
+  {
+    "idx": 73,
+    "q": "Extreme housing, pick:",
+    "a": "Skyscraper penthouse (elevator anxiety)",
+    "b": "Cozy underground bunker (no windows)"
+  },
+  {
+    "idx": 74,
+    "q": "One style, forever:",
+    "a": "Brutalism",
+    "b": "Baroque"
+  },
+  {
+    "idx": 75,
+    "q": "Design only one typology forever:",
+    "a": "Museums & galleries",
+    "b": "Religious buildings"
+  },
+  {
+    "idx": 76,
+    "q": "A style gets tattooed on your hands:",
+    "a": "Zaha flowing curves",
+    "b": "Mies perfect lines"
+  },
+  {
+    "idx": 77,
+    "q": "Become THE specialist:",
+    "a": "Bridge designer",
+    "b": "Tower designer"
+  },
+  {
+    "idx": 78,
+    "q": "One impossible gift:",
+    "a": "Talk to the ancient wonder builders",
+    "b": "Preview architecture 100 years ahead"
+  },
+  {
+    "idx": 79,
+    "q": "Masterpiece of light, see one:",
+    "a": "Ronchamp",
+    "b": "Kimbell Art Museum"
+  },
+  {
+    "idx": 80,
+    "q": "Your legacy:",
+    "a": "Design your city's landmark",
+    "b": "Design a hidden masterpiece abroad"
+  },
+  {
+    "idx": 81,
+    "q": "One practice forever:",
+    "a": "Renovation & adaptive reuse only",
+    "b": "New builds only"
+  },
+  {
+    "idx": 82,
+    "q": "Inherit one pair of hands:",
+    "a": "Gehry's crumpling hands",
+    "b": "Calatrava's skeleton hands"
+  },
+  {
+    "idx": 83,
+    "q": "Your life's work:",
+    "a": "ONE building that lasts 100 years",
+    "b": "100 buildings that last 10"
+  },
+  {
+    "idx": 84,
+    "q": "Extreme site, pick:",
+    "a": "Tiny downtown infill lot",
+    "b": "Massive remote mountain site"
+  },
+  {
+    "idx": 85,
+    "q": "Win one award:",
+    "a": "The Pritzker",
+    "b": "Venice Biennale Golden Lion"
+  },
+  {
+    "idx": 86,
+    "q": "Lifetime ban, pick:",
+    "a": "Banned from all cathedrals",
+    "b": "Banned from all observation decks"
+  },
+  {
+    "idx": 87,
+    "q": "Your firm identity:",
+    "a": "Solo atelier (free but unstable)",
+    "b": "Big firm partner (stable but corporate)"
+  },
+  {
+    "idx": 88,
+    "q": "Architecture trip style:",
+    "a": "Landmark checklist speedrun",
+    "b": "Wander alleys and everyday buildings"
+  },
+  {
+    "idx": 89,
+    "q": "Your roof forever:",
+    "a": "Roof garden (maintenance hell)",
+    "b": "Gabled roof (comes with attic)"
+  },
+  {
+    "idx": 90,
+    "q": "Your ceiling forever:",
+    "a": "5m tall (heating bill horror)",
+    "b": "2.2m cozy (slightly claustrophobic)"
+  },
+  {
+    "idx": 91,
+    "q": "Your windows forever:",
+    "a": "Floor-to-ceiling glass (curtains required)",
+    "b": "Many small windows (light like paintings)"
+  },
+  {
+    "idx": 92,
+    "q": "Your stairs forever:",
+    "a": "Spiral (gorgeous, moving day nightmare)",
+    "b": "Straight run (practical, boring)"
+  },
+  {
+    "idx": 93,
+    "q": "One season forever:",
+    "a": "Endless summer (studio AC blasting)",
+    "b": "Endless winter (glue dries faster)"
+  },
+  {
+    "idx": 94,
+    "q": "Vertical curse:",
+    "a": "Stairs only forever (no elevators)",
+    "b": "Elevators only forever (no stairs)"
+  },
+  {
+    "idx": 95,
+    "q": "A tool possesses your body:",
+    "a": "Right hand becomes a scale ruler",
+    "b": "Left hand becomes a box cutter"
+  },
+  {
+    "idx": 96,
+    "q": "All-nighter midnight snack:",
+    "a": "Convenience store ramen + gimbap",
+    "b": "Delivery chicken (30-min wait)"
+  },
+  {
+    "idx": 97,
+    "q": "Studio snack locked forever:",
+    "a": "Unlimited jelly",
+    "b": "Unlimited chips"
+  },
+  {
+    "idx": 98,
+    "q": "Alone in the elevator with your professor!",
+    "a": "Bring up your project first",
+    "b": "Perfect silence until ground floor"
+  },
+  {
+    "idx": 99,
+    "q": "Nobody is standing at your panel...",
+    "a": "Start recruiting passersby",
+    "b": "Silently hold your ground"
+  },
+  {
+    "idx": 100,
+    "q": "Your professor seems to be dozing mid-crit!",
+    "a": "Speak louder",
+    "b": "Quietly wrap up early"
+  },
+  {
+    "idx": 101,
+    "q": "A classmate brought a concept just like yours!",
+    "a": "Talk it out immediately",
+    "b": "Quietly change your concept"
+  },
+  {
+    "idx": 102,
+    "q": "Your deskmate starts crying at 3am...",
+    "a": "Silently hand them a chocolate bar",
+    "b": "Cry together"
+  },
+  {
+    "idx": 103,
+    "q": "10 minutes to deadline, 5 people in the print queue!",
+    "a": "Beg your way forward",
+    "b": "Accept fate, wait in line"
+  },
+  {
+    "idx": 104,
+    "q": "The professor picks up and SHAKES your model!",
+    "a": "Say: please be careful",
+    "b": "Just pray it holds"
+  },
+  {
+    "idx": 105,
+    "q": "You found a wallet. It belongs to a rival studio...",
+    "a": "Return it, obviously",
+    "b": "Return it, but make sure everyone knows"
+  },
+  {
+    "idx": 106,
+    "q": "Any questions? ...5 seconds of silence...",
+    "a": "Ask anything to break it",
+    "b": "Stare at the floor (eye contact = death)"
+  },
+  {
+    "idx": 107,
+    "q": "Total redesign vs develop, 3 days left!",
+    "a": "Tear it down, no regrets",
+    "b": "Develop and commit"
+  },
+  {
+    "idx": 108,
+    "q": "Mid-presentation, you say: uh... so...",
+    "a": "Honest pause: one moment please",
+    "b": "Keep talking, say anything"
+  },
+  {
+    "idx": 109,
+    "q": "A friend calls your design... kind of ordinary?",
+    "a": "Accept it, ask for advice",
+    "b": "Deliver a 3-minute lecture on the beauty of ordinary"
+  },
+  {
+    "idx": 110,
+    "q": "3am studio. All the lights just went out!",
+    "a": "Phone flashlight, keep working",
+    "b": "It is a sign. Go home"
+  },
+  {
+    "idx": 111,
+    "q": "The professor praised a model you had thrown away!",
+    "a": "Confess: I actually discarded that",
+    "b": "Declare: that is my real scheme, revive it"
+  },
+  {
+    "idx": 112,
+    "q": "An outside juror asks: ...why?",
+    "a": "Face it with your prepared logic",
+    "b": "A great question! (stall for time)"
+  },
+  {
+    "idx": 113,
+    "q": "One facade material forever:",
+    "a": "Red brick only",
+    "b": "Metal panels only"
+  },
+  {
+    "idx": 114,
+    "q": "Dinner with a modern master:",
+    "a": "Louis Kahn",
+    "b": "Alvar Aalto"
+  },
+  {
+    "idx": 115,
+    "q": "Only one site visit allowed:",
+    "a": "The Alhambra",
+    "b": "Katsura Imperial Villa"
+  },
+  {
+    "idx": 116,
+    "q": "Panel text language locked forever:",
+    "a": "All English (looks pro, typo risk)",
+    "b": "All native language (honest, font struggles)"
+  },
+  {
+    "idx": 117,
+    "q": "Site plan curse, pick one:",
+    "a": "Hand-draw 1,000 tree symbols",
+    "b": "Redo the entire parking layout"
+  },
+  {
+    "idx": 118,
+    "q": "Presentation time locked forever:",
+    "a": "3 minutes (compression hell)",
+    "b": "30 minutes (silence hell)"
+  },
+  {
+    "idx": 119,
+    "q": "Model photoshoot, give up one:",
+    "a": "No lighting gear (phone flashlight only)",
+    "b": "No retouching (submit as shot)"
+  },
+  {
+    "idx": 120,
+    "q": "Computer betrayal before deadline, lesser evil:",
+    "a": "Forced OS update begins",
+    "b": "Discover autosave was OFF"
+  },
+  {
+    "idx": 121,
+    "q": "Professor spots your mistake. Less painful:",
+    "a": "A typo dead-center on the panel",
+    "b": "Wrong scale on the section"
+  },
+  {
+    "idx": 122,
+    "q": "Sketch tool locked forever:",
+    "a": "Tracing paper + pen only",
+    "b": "iPad only"
+  },
+  {
+    "idx": 123,
+    "q": "Competition career, choose:",
+    "a": "ONE grand prize (all else rejected)",
+    "b": "Ten honorable mentions (no grand prize)"
+  },
+  {
+    "idx": 124,
+    "q": "Pick your studio chair:",
+    "a": "Comfy but squeaks with every move",
+    "b": "Rock hard but silent"
+  },
+  {
+    "idx": 125,
+    "q": "A design constraint follows you forever:",
+    "a": "No south-facing layouts",
+    "b": "Openings capped at 20%"
+  },
+  {
+    "idx": 126,
+    "q": "Site trip misfortune, pick:",
+    "a": "Rain all day",
+    "b": "Arrive to find it closed"
+  },
+  {
+    "idx": 127,
+    "q": "Name your future firm:",
+    "a": "Your own name (X Architects)",
+    "b": "A cool abstract word (explain it forever)"
+  },
+  {
+    "idx": 128,
+    "q": "Brief style forever:",
+    "a": "100 pages of research + total design freedom",
+    "b": "Zero research + suffocating requirements"
+  },
+  {
+    "idx": 129,
+    "q": "Pick your site:",
+    "a": "30-degree steep slope",
+    "b": "Acute triangle sliver"
+  },
+  {
+    "idx": 130,
+    "q": "Crit format locked forever:",
+    "a": "Public crit in the auditorium, whole school",
+    "b": "1:1 closed-door crit with the professor"
+  },
+  {
+    "idx": 131,
+    "q": "Petty drawing curse:",
+    "a": "Contours never quite align",
+    "b": "Always forget the scale bar"
+  },
+  {
+    "idx": 132,
+    "q": "All-nighter audio is enforced:",
+    "a": "Lo-fi playing 24/7, mandatory",
+    "b": "Total silence, earphones banned"
+  },
+  {
+    "idx": 133,
+    "q": "Fate of your portfolio:",
+    "a": "Immortalized in school brochures (no edits)",
+    "b": "Sealed forever (nobody sees it)"
+  },
+  {
+    "idx": 134,
+    "q": "Degree show booth location:",
+    "a": "Prime entrance spot (crowded, loud)",
+    "b": "Quiet corner (peaceful, deserted)"
+  },
+  {
+    "idx": 135,
+    "q": "Attend one master class:",
+    "a": "Rem Koolhaas rapid-fire lecture",
+    "b": "Peter Zumthor silence workshop"
+  },
+  {
+    "idx": 136,
+    "q": "Ability trade, pick one:",
+    "a": "Glass heart + genius hands",
+    "b": "Steel heart + average hands"
+  },
+  {
+    "idx": 137,
+    "q": "Petty printing curse:",
+    "a": "Everything prints 1% smaller",
+    "b": "Margins always slightly crooked"
+  },
+  {
+    "idx": 138,
+    "q": "Join one club:",
+    "a": "Architecture field-trip club",
+    "b": "Woodworking club"
+  },
+  {
+    "idx": 139,
+    "q": "Your first construction site:",
+    "a": "House renovation",
+    "b": "Supertall tower"
+  },
+  {
+    "idx": 140,
+    "q": "Senior studio theme:",
+    "a": "City-scale masterplan",
+    "b": "1:1 detail mockup"
+  },
+  {
+    "idx": 141,
+    "q": "Petty CAD curse:",
+    "a": "Extension lines invisible on screen",
+    "b": "All text styles corrupted"
+  },
+  {
+    "idx": 142,
+    "q": "Watch one video 100 times:",
+    "a": "An architecture documentary",
+    "b": "The Inception city-folding scene"
+  },
+  {
+    "idx": 143,
+    "q": "Drawing style locked forever:",
+    "a": "Isometric only",
+    "b": "One-point perspective only"
+  },
+  {
+    "idx": 144,
+    "q": "Summer job, pick:",
+    "a": "Hauling bricks for a month",
+    "b": "Folding 1,000 A1 drawings"
+  },
+  {
+    "idx": 145,
+    "q": "Belongings curse:",
+    "a": "Keep losing your scale ruler",
+    "b": "Lead keeps snapping"
+  },
+  {
+    "idx": 146,
+    "q": "Layout type locked forever:",
+    "a": "Courtyard schemes only",
+    "b": "Piloti schemes only"
+  },
+  {
+    "idx": 147,
+    "q": "Roof dilemma:",
+    "a": "Flat roof (eternal leak anxiety)",
+    "b": "Pitched roof (attic sauna forever)"
+  },
+  {
+    "idx": 148,
+    "q": "Code-check duty locked forever:",
+    "a": "Daylight regulations only",
+    "b": "Egress distances only"
+  },
+  {
+    "idx": 149,
+    "q": "Design language locked forever:",
+    "a": "Corbusier five points only",
+    "b": "Miesian universal space only"
+  },
+  {
+    "idx": 150,
+    "q": "Pick your design muse:",
+    "a": "The weird dreams you have nightly",
+    "b": "People you observe on the subway"
+  },
+  {
+    "idx": 151,
+    "q": "One professor compliment, forever:",
+    "a": "Great hands (craft recognized)",
+    "b": "Great thinking (concept recognized)"
+  },
+  {
+    "idx": 152,
+    "q": "Your building's fate:",
+    "a": "Famous via a silly public nickname",
+    "b": "Quietly respected, no nickname"
+  },
+  {
+    "idx": 153,
+    "q": "Deadline D-1, use one cheat:",
+    "a": "Freeze time for 3 hours (only you move)",
+    "b": "Summon one classmate (3-hour assistant)"
+  }
+]

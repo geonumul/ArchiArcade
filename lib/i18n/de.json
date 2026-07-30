@@ -1,0 +1,222 @@
+{
+  "titleLogo": "DAS GROSSE<br>ARCHI-DILEMMA",
+  "subdesc": "Wähl deine Runde: <b>10 · 20 · 30 STAGES</b>!<br>Jede Runde neue Fragen aus der Archi-Bank.<br>Alle Stimmen anonym, weltweit gezählt.",
+  "btnSolo": "Allein spielen",
+  "btnHost": "Raum erstellen (Host)",
+  "btnJoin": "Raum beitreten",
+  "btnLobby": "← Zurück zur Spielhalle",
+  "back": "← Zurück",
+  "hsTitle": "Raum erstellen",
+  "pwLabel": "Passwort (zum Beitreten)",
+  "tmLabel": "Abstimmzeit pro Frage",
+  "tmOpts": [
+    "5 s (Sprint)",
+    "10 s",
+    "15 s",
+    "20 s",
+    "30 s (gemütlich)"
+  ],
+  "btnCreate": "Erstellen",
+  "ntShare": "Zum Teilen — Raumnummer und Passwort",
+  "ntStart": "Beim Start erscheint die Frage bei allen gleichzeitig",
+  "btnReroll": "Fragen neu ziehen",
+  "waitingPlayers": "Warte auf Spieler...",
+  "jnTitle": "Raum beitreten",
+  "jnLabels": [
+    "Raumnummer (4 Ziffern)",
+    "Passwort",
+    "Spitzname"
+  ],
+  "btnEnter": "Beitreten",
+  "wtTitle": "Du bist drin!",
+  "wtWait": "Warte, bis der Host startet...",
+  "npc": "▶ Die Frage des Kritik-Endgegners",
+  "waitReveal": "Abstimmung beendet! Auszählung...",
+  "btnCloseNow": "Sofort schließen",
+  "btnSwapQ": "Frage tauschen",
+  "lblA": "Wahl A",
+  "lblB": "Wahl B",
+  "lblM": "Male gegen den Strom",
+  "globalPre": "Weltweit: ",
+  "hostPreparing": "Der Host bereitet die nächste Frage vor",
+  "netErr": "Netzwerkfehler — nur deine Wahl wird angezeigt",
+  "err": {
+    "needPw": "Gib ein Passwort ein",
+    "creating": "Wird erstellt...",
+    "noCode": "Keine freie Nummer — versuch's nochmal",
+    "createFail": "Erstellen fehlgeschlagen — später erneut versuchen",
+    "code4": "Die Nummer hat 4 Ziffern",
+    "checking": "Prüfe...",
+    "noRoom": "Diesen Raum gibt es nicht",
+    "badRead": "Raum kann nicht gelesen werden",
+    "expired": "Raum abgelaufen (über 24 h)",
+    "badPw": "Falsches Passwort"
+  },
+  "hubLogo": "DIE SPIELHALLE<br>IM ZEICHENSAAL",
+  "marquee": "Der offizielle Prokrastinationsraum für erschöpfte Architekturstudierende ··· eine Runde zusammen, dann zurück zu den Modellen ··· neue Spiele kommen laufend ···",
+  "cartNames": [
+    "DAS GROSSE<br>ARCHI-DILEMMA",
+    "WER HAT DAS<br>ENTWORFEN?",
+    "ARCHI-BEGRIFFE<br>BLITZ-QUIZ",
+    "WERWOLF IM<br>ZEICHENSAAL",
+    "FINDE DEN<br>PLANFEHLER",
+    "MASSSTABS-<br>GEFÜHL-TEST"
+  ],
+  "sugName": "Was kommt in die nächste Cartridge?",
+  "sugSmall": "Schlag ein Spiel vor und es wird Update-Kandidat",
+  "sugTag": "SPIEL VORSCHLAGEN ▶",
+  "repName": "Diese Frage ist unausgewogen!",
+  "repSmall": "Unfaire Fragen melden, neue vorschlagen, Verbesserungen anregen",
+  "repTag": "WERKSTATT BETRETEN ▶",
+  "sgTitle": "SPIELE-WUNSCHTAFEL",
+  "sgNote": "Was wollen wir im Zeichensaal zusammen spielen?<br>Die meistgewünschten Spiele werden zuerst gebaut!",
+  "sgLabels": [
+    "Spitzname",
+    "Spielidee"
+  ],
+  "btnPostIdea": "WUNSCH EINWERFEN",
+  "wsTitle": "FRAGEN-WERKSTATT",
+  "wsNote": "Hilf mit, die Fragen besser zu machen.<br>Schieflagen, neue Ideen — alles willkommen.",
+  "wsTypeL": "TYP",
+  "wsOpts": [
+    "⚖️ Schieflage (eine Seite gewinnt immer)",
+    "💡 Idee für neue Frage",
+    "✨ Lustiger wäre es, wenn..."
+  ],
+  "wsLabels": [
+    "Spitzname",
+    "Details"
+  ],
+  "btnPostBug": "ABSENDEN",
+  "emptyIdeas": "Noch keine Wünsche. Wirf die erste Münze ein!",
+  "emptyBugs": "Noch keine Meldungen. Fang die erste Bastelei an!",
+  "needIdea": "Gib eine Spielidee ein",
+  "needBug": "Gib Details ein",
+  "throttle": "Zu schnell! In 15 s nochmal (Spamschutz)",
+  "saveFail": "Speichern fehlgeschlagen — nochmal versuchen",
+  "auTitle": "SPIELERKARTE",
+  "auDesc": "Spitzname und PIN genügen, um Bilanz und Titel zu speichern.<br>Ohne Anmeldung bleibt alles spielbar.",
+  "auNameL": "SPITZNAME (2-8 Zeichen)",
+  "auPinL": "Passwort (8+, Buchstaben+Zahlen)",
+  "btnLogin": "ANMELDEN",
+  "btnRegister": "REGISTRIEREN",
+  "btnLogout": "ABMELDEN",
+  "auErrName": "Spitzname: 2-8 Buchstaben/Ziffern/_",
+  "auErrPin": "PIN: mindestens 4 Zeichen",
+  "auErrDup": "Spitzname schon vergeben",
+  "auErrNo": "Spitzname nicht gefunden — drück REGISTRIEREN",
+  "auErrPw": "Falsche PIN",
+  "auErrNet": "Netzwerkfehler — nochmal versuchen",
+  "cardPlays": "Beendete Spiele",
+  "cardMinor": "Minderheitswahlen (gesamt)",
+  "cardTitle": "Aktueller Titel",
+  "cardMax": "Höchster Rang erreicht!",
+  "dkT1": "NOW OPEN",
+  "dkB1": "Eine Online-Spielhalle für erschöpfte Architekturstudierende.<br>Zufällige Fragen, weltweite Statistik, Live-Räume.",
+  "dkGuest": "Du spielst als Gast.<br>Melde dich an, um Bilanz und Titel zu speichern.",
+  "rHot": "STARK",
+  "rMeh": "LAHM",
+  "lenLabel": "RUNDENLÄNGE",
+  "hcLabel": "FRAGEN",
+  "hcOpts": [
+    "10 (kurz und knackig)",
+    "20 (Standard)",
+    "30 (volles Menü)"
+  ],
+  "anon": "Anonym",
+  "dkQuiet": "Gerade ist es still...",
+  "phHostPw": "z. B. 1234",
+  "phJoinCode": "z. B. 7842",
+  "phJoinName": "z. B. Nachteule",
+  "phSgName": "z. B. SaalGeist",
+  "phSgText": "z. B. Gebäude an der Silhouette erraten",
+  "phBgName": "z. B. Bastler",
+  "phBgText": "z. B. Hier gewinnt immer A",
+  "moreGames": "ALLE SPIELE<br>ANSEHEN",
+  "gcatT": "SPIELKATALOG",
+  "gcatGhost": "Dieser Slot ist frei — wünsch dir dein Spiel!",
+  "gameCat": [
+    [
+      "Das Große Archi-Dilemma",
+      "Das ultimative Entweder-oder, das Saal-Debatten per Weltabstimmung beendet"
+    ],
+    [
+      "Wer hat das entworfen?",
+      "Errate den Architekten an Silhouette oder Foto"
+    ],
+    [
+      "Archi-Begriffe Blitz-Quiz",
+      "Vom Kragarm bis zum Gesims — gegen die Uhr"
+    ],
+    [
+      "Werwolf im Zeichensaal",
+      "Nur einer bekommt eine andere Aufgabe — bluffe deinen Saal"
+    ],
+    [
+      "Finde den Planfehler",
+      "Wer die versteckten Fehler im sauberen Plan zuerst findet, gewinnt"
+    ],
+    [
+      "Maßstabsgefühl-Test",
+      "Wie viele mm hat diese Tür? Teste dein Körpergedächtnis"
+    ],
+    [
+      "Zeichensaal-Bingo",
+      "5×5-Bingo der schmerzhaft wahren Momente — „alles nochmal“ inklusive"
+    ],
+    [
+      "Struktur-Schach",
+      "Die Figuren sind Stützen, Balken und Bögen — Schach für Statik-Köpfe"
+    ],
+    [
+      "Zeichensaal-Mafia",
+      "Jede Nacht wird ein Plan zerrissen. Tagsüber debattieren, Mafia entlarven"
+    ]
+  ],
+  "commHead": "▼ COMMUNITY · ERÖFFNUNG BALD ▼",
+  "commSoonTag": "In Vorbereitung · Interesse wird gezählt",
+  "btnInterest": "Will ich haben! ♥",
+  "interestDone": "Registriert ✔ Bis zur Eröffnung",
+  "commOrder": [
+    "team",
+    "res",
+    "crit",
+    "match"
+  ],
+  "commCat": {
+    "team": {
+      "icon": "🤝",
+      "t": "Wettbewerbs-Teampartner",
+      "d": "Bilde Wettbewerbs- und Lernteams mit Architekturstudierenden weltweit. Die KI übersetzt natürlich."
+    },
+    "crit": {
+      "icon": "🖼️",
+      "t": "Portfolio- & Modellkritik",
+      "d": "Lade Portfolio und Modellfotos hoch und hol dir Kritik aus aller Welt. Ein Nur-Lob-Modus ist in Arbeit."
+    },
+    "res": {
+      "icon": "🧱",
+      "t": "Material & Ressourcen",
+      "d": "Modellbau-Materialkombis, YouTube-Kanäle und Archi-Communities jedes Landes, nach Ländern archiviert."
+    },
+    "match": {
+      "icon": "🧩",
+      "t": "Studio-Match (Interessen)",
+      "d": "Finde den passenden Entwurfspartner oder Auslandskontakt. Kriterien je Land angepasst (Interessen, MBTI, Astro...)."
+    }
+  },
+  "auPw2L": "Passwort bestätigen",
+  "auErrPw8": "Mindestens 8 Zeichen mit Buchstaben und Zahlen",
+  "auErrPw2": "Passwörter stimmen nicht überein",
+  "auStrength": [
+    "Schwach",
+    "Okay",
+    "Stark"
+  ],
+  "modErr": "Die KI hält diesen Inhalt für nicht postbar",
+  "modChecking": "KI prüft...",
+  "exitAsk": "Wirklich aussteigen?",
+  "exitAskHost": "Beim Verlassen endet der Raum. Aussteigen?",
+  "exitYes": "RAUS ✕",
+  "exitNo": "WEITER ▶"
+}
