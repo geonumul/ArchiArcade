@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { hasDatabase, db } from "@/lib/db";
 import {
   hashPassword,
+  isAdminName,
   validName,
   validPassword,
   signAccess,
@@ -56,7 +57,9 @@ export async function POST(req: Request) {
   const locale = typeof body.locale === "string" && isLang(body.locale) ? body.locale : "ko";
 
   if (!validName(name)) return NextResponse.json({ error: "닉네임을 확인해주세요", field: "name" }, { status: 400 });
-  if (name.toLowerCase() === "admin") {
+  // 관리자 이름은 가입으로 만들 수 없다. 이름만 알면 누구나 선점할 수 있기 때문이고,
+  // 그 계정은 scripts/create-admin.mjs 로만 만든다.
+  if (name.toLowerCase() === "admin" || isAdminName(name)) {
     return NextResponse.json({ error: "사용할 수 없는 이름이에요", field: "name" }, { status: 400 });
   }
   if (!validEmail(email)) {

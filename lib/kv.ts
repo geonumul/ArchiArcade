@@ -38,8 +38,17 @@ const KEY_RULES: RegExp[] = [
   // 허용하지 않는다 — 허용하는 순간 같은 구멍이 다시 열린다.
 ];
 
+/**
+ * 허용목록에 걸리더라도 막는 키.
+ *
+ * 제보는 서버(/api/reports)로 옮겼고 관리자와 본인만 볼 수 있어야 한다. 이 키를
+ * 열어 두면 접두사 규칙(arcade-*)에 걸려 통과하므로, 여기서 따로 막는다.
+ */
+const KEY_DENY: RegExp[] = [/^arcade-qfeedback-v\d+$/];
+
 export function isAllowedKey(key: string): boolean {
   if (!key || key.length > 240) return false;
+  if (KEY_DENY.some((re) => re.test(key))) return false;
   return KEY_RULES.some((re) => re.test(key));
 }
 

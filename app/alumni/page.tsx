@@ -204,7 +204,7 @@ export default function AlumniPage() {
         ▼ {t.aMe} ▼
       </div>
 
-      {/* 이미 공개 중이면 그 사실을 먼저 알린다 — 여기가 수정하는 자리라는 게 분명해야 한다. */}
+      {/* 이미 공개 중이면 그 사실을 먼저 알린다 - 여기가 수정하는 자리라는 게 분명해야 한다. */}
       {me?.directoryOptIn && (
         <div className="note" style={{ color: "var(--yellow)" }}>{t.aListed}</div>
       )}

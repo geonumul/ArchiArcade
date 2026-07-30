@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s · ARCHIARCADE",
   },
   description:
-    "밤샘하는 건축학도를 위한 온라인 오락실 — 9개 언어로 즐기는 건축학과 밸런스게임.",
+    "밤샘하는 건축학도를 위한 온라인 오락실 - 9개 언어로 즐기는 건축학과 밸런스게임.",
   // archiarcade.com 은 www 로 넘긴다. 미리보기 크롤러가 리다이렉트에서 그림을 놓치는
   // 일이 있어, 실제로 200 을 주는 주소를 그대로 쓴다.
   metadataBase: new URL("https://www.archiarcade.com"),
