@@ -3741,16 +3741,19 @@ Object.assign(UI.es,{modErr:"La IA consideró este contenido no publicable",modC
 
 
 /* ═══ 8-bit BGM — 자체 작곡 칩튠 루프 (외부 소스 0, 라이선스 클린) ═══ */
-const BGM={playing:false,timer:null,next:0,step:0,gain:null};
-const BPM=152, SPB=60/BPM/2; // 8분음표 단위 — 소유자 지정 템포(밤샘 중에도 손이 움직이는 속도)
-// A단조 16스텝 × 8마디 루프
-const B_BASS=["A2","A2","E3","A2","F2","F2","C3","F2","G2","G2","D3","G2","E2","E2","B2","E2"]; // 마디당 4스텝 × 4코스
+const BGM={playing:false,timer:null,next:0,step:0,bar:0,gain:null};
+const BPM=152, SPB=60/BPM/4; // 16분음표 한 칸
+/* 리드 — 16분음표로 쪼갠 아르페지오. 32칸(2마디)씩 두 패턴을 번갈아 돌려
+   같은 코드 진행이라도 두 바퀴째가 더 밝게 열리도록 했다. */
 const B_LEAD=[
- "A4",0,"C5","E5",0,"D5","C5",0,"A4",0,"C5",0,"E5","D5","C5","D5",
- "E5",0,"G5","E5",0,"D5","C5",0,"A4","C5","D5","E5","C5",0,"A4",0,
- "F4",0,"A4","C5",0,"C5","A4",0,"G4",0,"B4","D5",0,"D5","B4",0,
- "E5","D5","C5","B4","A4",0,"E4",0,"A4",0,0,0,0,0,0,0
+ ["C5","E5","G5","C6","G5","E5","C5","E5", "A4","C5","E5","A5","E5","C5","A4","C5",
+  "F4","A4","C5","F5","C5","A4","F4","A4", "G4","B4","D5","G5","D5","B4","G4","B4"],
+ ["C5","E5","G5","C6","E6","C6","G5","E5", "A4","C5","E5","A5","C6","A5","E5","C5",
+  "F4","A4","C5","F5","A5","F5","C5","A4", "G4","D5","G5","B5","D6","B5","G5","D5"]
 ];
+/* 베이스 — 8분음표 자리에서만 읽고, 한 옥타브 내려 깔아 준다.
+   리드가 16분음표로 바쁘기 때문에 받쳐주는 쪽은 단순해야 뭉치지 않는다. */
+const B_BASS=["C4",0,"C4",0,"A3",0,"A3",0,"F4",0,"F4",0,"G4",0,"G4",0];
 const NOTE_F={};
 (function(){ const N=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
   for(let o=1;o<=6;o++) N.forEach((n,i)=>NOTE_F[n+o]=440*Math.pow(2,(o*12+i-57)/12)); })();
@@ -3774,24 +3777,43 @@ function bgmHat(t){
   s.buffer=buf; g.gain.value=.05; s.connect(g); g.connect(bgmGainNode()); s.start(t);
 }
 function bgmSchedule(){
-  if(!BGM.playing) return;
+  if(!BGM.playing||!audioCtx) return;
+  /* 예약 시각이 현재보다 뒤처졌으면 따라잡지 않고 지금으로 다시 맞춘다.
+     정지된 컨텍스트에서는 currentTime 이 0에 멈춰 있다가 재생이 풀리는 순간
+     껑충 뛴다. 그때 뒤처진 만큼을 그대로 예약하면 전부 과거 시각이 되어
+     한 음도 들리지 않는다 — 소리가 안 나던 원인이 이것이었다. */
+  if(BGM.next<audioCtx.currentTime) BGM.next=audioCtx.currentTime+.05;
+
   while(BGM.next<audioCtx.currentTime+.15){
     const st=BGM.step;
-    const bass=B_BASS[st%16], lead=B_LEAD[st%64];
-    if(bass) bgmNote(NOTE_F[bass],BGM.next,SPB*.95,"triangle",.10);
-    if(lead) bgmNote(NOTE_F[lead],BGM.next,SPB*.9,"square",.045);
-    if(st%2===1) bgmHat(BGM.next);
+    const lead=B_LEAD[BGM.bar%B_LEAD.length][st%32];
+    if(lead) bgmNote(NOTE_F[lead],BGM.next,SPB*.9,"square",.05);
+    if(st%2===0){
+      const bass=B_BASS[(st/2)%B_BASS.length];
+      if(bass) bgmNote(NOTE_F[bass]/2,BGM.next,SPB*1.6,"triangle",.09);
+    }
+    if(st%2===1) bgmHat(BGM.next);         // 뒷박 하이햇 — 속도감을 준다
     BGM.next+=SPB; BGM.step++;
+    if(BGM.step%32===0) BGM.bar++;
   }
 }
 function bgmStart(){
   if(BGM.playing||!SND.on) return;
   try{
     audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
-    if(audioCtx.state==="suspended") audioCtx.resume();
-    BGM.playing=true; BGM.next=audioCtx.currentTime+.05; BGM.step=0;
+  }catch(e){ return; }
+
+  /* 재생이 풀린 뒤에 첫 음 시각을 잡아야 한다. resume() 은 비동기라,
+     기다리지 않고 예약하면 위에서 말한 "과거 예약" 이 그대로 벌어진다. */
+  const begin=()=>{
+    if(BGM.playing) return;
+    BGM.playing=true; BGM.next=audioCtx.currentTime+.08; BGM.step=0; BGM.bar=0;
     BGM.timer=setInterval(bgmSchedule,60);
-  }catch(e){}
+  };
+  if(audioCtx.state==="suspended"){
+    const p=audioCtx.resume();
+    if(p&&p.then) p.then(begin,begin); else begin();
+  }else begin();
 }
 function bgmStop(){ BGM.playing=false; if(BGM.timer){clearInterval(BGM.timer);BGM.timer=null;} }
 
@@ -3817,16 +3839,12 @@ $("volSlider").addEventListener("input",()=>{
 // 기본은 소리 켬. 다만 브라우저는 사용자 조작 없이 오디오를 시작하지 못하게 막으므로,
 // 첫 클릭·터치·키 입력에서 한 번만 붙잡아 시작한다. 그 전에는 조용한 게 정상이다.
 (function(){
-  const kick=()=>{
-    if(!SND.on) return;
-    try{
-      audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
-      if(audioCtx.state==="suspended") audioCtx.resume();
-    }catch(e){}
-    bgmStart();
+  const EV=["pointerdown","keydown","touchstart"];
+  const once=()=>{
+    EV.forEach(ev=>document.removeEventListener(ev,once));
+    if(SND.on) bgmStart();               // 컨텍스트 생성·재생 해제는 bgmStart 가 맡는다
   };
-  const once=()=>{ kick(); ["pointerdown","keydown","touchstart"].forEach(ev=>document.removeEventListener(ev,once)); };
-  ["pointerdown","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,once,{passive:true}));
+  EV.forEach(ev=>document.addEventListener(ev,once,{passive:true}));
 })();
 document.addEventListener("visibilitychange",()=>{ if(document.hidden) bgmStop(); else if(SND.on) bgmStart(); });
 
