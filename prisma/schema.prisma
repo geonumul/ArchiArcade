@@ -31,6 +31,7 @@ model User {
   applications JobApplication[]
   hostedRooms  Room[]
   reports      Report[]
+  reactions    ReactionVote[]
 }
 
 /// 비밀번호 재설정 코드. 원문 대신 해시만 두고 만료·시도 횟수로 무차별 대입을 막는다
@@ -397,4 +398,49 @@ model Report {
 
   @@index([userId, createdAt])
   @@index([createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────
+// 유입 측정 · 대기실 채팅 · 밸런스 조절 후보
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * 날짜별 유입 집계.
+ *
+ * 개인을 특정하지 않는다. IP 도, 방문자 구분용 쿠키나 기기 식별자도 저장하지 않고
+ * (날짜·채널·기기·언어) 조합의 숫자만 더한다. 어떤 행도 한 사람을 가리키지 않으므로
+ * 개인정보가 아니고, 그래서 수집 동의를 받지 않아도 된다.
+ *
+ * 채널은 브라우저가 알려준다. 첫 화면을 열 때 주소의 utm_source 나 어디서 왔는지를
+ * 보고 정한 뒤, 그 탭이 살아 있는 동안 메모리에만 들고 있다가 사건이 생길 때 같이
+ * 보낸다 - 기기에 아무것도 남기지 않으려고 이렇게 한다.
+ */
+model VisitStat {
+  day      String // YYYY-MM-DD
+  channel  String // kakao | instagram | google | naver | direct | other
+  device   String // mobile | desktop
+  lang     String
+
+  /// 퍼널. 방문한 사람 중 몇이 놀았고, 몇이 가입했고, 몇이 학교 인증까지 갔는가.
+  visits   Int @default(0)
+  plays    Int @default(0)
+  signups  Int @default(0)
+  verifies Int @default(0)
+
+  @@id([day, channel, device, lang])
+  @@index([day])
+}
+
+/// 문항 리액션 중복 방지. 한 사람이 한 문항에 한 번만 누를 수 있게 한다 -
+/// 노잼 수가 밸런스 조절 후보를 정하는 근거가 되므로 부풀릴 수 있으면 안 된다.
+model ReactionVote {
+  questionIdx Int
+  userId      String
+  kind        String // "hot" | "meh"
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([questionIdx, userId])
+  @@index([userId])
 }
