@@ -3290,16 +3290,6 @@ if(window.matchMedia&&window.matchMedia("(min-width:1100px)").matches){ refreshD
    판단의 근거가 되지 못했다. 이제 한 문항에 한 번만 세고, 노잼이 다섯이면 밸런스
    조절 후보로 올라간다. */
 const reacted=new Map();   // 이 화면에서 내가 무엇을 눌렀는지
-/* 9개 언어를 다 채운다. 비워 두면 화면에 undefined 가 그대로 찍힌다. */
-Object.assign(UI.ko,{rHot:"꿀잼",rMeh:"노잼",reactNeedLogin:"로그인하면 이 문항을 평가할 수 있어요"});
-Object.assign(UI.en,{rHot:"HOT",rMeh:"MEH",reactNeedLogin:"Log in to rate this question"});
-Object.assign(UI.zh,{rHot:"有趣",rMeh:"无聊",reactNeedLogin:"登录后即可评价这道题"});
-Object.assign(UI.tw,{rHot:"有趣",rMeh:"無聊",reactNeedLogin:"登入後即可評價這道題"});
-Object.assign(UI.ja,{rHot:"神問",rMeh:"微妙",reactNeedLogin:"ログインするとこの問題を評価できます"});
-Object.assign(UI.fr,{rHot:"TOP",rMeh:"BOF",reactNeedLogin:"Connectez-vous pour noter cette question"});
-Object.assign(UI.it,{rHot:"TOP",rMeh:"NOIA",reactNeedLogin:"Accedi per valutare questa domanda"});
-Object.assign(UI.de,{rHot:"STARK",rMeh:"NAJA",reactNeedLogin:"Melde dich an, um diese Frage zu bewerten"});
-Object.assign(UI.es,{rHot:"TOP",rMeh:"MEH",reactNeedLogin:"Inicia sesión para valorar esta pregunta"});
 async function showReacts(){
   const bi=ROUND[idx]?ROUND[idx].bi:null; if(bi===null) return;
   $("rhLabel").textContent=UI[LANG].rHot; $("rmLabel").textContent=UI[LANG].rMeh;
@@ -3671,26 +3661,7 @@ openAdmin=async function(){
 
    로그인해야 열린다. 기록이 남아야 "지난번보다 나아졌다" 가 성립하는데, 그건
    누구인지 알아야 가능하다. 문제 은행은 /quiz-architect.js 에 따로 있다. */
-Object.assign(UI.ko,{aqName:"이 건물<br>누가 설계했게",aqPlay:"PLAY ▶",aqLock:"로그인 필요",aqNeed:"로그인하면 열립니다. 기록이 남아야 지난번보다 나아졌는지 알 수 있어요.",aqRight:"정답!",aqWrong:"아쉽다 - 정답은",aqTime:"시간 초과 - 정답은",aqClearT:"GAME CLEAR!",aqLblR:"맞힌 개수",aqLblB:"최고 기록",aqRetryT:"한 판 더 ▶",aqBackT:"오락실로 ←",aqSoon:"문제를 불러오지 못했어요"});
-Object.assign(UI.en,{aqName:"WHO<br>DESIGNED IT",aqPlay:"PLAY ▶",aqLock:"LOG IN",aqNeed:"Log in to unlock. Your best score only means something if it is saved.",aqRight:"Correct!",aqWrong:"Nope - it was",aqTime:"Time up - it was",aqClearT:"GAME CLEAR!",aqLblR:"CORRECT",aqLblB:"BEST",aqRetryT:"PLAY AGAIN ▶",aqBackT:"ARCADE ←",aqSoon:"Could not load the questions"});
-Object.assign(UI.zh,{aqName:"这栋建筑<br>谁设计的",aqPlay:"开始 ▶",aqLock:"需登录",aqNeed:"登录后开放。成绩要能保存，才知道有没有进步。",aqRight:"答对了！",aqWrong:"可惜 - 正确答案是",aqTime:"超时 - 正确答案是",aqClearT:"GAME CLEAR!",aqLblR:"答对数",aqLblB:"最佳纪录",aqRetryT:"再来一局 ▶",aqBackT:"回大厅 ←",aqSoon:"题目加载失败"});
-Object.assign(UI.tw,{aqName:"這棟建築<br>誰設計的",aqPlay:"開始 ▶",aqLock:"需登入",aqNeed:"登入後開放。成績要能保存，才知道有沒有進步。",aqRight:"答對了！",aqWrong:"可惜 - 正確答案是",aqTime:"超時 - 正確答案是",aqClearT:"GAME CLEAR!",aqLblR:"答對數",aqLblB:"最佳紀錄",aqRetryT:"再來一局 ▶",aqBackT:"回大廳 ←",aqSoon:"題目載入失敗"});
-Object.assign(UI.ja,{aqName:"この建築<br>誰の設計",aqPlay:"はじめる ▶",aqLock:"ログイン必要",aqNeed:"ログインで解放されます。記録が残ってこそ前回より伸びたか分かります。",aqRight:"正解！",aqWrong:"惜しい - 正解は",aqTime:"時間切れ - 正解は",aqClearT:"GAME CLEAR!",aqLblR:"正解数",aqLblB:"最高記録",aqRetryT:"もう一度 ▶",aqBackT:"ロビーへ ←",aqSoon:"問題を読み込めませんでした"});
-Object.assign(UI.fr,{aqName:"QUI L'A<br>CONÇU",aqPlay:"JOUER ▶",aqLock:"CONNEXION",aqNeed:"Connectez-vous pour débloquer. Un record n'a de sens que s'il est conservé.",aqRight:"Correct !",aqWrong:"Raté - c'était",aqTime:"Temps écoulé - c'était",aqClearT:"GAME CLEAR!",aqLblR:"BONNES RÉPONSES",aqLblB:"RECORD",aqRetryT:"REJOUER ▶",aqBackT:"SALLE ←",aqSoon:"Impossible de charger les questions"});
-Object.assign(UI.it,{aqName:"CHI L'HA<br>PROGETTATO",aqPlay:"GIOCA ▶",aqLock:"ACCEDI",aqNeed:"Accedi per sbloccare. Un record ha senso solo se resta salvato.",aqRight:"Esatto!",aqWrong:"Peccato - era",aqTime:"Tempo scaduto - era",aqClearT:"GAME CLEAR!",aqLblR:"RISPOSTE ESATTE",aqLblB:"RECORD",aqRetryT:"GIOCA ANCORA ▶",aqBackT:"SALA ←",aqSoon:"Impossibile caricare le domande"});
-Object.assign(UI.de,{aqName:"WER HAT<br>ES ENTWORFEN",aqPlay:"SPIELEN ▶",aqLock:"ANMELDEN",aqNeed:"Zum Freischalten anmelden. Ein Rekord zählt nur, wenn er gespeichert bleibt.",aqRight:"Richtig!",aqWrong:"Knapp daneben - es war",aqTime:"Zeit abgelaufen - es war",aqClearT:"GAME CLEAR!",aqLblR:"RICHTIG",aqLblB:"BESTWERT",aqRetryT:"NOCHMAL ▶",aqBackT:"HALLE ←",aqSoon:"Fragen konnten nicht geladen werden"});
-Object.assign(UI.es,{aqName:"QUIÉN LO<br>PROYECTÓ",aqPlay:"JUGAR ▶",aqLock:"INICIA SESIÓN",aqNeed:"Inicia sesión para desbloquear. Un récord solo cuenta si se guarda.",aqRight:"¡Correcto!",aqWrong:"Casi - era",aqTime:"Se acabó el tiempo - era",aqClearT:"GAME CLEAR!",aqLblR:"ACIERTOS",aqLblB:"RÉCORD",aqRetryT:"OTRA PARTIDA ▶",aqBackT:"SALÓN ←",aqSoon:"No se han podido cargar las preguntas"});
 
-/* 성향 카드 문구. {n} 자리에는 나와 같은 답을 고른 사람의 비율이 들어간다. */
-Object.assign(UI.ko,{profTitle:"◆ 내 성향 카드",profAnswered:"지금까지 답한 문항",profMinor:"다수파를 거스른 횟수",profRarest:"가장 외로웠던 선택 - 나와 같은 답 {n}%",profGuest:"로그인하면 답이 쌓여서 내 성향 카드가 만들어집니다. 학교 메일 없어도 됩니다."});
-Object.assign(UI.en,{profTitle:"◆ YOUR CARD",profAnswered:"Questions answered",profMinor:"Times you went against the crowd",profRarest:"Your loneliest pick - only {n}% agreed",profGuest:"Log in and your answers build a profile card. No school email needed."});
-Object.assign(UI.zh,{profTitle:"◆ 我的倾向卡",profAnswered:"已回答题数",profMinor:"与多数人相反的次数",profRarest:"最孤独的选择 - 只有 {n}% 与你相同",profGuest:"登录后答题会累积成你的倾向卡。不需要学校邮箱。"});
-Object.assign(UI.tw,{profTitle:"◆ 我的傾向卡",profAnswered:"已回答題數",profMinor:"與多數人相反的次數",profRarest:"最孤獨的選擇 - 只有 {n}% 與你相同",profGuest:"登入後答題會累積成你的傾向卡。不需要學校信箱。"});
-Object.assign(UI.ja,{profTitle:"◆ わたしの傾向カード",profAnswered:"これまでの回答数",profMinor:"多数派に逆らった回数",profRarest:"いちばん孤独だった選択 - 同じ答えは {n}%",profGuest:"ログインすると回答がたまって傾向カードになります。大学メールは不要です。"});
-Object.assign(UI.fr,{profTitle:"◆ VOTRE CARTE",profAnswered:"Questions répondues",profMinor:"Fois où vous avez pris le contre-pied",profRarest:"Votre choix le plus solitaire - {n}% seulement d'accord",profGuest:"Connectez-vous et vos réponses composent votre carte. Pas besoin d'adresse universitaire."});
-Object.assign(UI.it,{profTitle:"◆ LA TUA SCHEDA",profAnswered:"Domande a cui hai risposto",profMinor:"Volte in cui sei andato controcorrente",profRarest:"La scelta più solitaria - solo il {n}% era d'accordo",profGuest:"Accedi e le tue risposte costruiscono la tua scheda. Non serve la mail universitaria."});
-Object.assign(UI.de,{profTitle:"◆ DEINE KARTE",profAnswered:"Beantwortete Fragen",profMinor:"So oft gegen die Mehrheit",profRarest:"Deine einsamste Wahl - nur {n}% waren dabei",profGuest:"Melde dich an, dann wachsen deine Antworten zu einer Karte. Ohne Hochschul-Mail."});
-Object.assign(UI.es,{profTitle:"◆ TU FICHA",profAnswered:"Preguntas respondidas",profMinor:"Veces que fuiste contracorriente",profRarest:"Tu elección más solitaria - solo el {n}% coincidió",profGuest:"Inicia sesión y tus respuestas van formando tu ficha. No hace falta correo universitario."});
 
 const AQ_N=10, AQ_SEC=12;
 let AQ={round:[],i:0,score:0,timer:null,left:0,log:[]};
@@ -4260,6 +4231,40 @@ UI.tw={
   lenLabel:'回合長度',hcLabel:'題目數量',hcOpts:['10題（短平快）','20題（標準）','30題（全套）'],
   anon:'匿名',dkQuiet:'目前很安靜...'
 };
+
+/* 아래 문구들은 반드시 UI.tw 정의 뒤에 와야 한다.
+   UI.zh / UI.ja / UI.tw 는 파일 위쪽이 아니라 여기서 만들어진다. 그 앞에서
+   Object.assign 을 하면 undefined 에 붙이려다 예외가 나고, 인라인 스크립트가
+   거기서 멈춰 그 뒤의 화면이 통째로 죽는다. 실제로 한 번 그렇게 됐다. */
+/* 9개 언어를 다 채운다. 비워 두면 화면에 undefined 가 그대로 찍힌다. */
+Object.assign(UI.ko,{rHot:"꿀잼",rMeh:"노잼",reactNeedLogin:"로그인하면 이 문항을 평가할 수 있어요"});
+Object.assign(UI.en,{rHot:"HOT",rMeh:"MEH",reactNeedLogin:"Log in to rate this question"});
+Object.assign(UI.zh,{rHot:"有趣",rMeh:"无聊",reactNeedLogin:"登录后即可评价这道题"});
+Object.assign(UI.tw,{rHot:"有趣",rMeh:"無聊",reactNeedLogin:"登入後即可評價這道題"});
+Object.assign(UI.ja,{rHot:"神問",rMeh:"微妙",reactNeedLogin:"ログインするとこの問題を評価できます"});
+Object.assign(UI.fr,{rHot:"TOP",rMeh:"BOF",reactNeedLogin:"Connectez-vous pour noter cette question"});
+Object.assign(UI.it,{rHot:"TOP",rMeh:"NOIA",reactNeedLogin:"Accedi per valutare questa domanda"});
+Object.assign(UI.de,{rHot:"STARK",rMeh:"NAJA",reactNeedLogin:"Melde dich an, um diese Frage zu bewerten"});
+Object.assign(UI.es,{rHot:"TOP",rMeh:"MEH",reactNeedLogin:"Inicia sesión para valorar esta pregunta"});
+/* 성향 카드 문구. {n} 자리에는 나와 같은 답을 고른 사람의 비율이 들어간다. */
+Object.assign(UI.ko,{profTitle:"◆ 내 성향 카드",profAnswered:"지금까지 답한 문항",profMinor:"다수파를 거스른 횟수",profRarest:"가장 외로웠던 선택 - 나와 같은 답 {n}%",profGuest:"로그인하면 답이 쌓여서 내 성향 카드가 만들어집니다. 학교 메일 없어도 됩니다."});
+Object.assign(UI.en,{profTitle:"◆ YOUR CARD",profAnswered:"Questions answered",profMinor:"Times you went against the crowd",profRarest:"Your loneliest pick - only {n}% agreed",profGuest:"Log in and your answers build a profile card. No school email needed."});
+Object.assign(UI.zh,{profTitle:"◆ 我的倾向卡",profAnswered:"已回答题数",profMinor:"与多数人相反的次数",profRarest:"最孤独的选择 - 只有 {n}% 与你相同",profGuest:"登录后答题会累积成你的倾向卡。不需要学校邮箱。"});
+Object.assign(UI.tw,{profTitle:"◆ 我的傾向卡",profAnswered:"已回答題數",profMinor:"與多數人相反的次數",profRarest:"最孤獨的選擇 - 只有 {n}% 與你相同",profGuest:"登入後答題會累積成你的傾向卡。不需要學校信箱。"});
+Object.assign(UI.ja,{profTitle:"◆ わたしの傾向カード",profAnswered:"これまでの回答数",profMinor:"多数派に逆らった回数",profRarest:"いちばん孤独だった選択 - 同じ答えは {n}%",profGuest:"ログインすると回答がたまって傾向カードになります。大学メールは不要です。"});
+Object.assign(UI.fr,{profTitle:"◆ VOTRE CARTE",profAnswered:"Questions répondues",profMinor:"Fois où vous avez pris le contre-pied",profRarest:"Votre choix le plus solitaire - {n}% seulement d'accord",profGuest:"Connectez-vous et vos réponses composent votre carte. Pas besoin d'adresse universitaire."});
+Object.assign(UI.it,{profTitle:"◆ LA TUA SCHEDA",profAnswered:"Domande a cui hai risposto",profMinor:"Volte in cui sei andato controcorrente",profRarest:"La scelta più solitaria - solo il {n}% era d'accordo",profGuest:"Accedi e le tue risposte costruiscono la tua scheda. Non serve la mail universitaria."});
+Object.assign(UI.de,{profTitle:"◆ DEINE KARTE",profAnswered:"Beantwortete Fragen",profMinor:"So oft gegen die Mehrheit",profRarest:"Deine einsamste Wahl - nur {n}% waren dabei",profGuest:"Melde dich an, dann wachsen deine Antworten zu einer Karte. Ohne Hochschul-Mail."});
+Object.assign(UI.es,{profTitle:"◆ TU FICHA",profAnswered:"Preguntas respondidas",profMinor:"Veces que fuiste contracorriente",profRarest:"Tu elección más solitaria - solo el {n}% coincidió",profGuest:"Inicia sesión y tus respuestas van formando tu ficha. No hace falta correo universitario."});
+Object.assign(UI.ko,{aqName:"이 건물<br>누가 설계했게",aqPlay:"PLAY ▶",aqLock:"로그인 필요",aqNeed:"로그인하면 열립니다. 기록이 남아야 지난번보다 나아졌는지 알 수 있어요.",aqRight:"정답!",aqWrong:"아쉽다 - 정답은",aqTime:"시간 초과 - 정답은",aqClearT:"GAME CLEAR!",aqLblR:"맞힌 개수",aqLblB:"최고 기록",aqRetryT:"한 판 더 ▶",aqBackT:"오락실로 ←",aqSoon:"문제를 불러오지 못했어요"});
+Object.assign(UI.en,{aqName:"WHO<br>DESIGNED IT",aqPlay:"PLAY ▶",aqLock:"LOG IN",aqNeed:"Log in to unlock. Your best score only means something if it is saved.",aqRight:"Correct!",aqWrong:"Nope - it was",aqTime:"Time up - it was",aqClearT:"GAME CLEAR!",aqLblR:"CORRECT",aqLblB:"BEST",aqRetryT:"PLAY AGAIN ▶",aqBackT:"ARCADE ←",aqSoon:"Could not load the questions"});
+Object.assign(UI.zh,{aqName:"这栋建筑<br>谁设计的",aqPlay:"开始 ▶",aqLock:"需登录",aqNeed:"登录后开放。成绩要能保存，才知道有没有进步。",aqRight:"答对了！",aqWrong:"可惜 - 正确答案是",aqTime:"超时 - 正确答案是",aqClearT:"GAME CLEAR!",aqLblR:"答对数",aqLblB:"最佳纪录",aqRetryT:"再来一局 ▶",aqBackT:"回大厅 ←",aqSoon:"题目加载失败"});
+Object.assign(UI.tw,{aqName:"這棟建築<br>誰設計的",aqPlay:"開始 ▶",aqLock:"需登入",aqNeed:"登入後開放。成績要能保存，才知道有沒有進步。",aqRight:"答對了！",aqWrong:"可惜 - 正確答案是",aqTime:"超時 - 正確答案是",aqClearT:"GAME CLEAR!",aqLblR:"答對數",aqLblB:"最佳紀錄",aqRetryT:"再來一局 ▶",aqBackT:"回大廳 ←",aqSoon:"題目載入失敗"});
+Object.assign(UI.ja,{aqName:"この建築<br>誰の設計",aqPlay:"はじめる ▶",aqLock:"ログイン必要",aqNeed:"ログインで解放されます。記録が残ってこそ前回より伸びたか分かります。",aqRight:"正解！",aqWrong:"惜しい - 正解は",aqTime:"時間切れ - 正解は",aqClearT:"GAME CLEAR!",aqLblR:"正解数",aqLblB:"最高記録",aqRetryT:"もう一度 ▶",aqBackT:"ロビーへ ←",aqSoon:"問題を読み込めませんでした"});
+Object.assign(UI.fr,{aqName:"QUI L'A<br>CONÇU",aqPlay:"JOUER ▶",aqLock:"CONNEXION",aqNeed:"Connectez-vous pour débloquer. Un record n'a de sens que s'il est conservé.",aqRight:"Correct !",aqWrong:"Raté - c'était",aqTime:"Temps écoulé - c'était",aqClearT:"GAME CLEAR!",aqLblR:"BONNES RÉPONSES",aqLblB:"RECORD",aqRetryT:"REJOUER ▶",aqBackT:"SALLE ←",aqSoon:"Impossible de charger les questions"});
+Object.assign(UI.it,{aqName:"CHI L'HA<br>PROGETTATO",aqPlay:"GIOCA ▶",aqLock:"ACCEDI",aqNeed:"Accedi per sbloccare. Un record ha senso solo se resta salvato.",aqRight:"Esatto!",aqWrong:"Peccato - era",aqTime:"Tempo scaduto - era",aqClearT:"GAME CLEAR!",aqLblR:"RISPOSTE ESATTE",aqLblB:"RECORD",aqRetryT:"GIOCA ANCORA ▶",aqBackT:"SALA ←",aqSoon:"Impossibile caricare le domande"});
+Object.assign(UI.de,{aqName:"WER HAT<br>ES ENTWORFEN",aqPlay:"SPIELEN ▶",aqLock:"ANMELDEN",aqNeed:"Zum Freischalten anmelden. Ein Rekord zählt nur, wenn er gespeichert bleibt.",aqRight:"Richtig!",aqWrong:"Knapp daneben - es war",aqTime:"Zeit abgelaufen - es war",aqClearT:"GAME CLEAR!",aqLblR:"RICHTIG",aqLblB:"BESTWERT",aqRetryT:"NOCHMAL ▶",aqBackT:"HALLE ←",aqSoon:"Fragen konnten nicht geladen werden"});
+Object.assign(UI.es,{aqName:"QUIÉN LO<br>PROYECTÓ",aqPlay:"JUGAR ▶",aqLock:"INICIA SESIÓN",aqNeed:"Inicia sesión para desbloquear. Un récord solo cuenta si se guarda.",aqRight:"¡Correcto!",aqWrong:"Casi - era",aqTime:"Se acabó el tiempo - era",aqClearT:"GAME CLEAR!",aqLblR:"ACIERTOS",aqLblB:"RÉCORD",aqRetryT:"OTRA PARTIDA ▶",aqBackT:"SALÓN ←",aqSoon:"No se han podido cargar las preguntas"});
 Object.assign(UI.tw,{phHostPw:"例：1234",phJoinCode:"例：7842",phJoinName:"例：通宵戰神",phSgName:"例：製圖室幽靈",phSgText:"例：猜名建築剪影",phBgName:"例：工坊坊主",phBgText:"例：這題A必勝，太無聊了"});
 Object.assign(UI.tw,{
   moreGames:'檢視<br>全部遊戲', gcatT:'遊戲目錄', gcatGhost:'這個卡槽還空著-來申請你想玩的遊戲吧！',
