@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { hasDatabase, db } from "@/lib/db";
-import { readToken, ACCESS_COOKIE } from "@/lib/auth";
+import { readToken, isAdminName, ACCESS_COOKIE } from "@/lib/auth";
+import { logAdminAccess } from "@/lib/audit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -35,7 +36,7 @@ const TOP = 20;
 async function whoami() {
   const jar = await cookies();
   const claims = await readToken(jar.get(ACCESS_COOKIE)?.value ?? "");
-  return claims ? { id: claims.sub, name: claims.name } : null;
+  return claims ? { id: claims.sub, name: claims.name, admin: isAdminName(claims.name) } : null;
 }
 
 export async function GET(req: Request) {
@@ -80,9 +81,12 @@ export async function GET(req: Request) {
       score: r.score,
       secs: r.secs,
       me: Boolean(me) && r.userId === me!.id,
+      // 관리자에게만 내려간다. 지울 대상을 가리키는 데 쓴다.
+      userId: me?.admin ? r.userId : undefined,
     })),
     mine: mine ? { score: mine.score, secs: mine.secs, rank: myRank } : null,
     loggedIn: Boolean(me),
+    admin: Boolean(me?.admin),
   });
 }
 
@@ -144,4 +148,47 @@ export async function POST(req: Request) {
     })) + 1;
 
   return NextResponse.json({ ok: true, best: better, rank });
+}
+
+/**
+ * 관리자가 순위표에서 한 줄을 지운다.
+ *
+ * 점수를 브라우저가 보내는 구조라 서버 검사만으로는 조작을 다 막지 못한다. 말이 안 되는
+ * 기록이 하나 올라가 있으면 그 아래 사람들은 아무리 해도 못 이기고, 순위표는 그날로
+ * 볼 이유가 없어진다. 지울 수 있어야 하는 이유다.
+ *
+ *   DELETE /api/archq { mode, userId }
+ */
+export async function DELETE(req: Request) {
+  if (!hasDatabase) return NextResponse.json({ error: "DATABASE_URL 필요" }, { status: 503 });
+
+  const me = await whoami();
+  // 권한이 없으면 이런 것이 있다는 사실도 알리지 않는다. 다른 관리자 화면과 같은 방식이다.
+  if (!me?.admin) return NextResponse.json({ error: "권한이 없어요" }, { status: 404 });
+
+  let body: { mode?: unknown; userId?: unknown };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "잘못된 요청" }, { status: 400 });
+  }
+
+  const mode = String(body.mode ?? "");
+  const userId = String(body.userId ?? "");
+  if (!MODES[mode] || !userId) return NextResponse.json({ error: "잘못된 값" }, { status: 400 });
+
+  const prisma = db();
+  /* 지우기 전에 누구의 기록인지 읽어 둔다. 지운 뒤에는 접속기록에 적을 "처리한 정보주체"
+     를 채울 방법이 없다(고시 제2조제3호). */
+  const target = await prisma.archqScore.findUnique({ where: { userId_mode: { userId, mode } } });
+  if (!target) return NextResponse.json({ error: "그 기록을 찾지 못했어요" }, { status: 404 });
+
+  await prisma.archqScore.delete({ where: { userId_mode: { userId, mode } } });
+  await logAdminAccess(req, {
+    admin: me.name,
+    subject: `${target.name} (${mode} ${target.score}점)`,
+    action: "순위 기록 삭제",
+  });
+
+  return NextResponse.json({ ok: true });
 }

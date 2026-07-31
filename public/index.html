@@ -275,6 +275,12 @@ body::after{
 
 /* 모드 고르기. 고른 것이 한눈에 보여야 한다 */
 .snd-hint{font-family:var(--kfont);font-size:10px;color:var(--dim);line-height:1.5;padding:6px 2px 0;max-width:180px;}
+/* 관리자가 지우는 X. 목록 한 줄 안에 들어가야 하므로 작다 */
+.del-x{
+  font-family:var(--efont);font-size:8px;color:var(--red);background:transparent;
+  border:2px solid var(--red);padding:2px 5px;margin-right:8px;cursor:pointer;
+}
+.del-x:disabled{opacity:.4;cursor:default;}
 .aq-modes{display:flex;flex-direction:column;gap:8px;width:100%;}
 .aq-mode{
   font-family:var(--kfont);font-size:14px;color:var(--ink);text-align:left;
@@ -719,6 +725,13 @@ body.ov-open{overflow:hidden;}
       <div class="note hidden" id="auSchoolHint"></div>
       <button class="btn kr hidden" id="btnGoVerify">학교 인증하러 가기 ▶</button>
       <!-- 로그인한 사람만. 비밀번호는 메일로 온 코드를 확인한 뒤에 바뀐다. -->
+      <!-- 인증한 사람만 보인다. 인증 전에는 왜 안 되는지 한 줄 뜬다. -->
+      <div class="field hidden" id="nickF">
+        <label id="nickL">닉네임 바꾸기</label>
+        <input id="nickIn" maxlength="16">
+      </div>
+      <button class="btn kr gray hidden" id="btnNick">닉네임 바꾸기</button>
+      <div class="note hidden" id="nickMsg" style="font-size:11px"></div>
       <button class="btn kr gray hidden" id="btnChangePw">비밀번호 바꾸기</button>
       <!-- 서버가 관리자라고 확인해 줄 때만 보인다. -->
       <button class="btn kr gray hidden" id="btnOpenAdmin">OP ROOM ▶</button>
@@ -970,7 +983,9 @@ body.ov-open{overflow:hidden;}
     <div class="stack hidden" id="vArchq">
       <div class="stage-head">
         <span class="stg" id="aqStage">Q 1 / 10</span>
-        <span id="aqScore">SCORE 0</span>
+        <span><span id="aqScore">SCORE 0</span>
+          <!-- 중간에 나갈 길이 없으면 탭을 닫는 수밖에 없다. 기록은 남기지 않는다. -->
+          <button class="crt-btn" id="aqQuit" style="margin-left:10px">✕</button></span>
       </div>
       <div class="timerbar"><div class="timerfill" id="aqBar"></div></div>
       <div class="qbox">
@@ -3179,6 +3194,7 @@ function updateAuthUI(){
   const logged=!!USER;
   // 로그인 상태가 바뀌면 잠긴 카트리지도 같이 풀린다
   if(typeof aqCartLabel==="function") aqCartLabel();
+  if(typeof refreshNick==="function") refreshNick();
   $("auNameF").classList.toggle("hidden",logged);
   $("auPinF").classList.toggle("hidden",logged);
   $("auBtns").classList.toggle("hidden",logged);
@@ -3195,6 +3211,58 @@ function updateAuthUI(){
         (nt?u.cardNext(nt[TITLE_IDX[LANG]||1], nt[0]-(p.plays||0)):u.cardMax)+'</div>';
   }
 }
+
+/* ═══ 닉네임 바꾸기 ═══
+   인증한 사람만 바꿀 수 있다. 아무나 바꿀 수 있으면 순위표 위쪽 사람 이름을 그대로
+   따라 짓거나, 남 이름으로 갈아탄 뒤 글을 쓰는 일이 생긴다.
+   인증 전에도 자리는 보여 주되 왜 안 되는지 말해 준다 - 아예 감춰 두면 그런 기능이
+   있는 줄도 모르고, 인증할 이유도 하나 줄어든다. */
+async function refreshNick(){
+  const u=UI[LANG];
+  const f=$("nickF"), btn=$("btnNick"), msg=$("nickMsg");
+  if(!USER){ f.classList.add("hidden"); btn.classList.add("hidden"); msg.classList.add("hidden"); return; }
+  try{
+    const r=await fetch("/api/auth/nickname",{cache:"no-store"});
+    if(!r.ok){ f.classList.add("hidden"); btn.classList.add("hidden"); msg.classList.add("hidden"); return; }
+    const d=await r.json();
+    $("nickL").textContent=u.nickLabel||UI.ko.nickLabel;
+    btn.textContent=u.nickBtn||UI.ko.nickBtn;
+    if(d.can){
+      $("nickIn").value=USER.name;
+      f.classList.remove("hidden"); btn.classList.remove("hidden");
+      msg.classList.add("hidden");
+    }else{
+      f.classList.add("hidden"); btn.classList.add("hidden");
+      msg.textContent=u.nickNeedVerify||UI.ko.nickNeedVerify;
+      msg.classList.remove("hidden");
+    }
+  }catch(e){}
+}
+
+$("btnNick").addEventListener("click",async function(){
+  const u=UI[LANG], msg=$("nickMsg"), btn=$("btnNick");
+  const name=clean($("nickIn").value);
+  if(!name||name===USER.name) return;
+  btn.disabled=true;
+  msg.classList.remove("hidden"); msg.textContent="...";
+  try{
+    const r=await fetch("/api/auth/nickname",{
+      method:"PATCH",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name:name})
+    });
+    const d=await r.json().catch(function(){ return {}; });
+    if(r.ok){
+      USER.name=d.name;
+      sfxClear();
+      msg.textContent=(u.nickDone||UI.ko.nickDone).replace("{n}",d.name);
+      updateAuthUI(); refreshDock();
+    }else{
+      msg.textContent=d.error||(u.auErrNet||"");
+    }
+  }catch(e){ msg.textContent=u.auErrNet||""; }
+  btn.disabled=false;
+});
+
 $("authBtn").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI(); });
 $("btnLogin").addEventListener("click",doLogin);
 $("btnRegister").addEventListener("click",doRegister);
@@ -3860,11 +3928,17 @@ async function aqLoadBoard(mode){
     if(!r.ok){ $("aqBoard").textContent=u.aqBoardFail||UI.ko.aqBoardFail; return; }
     const d=await r.json();
     const m=aqMode(mode);
+    /* 관리자에게는 지우기 X 가 붙는다. 점수는 브라우저가 보내는 값이라 서버 검사만으로
+       조작을 다 막지 못하고, 말이 안 되는 기록이 하나 박혀 있으면 그 아래 사람들은
+       아무리 해도 못 이겨서 순위표를 볼 이유가 없어진다. */
+    const isAdmin=!!d.admin;
     const rows=(d.rows||[]).map(function(x){
       // 문항 모드는 동점을 시간으로 가르므로 시간을 함께 보여 준다.
       const detail=m.secs? "" : " · "+x.secs+"s";
+      const del=(isAdmin&&x.userId)
+        ? '<button class="del-x" data-delscore="'+esc(x.userId)+'">X</button>' : '';
       return '<div class="pl-row"'+(x.me?' style="color:var(--yellow)"':'')+'>'+
-             '<span>'+x.rank+'. '+esc(x.name)+'</span>'+
+             '<span>'+del+x.rank+'. '+esc(x.name)+'</span>'+
              '<span style="font-size:11px">'+x.score+detail+'</span></div>';
     }).join("");
     let mine="";
@@ -3875,6 +3949,17 @@ async function aqLoadBoard(mode){
            '<span style="font-size:11px">'+d.mine.score+(m.secs?"":" · "+d.mine.secs+"s")+'</span></div>';
     }
     $("aqBoard").innerHTML=(rows||'<div class="pl-row">'+esc(u.aqBoardEmpty||UI.ko.aqBoardEmpty)+'</div>')+mine;
+    $("aqBoard").querySelectorAll("[data-delscore]").forEach(function(b){
+      b.addEventListener("click",async function(){
+        if(!confirm(u.delAsk||UI.ko.delAsk)) return;
+        b.disabled=true;
+        const ok=await fetch("/api/archq",{
+          method:"DELETE",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({mode:mode,userId:b.dataset.delscore})
+        }).then(r=>r.ok).catch(()=>false);
+        if(ok) aqLoadBoard(mode); else b.disabled=false;
+      });
+    });
   }catch(e){ $("aqBoard").textContent=u.aqBoardFail||UI.ko.aqBoardFail; }
 }
 
@@ -4003,6 +4088,15 @@ async function aqEnd(){
 
 $("cartArchq").addEventListener("click",aqOpenModes);
 $("aqRetry").addEventListener("click",aqOpenModes);
+/* 판 도중에 나가기. 기록은 올리지 않는다 - 중간에 그만둔 것을 최고 기록과 겨루게
+   하면 순위표가 뜻을 잃는다. 시계도 둘 다 멈춘다. */
+$("aqQuit").addEventListener("click",function(){
+  const u=UI[LANG];
+  if(!confirm(u.aqQuitAsk||UI.ko.aqQuitAsk)) return;
+  aqStop();
+  if(AQ.clock){ clearInterval(AQ.clock); AQ.clock=null; }
+  sfxNext(); aqOpenModes();
+});
 $("aqModeBack").addEventListener("click",function(){ sfxNext(); $("hudM").textContent="ARCADE"; show("vArcade"); });
 $("aqBack").addEventListener("click",function(){ aqStop(); sfxNext(); $("hudM").textContent="ARCADE"; show("vArcade"); });
 aqCartLabel();
@@ -4099,7 +4193,7 @@ $("btnGoVerify").addEventListener("click",()=>{
 /* ═══ 신규 기능 i18n (8개 언어) + 문화별 커뮤니티 노출 순서 ═══ */
 Object.assign(UI.ko,{
   moreGames:'더 많은<br>게임 보기', gcatT:'게임 카탈로그', gcatGhost:'다음 슬롯은 비어 있어요 - 하고 싶은 게임을 신청해 주세요!',
-  gameCat:[['건축학과 밸런스게임','설계실의 영원한 논쟁을 투표로 끝장내는 궁극의 2지선다'],['이 건물 누가 설계했게','실루엣·사진만 보고 건축가를 맞히는 눈썰미 퀴즈'],['건축용어 스피드 퀴즈','캔틸레버부터 코니스까지, 제한시간 안에 용어 맞히기'],['설계실 라이어게임','한 명만 다른 제시어를 받는다 - 설계실 눈치 게임'],['도면 틀린그림찾기','멀쩡해 보이는 도면 속 오류를 빨리 찾는 사람이 승리'],['스케일 감각 테스트','이 문, 몇 mm일까? 몸에 밴 스케일 감각 측정']],
+  gameCat:[['건축학과 밸런스게임','설계실의 영원한 논쟁을 투표로 끝장내는 궁극의 2지선다'],['이 건물 누가 설계했게','건물 이름과 연도만 보고 설계자를 맞히는 퀴즈 - 10·20·30문항과 타임어택'],['건축용어 스피드 퀴즈','캔틸레버부터 코니스까지, 제한시간 안에 용어 맞히기'],['설계실 라이어게임','한 명만 다른 제시어를 받는다 - 설계실 눈치 게임'],['도면 틀린그림찾기','멀쩡해 보이는 도면 속 오류를 빨리 찾는 사람이 승리'],['스케일 감각 테스트','이 문, 몇 mm일까? 몸에 밴 스케일 감각 측정']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'오픈 준비 중 · 관심 등록 받는 중',
   btnInterest:'이 기능 원해요! ♥', interestDone:'등록 완료 ✔ 오픈되면 만나요',
   commOrder:['team','crit','res','match'],
@@ -4115,7 +4209,7 @@ Object.assign(UI.ko,{
 });
 Object.assign(UI.en,{
   moreGames:'SEE ALL<br>GAMES', gcatT:'GAME CATALOG', gcatGhost:'This slot is empty - request the game you want!',
-  gameCat:[['Archi Balance Game','The ultimate either/or that settles studio debates by global vote'],['Guess the Architect','Name the architect from a silhouette or photo'],['Archi Terms Speed Quiz','From cantilever to cornice - beat the clock'],['Studio Liar Game','One player gets a different prompt - bluff your studio'],['Spot the Drawing Error','Find the hidden mistakes in a clean-looking drawing'],['Scale Sense Test','How many mm is that door? Test your body memory']],
+  gameCat:[['Archi Balance Game','The ultimate either/or that settles studio debates by global vote'],['Guess the Architect','Name the architect from the building and its year - 10, 20, 30 or time attack'],['Archi Terms Speed Quiz','From cantilever to cornice - beat the clock'],['Studio Liar Game','One player gets a different prompt - bluff your studio'],['Spot the Drawing Error','Find the hidden mistakes in a clean-looking drawing'],['Scale Sense Test','How many mm is that door? Test your body memory']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'In prep · collecting interest',
   btnInterest:'I want this! ♥', interestDone:'Registered ✔ See you at launch',
   commOrder:['team','crit','match','res'],
@@ -4131,7 +4225,7 @@ Object.assign(UI.en,{
 });
 Object.assign(UI.zh,{
   moreGames:'查看<br>全部游戏', gcatT:'游戏目录', gcatGhost:'这个卡槽还空着-来申请你想玩的游戏吧！',
-  gameCat:[['建筑系二选一大战','用全球投票终结画室永恒争论的终极二选一'],['这栋楼谁设计的','只看剪影或照片猜建筑师的眼力测验'],['建筑术语速答竞赛','从悬挑到檐口，限时抢答'],['制图室谁是卧底','只有一人拿到不同题目-画室推理博弈'],['图纸找不同','谁先找出看似正常的图纸里的错误谁赢'],['比例感觉测试','这扇门多少毫米？测测刻进身体的比例感']],
+  gameCat:[['建筑系二选一大战','用全球投票终结画室永恒争论的终极二选一'],['这栋楼谁设计的','只凭建筑名称和年份猜出建筑师 - 10·20·30题与计时赛'],['建筑术语速答竞赛','从悬挑到檐口，限时抢答'],['制图室谁是卧底','只有一人拿到不同题目-画室推理博弈'],['图纸找不同','谁先找出看似正常的图纸里的错误谁赢'],['比例感觉测试','这扇门多少毫米？测测刻进身体的比例感']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'筹备中 · 收集心愿',
   btnInterest:'我想要这个！♥', interestDone:'已登记 ✔ 上线见',
   commOrder:['match','team','crit','res'],
@@ -4147,7 +4241,7 @@ Object.assign(UI.zh,{
 });
 Object.assign(UI.ja,{
   moreGames:'ゲームを<br>すべて見る', gcatT:'ゲームカタログ', gcatGhost:'このスロットは空きです-遊びたいゲームをリクエスト！',
-  gameCat:[['建築学科 究極の二択','製図室の永遠の論争を世界投票で決着させる二択'],['この建物 誰の設計？','シルエットや写真だけで建築家を当てる眼力クイズ'],['建築用語スピードクイズ','キャンチからコーニスまで、制限時間内に即答'],['製図室人狼ゲーム','一人だけ違うお題-製図室の腹の探り合い'],['図面間違い探し','一見まともな図面のミスを早く見つけた人の勝ち'],['スケール感覚テスト','このドア、何mm？体に染みたスケール感を測定']],
+  gameCat:[['建築学科 究極の二択','製図室の永遠の論争を世界投票で決着させる二択'],['この建物 誰の設計？','建物名と竣工年だけで建築家を当てるクイズ - 10・20・30問とタイムアタック'],['建築用語スピードクイズ','キャンチからコーニスまで、制限時間内に即答'],['製図室人狼ゲーム','一人だけ違うお題-製図室の腹の探り合い'],['図面間違い探し','一見まともな図面のミスを早く見つけた人の勝ち'],['スケール感覚テスト','このドア、何mm？体に染みたスケール感を測定']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'準備中 · 興味登録受付中',
   btnInterest:'この機能ほしい！♥', interestDone:'登録完了 ✔ オープンでお会いしましょう',
   commOrder:['team','crit','match','res'],
@@ -4163,7 +4257,7 @@ Object.assign(UI.ja,{
 });
 Object.assign(UI.fr,{
   moreGames:'VOIR TOUS<br>LES JEUX', gcatT:'CATALOGUE DE JEUX', gcatGhost:'Ce slot est vide - demande le jeu de tes rêves !',
-  gameCat:[['Le Grand Dilemme Archi','Le duel ultime qui tranche les débats d\'atelier par vote mondial'],['Qui a conçu ce bâtiment ?','Devine l\'architecte à partir d\'une silhouette ou d\'une photo'],['Vocab Archi Quiz Éclair','Du porte-à-faux à la corniche, réponds avant la fin du chrono'],['Loup-Garou de l\'Atelier','Un seul joueur reçoit une autre consigne - bluffe ton atelier'],['Cherchez l\'Erreur du Plan','Trouve les fautes cachées dans un plan d\'apparence propre'],['Test du Sens de l\'Échelle','Cette porte fait combien de mm ? Mesure ta mémoire du corps']],
+  gameCat:[['Le Grand Dilemme Archi','Le duel ultime qui tranche les débats d\'atelier par vote mondial'],['Qui a conçu ce bâtiment ?','Devine l\'architecte d\'apres le batiment et son annee - 10, 20, 30 ou contre-la-montre'],['Vocab Archi Quiz Éclair','Du porte-à-faux à la corniche, réponds avant la fin du chrono'],['Loup-Garou de l\'Atelier','Un seul joueur reçoit une autre consigne - bluffe ton atelier'],['Cherchez l\'Erreur du Plan','Trouve les fautes cachées dans un plan d\'apparence propre'],['Test du Sens de l\'Échelle','Cette porte fait combien de mm ? Mesure ta mémoire du corps']],
   commHead:'▼ COMMUNAUTÉ · OUVERTURE PROCHAINE ▼', commSoonTag:'En préparation · intérêts comptés',
   btnInterest:'Je veux ça ! ♥', interestDone:'Enregistré ✔ À l\'ouverture !',
   commOrder:['team','match','crit','res'],
@@ -4179,7 +4273,7 @@ Object.assign(UI.fr,{
 });
 Object.assign(UI.it,{
   moreGames:'VEDI TUTTI<br>I GIOCHI', gcatT:'CATALOGO GIOCHI', gcatGhost:'Questo slot è vuoto - richiedi il gioco che vuoi!',
-  gameCat:[['Il Grande Dilemma Archi','Il duello definitivo che chiude i dibattiti d\'aula col voto mondiale'],['Chi ha progettato questo edificio?','Indovina l\'architetto da una sagoma o una foto'],['Termini Archi Quiz Lampo','Dallo sbalzo al cornicione, rispondi prima del gong'],['Lupus dell\'Aula Studio','Un solo giocatore riceve un tema diverso - bluffa i colleghi'],['Trova l\'Errore nel Disegno','Scova gli errori nascosti in una tavola all\'apparenza pulita'],['Test del Senso di Scala','Quanti mm è quella porta? Misura la memoria del corpo']],
+  gameCat:[['Il Grande Dilemma Archi','Il duello definitivo che chiude i dibattiti d\'aula col voto mondiale'],['Chi ha progettato questo edificio?','Indovina l\'architetto dal nome et dall\'anno - 10, 20, 30 o sfida a tempo'],['Termini Archi Quiz Lampo','Dallo sbalzo al cornicione, rispondi prima del gong'],['Lupus dell\'Aula Studio','Un solo giocatore riceve un tema diverso - bluffa i colleghi'],['Trova l\'Errore nel Disegno','Scova gli errori nascosti in una tavola all\'apparenza pulita'],['Test del Senso di Scala','Quanti mm è quella porta? Misura la memoria del corpo']],
   commHead:'▼ COMMUNITY · APERTURA IN ARRIVO ▼', commSoonTag:'In preparazione · interesse in raccolta',
   btnInterest:'Lo voglio! ♥', interestDone:'Registrato ✔ Ci vediamo all\'apertura',
   commOrder:['team','match','crit','res'],
@@ -4195,7 +4289,7 @@ Object.assign(UI.it,{
 });
 Object.assign(UI.de,{
   moreGames:'ALLE SPIELE<br>ANSEHEN', gcatT:'SPIELKATALOG', gcatGhost:'Dieser Slot ist frei - wünsch dir dein Spiel!',
-  gameCat:[['Das Große Archi-Dilemma','Das ultimative Entweder-oder, das Saal-Debatten per Weltabstimmung beendet'],['Wer hat das entworfen?','Errate den Architekten an Silhouette oder Foto'],['Archi-Begriffe Blitz-Quiz','Vom Kragarm bis zum Gesims - gegen die Uhr'],['Werwolf im Zeichensaal','Nur einer bekommt eine andere Aufgabe - bluffe deinen Saal'],['Finde den Planfehler','Wer die versteckten Fehler im sauberen Plan zuerst findet, gewinnt'],['Maßstabsgefühl-Test','Wie viele mm hat diese Tür? Teste dein Körpergedächtnis']],
+  gameCat:[['Das Große Archi-Dilemma','Das ultimative Entweder-oder, das Saal-Debatten per Weltabstimmung beendet'],['Wer hat das entworfen?','Errate den Architekten aus Gebaeude und Baujahr - 10, 20, 30 oder Zeitrennen'],['Archi-Begriffe Blitz-Quiz','Vom Kragarm bis zum Gesims - gegen die Uhr'],['Werwolf im Zeichensaal','Nur einer bekommt eine andere Aufgabe - bluffe deinen Saal'],['Finde den Planfehler','Wer die versteckten Fehler im sauberen Plan zuerst findet, gewinnt'],['Maßstabsgefühl-Test','Wie viele mm hat diese Tür? Teste dein Körpergedächtnis']],
   commHead:'▼ COMMUNITY · ERÖFFNUNG BALD ▼', commSoonTag:'In Vorbereitung · Interesse wird gezählt',
   btnInterest:'Will ich haben! ♥', interestDone:'Registriert ✔ Bis zur Eröffnung',
   commOrder:['team','res','crit','match'],
@@ -4211,7 +4305,7 @@ Object.assign(UI.de,{
 });
 Object.assign(UI.es,{
   moreGames:'VER TODOS<br>LOS JUEGOS', gcatT:'CATÁLOGO DE JUEGOS', gcatGhost:'Este hueco está vacío - ¡pide el juego que quieras!',
-  gameCat:[['El Gran Dilema Arqui','El duelo definitivo que zanja los debates del taller por voto mundial'],['¿Quién diseñó este edificio?','Adivina el arquitecto por una silueta o una foto'],['Términos Arqui Quiz Relámpago','Del voladizo a la cornisa, responde contra el reloj'],['Hombre Lobo del Taller','Solo uno recibe otra consigna - farolea a tu taller'],['Busca el Error del Plano','Gana quien antes encuentre los fallos ocultos de un plano impecable'],['Test del Sentido de Escala','¿Cuántos mm tiene esa puerta? Mide tu memoria corporal']],
+  gameCat:[['El Gran Dilema Arqui','El duelo definitivo que zanja los debates del taller por voto mundial'],['¿Quién diseñó este edificio?','Adivina el arquitecto por el edificio y su ano - 10, 20, 30 o contrarreloj'],['Términos Arqui Quiz Relámpago','Del voladizo a la cornisa, responde contra el reloj'],['Hombre Lobo del Taller','Solo uno recibe otra consigna - farolea a tu taller'],['Busca el Error del Plano','Gana quien antes encuentre los fallos ocultos de un plano impecable'],['Test del Sentido de Escala','¿Cuántos mm tiene esa puerta? Mide tu memoria corporal']],
   commHead:'▼ COMUNIDAD · APERTURA PRÓXIMA ▼', commSoonTag:'En preparación · registrando interés',
   btnInterest:'¡Lo quiero! ♥', interestDone:'Registrado ✔ Nos vemos en la apertura',
   commOrder:['match','team','crit','res'],
@@ -4524,6 +4618,28 @@ Object.assign(UI.it,{aqCountMode:"{n} domande",aqTimeMode:"Sfida a tempo {n}s",a
 Object.assign(UI.de,{aqCountMode:"{n} Fragen",aqTimeMode:"{n}s Zeitrennen",aqModeNote:"Waehle einen Modus. Jeder Modus hat seine eigene Rangliste.",aqGo:"START ▶",aqBoardEmpty:"Noch keine Ergebnisse",aqBoardFail:"Rangliste nicht ladbar",aqRank:"Platz {n}"});
 Object.assign(UI.es,{aqCountMode:"{n} preguntas",aqTimeMode:"Contrarreloj de {n}s",aqModeNote:"Elige un modo. Cada modo tiene su propia clasificacion.",aqGo:"EMPEZAR ▶",aqBoardEmpty:"Aun no hay marcas",aqBoardFail:"No se ha podido cargar la clasificacion",aqRank:"{n}o"});
 
+/* 나가기·지우기 확인 문구. */
+Object.assign(UI.ko,{aqQuitAsk:"정말 나갈까요? 이번 판 기록은 남지 않아요.",delAsk:"이 기록을 지울까요?"});
+Object.assign(UI.en,{aqQuitAsk:"Quit this round? Your score will not be saved.",delAsk:"Delete this score?"});
+Object.assign(UI.zh,{aqQuitAsk:"确定退出？本局成绩不会保存。",delAsk:"要删除这条记录吗？"});
+Object.assign(UI.tw,{aqQuitAsk:"確定退出？本局成績不會保存。",delAsk:"要刪除這筆紀錄嗎？"});
+Object.assign(UI.ja,{aqQuitAsk:"やめますか？今回の記録は残りません。",delAsk:"この記録を削除しますか？"});
+Object.assign(UI.fr,{aqQuitAsk:"Quitter la partie ? Votre score ne sera pas enregistre.",delAsk:"Supprimer ce score ?"});
+Object.assign(UI.it,{aqQuitAsk:"Uscire dalla partita? Il punteggio non verra salvato.",delAsk:"Eliminare questo punteggio?"});
+Object.assign(UI.de,{aqQuitAsk:"Runde verlassen? Dein Ergebnis wird nicht gespeichert.",delAsk:"Diesen Eintrag loeschen?"});
+Object.assign(UI.es,{aqQuitAsk:"Salir de la partida? Tu marca no se guardara.",delAsk:"Eliminar esta marca?"});
+
+/* 닉네임 바꾸기 문구. {n} 에는 바뀐 이름이 들어간다. */
+Object.assign(UI.ko,{nickLabel:"닉네임 바꾸기",nickBtn:"바꾸기",nickNeedVerify:"학교 인증을 하면 닉네임을 바꿀 수 있어요.",nickDone:"{n} 으로 바꿨어요"});
+Object.assign(UI.en,{nickLabel:"Change nickname",nickBtn:"Change",nickNeedVerify:"Verify your school to change your nickname.",nickDone:"Changed to {n}"});
+Object.assign(UI.zh,{nickLabel:"修改昵称",nickBtn:"修改",nickNeedVerify:"完成学校认证后即可修改昵称。",nickDone:"已改为 {n}"});
+Object.assign(UI.tw,{nickLabel:"修改暱稱",nickBtn:"修改",nickNeedVerify:"完成學校認證後即可修改暱稱。",nickDone:"已改為 {n}"});
+Object.assign(UI.ja,{nickLabel:"ニックネーム変更",nickBtn:"変更",nickNeedVerify:"学校認証をするとニックネームを変更できます。",nickDone:"{n} に変更しました"});
+Object.assign(UI.fr,{nickLabel:"Changer de pseudo",nickBtn:"Changer",nickNeedVerify:"Verifiez votre ecole pour changer de pseudo.",nickDone:"Change en {n}"});
+Object.assign(UI.it,{nickLabel:"Cambia nickname",nickBtn:"Cambia",nickNeedVerify:"Verifica la tua scuola per cambiare nickname.",nickDone:"Cambiato in {n}"});
+Object.assign(UI.de,{nickLabel:"Nickname aendern",nickBtn:"Aendern",nickNeedVerify:"Bestaetige deine Hochschule, um den Nickname zu aendern.",nickDone:"Geaendert zu {n}"});
+Object.assign(UI.es,{nickLabel:"Cambiar apodo",nickBtn:"Cambiar",nickNeedVerify:"Verifica tu escuela para cambiar de apodo.",nickDone:"Cambiado a {n}"});
+
 /* 아이폰 무음 스위치 안내. 세션을 바꿔 무음 스위치와 무관해졌지만, 그래도
    안 들리는 사람에게 어디를 볼지 알려 주는 마지막 줄이다. */
 Object.assign(UI.ko,{sndHint:"소리가 안 나면 측면 무음 스위치와 볼륨을 확인해주세요."});
@@ -4558,7 +4674,7 @@ Object.assign(UI.es,{aqName:"QUIÉN LO<br>PROYECTÓ",aqPlay:"JUGAR ▶",aqLock:"
 Object.assign(UI.tw,{phHostPw:"例：1234",phJoinCode:"例：7842",phJoinName:"例：通宵戰神",phSgName:"例：製圖室幽靈",phSgText:"例：猜名建築剪影",phBgName:"例：工坊坊主",phBgText:"例：這題A必勝，太無聊了"});
 Object.assign(UI.tw,{
   moreGames:'檢視<br>全部遊戲', gcatT:'遊戲目錄', gcatGhost:'這個卡槽還空著-來申請你想玩的遊戲吧！',
-  gameCat:[['建築系二選一大戰','用全球投票終結畫室永恆爭論的終極二選一'],['這棟樓誰設計的','只看剪影或照片猜建築師的眼力測驗'],['建築術語速答競賽','從懸挑到簷口，限時搶答'],['製圖室誰是臥底','只有一人拿到不同題目-畫室推理博弈'],['圖紙找不同','誰先找出看似正常的圖紙裡的錯誤誰贏'],['比例感覺測試','這扇門多少毫米？測測刻進身體的比例感']],
+  gameCat:[['建築系二選一大戰','用全球投票終結畫室永恆爭論的終極二選一'],['這棟樓誰設計的','只憑建築名稱和年份猜出建築師 - 10·20·30題與計時賽'],['建築術語速答競賽','從懸挑到簷口，限時搶答'],['製圖室誰是臥底','只有一人拿到不同題目-畫室推理博弈'],['圖紙找不同','誰先找出看似正常的圖紙裡的錯誤誰贏'],['比例感覺測試','這扇門多少毫米？測測刻進身體的比例感']],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'籌備中 · 收集心願',
   btnInterest:'我想要這個！♥', interestDone:'已登記 ✔ 上線見',
   commOrder:['match','team','crit','res'],
