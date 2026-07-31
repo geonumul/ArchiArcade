@@ -109,6 +109,20 @@ export default function VerifyPage() {
       }
       setBadge(d.badge);
       setStep("done");
+      /* 퍼널의 마지막 칸. 어느 경로로 들어온 사람이 학교 인증까지 가는지가
+         결국 알고 싶은 것이라, 성공한 순간에만 한 번 보낸다. 실패해도 화면은
+         그대로 진행한다 - 측정 때문에 인증이 막히면 본말이 뒤집힌다. */
+      fetch("/api/visits", {
+        method: "POST",
+        keepalive: true,
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          event: "verify",
+          channel: sessionStorage.getItem("aa-ch") ?? "direct",
+          device: window.matchMedia("(max-width:820px)").matches ? "mobile" : "desktop",
+          lang: document.documentElement.lang || "ko",
+        }),
+      }).catch(() => {});
     } catch {
       setErr(t.errNet);
     } finally {
