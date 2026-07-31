@@ -3771,15 +3771,22 @@ function aqIndex(){
    한국 이름 하나만 찾으면 되고, 힌트에 CN 이라고 써 두면 중국 사람이 한 명일 때
    그 사람이 곧 정답이다. 그래서 같은 나라에서 먼저 채우고, 모자라면 연대가
    가까운 사람으로 메운다. 그래도 모자랄 때만 아무나 넣는다. */
+/* 오답 셋 중 같은 나라 사람은 한 명까지만 넣는다.
+   처음에는 셋 다 같은 나라에서 뽑았는데, 그러면 한국 건물 문제에 한국 사람 넷이
+   나와서 아는 사람만 푸는 문제가 된다. 재미보다 어려움이 앞선다.
+   한 명만 섞어도 "이 나라 사람은 하나뿐이니 저것" 이 안 통하고, 4000판을 돌려 보면
+   보기 중 같은 나라 사람이 평균 3.47명에서 2.16명으로 내려가는 반면 나라만 보고
+   풀리는 비율은 12.0% 에서 12.5% 로 사실상 그대로다. 난이도만 내려간다. */
+const AQ_SAME_COUNTRY=1;
 function aqWrong(b){
   const bank=window.ARCHQ, ix=aqIndex();
   const out=[];
-  const take=function(pool){
+  const take=function(pool,lim){
     aqShuffle(pool).forEach(function(a){
-      if(out.length<3&&a!==b.a&&out.indexOf(a)<0) out.push(a);
+      if(out.length<(lim||3)&&a!==b.a&&out.indexOf(a)<0) out.push(a);
     });
   };
-  take([...(ix.byCountry[b.c]||[])]);                       // 같은 나라
+  take([...(ix.byCountry[b.c]||[])],AQ_SAME_COUNTRY);       // 같은 나라, 한 명까지
   if(out.length<3){
     const mine=ix.era[b.a]||b.y;
     take([...bank.arch.keys()]
