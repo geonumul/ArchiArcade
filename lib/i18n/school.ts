@@ -37,6 +37,8 @@ export interface SchoolStrings {
 
   sTitle: string;
   sNote: string;
+  /// 표를 어떻게 얻는지. 순위 화면에서 가장 먼저 궁금해지는 것이라 눈에 띄게 둔다.
+  sHow: string;
   sAll: string;
   sMine: (school: string, rank: number) => string;
   sMineNo: (school: string) => string;
@@ -94,6 +96,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "뱃지 해제",
     sTitle: "학교 순위",
     sNote: "인증된 학생의 표만 집계됩니다.",
+    sHow: "표는 게임을 한 판 할 때마다 쌓입니다. 학교 인증을 하고 문항에 답하면 그 표가 우리 학교 것으로 잡혀요. 인증 전에 던진 표는 전세계 통계에는 들어가지만 학교 순위에는 오르지 않습니다.",
     sAll: "전체",
     sMine: (s, r) => `우리 학교(${s}) - ${r}위`,
     sMineNo: (s) => `우리 학교(${s})는 아직 순위에 없어요. 한 판 하면 올라갑니다`,
@@ -149,6 +152,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "REMOVE BADGE",
     sTitle: "SCHOOL RANKING",
     sNote: "Only votes from verified students are counted.",
+    sHow: "Votes come from playing. Verify your school, then every answer you give counts for it. Votes cast before you verify still feed the global stats but not the school ranking.",
     sAll: "All",
     sMine: (s, r) => `Your school (${s}) - #${r}`,
     sMineNo: (s) => `Your school (${s}) is not ranked yet. One game gets it on the board`,
@@ -204,6 +208,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "解除徽章",
     sTitle: "学校排名",
     sNote: "仅统计已认证学生的投票。",
+    sHow: "投票来自于玩游戏。认证学校后，你的每次作答都会计入本校。认证前投的票仍计入全球统计，但不计入学校排名。",
     sAll: "全部",
     sMine: (s, r) => `本校（${s}）- 第${r}名`,
     sMineNo: (s) => `本校（${s}）还没有上榜。玩一局就能上榜`,
@@ -259,6 +264,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "解除徽章",
     sTitle: "學校排名",
     sNote: "僅統計已認證學生的投票。",
+    sHow: "投票來自於玩遊戲。認證學校後，你的每次作答都會計入本校。認證前投的票仍計入全球統計，但不計入學校排名。",
     sAll: "全部",
     sMine: (s, r) => `本校（${s}）- 第${r}名`,
     sMineNo: (s) => `本校（${s}）還沒上榜。玩一局就能上榜`,
@@ -314,6 +320,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "バッジを外す",
     sTitle: "学校ランキング",
     sNote: "認証済み学生の票だけを集計します。",
+    sHow: "票はプレイするたびに増えます。学校を認証すると、以降の回答が自分の学校の票になります。認証前の票は世界統計には入りますが学校ランキングには入りません。",
     sAll: "すべて",
     sMine: (s, r) => `自分の学校（${s}）- ${r}位`,
     sMineNo: (s) => `自分の学校（${s}）はまだランク外です。1回遊べば載ります`,
@@ -369,6 +376,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "RETIRER LE BADGE",
     sTitle: "CLASSEMENT DES ÉCOLES",
     sNote: "Seuls les votes d'étudiants vérifiés sont comptés.",
+    sHow: "Les votes viennent du jeu. Vérifiez votre école et chaque réponse comptera pour elle. Les votes antérieurs alimentent les stats mondiales mais pas le classement.",
     sAll: "Tous",
     sMine: (s, r) => `Votre école (${s}) - ${r}e`,
     sMineNo: (s) => `Votre école (${s}) n'est pas encore classée. Une partie suffit`,
@@ -424,6 +432,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "RIMUOVI BADGE",
     sTitle: "CLASSIFICA SCUOLE",
     sNote: "Contano solo i voti degli studenti verificati.",
+    sHow: "I voti arrivano giocando. Verifica la tua scuola e ogni risposta conterà per lei. I voti precedenti alimentano le statistiche globali ma non la classifica.",
     sAll: "Tutte",
     sMine: (s, r) => `La tua scuola (${s}) - ${r}°`,
     sMineNo: (s) => `La tua scuola (${s}) non è ancora in classifica. Basta una partita`,
@@ -479,6 +488,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "ABZEICHEN ENTFERNEN",
     sTitle: "HOCHSCHUL-RANGLISTE",
     sNote: "Nur Stimmen verifizierter Studierender zählen.",
+    sHow: "Stimmen entstehen beim Spielen. Verifiziere deine Hochschule, dann zählt jede Antwort für sie. Frühere Stimmen fließen in die weltweite Statistik, nicht in die Rangliste.",
     sAll: "Alle",
     sMine: (s, r) => `Deine Hochschule (${s}) - Platz ${r}`,
     sMineNo: (s) => `Deine Hochschule (${s}) ist noch nicht platziert. Eine Runde genügt`,
@@ -534,6 +544,7 @@ export const SCHOOL_UI: Record<SchoolLang, SchoolStrings> = {
     vUnbadge: "QUITAR INSIGNIA",
     sTitle: "RANKING DE ESCUELAS",
     sNote: "Solo se cuentan los votos de estudiantes verificados.",
+    sHow: "Los votos salen de jugar. Verifica tu escuela y cada respuesta contará para ella. Los votos anteriores alimentan las estadísticas globales pero no el ranking.",
     sAll: "Todas",
     sMine: (s, r) => `Tu escuela (${s}) - puesto ${r}`,
     sMineNo: (s) => `Tu escuela (${s}) aún no está en el ranking. Con una partida entra`,

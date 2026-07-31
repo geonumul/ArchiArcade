@@ -46,6 +46,10 @@ export default function SchoolsPage() {
   return (
     <Cabinet title={t.sTitle} hudRight="RANKING">
       <div className="note">{t.sNote}</div>
+      {/* 순위를 보면 바로 "그래서 표는 어떻게 얻나" 가 궁금해진다. 그 자리에 답을 둔다. */}
+      <div className="note" style={{ fontSize: 12, lineHeight: 1.7, color: "var(--dim)" }}>
+        {t.sHow}
+      </div>
 
       {countries.length > 1 && (
         <Picker
