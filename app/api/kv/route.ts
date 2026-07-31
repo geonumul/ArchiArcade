@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hasDatabase, prisma } from "@/lib/db";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 import {
   MAX_LIST_KEYS,
   MAX_VALUE_BYTES,
@@ -117,7 +117,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const ip = ipOf(req);
-  const rl = await rateLimit(`kv:w:${ip}`, 240, 60);
+  const rl = await rateLimit(`kv:w:${ipKey(ip)}`, 240, 60);
   if (!rl.allowed) return tooMany(rl.retryAfterSec);
 
   let body: { key?: unknown; value?: unknown };
@@ -155,7 +155,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const ip = ipOf(req);
-  const rl = await rateLimit(`kv:w:${ip}`, 240, 60);
+  const rl = await rateLimit(`kv:w:${ipKey(ip)}`, 240, 60);
   if (!rl.allowed) return tooMany(rl.retryAfterSec);
 
   const key = new URL(req.url).searchParams.get("key");

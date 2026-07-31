@@ -86,6 +86,29 @@ export async function rateLimit(key: string, limit: number, windowSec: number): 
   };
 }
 
+/**
+ * IP 를 도배 방지용 열쇠로만 바꾼다.
+ *
+ * 예전에는 `interest:1.2.3.4` 처럼 IP 를 그대로 열쇠에 넣었다. 그 열쇠는 Upstash 로
+ * 그대로 전송되므로, 우리 DB 에 IP 를 저장하지 않는다고 해도 원본 IP 는 국외로
+ * 나가고 있었다. 처리방침에 "IP 를 저장하지 않는다" 고 적어 둔 것이 반쪽만 맞는
+ * 상태였던 셈이다.
+ *
+ * 해시로 바꾸면 도배 방지는 그대로 된다 - 같은 사람은 같은 열쇠가 나오기 때문이다.
+ * 대신 열쇠만 보고 IP 를 되찾을 수는 없다. 소금은 서버에만 있고 밖으로 나가지 않는다.
+ *
+ * 짧게 자르는 이유: 열쇠 길이는 Upstash 요금과 무관하지만, 길다고 더 안전해지지도
+ * 않는다. 16자리면 도배꾼끼리 우연히 겹칠 일이 사실상 없다.
+ */
+import { createHmac } from "node:crypto";
+
+const IP_SALT = process.env.JWT_SECRET || "archiarcade-local-dev";
+
+export function ipKey(ip: string): string {
+  if (!ip) return "unknown";
+  return createHmac("sha256", IP_SALT).update(ip).digest("hex").slice(0, 16);
+}
+
 /// 성공 시 카운터를 비운다(로그인 성공 등).
 export async function resetLimit(key: string): Promise<void> {
   if (hasUpstash) {

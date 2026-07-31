@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hasDatabase, prisma } from "@/lib/db";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 import { isLang } from "@/lib/i18n";
 
 export const runtime = "nodejs";
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
   // 정상이라 넉넉하게 잡는다. 좁게 잡으면 막히는 쪽은 늘 제일 열심히 논 사람이고,
   // 그러면 퍼널 뒷단(가입, 인증)만 골라서 깎여 나간다. 학교나 카페처럼 여러 명이
   // 같은 IP 를 쓰는 경우도 있어서 더 그렇다.
-  const rl = await rateLimit(`visits:${ip}`, 300, 600);
+  const rl = await rateLimit(`visits:${ipKey(ip)}`, 300, 600);
   // 막혔어도 화면에는 아무 일도 없어야 한다. 이 요청은 사용자가 볼 응답이 아니다.
   if (!rl.allowed) return NextResponse.json({ ok: true });
 

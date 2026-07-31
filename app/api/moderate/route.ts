@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { moderate } from "@/lib/moderation";
 import { prisma } from "@/lib/db";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 /// 검열은 반드시 서버를 경유한다. 클라이언트는 API 키를 절대 보지 않는다.
 export async function POST(req: Request) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  const rl = await rateLimit(`moderate:${ip}`, 30, 60);
+  const rl = await rateLimit(`moderate:${ipKey(ip)}`, 30, 60);
   if (!rl.allowed) {
     return NextResponse.json(
       { ok: false, reason: "너무 자주 요청했어요" },

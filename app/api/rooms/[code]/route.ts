@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { store } from "@/lib/store";
 import { verifyPassword } from "@/lib/auth";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,7 +30,7 @@ export async function POST(req: Request, { params }: Ctx) {
   // 방 단위로 모든 시도를 세면 정원 50인 방이 정원을 채우지 못한다 —
   // 정상 입장 50건이 곧바로 한도를 넘겨버리기 때문이다.
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  const perIp = await rateLimit(`room:join:ip:${ip}`, 30, 60);
+  const perIp = await rateLimit(`room:join:ip:${ipKey(ip)}`, 30, 60);
   if (!perIp.allowed) {
     return NextResponse.json(
       { error: "입장 시도가 너무 많아요" },

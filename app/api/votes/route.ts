@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { store } from "@/lib/store";
 import { BANK_SIZE, isLocalVariant } from "@/lib/game/bank";
 import { isLang } from "@/lib/i18n";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 import { readBadge, BADGE_COOKIE } from "@/lib/badge";
 
 export const runtime = "nodejs";
@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 /// "국가별 인식 비교" 리포트를 나중에 뽑을 수 있게 한다.
 export async function POST(req: Request) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  const rl = await rateLimit(`vote:${ip}`, 120, 60);
+  const rl = await rateLimit(`vote:${ipKey(ip)}`, 120, 60);
   if (!rl.allowed) {
     return NextResponse.json({ error: "too many" }, { status: 429, headers: { "retry-after": String(rl.retryAfterSec) } });
   }

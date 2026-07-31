@@ -16,6 +16,10 @@ export const dynamic = "force-dynamic";
  *
  * 여기 있는 숫자는 전부 여러 사람의 합이라 개인을 되짚을 수 있는 값이 없다.
  *
+ * 그래서 관리자 접속기록(고시 제8조, lib/audit.ts)을 남기지 않는다. 고시가 남기라는 것은
+ * "처리한 정보주체 정보"가 있는 접속이고, 이 화면에는 정보주체가 한 명도 등장하지 않는다.
+ * 아무나 봐도 되는 합계까지 기록하면 표만 불어나 정작 봐야 할 줄이 묻힌다.
+ *
  *   GET /api/admin/funnel?days=14
  *     → { range: { from, to },
  *         byChannel: [{ channel, visits, plays, signups, verifies }],

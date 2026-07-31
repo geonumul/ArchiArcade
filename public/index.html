@@ -217,6 +217,15 @@ body::after{
 /* 잠긴 것(locked)과 다르다. 이건 눌리는 카트리지고, 누르면 왜 로그인이
    필요한지 알려 준다. 흐리게 하면 아예 없는 것처럼 보여 아무도 누르지 않는다. */
 .cart.gated .cart-tag{border-color:var(--blue);color:var(--blue);}
+
+/* 선택 동의 한 줄. 눈에 띄되 가입을 막는 것처럼 보이면 안 된다 */
+.optin{
+  display:flex;align-items:center;gap:10px;width:100%;
+  font-size:12px;color:var(--dim);line-height:1.5;cursor:pointer;text-align:left;
+}
+.optin input{
+  flex:none;width:18px;height:18px;accent-color:var(--yellow);cursor:pointer;
+}
 .arcade-stats{
   font-family:var(--efont);font-size:9px;color:var(--dim);
   display:flex;gap:18px;justify-content:center;
@@ -677,6 +686,14 @@ body.ov-open{overflow:hidden;}
       <div class="field pw-field" id="auPinF"><label id="auPinL">비밀번호</label><input id="auPin" maxlength="64" type="password"><button class="pw-eye" id="pwEye" tabindex="-1">👁</button></div>
       <div class="field pw-field hidden" id="auPw2F"><label id="auPw2L">비밀번호 확인</label><input id="auPw2" maxlength="64" type="password"></div>
       <div class="pw-meter hidden" id="auMeter"><i></i><i></i><i></i><span id="auMeterT"></span></div>
+      <!-- 선택. 체크하지 않아도 가입되고 서비스도 똑같이 쓸 수 있다.
+           새 게임 소식은 광고성 정보라 이 동의 없이는 한 통도 보낼 수 없다
+           (정보통신망법 제50조). 기본값은 반드시 꺼짐이어야 한다 - 미리 체크해 두면
+           명시적 동의로 인정되지 않는다. -->
+      <label class="optin hidden" id="auMktF">
+        <input type="checkbox" id="auMkt">
+        <span id="auMktT">(선택) 새 게임 소식을 메일로 받을게요</span>
+      </label>
       <div class="err" id="auErr"></div>
       <div class="next-wrap" id="auBtns">
         <button class="btn kr" id="btnLogin">로그인</button>
@@ -1769,6 +1786,18 @@ function track(event){
 }
 track("visit");
 
+/* 한 판이 끝까지 갔는지. 방문 수와 플레이 수만으로는 "재미없어서 나갔다" 가 안 보인다.
+   시작한 판 중 몇 개가 끝났는지, 평균 몇 문항에서 멈추는지가 문항을 손볼 근거가 된다.
+   누가 했는지는 보내지 않는다 - 그날의 합에만 더해지므로 개인과 이어지지 않는다. */
+function round(game,event,answered){
+  try{
+    fetch("/api/rounds",{
+      method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({game:game,event:event,lang:LANG,answered:answered||0})
+    }).catch(()=>{});
+  }catch(e){}
+}
+
 /* ── 8비트 효과음 ── */
 let audioCtx=null, masterGain=null;
 let SND={vol:0.7, on:true}; // 기본 소리 켬 - 토글 하나로 BGM+SFX 동시 제어
@@ -1899,6 +1928,7 @@ function showEnd(){
   $("cntA").textContent=aC; $("cntB").textContent=myPicks.filter(p=>p==="b").length; $("cntM").textContent=minorCount;
   const r=UI[LANG].ranks(minorCount,NQ);
   $("rankBox").innerHTML=r[0]+"<br>"+r[1];
+  round("balance","finish",myPicks.filter(Boolean).length);
   showProfCard();
 }
 
@@ -2024,7 +2054,7 @@ async function hostLobbyPoll(){
   await sSet(stKey(room.code),JSON.stringify(hostState));
 }
 async function hostStartGame(){
-  stopTimers(); sfxNext(); bumpStats("plays"); track("play"); idx=0; myPicks=[]; minorCount=0;
+  stopTimers(); sfxNext(); bumpStats("plays"); track("play"); round("balance","start"); idx=0; myPicks=[]; minorCount=0;
   show("vQuiz"); await hostOpenVoting();
 }
 async function hostOpenVoting(){
@@ -2400,7 +2430,7 @@ $("btnBgBack").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="
 
 $("btnLobby").addEventListener("click",()=>{ stopTimers(); sfxNext(); $("hudM").textContent="ARCHI ARCADE"; show("vArcade"); });
 $("btnSolo").addEventListener("click",async()=>{
-  mode="solo"; sfxNext(); stopTimers(); bumpStats("plays"); track("play");
+  mode="solo"; sfxNext(); stopTimers(); bumpStats("plays"); track("play"); round("balance","start");
   idx=0; myPicks=[]; minorCount=0;
   NQ=roundLen;
   drawRound();                        // 매 판 새로운 랜덤 20문항
@@ -3090,7 +3120,7 @@ async function doRegister(){
   if(!validPw(p)){ $("auErr").textContent=UI[LANG].auErrPw8; return; }
   if(p!==p2){ $("auErr").textContent=UI[LANG].auErrPw2; return; }
   $("auErr").textContent="...";
-  const r=await authPost("/api/auth/register",{name:n,email:em,pw:p,locale:LANG});
+  const r=await authPost("/api/auth/register",{name:n,email:em,pw:p,locale:LANG,marketing:$("auMkt").checked});
   if(!r.ok){ $("auErr").textContent=r.d.error||UI[LANG].auErrNet; return; }
   setUser(r.d.user, r.d.schoolEmail);
   track("signup");
@@ -3703,10 +3733,11 @@ function aqStart(){
     $("auErr").textContent=u.aqNeed||UI.ko.aqNeed;
     return;
   }
-  const round=aqDraw();
-  if(!round){ alert(u.aqSoon||UI.ko.aqSoon); return; }
-  AQ={round:round,i:0,score:0,timer:null,left:0,log:[]};
-  sfxNext(); track("play");
+  // 판을 뜻하는 지역 이름이 판 집계 함수 round() 를 가리지 않게 다른 이름을 쓴다
+  const deck=aqDraw();
+  if(!deck){ alert(u.aqSoon||UI.ko.aqSoon); return; }
+  AQ={round:deck,i:0,score:0,timer:null,left:0,log:[]};
+  sfxNext(); track("play"); round("archq","start");
   $("hudM").textContent="WHO DESIGNED IT";
   show("vArchq"); aqAsk();
 }
@@ -3778,6 +3809,7 @@ function aqEnd(){
     return '<div class="pl-row"><span>'+(e.ok?"○":"✕")+' '+esc(e.name)+'</span>'+
            '<span style="color:var(--dim);font-size:11px">'+esc(e.answer)+'</span></div>';
   }).join("");
+  round("archq","finish",AQ.log.length);
   sfxClear(); $("hudM").textContent="RESULT"; show("vArchqEnd");
 }
 
@@ -3797,6 +3829,8 @@ function setAuthMode(m){
   $("auPw2F").classList.toggle("hidden",m!=="register");
   $("auEmailF").classList.toggle("hidden",m!=="register");
   $("auMeter").classList.toggle("hidden",m!=="register");
+  $("auMktF").classList.toggle("hidden",m!=="register");
+  $("auMktT").textContent=UI[LANG].mktOptIn||UI.ko.mktOptIn;
   $("btnLogin").classList.toggle("hidden",m!=="login");
   $("btnRegister").classList.toggle("hidden",m!=="register");
   // 비밀번호 찾기는 로그인 탭에서만 의미가 있다.
@@ -4256,6 +4290,17 @@ Object.assign(UI.fr,{profTitle:"◆ VOTRE CARTE",profAnswered:"Questions répond
 Object.assign(UI.it,{profTitle:"◆ LA TUA SCHEDA",profAnswered:"Domande a cui hai risposto",profMinor:"Volte in cui sei andato controcorrente",profRarest:"La scelta più solitaria - solo il {n}% era d'accordo",profGuest:"Accedi e le tue risposte costruiscono la tua scheda. Non serve la mail universitaria."});
 Object.assign(UI.de,{profTitle:"◆ DEINE KARTE",profAnswered:"Beantwortete Fragen",profMinor:"So oft gegen die Mehrheit",profRarest:"Deine einsamste Wahl - nur {n}% waren dabei",profGuest:"Melde dich an, dann wachsen deine Antworten zu einer Karte. Ohne Hochschul-Mail."});
 Object.assign(UI.es,{profTitle:"◆ TU FICHA",profAnswered:"Preguntas respondidas",profMinor:"Veces que fuiste contracorriente",profRarest:"Tu elección más solitaria - solo el {n}% coincidió",profGuest:"Inicia sesión y tus respuestas van formando tu ficha. No hace falta correo universitario."});
+
+/* 선택 동의 문구. 체크하지 않아도 가입되고 서비스도 똑같다는 것이 드러나야 한다. */
+Object.assign(UI.ko,{mktOptIn:"(선택) 새 게임 소식을 메일로 받을게요"});
+Object.assign(UI.en,{mktOptIn:"(optional) Email me when a new game opens"});
+Object.assign(UI.zh,{mktOptIn:"(选填) 有新游戏时用邮件通知我"});
+Object.assign(UI.tw,{mktOptIn:"(選填) 有新遊戲時用信件通知我"});
+Object.assign(UI.ja,{mktOptIn:"(任意) 新しいゲームができたらメールで知らせて"});
+Object.assign(UI.fr,{mktOptIn:"(facultatif) Me prévenir par e-mail des nouveaux jeux"});
+Object.assign(UI.it,{mktOptIn:"(facoltativo) Avvisami via e-mail dei nuovi giochi"});
+Object.assign(UI.de,{mktOptIn:"(optional) Mail mir, wenn ein neues Spiel aufmacht"});
+Object.assign(UI.es,{mktOptIn:"(opcional) Avisadme por correo de los juegos nuevos"});
 Object.assign(UI.ko,{aqName:"이 건물<br>누가 설계했게",aqPlay:"PLAY ▶",aqLock:"로그인 필요",aqNeed:"로그인하면 열립니다. 기록이 남아야 지난번보다 나아졌는지 알 수 있어요.",aqRight:"정답!",aqWrong:"아쉽다 - 정답은",aqTime:"시간 초과 - 정답은",aqClearT:"GAME CLEAR!",aqLblR:"맞힌 개수",aqLblB:"최고 기록",aqRetryT:"한 판 더 ▶",aqBackT:"오락실로 ←",aqSoon:"문제를 불러오지 못했어요"});
 Object.assign(UI.en,{aqName:"WHO<br>DESIGNED IT",aqPlay:"PLAY ▶",aqLock:"LOG IN",aqNeed:"Log in to unlock. Your best score only means something if it is saved.",aqRight:"Correct!",aqWrong:"Nope - it was",aqTime:"Time up - it was",aqClearT:"GAME CLEAR!",aqLblR:"CORRECT",aqLblB:"BEST",aqRetryT:"PLAY AGAIN ▶",aqBackT:"ARCADE ←",aqSoon:"Could not load the questions"});
 Object.assign(UI.zh,{aqName:"这栋建筑<br>谁设计的",aqPlay:"开始 ▶",aqLock:"需登录",aqNeed:"登录后开放。成绩要能保存，才知道有没有进步。",aqRight:"答对了！",aqWrong:"可惜 - 正确答案是",aqTime:"超时 - 正确答案是",aqClearT:"GAME CLEAR!",aqLblR:"答对数",aqLblB:"最佳纪录",aqRetryT:"再来一局 ▶",aqBackT:"回大厅 ←",aqSoon:"题目加载失败"});

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hasDatabase, prisma } from "@/lib/db";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 import { isLang } from "@/lib/i18n";
 
 export const runtime = "nodejs";
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   // 한 사람이 네 개를 다 눌러도 넉넉하되, 눌러서 숫자를 부풀리기는 어렵게.
-  const rl = await rateLimit(`interest:${ip}`, 12, 600);
+  const rl = await rateLimit(`interest:${ipKey(ip)}`, 12, 600);
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "잠시 후 다시 시도해주세요" },

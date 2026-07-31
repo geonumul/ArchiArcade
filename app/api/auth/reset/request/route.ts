@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { hasDatabase, db } from "@/lib/db";
 import { sendPasswordResetCode, MAIL_ENABLED } from "@/lib/mailer";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 import { normalizeEmail, validEmail } from "@/lib/email";
 
 export const runtime = "nodejs";
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       { status: 429, headers: { "retry-after": String(perEmail.retryAfterSec) } }
     );
   }
-  const perIp = await rateLimit(`reset:ip:${ip}`, 10, 600);
+  const perIp = await rateLimit(`reset:ip:${ipKey(ip)}`, 10, 600);
   if (!perIp.allowed) {
     return NextResponse.json({ error: "요청이 너무 많아요" }, { status: 429 });
   }

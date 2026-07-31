@@ -40,7 +40,11 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const prisma = db();
 
-  // 관리자용: 손볼 문항 목록
+  /* 관리자용: 손볼 문항 목록.
+     관리자만 보는 자리지만 접속기록(고시 제8조)을 남기지 않는다. 나가는 값이 문항 번호와
+     꿀잼·노잼 수뿐이라 "처리한 정보주체 정보"에 적을 사람이 없기 때문이다. 누가 눌렀는지는
+     ReactionVote 에 있지만 이 조회는 그 표를 건드리지 않는다. 아래 PATCH 도 같은 이유로
+     남기지 않는다 - 문항의 상태를 바꿀 뿐 사람의 정보를 고치는 것이 아니다. */
   if (url.searchParams.get("flagged")) {
     const me = await whoami();
     if (!me?.admin) return NextResponse.json({ error: "권한이 없어요" }, { status: 404 });

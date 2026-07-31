@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { hasDatabase, db } from "@/lib/db";
 import { hashPassword, validPassword } from "@/lib/auth";
-import { rateLimit, resetLimit } from "@/lib/ratelimit";
+import { rateLimit, resetLimit, ipKey } from "@/lib/ratelimit";
 import { normalizeEmail, validEmail } from "@/lib/email";
 
 export const runtime = "nodejs";
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  const rl = await rateLimit(`resetc:ip:${ip}`, 20, 600);
+  const rl = await rateLimit(`resetc:ip:${ipKey(ip)}`, 20, 600);
   if (!rl.allowed) {
     return NextResponse.json({ error: "요청이 너무 많아요" }, { status: 429 });
   }
