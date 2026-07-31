@@ -33,6 +33,17 @@ const PAGE = 100;
  */
 const KINDS = ["밸런스붕괴", "새질문", "개선"] as const;
 
+/**
+ * 게시판 둘. 규칙은 같고 누가 볼 수 있느냐만 다르다.
+ *   report - 질문 밸런스 제보. 관리자와 본인만 본다.
+ *   idea   - 다음 카트리지 신청. 모두가 본다.
+ */
+const BOARDS = ["report", "idea"] as const;
+type Board = (typeof BOARDS)[number];
+function asBoard(v: unknown): Board {
+  return (BOARDS as readonly string[]).includes(String(v)) ? (String(v) as Board) : "report";
+}
+
 interface Me {
   id: string;
   name: string;
@@ -51,24 +62,36 @@ function clean(v: unknown, max: number): string {
   return v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   if (!hasDatabase) return NextResponse.json({ error: "DATABASE_URL 필요" }, { status: 503 });
 
+  const board = asBoard(new URL(req.url).searchParams.get("board"));
   const me = await whoami();
-  // 로그인하지 않은 사람에게는 목록이 있는지조차 알리지 않는다.
-  if (!me) return NextResponse.json({ error: "로그인이 필요해요", needLogin: true }, { status: 401 });
+
+  // 신청 목록은 누구나 본다 - 남들이 뭘 원하는지 보는 것이 이 게시판의 재미다.
+  // 제보는 로그인해야 보이고, 그마저도 자기 것만 보인다.
+  if (!me && board !== "idea") {
+    return NextResponse.json({ error: "로그인이 필요해요", needLogin: true }, { status: 401 });
+  }
 
   const prisma = db();
   const rows = await prisma.report.findMany({
-    // 관리자만 전체를 본다. 그 밖에는 자기가 넣은 것만 — 지우기 위해서다.
-    where: me.admin ? {} : { userId: me.id },
+    where:
+      board === "idea"
+        ? { board }
+        : // 관리자만 전체를 본다. 그 밖에는 자기가 넣은 것만 - 지우기 위해서다.
+          me!.admin
+          ? { board }
+          : { board, userId: me!.id },
     select: { id: true, authorName: true, kind: true, body: true, lang: true, createdAt: true, userId: true },
     orderBy: { createdAt: "desc" },
     take: PAGE,
   });
 
   return NextResponse.json({
-    admin: me.admin,
+    board,
+    admin: Boolean(me?.admin),
+    loggedIn: Boolean(me),
     rows: rows.map((r) => ({
       id: r.id,
       authorName: r.authorName,
@@ -76,7 +99,8 @@ export async function GET() {
       body: r.body,
       lang: r.lang,
       createdAt: r.createdAt.toISOString(),
-      mine: r.userId === me.id,
+      // 지울 수 있는지 화면이 바로 알 수 있게 함께 내보낸다.
+      mine: Boolean(me) && r.userId === me!.id,
     })),
   });
 }
@@ -87,7 +111,7 @@ export async function POST(req: Request) {
   const me = await whoami();
   if (!me) return NextResponse.json({ error: "로그인 후 제보할 수 있어요", needLogin: true }, { status: 401 });
 
-  const rl = await rateLimit(`report:${me.id}`, 5, 600);
+  const rl = await rateLimit(`report:${me.id}`, 8, 600);
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "제보가 너무 잦아요. 잠시 후 다시 시도해주세요" },
@@ -95,13 +119,14 @@ export async function POST(req: Request) {
     );
   }
 
-  let raw: { kind?: unknown; body?: unknown; lang?: unknown; authorName?: unknown };
+  let raw: { kind?: unknown; body?: unknown; lang?: unknown; authorName?: unknown; board?: unknown };
   try {
     raw = await req.json();
   } catch {
     return NextResponse.json({ error: "잘못된 요청" }, { status: 400 });
   }
 
+  const board = asBoard(raw.board);
   const kind = (KINDS as readonly string[]).includes(String(raw.kind)) ? String(raw.kind) : KINDS[0];
   const body = clean(raw.body, BODY_MAX);
   const lang = typeof raw.lang === "string" && isLang(raw.lang) ? raw.lang : "ko";
@@ -121,7 +146,7 @@ export async function POST(req: Request) {
 
   const prisma = db();
   const row = await prisma.report.create({
-    data: { userId: me.id, authorName, kind, body, lang },
+    data: { userId: me.id, board, authorName, kind, body, lang },
     select: { id: true, authorName: true, kind: true, body: true, lang: true, createdAt: true },
   });
 
