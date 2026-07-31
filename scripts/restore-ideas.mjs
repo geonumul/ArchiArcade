@@ -1,0 +1,117 @@
+/**
+ * 지워진 게시판 글을 과거 시점의 값에서 되살린다.
+ *
+ *   RESTORE_JSON=되살릴값.json node scripts/restore-ideas.mjs        → 무엇이 돌아오는지만 보여 준다
+ *   RESTORE_JSON=되살릴값.json node scripts/restore-ideas.mjs --yes  → 실제로 되살린다
+ *
+ * 과거 시점 브랜치를 떠 두었다면 접속 문자열로도 된다.
+ *   RESTORE_FROM="postgres://…" node scripts/restore-ideas.mjs
+ *
+ * 공용 저장소는 덮어쓰기 방식이라 이전 값이 남지 않는다. 내가 검증하다 이 키를 비웠고,
+ * 사람들이 남긴 글이 사라졌다. Neon 은 과거 시점을 조회하게 해 주므로, 그때의 값을
+ * 읽어 지금 값과 합친다. 브랜치를 새로 뜨지 않고 Neon 콘솔에서 그 시점으로 조회한
+ * 결과를 그대로 파일에 넣어도 된다 - 그쪽이 훨씬 간단하다.
+ *
+ * RESTORE_JSON 파일 모양은 { "키": [글, …], … } 이다.
+ *
+ * 합치는 규칙:
+ *   - 지금 있는 글은 하나도 건드리지 않는다. 되살리려다 덮는 일은 없어야 한다.
+ *   - 과거에만 있는 글을 붙이고, 시간 순으로 정렬한다.
+ *   - 같은 글인지는 (작성시각, 본문) 으로 본다. 원본이 글에 id 를 주지 않기 때문이다.
+ *
+ * 운영 DB 에는 이 스크립트만 쓴다. 과거 쪽은 읽기만 한다.
+ */
+import { PrismaClient } from "@prisma/client";
+import { readFileSync } from "node:fs";
+import { argv, env, exit } from "node:process";
+
+const apply = argv.includes("--yes");
+const from = env.RESTORE_FROM;
+const jsonPath = env.RESTORE_JSON;
+/// 원본이 최근 80건만 들고 있다. 되살린 뒤에도 그 상한을 지킨다.
+const KEEP = 80;
+const KEYS = ["arcade-ideas-v1", "arcade-qfeedback-v1"];
+
+if (!from && !jsonPath) {
+  console.log("되살릴 값이 어디 있는지 알려주세요.");
+  console.log("  RESTORE_JSON=되살릴값.json node scripts/restore-ideas.mjs");
+  console.log('  RESTORE_FROM="postgres://…과거브랜치…" node scripts/restore-ideas.mjs');
+  exit(1);
+}
+
+const live = new PrismaClient();
+const past = from ? new PrismaClient({ datasources: { db: { url: from } } }) : null;
+const fromFile = jsonPath ? JSON.parse(readFileSync(jsonPath, "utf8")) : null;
+
+/** 원본이 쓰는 모양은 글 배열이다. 값이 깨졌거나 배열이 아니면 빈 것으로 본다. */
+function parseList(row) {
+  if (!row) return [];
+  try {
+    const v = JSON.parse(row.value);
+    return Array.isArray(v) ? v : [];
+  } catch {
+    return [];
+  }
+}
+
+/** 과거 값을 파일에서든 브랜치에서든 같은 모양으로 가져온다. */
+async function readPast(key) {
+  if (fromFile) {
+    const v = fromFile[key];
+    return Array.isArray(v) ? v : [];
+  }
+  return parseList(await past.kv.findUnique({ where: { key } }));
+}
+
+/** 같은 글인지 보는 기준. 원본 글에는 id 가 없어 시각과 본문을 함께 본다. */
+function identity(post) {
+  return `${post?.ts ?? ""}|${String(post?.t ?? post?.text ?? "")}`;
+}
+
+try {
+  let touched = 0;
+
+  for (const key of KEYS) {
+    const [liveRow, before] = await Promise.all([live.kv.findUnique({ where: { key } }), readPast(key)]);
+
+    const now = parseList(liveRow);
+
+    const have = new Set(now.map(identity));
+    const back = before.filter((p) => !have.has(identity(p)));
+
+    console.log(`${key}: 지금 ${now.length}건 · 과거 ${before.length}건 → 되살릴 글 ${back.length}건`);
+    back.slice(0, 5).forEach((p) => {
+      const text = String(p?.t ?? p?.text ?? "").replace(/\s+/g, " ").slice(0, 50);
+      console.log(`   · ${text}`);
+    });
+    if (back.length > 5) console.log(`   · … 그 밖 ${back.length - 5}건`);
+
+    if (!back.length) continue;
+
+    /* 오래된 것이 앞이다. 화면이 `.slice(-3).reverse()` 로 최근 세 건을 꺼내므로
+       순서를 뒤집으면 게시판이 거꾸로 보인다. 상한도 앞이 아니라 뒤에서 지킨다 -
+       넘칠 때 잘려 나가야 하는 것은 오래된 쪽이다. */
+    const merged = [...now, ...back]
+      .sort((a, b) => (Number(a?.ts) || 0) - (Number(b?.ts) || 0))
+      .slice(-KEEP);
+
+    if (apply) {
+      await live.kv.upsert({
+        where: { key },
+        create: { key, value: JSON.stringify(merged) },
+        update: { value: JSON.stringify(merged) },
+      });
+      console.log(`   → ${merged.length}건으로 다시 썼습니다.`);
+    }
+    touched += back.length;
+  }
+
+  if (!apply) {
+    console.log(`\n미리보기입니다. 실제로 되살리려면 --yes 를 붙이세요. (총 ${touched}건)`);
+  } else {
+    console.log(`\n${touched}건 되살렸습니다.`);
+  }
+} finally {
+  await live.$disconnect();
+  if (past) await past.$disconnect();
+}

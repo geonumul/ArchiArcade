@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { hasDatabase, db } from "@/lib/db";
 import { readToken, isAdminName, ACCESS_COOKIE } from "@/lib/auth";
+import { logAdminAccess } from "@/lib/audit";
 import { rateLimit } from "@/lib/ratelimit";
 import { moderate } from "@/lib/moderation";
 import { isLang } from "@/lib/i18n";
@@ -88,6 +89,17 @@ export async function GET(req: Request) {
     take: PAGE,
   });
 
+  /* 관리자가 제보함을 펼치면 남이 쓴 글과 그때 적은 이름을 통째로 보게 되므로 접속기록을
+     남긴다(고시 제8조). 신청 게시판(idea)은 누구나 보는 자리라 관리자라고 더 보는 것이
+     없어서 남기지 않는다 - 아무 일도 아닌 줄까지 쌓이면 정작 봐야 할 줄이 묻힌다. */
+  if (me?.admin && board !== "idea") {
+    await logAdminAccess(req, {
+      admin: me.name,
+      subject: `제보 ${rows.length}건 (작성자 ${new Set(rows.map((r) => r.userId)).size}명)`,
+      action: "제보함 조회",
+    });
+  }
+
   return NextResponse.json({
     board,
     admin: Boolean(me?.admin),
@@ -163,6 +175,14 @@ export async function DELETE(req: Request) {
   if (!id) return NextResponse.json({ error: "지울 대상이 없어요" }, { status: 400 });
 
   const prisma = db();
+
+  /* 관리자가 지우는 것이라면 누구 글이었는지 먼저 읽어 둔다. 지운 뒤에는 알아낼 방법이
+     없는데, 접속기록의 "처리한 정보주체 정보"가 비면 기록으로 인정되지 않는다
+     (고시 제2조제3호). 관리자가 아닐 때는 본인 것만 지워지므로 이 조회를 하지 않는다. */
+  const target = me.admin
+    ? await prisma.report.findUnique({ where: { id }, select: { userId: true, authorName: true } })
+    : null;
+
   // 관리자가 아니면 본인 것만 지워진다. 조건을 where 에 넣어, 남의 것을 지우려 해도
   // "없음" 으로 떨어지게 한다 — 존재 여부조차 알려주지 않는다.
   const removed = await prisma.report.deleteMany({
@@ -172,5 +192,16 @@ export async function DELETE(req: Request) {
   if (removed.count === 0) {
     return NextResponse.json({ error: "그 제보를 찾지 못했어요" }, { status: 404 });
   }
+
+  /* 본인 글을 지운 관리자까지 한 줄 남는다. 남의 것인지 가려서 빼면 코드는 조금
+     깔끔해지지만, 빠뜨린 줄은 나중에 되살릴 수 없다. 더 남는 쪽이 안전하다. */
+  if (me.admin) {
+    await logAdminAccess(req, {
+      admin: me.name,
+      subject: `제보 ${id} (작성자 ${target?.authorName ?? "미상"} / ${target?.userId ?? "미상"})`,
+      action: target && target.userId === me.id ? "본인 제보 삭제" : "제보 삭제",
+    });
+  }
+
   return NextResponse.json({ ok: true });
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hasDatabase, prisma } from "@/lib/db";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   // 한 판이 30문항이라, 연달아 두 판을 해도 걸리지 않을 만큼만 열어 둔다.
-  const rl = await rateLimit(`bank:${ip}`, 120, 60);
+  const rl = await rateLimit(`bank:${ipKey(ip)}`, 120, 60);
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "too many requests" },

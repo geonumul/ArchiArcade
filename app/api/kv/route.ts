@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { hasDatabase, prisma } from "@/lib/db";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 import {
   MAX_LIST_KEYS,
   MAX_VALUE_BYTES,
   expiryFor,
   isAllowedKey,
   isAllowedPrefix,
+  isWritableKey,
 } from "@/lib/kv";
 
 export const runtime = "nodejs";
@@ -116,7 +117,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const ip = ipOf(req);
-  const rl = await rateLimit(`kv:w:${ip}`, 240, 60);
+  const rl = await rateLimit(`kv:w:${ipKey(ip)}`, 240, 60);
   if (!rl.allowed) return tooMany(rl.retryAfterSec);
 
   let body: { key?: unknown; value?: unknown };
@@ -128,7 +129,8 @@ export async function POST(req: Request) {
 
   const key = typeof body.key === "string" ? body.key : "";
   const value = typeof body.value === "string" ? body.value : "";
-  if (!isAllowedKey(key)) {
+  // 쓰기는 더 좁다. 대기실 채팅처럼 읽기만 열어 둔 키가 있다.
+  if (!isWritableKey(key)) {
     return NextResponse.json({ error: "key not allowed" }, { status: 400 });
   }
   if (Buffer.byteLength(value, "utf8") > MAX_VALUE_BYTES) {
@@ -153,11 +155,11 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const ip = ipOf(req);
-  const rl = await rateLimit(`kv:w:${ip}`, 240, 60);
+  const rl = await rateLimit(`kv:w:${ipKey(ip)}`, 240, 60);
   if (!rl.allowed) return tooMany(rl.retryAfterSec);
 
   const key = new URL(req.url).searchParams.get("key");
-  if (!key || !isAllowedKey(key)) {
+  if (!key || !isWritableKey(key)) {
     return NextResponse.json({ error: "key not allowed" }, { status: 400 });
   }
 

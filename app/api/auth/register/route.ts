@@ -12,7 +12,7 @@ import {
   ACCESS_COOKIE,
   REFRESH_COOKIE,
 } from "@/lib/auth";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 import { isLang } from "@/lib/i18n";
 import { normalizeEmail, validEmail } from "@/lib/email";
 import { resolveSchool } from "@/lib/school";
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  const rl = await rateLimit(`register:${ip}`, 5, 600);
+  const rl = await rateLimit(`register:${ipKey(ip)}`, 5, 600);
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "잠시 후 다시 시도해주세요" },
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { name?: unknown; email?: unknown; pw?: unknown; locale?: unknown };
+  let body: { name?: unknown; email?: unknown; pw?: unknown; locale?: unknown; marketing?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -78,7 +78,17 @@ export async function POST(req: Request) {
   }
 
   const user = await prisma.user.create({
-    data: { name, email, pwHash: await hashPassword(pw), locale, profile: { create: {} } },
+    data: {
+      name,
+      email,
+      pwHash: await hashPassword(pw),
+      locale,
+      profile: { create: {} },
+      /* 광고성 정보 수신 동의. 체크했을 때만 줄을 만든다 - 안 한 사람에게 "거부" 라는
+         기록을 남길 이유가 없고, 없으면 없는 것이 곧 동의하지 않은 상태다.
+         체크 여부는 가입 성패에 아무 영향을 주지 않는다(개인정보 보호법 제16조제3항). */
+      ...(body.marketing === true ? { marketing: { create: { agreed: true } } } : {}),
+    },
   });
 
   const claims = { sub: user.id, name: user.name, gen: 0 };

@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { hasDatabase, db } from "@/lib/db";
 import { readBadge, BADGE_COOKIE, signBadge, badgeCookieOptions } from "@/lib/badge";
 import { isMajor } from "@/lib/majors";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -114,7 +114,7 @@ export async function POST(req: Request) {
   }
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  const rl = await rateLimit(`alumni:${ip}`, 20, 60);
+  const rl = await rateLimit(`alumni:${ipKey(ip)}`, 20, 60);
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "너무 자주 바꿨어요. 잠시 후 다시 시도해주세요" },

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { hasDatabase, db } from "@/lib/db";
 import { readToken, isAdminName, ACCESS_COOKIE } from "@/lib/auth";
+import { logAdminAccess } from "@/lib/audit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,12 +16,15 @@ export const dynamic = "force-dynamic";
  * 공개하지 않은 사람의 이름·회사는 내보내지 않는다. "공개에 동의한 사람만 보입니다"
  * 라고 화면에 적어 두고 관리자 화면에서 그걸 뒤집으면 그 약속이 거짓이 된다.
  * 몇 명인지와 어느 학과인지까지만 보이고, 그것만으로도 어디에 사람이 모이는지는 알 수 있다.
+ *
+ * 이 리포에서 관리자가 남의 개인정보를 가장 많이 보는 자리라, 부를 때마다 접속기록을
+ * 남긴다(고시 제8조, lib/audit.ts).
  */
 
 const MAX_SCHOOLS = 100;
 const MAX_PEOPLE = 50;
 
-export async function GET() {
+export async function GET(req: Request) {
   if (!hasDatabase) return NextResponse.json({ error: "DATABASE_URL 필요" }, { status: 503 });
 
   const jar = await cookies();
@@ -101,6 +105,17 @@ export async function GET() {
   const schools = [...bySchool.values()]
     .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name))
     .slice(0, MAX_SCHOOLS);
+
+  /* 처리한 정보주체 정보는 "어느 학교의 몇 명 분을 펼쳤나"로 적는다. 한 번에 여러 학교를
+     받아 가는 조회라 개인을 한 명씩 적을 수 없고, 굳이 적으면 접속기록 쪽이 오히려 더 큰
+     개인정보 더미가 된다. 나중에 "이 학교 사람들의 정보가 언제 열렸나"를 되짚기에는
+     학교 도메인과 인원 수로 충분하다. */
+  const touched = schools.slice(0, 5).map((s) => s.domain);
+  await logAdminAccess(req, {
+    admin: claims.name,
+    subject: `인증자 ${rows.length}명 / 학교 ${bySchool.size}곳 (상위: ${touched.join(", ") || "없음"})`,
+    action: "동문목록 조회",
+  });
 
   return NextResponse.json({
     schools,

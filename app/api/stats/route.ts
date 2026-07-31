@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hasDatabase, prisma } from "@/lib/db";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
   if (!hasDatabase || !prisma) return NextResponse.json(ZERO);
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  const rl = await rateLimit(`stats:${ip}`, 60, 60);
+  const rl = await rateLimit(`stats:${ipKey(ip)}`, 60, 60);
   // 막혔더라도 화면에 숫자는 떠야 하므로 현재 값을 돌려준다.
   if (!rl.allowed) return NextResponse.json(await current());
 

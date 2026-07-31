@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { store } from "@/lib/store";
 import { hashPassword } from "@/lib/auth";
 import { drawRound, makeRoomCode, DEFAULT_ROUND_LENGTH, ROUND_LENGTHS } from "@/lib/game/round";
-import { rateLimit } from "@/lib/ratelimit";
+import { rateLimit, ipKey } from "@/lib/ratelimit";
 import { isLang } from "@/lib/i18n";
 import { DEFAULT_ROOM_SIZE, isRoomSize } from "@/lib/capacity";
 
@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 /// 방 생성. 코드는 서버가 뽑고, 비밀번호는 해시만 저장한다.
 export async function POST(req: Request) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  const rl = await rateLimit(`room:create:${ip}`, 10, 60);
+  const rl = await rateLimit(`room:create:${ipKey(ip)}`, 10, 60);
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "방을 너무 자주 만들고 있어요" },
