@@ -273,6 +273,17 @@ body::after{
 .mini-btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--shadow);}
 .mini-btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px;}
 
+/* 모드 고르기. 고른 것이 한눈에 보여야 한다 */
+.aq-modes{display:flex;flex-direction:column;gap:8px;width:100%;}
+.aq-mode{
+  font-family:var(--kfont);font-size:14px;color:var(--ink);text-align:left;
+  background:var(--panel2);border:4px solid var(--border);box-shadow:0 4px 0 var(--shadow);
+  padding:12px 14px;cursor:pointer;
+}
+.aq-mode:active{transform:translateY(4px);box-shadow:0 0 0 var(--shadow);}
+.aq-mode.cur{background:var(--yellow);color:var(--shadow);}
+.aq-mode:focus-visible{outline:4px solid var(--blue);outline-offset:2px;}
+
 /* 설계자 맞히기 - 보기 넷. 밸런스게임의 .choice 와 같은 결이되 폭이 좁다 */
 .aq-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
 @media(max-width:560px){.aq-choices{grid-template-columns:1fr;}}
@@ -669,7 +680,7 @@ body.ov-open{overflow:hidden;}
       <!-- 푸터는 1100px 이상에서만 보이므로 모바일에서는 방침에 닿을 길이 없다.
            개인정보 보호법 제30조는 쉽게 확인할 수 있게 공개하도록 하므로 여기에도 둔다. -->
       <div class="note" style="font-size:11px;padding-top:4px">
-        <a href="/privacy" id="lnkPrivacy" style="color:var(--dim)">개인정보 처리방침</a>
+        <a href="/privacy" id="lnkPrivacy" target="_blank" rel="noopener" style="color:var(--dim)">개인정보 처리방침</a>
       </div>
     </div>
 
@@ -942,6 +953,15 @@ body.ov-open{overflow:hidden;}
       <button class="btn" id="retryBtn">CONTINUE?</button>
     </div>
 
+    <!-- ── 설계자 맞히기: 모드 고르기 ── -->
+    <div class="stack hidden" id="vArchqMode">
+      <div class="logo" style="font-size:20px" id="aqModeT">이 건물 누가 설계했게</div>
+      <div class="note" id="aqModeN">모드를 고르세요. 순위는 모드마다 따로 매겨집니다.</div>
+      <div class="aq-modes" id="aqModes"></div>
+      <div class="playerlist" id="aqBoard" style="max-height:210px"></div>
+      <button class="btn kr gray" id="aqModeBack">오락실로 ←</button>
+    </div>
+
     <!-- ── 두 번째 카트리지: 이 건물 누가 설계했게 ── -->
     <div class="stack hidden" id="vArchq">
       <div class="stage-head">
@@ -988,7 +1008,7 @@ body.ov-open{overflow:hidden;}
      <div class="dock-body" id="dockUser">게스트 모드로 플레이 중.<br>로그인하면 전적과 칭호가 저장됩니다.</div>
    </div>
  </aside>
- <footer class="site-foot">© 2026 설계실 오락실 - ARCHI ARCADE · v1.5 · FONTS: GALMURI + PRESS START 2P (SIL OFL) · <a href="/privacy" style="color:var(--dim)">개인정보 처리방침</a></footer>
+ <footer class="site-foot">© 2026 설계실 오락실 - ARCHI ARCADE · v1.5 · FONTS: GALMURI + PRESS START 2P (SIL OFL) · <a href="/privacy" target="_blank" rel="noopener" style="color:var(--dim)">개인정보 처리방침</a></footer>
 </div>
 
 <div class="ov hidden" id="ovGames">
@@ -1673,7 +1693,7 @@ const APP_VER="1.7.0";
 const ROOM_TTL=24*3600*1000;            // 방 유효기간 24시간
 const $ = id => document.getElementById(id);
 const uid = Math.random().toString(36).slice(2,10);
-const VIEWS = ["vArcade","vTitle","vHostSetup","vHostLobby","vJoin","vWait","vQuiz","vEnd","vSuggest","vReport","vAuth","vForgot","vAdmin","vArchq","vArchqEnd"];
+const VIEWS = ["vArcade","vTitle","vHostSetup","vHostLobby","vJoin","vWait","vQuiz","vEnd","vSuggest","vReport","vAuth","vForgot","vAdmin","vArchqMode","vArchq","vArchqEnd"];
 
 /* ── 보안 헬퍼 ── */
 // XSS 방지: 사용자 입력이 화면에 표시되기 전 이스케이프
@@ -2292,7 +2312,7 @@ $("cartBalance").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent
 $("cartSuggest").addEventListener("click",async()=>{
   sfxNext(); $("hudM").textContent="REQUEST BOARD"; show("vSuggest");
   $("sgName").value = USER ? USER.name : UI[LANG].anon;
-  $("ideaList").textContent="불러오는 중...";
+  $("ideaList").textContent=UI[LANG].loadingT||UI.ko.loadingT;
   renderIdeas(await loadIdeas());
 });
 $("btnSgLogin").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI(); });
@@ -3302,10 +3322,14 @@ async function refreshDock(){
     $("dockUser").innerHTML='<b>'+esc(USER.name)+'</b> - '+esc(titleFor(p.plays||0))+'<br>'+u.cardPlays+': <b>'+(p.plays||0)+'</b> · '+u.cardMinor+': <b>'+(p.minor||0)+'</b>';
   }
   try{
-    const ideas=(await loadIdeas()).slice(-3).reverse();
-    const bugs=(await loadBugs()).slice(-3).reverse();
-    const lines=[...ideas.map(i=>'<span class="feed-line"><span class="who">💬 '+esc(i.n)+'</span> '+esc(i.t)+'</span>'),
-                 ...bugs.map(i=>'<span class="feed-line"><span class="who">'+(TP_ICON[i.tp]||"⚖️")+' '+esc(i.n)+'</span> '+esc(i.t)+'</span>')];
+    /* 게시판이 공용 저장소에서 서버로 옮겨가면서 loadIdeas/loadBugs 가 배열 대신
+       {rows, admin, loggedIn} 을 돌려주게 됐는데, 여기만 예전처럼 배열로 다루고
+       있었다. .slice 가 없어 예외가 났고 try 가 그걸 삼켜서, LIVE FEED 가 아무 말
+       없이 비어 있었다. 조용히 죽는 종류라 아무도 눈치채지 못했다. */
+    const ideas=((await loadIdeas()).rows||[]).slice(0,3);
+    const bugs=((await loadBugs()).rows||[]).slice(0,3);
+    const lines=[...ideas.map(i=>'<span class="feed-line"><span class="who">💬 '+esc(i.authorName)+'</span> '+esc(i.body)+'</span>'),
+                 ...bugs.map(i=>'<span class="feed-line"><span class="who">'+(TP_ICON[i.kind]||"⚖️")+' '+esc(i.authorName)+'</span> '+esc(i.body)+'</span>')];
     $("dockFeed").innerHTML=lines.length?lines.join(""):UI[LANG].dkQuiet;
   }catch(e){}
 }
@@ -3555,9 +3579,14 @@ applyLang();
 
 
 /* ═══ 게임 카탈로그 모달 ═══ */
+/* play:true 면 목록에서 바로 들어갈 수 있다. open 은 어느 카트리지를 누를지.
+   설계자 맞히기는 로그인해야 열리는데, 그 판단은 카트리지 쪽(aqStart)이 하므로
+   여기서는 그냥 같은 버튼을 누르기만 하면 된다 - 잠금 규칙이 두 곳에 생기면
+   한쪽만 고치는 일이 반드시 생긴다. */
 const GAMES=[
-  {id:"balance",icon:"⚖️",play:true},
-  {id:"guess",icon:"🏛️"},{id:"quiz",icon:"✏️"},
+  {id:"balance",icon:"⚖️",play:true,open:"cartBalance"},
+  {id:"guess",icon:"🏛️",play:true,open:"cartArchq"},
+  {id:"quiz",icon:"✏️"},
   {id:"liar",icon:"🗿"},{id:"spot",icon:"🔍"},{id:"scale",icon:"📏"},
   {id:"bingo",icon:"🎫"},{id:"chess",icon:"♟️"},{id:"mafia",icon:"🌙"}
 ];
@@ -3569,8 +3598,12 @@ function openGames(){
     const pair=(u.gameCat&&u.gameCat[i])||["",""];
     const r=document.createElement("button");
     r.className="gcat-row"+(g.play?"":" soon");
-    r.innerHTML='<span class="gcat-icon">'+g.icon+'</span><span class="gcat-txt"><div class="gcat-name">'+pair[0]+'</div><div class="gcat-desc">'+pair[1]+'</div></span><span class="gcat-tag">'+(g.play?"PLAY ▶":"SOON")+'</span>';
-    if(g.play) r.addEventListener("click",()=>{ closeOv(); $("cartBalance").click(); });
+    /* 로그인해야 열리는 게임은 태그로 그렇다고 알려 준다. 눌러 보고서야 알게 되면
+       속은 기분이 든다. 누르는 것은 막지 않는다 - 눌러야 왜 필요한지 말할 수 있다. */
+    const needLogin=g.open==="cartArchq"&&!USER;
+    const tag=g.play?(needLogin?(u.aqLock||UI.ko.aqLock):"PLAY ▶"):"SOON";
+    r.innerHTML='<span class="gcat-icon">'+g.icon+'</span><span class="gcat-txt"><div class="gcat-name">'+pair[0]+'</div><div class="gcat-desc">'+pair[1]+'</div></span><span class="gcat-tag">'+tag+'</span>';
+    if(g.play) r.addEventListener("click",()=>{ closeOv(); $(g.open).click(); });
     box.appendChild(r);
   });
   const gh=document.createElement("button");
@@ -3709,22 +3742,129 @@ function aqCartLabel(){
   $("cartArchq").classList.toggle("gated",!USER);
 }
 
-function aqDraw(){
+/* 어느 설계자가 어느 나라·어느 시대에서 일했는지를 은행에서 미리 뽑아 둔다.
+   오답을 고를 때 쓴다. */
+let AQ_MAP=null;
+function aqIndex(){
+  if(AQ_MAP) return AQ_MAP;
+  const bank=window.ARCHQ;
+  AQ_MAP={byCountry:{},era:{}};
+  bank.bld.forEach(function(b){
+    (AQ_MAP.byCountry[b.c]=AQ_MAP.byCountry[b.c]||new Set()).add(b.a);
+    // 설계자의 대표 연대. 여러 건물이 있으면 평균 언저리가 된다.
+    const e=AQ_MAP.era[b.a]||(AQ_MAP.era[b.a]={sum:0,n:0});
+    e.sum+=b.y; e.n++;
+  });
+  Object.keys(AQ_MAP.era).forEach(function(a){ AQ_MAP.era[a]=AQ_MAP.era[a].sum/AQ_MAP.era[a].n; });
+  return AQ_MAP;
+}
+
+/* 오답 셋을 고른다.
+   그냥 아무나 뽑으면 문제가 안 된다. 부여박물관 문제에 유럽 사람 셋이 나오면
+   한국 이름 하나만 찾으면 되고, 힌트에 CN 이라고 써 두면 중국 사람이 한 명일 때
+   그 사람이 곧 정답이다. 그래서 같은 나라에서 먼저 채우고, 모자라면 연대가
+   가까운 사람으로 메운다. 그래도 모자랄 때만 아무나 넣는다. */
+function aqWrong(b){
+  const bank=window.ARCHQ, ix=aqIndex();
+  const out=[];
+  const take=function(pool){
+    aqShuffle(pool).forEach(function(a){
+      if(out.length<3&&a!==b.a&&out.indexOf(a)<0) out.push(a);
+    });
+  };
+  take([...(ix.byCountry[b.c]||[])]);                       // 같은 나라
+  if(out.length<3){
+    const mine=ix.era[b.a]||b.y;
+    take([...bank.arch.keys()]
+      .filter(function(a){ return Math.abs((ix.era[a]||0)-mine)<=35; }));   // 비슷한 시대
+  }
+  if(out.length<3) take([...bank.arch.keys()]);             // 마지막 수단
+  return out;
+}
+
+function aqDraw(n){
   const bank=window.ARCHQ;
   if(!bank||!bank.bld||!bank.bld.length) return null;
-  const pick=aqShuffle([...bank.bld.keys()]).slice(0,AQ_N);
+  const pick=aqShuffle([...bank.bld.keys()]).slice(0,n||AQ_N);
   return pick.map(function(bi){
     const b=bank.bld[bi];
-    /* 오답은 다른 설계자에서 뽑는다. 같은 사람이 보기에 두 번 나오면
-       그것만으로 정답이 아니라는 게 드러난다. */
-    const others=aqShuffle([...bank.arch.keys()].filter(x=>x!==b.a)).slice(0,3);
-    return {b:b, opts:aqShuffle([b.a].concat(others))};
+    return {b:b, opts:aqShuffle([b.a].concat(aqWrong(b)))};
   });
 }
 
 function aqStop(){ if(AQ.timer){ clearInterval(AQ.timer); AQ.timer=null; } }
 
-function aqStart(){
+/* 모드 다섯. 문항 수 셋과 타임어택 둘이다.
+   순위를 한 표에 섞으면 30문항이 무조건 위로 가고 타임어택은 단위가 아예 달라서,
+   모드마다 따로 겨룬다. */
+const AQ_MODES=[
+  {id:"q10",n:10},{id:"q20",n:20},{id:"q30",n:30},
+  {id:"t60",secs:60},{id:"t120",secs:120}
+];
+function aqMode(id){ return AQ_MODES.filter(function(m){return m.id===id;})[0]||AQ_MODES[0]; }
+function aqModeLabel(m){
+  const u=UI[LANG];
+  return m.secs ? (u.aqTimeMode||UI.ko.aqTimeMode).replace("{n}",m.secs)
+                : (u.aqCountMode||UI.ko.aqCountMode).replace("{n}",m.n);
+}
+
+/* 모드 고르는 화면. 여기서 순위표도 함께 본다 - 남의 기록을 보고 나서 시작해야
+   한 판 더 할 마음이 생긴다. */
+let AQ_PICK="q10";
+function aqOpenModes(){
+  const u=UI[LANG];
+  if(!USER){
+    sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI();
+    $("auErr").textContent=u.aqNeed||UI.ko.aqNeed;
+    return;
+  }
+  $("aqModeT").textContent=(UI[LANG].cartNames&&UI[LANG].cartNames[1]||UI.ko.cartNames[1]).replace(/<br\s*\/?>/g," ");
+  $("aqModeN").textContent=u.aqModeNote||UI.ko.aqModeNote;
+  $("aqModeBack").textContent=u.aqBackT||UI.ko.aqBackT;
+  const box=$("aqModes"); box.innerHTML="";
+  AQ_MODES.forEach(function(m){
+    const b=document.createElement("button");
+    b.className="aq-mode"+(m.id===AQ_PICK?" cur":"");
+    b.textContent=aqModeLabel(m);
+    b.addEventListener("click",function(){ sfxSelect(); AQ_PICK=m.id; aqOpenModes(); });
+    box.appendChild(b);
+  });
+  const go=document.createElement("button");
+  go.className="btn"; go.style.marginTop="4px";
+  go.textContent=u.aqGo||UI.ko.aqGo;
+  go.addEventListener("click",function(){ aqStart(AQ_PICK); });
+  box.appendChild(go);
+  sfxNext(); $("hudM").textContent="WHO DESIGNED IT"; show("vArchqMode");
+  aqLoadBoard(AQ_PICK);
+}
+
+async function aqLoadBoard(mode){
+  const u=UI[LANG];
+  $("aqBoard").textContent=u.loadingT||UI.ko.loadingT;
+  try{
+    const r=await fetch("/api/archq?mode="+encodeURIComponent(mode),{cache:"no-store"});
+    if(!r.ok){ $("aqBoard").textContent=u.aqBoardFail||UI.ko.aqBoardFail; return; }
+    const d=await r.json();
+    const m=aqMode(mode);
+    const rows=(d.rows||[]).map(function(x){
+      // 문항 모드는 동점을 시간으로 가르므로 시간을 함께 보여 준다.
+      const detail=m.secs? "" : " · "+x.secs+"s";
+      return '<div class="pl-row"'+(x.me?' style="color:var(--yellow)"':'')+'>'+
+             '<span>'+x.rank+'. '+esc(x.name)+'</span>'+
+             '<span style="font-size:11px">'+x.score+detail+'</span></div>';
+    }).join("");
+    let mine="";
+    if(d.mine&&!(d.rows||[]).some(function(x){return x.me;})){
+      // 상위 20명 밖이면 자기 등수를 따로 붙여 준다. 없으면 다시 할 이유가 안 보인다.
+      mine='<div class="pl-row" style="color:var(--yellow);border-top:2px solid #565b86">'+
+           '<span>'+d.mine.rank+'. '+esc(USER?USER.name:"")+'</span>'+
+           '<span style="font-size:11px">'+d.mine.score+(m.secs?"":" · "+d.mine.secs+"s")+'</span></div>';
+    }
+    $("aqBoard").innerHTML=(rows||'<div class="pl-row">'+esc(u.aqBoardEmpty||UI.ko.aqBoardEmpty)+'</div>')+mine;
+  }catch(e){ $("aqBoard").textContent=u.aqBoardFail||UI.ko.aqBoardFail; }
+}
+
+function aqStart(modeId){
   const u=UI[LANG];
   if(!USER){
     /* 막아 두기만 하면 그냥 나간다. 왜 로그인이 필요한지 한 줄 말하고 로그인
@@ -3733,30 +3873,50 @@ function aqStart(){
     $("auErr").textContent=u.aqNeed||UI.ko.aqNeed;
     return;
   }
-  // 판을 뜻하는 지역 이름이 판 집계 함수 round() 를 가리지 않게 다른 이름을 쓴다
-  const deck=aqDraw();
+  const m=aqMode(modeId||AQ_PICK);
+  /* 타임어택은 몇 문항을 풀지 미리 알 수 없으므로 넉넉히 뽑아 둔다. 60초에
+     한 문항 3초로 잡아도 스무 개면 충분하지만, 빠른 사람을 막지 않게 여유를 둔다. */
+  const deck=aqDraw(m.secs? Math.min(120,Math.max(40,Math.floor(m.secs/1.5))) : m.n);
   if(!deck){ alert(u.aqSoon||UI.ko.aqSoon); return; }
-  AQ={round:deck,i:0,score:0,timer:null,left:0,log:[]};
+  AQ={mode:m,round:deck,i:0,score:0,timer:null,left:0,log:[],startedAt:Date.now(),clock:null,ends:0};
   sfxNext(); track("play"); round("archq","start");
   $("hudM").textContent="WHO DESIGNED IT";
-  show("vArchq"); aqAsk();
+  show("vArchq");
+  if(m.secs){
+    /* 타임어택은 문항마다 시계를 다시 돌리지 않는다. 한 판 전체가 하나의 시계다. */
+    AQ.ends=Date.now()+m.secs*1000;
+    AQ.clock=setInterval(function(){
+      const left=AQ.ends-Date.now();
+      $("aqBar").style.width=Math.max(0,left/(m.secs*1000)*100)+"%";
+      if(left<=0){ clearInterval(AQ.clock); AQ.clock=null; aqEnd(); }
+    },100);
+  }
+  aqAsk();
 }
 
 function aqAsk(){
   aqStop();
   const u=UI[LANG], q=AQ.round[AQ.i], bank=window.ARCHQ;
-  $("aqStage").textContent="Q "+(AQ.i+1)+" / "+AQ.round.length;
+  if(!q){ aqEnd(); return; }
+  $("aqStage").textContent=AQ.mode.secs
+    ? aqModeLabel(AQ.mode)
+    : "Q "+(AQ.i+1)+" / "+AQ.round.length;
   $("aqScore").textContent="SCORE "+AQ.score;
   $("aqName").textContent=aqName(q.b);
-  $("aqHint").textContent=q.b.y+" · "+q.b.c;
+  /* 나라는 보기 중 그 나라 사람이 둘 이상일 때만 보여 준다. 한 명뿐이면 나라만
+     보고 바로 찍을 수 있어서, 힌트가 아니라 정답을 알려 주는 셈이 된다. */
+  const inC=aqIndex().byCountry[q.b.c]||new Set();
+  const share=q.opts.filter(function(a){ return inC.has(a); }).length;
+  $("aqHint").textContent=q.b.y+(share>=2?" · "+q.b.c:"");
   $("aqFeed").textContent="";
   const box=$("aqChoices"); box.innerHTML="";
   q.opts.forEach(function(ai){
     const b=document.createElement("button");
     b.className="aq-c"; b.textContent=aqName(bank.arch[ai]);
-    b.addEventListener("click",()=>aqAnswer(ai,b));
+    b.addEventListener("click",function(){ aqAnswer(ai,b); });
     box.appendChild(b);
   });
+  if(AQ.mode.secs) return;                 // 타임어택은 전체 시계 하나뿐
   AQ.left=AQ_SEC*10;
   $("aqBar").style.width="100%";
   AQ.timer=setInterval(function(){
@@ -3783,26 +3943,27 @@ function aqAnswer(picked,btn){
   }
   AQ.log.push({name:aqName(q.b),answer:answer,ok:ok});
   $("aqScore").textContent="SCORE "+AQ.score;
-  // 정답을 읽을 시간을 준다. 바로 넘어가면 무엇이 맞았는지 모르고 지나간다.
+  /* 정답을 읽을 시간을 준다. 바로 넘어가면 무엇이 맞았는지 모르고 지나간다.
+     타임어택은 그 시간도 자기 시간이라 짧게 둔다. */
   setTimeout(function(){
+    if(!AQ.mode) return;                       // 그 사이에 시간이 다 됐다
     AQ.i++;
     if(AQ.i>=AQ.round.length) aqEnd(); else aqAsk();
-  },1400);
+  }, AQ.mode.secs?700:1400);
 }
 
-function aqEnd(){
+async function aqEnd(){
   const u=UI[LANG];
   aqStop();
-  /* 최고 기록은 이 기기에만 둔다. 서버에 올릴 만한 값이 아직 아니고, 굳이
-     사람과 묶어 저장할 이유도 없다. */
-  let best=0;
-  try{ best=parseInt(localStorage.getItem("aa-aq-best")||"0",10)||0; }catch(e){}
-  if(AQ.score>best){ best=AQ.score; try{ localStorage.setItem("aa-aq-best",String(best)); }catch(e){} }
+  if(AQ.clock){ clearInterval(AQ.clock); AQ.clock=null; }
+  const m=AQ.mode, secs=m.secs||Math.round((Date.now()-AQ.startedAt)/1000);
+  const total=m.secs? AQ.log.length : AQ.round.length;
+
   $("aqClear").textContent=u.aqClearT||"GAME CLEAR!";
   $("aqLblRight").textContent=u.aqLblR||UI.ko.aqLblR;
   $("aqLblBest").textContent=u.aqLblB||UI.ko.aqLblB;
-  $("aqRight").textContent=AQ.score+" / "+AQ.round.length;
-  $("aqBest").textContent=String(best);
+  $("aqRight").textContent=AQ.score+" / "+total;
+  $("aqBest").textContent=aqModeLabel(m);
   $("aqRetry").textContent=u.aqRetryT||UI.ko.aqRetryT;
   $("aqBack").textContent=u.aqBackT||UI.ko.aqBackT;
   $("aqReview").innerHTML=AQ.log.map(function(e){
@@ -3811,10 +3972,24 @@ function aqEnd(){
   }).join("");
   round("archq","finish",AQ.log.length);
   sfxClear(); $("hudM").textContent="RESULT"; show("vArchqEnd");
+
+  /* 기록을 올린다. 자기 최고보다 좋을 때만 서버가 갱신하므로 여기서는 그냥 보낸다. */
+  try{
+    const r=await fetch("/api/archq",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({mode:m.id,score:AQ.score,secs:secs})
+    });
+    if(r.ok){
+      const d=await r.json();
+      $("aqBest").textContent=aqModeLabel(m)+" · "+
+        (u.aqRank||UI.ko.aqRank).replace("{n}",d.rank)+(d.best?" ★":"");
+    }
+  }catch(e){}
 }
 
-$("cartArchq").addEventListener("click",aqStart);
-$("aqRetry").addEventListener("click",aqStart);
+$("cartArchq").addEventListener("click",aqOpenModes);
+$("aqRetry").addEventListener("click",aqOpenModes);
+$("aqModeBack").addEventListener("click",function(){ sfxNext(); $("hudM").textContent="ARCADE"; show("vArcade"); });
 $("aqBack").addEventListener("click",function(){ aqStop(); sfxNext(); $("hudM").textContent="ARCADE"; show("vArcade"); });
 aqCartLabel();
 
@@ -3894,7 +4069,17 @@ function renderSchoolHint(){
     btn.textContent = u.auGoVerify || "학교 인증하러 가기 ▶";
   }
 }
-$("btnGoVerify").addEventListener("click",()=>{ sfxNext(); location.href="/verify?lang="+encodeURIComponent(LANG); });
+/* 인증은 새 탭에서 연다.
+   같은 탭에서 넘어가면 페이지가 통째로 바뀌면서 오디오 컨텍스트가 사라져 노래가
+   뚝 끊긴다. 인증을 마치고 돌아와도 처음부터 다시 시작해야 한다. 새 탭이면 오락실
+   탭은 그대로 돌아가고, 인증이 끝나면 탭만 닫으면 된다. */
+$("btnGoVerify").addEventListener("click",()=>{
+  sfxNext();
+  const url="/verify?lang="+encodeURIComponent(LANG);
+  const w=window.open(url,"_blank","noopener");
+  // 팝업이 막히는 브라우저도 있다. 그때는 원래대로 이 탭에서 연다.
+  if(!w) location.href=url;
+});
 
 
 /* ═══ 신규 기능 i18n (8개 언어) + 문화별 커뮤니티 노출 순서 ═══ */
@@ -4301,6 +4486,29 @@ Object.assign(UI.fr,{mktOptIn:"(facultatif) Me prévenir par e-mail des nouveaux
 Object.assign(UI.it,{mktOptIn:"(facoltativo) Avvisami via e-mail dei nuovi giochi"});
 Object.assign(UI.de,{mktOptIn:"(optional) Mail mir, wenn ein neues Spiel aufmacht"});
 Object.assign(UI.es,{mktOptIn:"(opcional) Avisadme por correo de los juegos nuevos"});
+
+/* 신청 게시판. ideaNeedLogin 은 아예 정의돼 있지 않아서 어느 언어로 보든 한국어가
+   떨어지고 있었다. 화면에 직접 박아 둔 "불러오는 중..." 도 같이 키로 뺀다. */
+Object.assign(UI.ko,{ideaNeedLogin:"로그인하면 신청할 수 있어요.",loadingT:"불러오는 중..."});
+Object.assign(UI.en,{ideaNeedLogin:"Log in to put in a request.",loadingT:"Loading..."});
+Object.assign(UI.zh,{ideaNeedLogin:"登录后即可提交申请。",loadingT:"加载中..."});
+Object.assign(UI.tw,{ideaNeedLogin:"登入後即可提交申請。",loadingT:"載入中..."});
+Object.assign(UI.ja,{ideaNeedLogin:"ログインするとリクエストできます。",loadingT:"読み込み中..."});
+Object.assign(UI.fr,{ideaNeedLogin:"Connectez-vous pour proposer un jeu.",loadingT:"Chargement..."});
+Object.assign(UI.it,{ideaNeedLogin:"Accedi per proporre un gioco.",loadingT:"Caricamento..."});
+Object.assign(UI.de,{ideaNeedLogin:"Melde dich an, um etwas vorzuschlagen.",loadingT:"Wird geladen..."});
+Object.assign(UI.es,{ideaNeedLogin:"Inicia sesión para proponer un juego.",loadingT:"Cargando..."});
+
+/* 설계자 맞히기 모드·순위표 문구. {n} 은 문항 수나 초, 등수가 들어간다. */
+Object.assign(UI.ko,{aqCountMode:"{n}문항",aqTimeMode:"{n}초 타임어택",aqModeNote:"모드를 고르세요. 순위는 모드마다 따로 매겨집니다.",aqGo:"시작 ▶",aqBoardEmpty:"아직 기록이 없어요",aqBoardFail:"순위를 불러오지 못했어요",aqRank:"{n}위"});
+Object.assign(UI.en,{aqCountMode:"{n} questions",aqTimeMode:"{n}s time attack",aqModeNote:"Pick a mode. Each mode has its own leaderboard.",aqGo:"START ▶",aqBoardEmpty:"No scores yet",aqBoardFail:"Could not load the ranking",aqRank:"#{n}"});
+Object.assign(UI.zh,{aqCountMode:"{n}题",aqTimeMode:"{n}秒计时赛",aqModeNote:"选择模式。每个模式的排名各自独立。",aqGo:"开始 ▶",aqBoardEmpty:"还没有记录",aqBoardFail:"排行榜加载失败",aqRank:"第{n}名"});
+Object.assign(UI.tw,{aqCountMode:"{n}題",aqTimeMode:"{n}秒計時賽",aqModeNote:"選擇模式。每個模式的排名各自獨立。",aqGo:"開始 ▶",aqBoardEmpty:"還沒有紀錄",aqBoardFail:"排行榜載入失敗",aqRank:"第{n}名"});
+Object.assign(UI.ja,{aqCountMode:"{n}問",aqTimeMode:"{n}秒タイムアタック",aqModeNote:"モードを選んでください。順位はモードごとに別です。",aqGo:"スタート ▶",aqBoardEmpty:"まだ記録がありません",aqBoardFail:"ランキングを読み込めませんでした",aqRank:"{n}位"});
+Object.assign(UI.fr,{aqCountMode:"{n} questions",aqTimeMode:"Contre-la-montre {n}s",aqModeNote:"Choisissez un mode. Chaque mode a son classement.",aqGo:"COMMENCER ▶",aqBoardEmpty:"Aucun score pour l instant",aqBoardFail:"Classement indisponible",aqRank:"{n}e"});
+Object.assign(UI.it,{aqCountMode:"{n} domande",aqTimeMode:"Sfida a tempo {n}s",aqModeNote:"Scegli una modalita. Ogni modalita ha la sua classifica.",aqGo:"INIZIA ▶",aqBoardEmpty:"Ancora nessun punteggio",aqBoardFail:"Classifica non disponibile",aqRank:"{n}o"});
+Object.assign(UI.de,{aqCountMode:"{n} Fragen",aqTimeMode:"{n}s Zeitrennen",aqModeNote:"Waehle einen Modus. Jeder Modus hat seine eigene Rangliste.",aqGo:"START ▶",aqBoardEmpty:"Noch keine Ergebnisse",aqBoardFail:"Rangliste nicht ladbar",aqRank:"Platz {n}"});
+Object.assign(UI.es,{aqCountMode:"{n} preguntas",aqTimeMode:"Contrarreloj de {n}s",aqModeNote:"Elige un modo. Cada modo tiene su propia clasificacion.",aqGo:"EMPEZAR ▶",aqBoardEmpty:"Aun no hay marcas",aqBoardFail:"No se ha podido cargar la clasificacion",aqRank:"{n}o"});
 Object.assign(UI.ko,{aqName:"이 건물<br>누가 설계했게",aqPlay:"PLAY ▶",aqLock:"로그인 필요",aqNeed:"로그인하면 열립니다. 기록이 남아야 지난번보다 나아졌는지 알 수 있어요.",aqRight:"정답!",aqWrong:"아쉽다 - 정답은",aqTime:"시간 초과 - 정답은",aqClearT:"GAME CLEAR!",aqLblR:"맞힌 개수",aqLblB:"최고 기록",aqRetryT:"한 판 더 ▶",aqBackT:"오락실로 ←",aqSoon:"문제를 불러오지 못했어요"});
 Object.assign(UI.en,{aqName:"WHO<br>DESIGNED IT",aqPlay:"PLAY ▶",aqLock:"LOG IN",aqNeed:"Log in to unlock. Your best score only means something if it is saved.",aqRight:"Correct!",aqWrong:"Nope - it was",aqTime:"Time up - it was",aqClearT:"GAME CLEAR!",aqLblR:"CORRECT",aqLblB:"BEST",aqRetryT:"PLAY AGAIN ▶",aqBackT:"ARCADE ←",aqSoon:"Could not load the questions"});
 Object.assign(UI.zh,{aqName:"这栋建筑<br>谁设计的",aqPlay:"开始 ▶",aqLock:"需登录",aqNeed:"登录后开放。成绩要能保存，才知道有没有进步。",aqRight:"答对了！",aqWrong:"可惜 - 正确答案是",aqTime:"超时 - 正确答案是",aqClearT:"GAME CLEAR!",aqLblR:"答对数",aqLblB:"最佳纪录",aqRetryT:"再来一局 ▶",aqBackT:"回大厅 ←",aqSoon:"题目加载失败"});

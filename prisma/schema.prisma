@@ -34,6 +34,7 @@ model User {
   reactions    ReactionVote[]
   answers      AnswerLog[]
   marketing    MarketingConsent?
+  archqScores  ArchqScore[]
 }
 
 /// 비밀번호 재설정 코드. 원문 대신 해시만 두고 만료·시도 횟수로 무차별 대입을 막는다
@@ -406,8 +407,15 @@ model Report {
    * 지우는 건 본인이나 관리자만 할 수 있다. 다른 것은 누가 볼 수 있느냐뿐이다.
    */
   board     String   @default("report")
-  /// 넣은 사람. 로그인해야 글을 쓸 수 있으므로 항상 있다.
-  userId    String
+  /**
+   * 넣은 사람. 지금은 로그인해야 글을 쓸 수 있으므로 새 글에는 항상 있다.
+   *
+   * 비어 있을 수 있는 것은 게시판이 공용 저장소에 있던 시절의 글 때문이다. 그때는
+   * 로그인 없이 아무 이름으로 쓸 수 있어서 계정이 남아 있지 않다. 없는 계정을
+   * 지어내 붙이면 그 사람이 쓴 것처럼 보이므로, 없는 것은 없는 대로 둔다.
+   * 이 칸이 비었다는 것은 "옛날 글" 이라는 뜻이고, 본인 삭제는 할 수 없다.
+   */
+  userId    String?
   /// 그때 표시한 이름. 나중에 닉네임을 바꿔도 제보에 적힌 이름은 그대로 남는다.
   authorName String
   /// "wrong" | "idea" | "fix" 등 원본 신고 종류 코드
@@ -416,7 +424,7 @@ model Report {
   lang      String   @default("ko")
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
   @@index([createdAt])
@@ -603,4 +611,38 @@ model RoundStat {
 
   @@id([day, game, device, lang, country])
   @@index([day])
+}
+
+/**
+ * 설계자 맞히기 기록.
+ *
+ * 모드마다 따로 겨룬다. 10문항과 30문항을 한 표에 섞으면 문항 수가 많은 쪽이
+ * 무조건 유리해서 순위가 뜻을 잃고, 타임어택은 아예 단위가 다르다.
+ *   q10 / q20 / q30   문항 수 모드. 많이 맞힌 사람이 위, 같으면 빨리 끝낸 사람이 위.
+ *   t60 / t120        타임어택. 제한 시간 안에 많이 맞힌 사람이 위.
+ *
+ * 한 사람당 모드별로 한 줄만 둔다. 판마다 줄을 쌓으면 많이 한 사람이 순위표를
+ * 도배하게 되고, 남기고 싶은 것은 그 사람의 최고 기록이다. 새 기록이 더 좋을 때만
+ * 갱신한다.
+ *
+ * 로그인해야 남는다. 기록이 누구 것인지 알 수 없으면 순위표가 성립하지 않는다.
+ */
+model ArchqScore {
+  userId String
+  /// "q10" | "q20" | "q30" | "t60" | "t120"
+  mode   String
+
+  /// 맞힌 개수.
+  score  Int
+  /// 걸린 시간(초). 문항 모드에서 동점자를 가른다. 타임어택은 제한 시간이 곧 이 값이다.
+  secs   Int
+  /// 그때 쓰던 닉네임. 나중에 닉네임을 바꿔도 순위표가 흔들리지 않게 함께 둔다.
+  name   String
+  playedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, mode])
+  /// 순위표는 모드별로 점수 높은 순, 같으면 빠른 순으로 뽑는다.
+  @@index([mode, score, secs])
 }
