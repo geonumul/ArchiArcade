@@ -80,17 +80,37 @@ const nudge = $("auErr").textContent;
 console.log(`        안내문: "${nudge}"`);
 if (!nudge) bad++;
 
-// 로그인한 척하고 한 판 - 문제가 그려지는지
+// 로그인한 척하면 모드 고르는 화면이 나와야 한다
 /* USER 는 let 이라 window 에 없다. 함수 선언은 window 에 올라오므로 setUser 를 쓴다. */
 window.setUser({ name: "tester", email: "t@example.com", plays: 0, minorPicks: 0 });
-window.aqStart();
+$("cartArchq").dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+await new Promise((r) => setTimeout(r, 300));
+const onModes = !$("vArchqMode").classList.contains("hidden");
+const modeBtns = $("aqModes").querySelectorAll(".aq-mode").length;
+console.log(`  ${onModes ? "OK  " : "FAIL"}  로그인하면 모드 화면이 나온다`);
+console.log(`  ${modeBtns === 5 ? "OK  " : "FAIL"}  모드가 5개다  (${modeBtns}개)`);
+if (!onModes || modeBtns !== 5) bad++;
+console.log(`        모드: ${[...$("aqModes").querySelectorAll(".aq-mode")].map((b) => b.textContent).join(" / ")}`);
+
+// 타임어택을 골라 한 판 - 시계가 하나로 도는지까지 본다
+window.aqStart("t60");
 await new Promise((r) => setTimeout(r, 300));
 const playing = !$("vArchq").classList.contains("hidden");
 const opts = $("aqChoices").querySelectorAll(".aq-c").length;
-console.log(`  ${playing ? "OK  " : "FAIL"}  로그인하면 게임이 시작된다`);
+const names = [...$("aqChoices").querySelectorAll(".aq-c")].map((b) => b.textContent);
+const uniqueOpts = new Set(names).size === names.length;
+console.log(`  ${playing ? "OK  " : "FAIL"}  타임어택이 시작된다`);
 console.log(`  ${opts === 4 ? "OK  " : "FAIL"}  보기가 4개 그려진다  (${opts}개)`);
+console.log(`  ${uniqueOpts ? "OK  " : "FAIL"}  보기에 같은 이름이 두 번 나오지 않는다`);
 console.log(`        문제: "${$("aqName").textContent}"  힌트: "${$("aqHint").textContent}"`);
-if (!playing || opts !== 4) bad++;
+if (!playing || opts !== 4 || !uniqueOpts) bad++;
+
+/* 무음 파일이 실제로 받아지는지. 이게 404 면 아이폰 무음 스위치 문제가 그대로 남는데,
+   화면에는 아무 표시도 나지 않아 알 길이 없다. */
+const wav = await fetch(BASE + "/silence.wav");
+const wavOk = wav.ok && Number(wav.headers.get("content-length")) > 1000;
+console.log(`  ${wavOk ? "OK  " : "FAIL"}  무음 파일이 받아진다  (${wav.status})`);
+if (!wavOk) bad++;
 
 if (errors.length) {
   console.log("\n콘솔 오류:");
