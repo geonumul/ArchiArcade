@@ -59,7 +59,25 @@ export function isAllowedKey(key: string): boolean {
  * 않은 사람이 아무 이름으로 넣거나 목록을 통째로 덮어쓸 수 있다. 게시판에서 실제로
  * 그 일이 가능했다. 그래서 쓰기는 /api/rooms/chat 만 하고, 거기서 로그인과 검열을 본다.
  */
-const WRITE_DENY: RegExp[] = [/^abg2-[A-Za-z0-9]{1,12}-chat$/];
+const WRITE_DENY: RegExp[] = [
+  /^abg2-[A-Za-z0-9]{1,12}-chat$/,
+
+  /**
+   * 사람들이 쌓은 숫자. 브라우저가 통째로 다시 쓰지 못하게 막는다.
+   *
+   * 전에는 값을 읽어 한 칸 고쳐 통째로 되쓰는 방식이라, 요청 하나로 154문항 집계가
+   * 전부 날아갈 수 있었다. 실제로 검증 도중 이 키를 지워 사람들이 쌓아 둔 표를
+   * 잃었고, Vote 표에서 되살려야 했다. 되살릴 수 있었던 건 운이 좋았던 것이다.
+   *
+   * 이제 늘리는 일만 서버가 한 문장으로 한다.
+   *   archbal-bank-v4    → /api/bank
+   *   arcade-stats-v1    → /api/stats
+   *   arcade-interest-v1 → /api/interest
+   */
+  /^archbal-bank-v\d+$/,
+  /^arcade-stats-v\d+$/,
+  /^arcade-interest-v\d+$/,
+];
 
 export function isWritableKey(key: string): boolean {
   if (!isAllowedKey(key)) return false;

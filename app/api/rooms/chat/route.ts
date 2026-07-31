@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "로그인하면 대화할 수 있어요", needLogin: true }, { status: 401 });
   }
 
-  let body: { code?: unknown; text?: unknown; lang?: unknown };
+  let body: { code?: unknown; text?: unknown; lang?: unknown; name?: unknown };
   try {
     body = await req.json();
   } catch {
@@ -108,8 +108,17 @@ export async function POST(req: Request) {
     /* 망가진 값이면 새로 시작한다 - 대기실 대화라 잃어도 되는 종류다 */
   }
 
-  // 이름은 계정 이름을 쓴다. 보낸 값을 믿으면 남을 사칭할 수 있다.
-  list.push({ n: claims.name, t: text, ts: Date.now() });
+  /* 이름은 방에서 쓰는 닉네임으로 보여 준다.
+     참가자 목록이 그 이름으로 되어 있어서, 채팅만 계정 이름이 나오면 같은 사람인지
+     알 수가 없다. 방 닉네임은 각자 정하는 것이라 사칭을 막지는 못하지만, 방은 코드를
+     아는 사람끼리 들어오는 자리이고 이름이 어긋나는 쪽이 실제로 더 헷갈린다.
+     대신 말하려면 로그인해야 하므로 도배와 검열은 계정 단위로 걸린다. */
+  const nick = stripControl(typeof body.name === "string" ? body.name : "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 8);
+
+  list.push({ n: nick || claims.name, t: text, ts: Date.now() });
   const next = list.slice(-KEEP);
 
   const expiresAt = new Date(Date.now() + ROOM_TTL_MS);

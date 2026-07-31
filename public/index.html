@@ -245,6 +245,20 @@ body::after{
   box-shadow:inset 0 4px 0 #565b86;max-height:150px;overflow-y:auto;
 }
 .playerlist .p{display:inline-block;margin-right:12px;color:var(--blue);}
+/* 목록 한 줄 - 관리자 패널에서 왼쪽은 내용, 오른쪽은 버튼이나 부연 */
+.pl-row{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  border-bottom:2px dotted #565b86;padding:5px 0;line-height:1.6;
+}
+.pl-row:last-child{border-bottom:0;}
+.mini-btn{
+  flex:none;font-family:var(--efont);font-size:9px;color:var(--shadow);
+  background:var(--yellow);border:3px solid var(--border);
+  box-shadow:0 3px 0 var(--shadow);padding:5px 9px;cursor:pointer;
+}
+.mini-btn:active{transform:translateY(3px);box-shadow:0 0 0 var(--shadow);}
+.mini-btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px;}
+.mini-btn:disabled{background:var(--dim);cursor:default;}
 
 /* 스테이지 */
 .stage-head{
@@ -875,6 +889,7 @@ body.ov-open{overflow:hidden;}
         <button class="react-btn" id="reactHot">🔥 <span id="rhLabel">꿀잼</span> <b id="rhCnt">0</b></button>
         <button class="react-btn" id="reactMeh">😑 <span id="rmLabel">노잼</span> <b id="rmCnt">0</b></button>
       </div>
+      <div class="meta hidden" id="reactNeed" style="margin-top:6px"></div>
     </div>
 
     <!-- ── 엔딩 ── -->
@@ -3123,37 +3138,65 @@ if(window.matchMedia&&window.matchMedia("(min-width:1100px)").matches){ refreshD
 
 
 /* ═══ 질문 리액션(🔥/😑) - 원터치 집계, 입력 없음 ═══ */
-const QREACT_KEY="arcade-qreact-v1";
-const reacted=new Set(); // 세션당 질문별 1회
-Object.assign(UI.ko,{rHot:"꿀잼",rMeh:"노잼"});
-Object.assign(UI.en,{rHot:"HOT",rMeh:"MEH"});
-async function loadReacts(){
-  const raw=await sGet(QREACT_KEY);
-  try{ const p=JSON.parse(raw); return (p&&typeof p==="object")?p:{}; }catch(e){ return {}; }
-}
+/* 리액션은 서버(/api/reactions)에 있다. 예전에는 공용 저장소에 숫자만 쌓아서 한
+   사람이 같은 문항을 몇 번이고 누를 수 있었고, 그러면 "노잼이 많은 문항" 이라는
+   판단의 근거가 되지 못했다. 이제 한 문항에 한 번만 세고, 노잼이 다섯이면 밸런스
+   조절 후보로 올라간다. */
+const reacted=new Map();   // 이 화면에서 내가 무엇을 눌렀는지
+/* 9개 언어를 다 채운다. 비워 두면 화면에 undefined 가 그대로 찍힌다. */
+Object.assign(UI.ko,{rHot:"꿀잼",rMeh:"노잼",reactNeedLogin:"로그인하면 이 문항을 평가할 수 있어요"});
+Object.assign(UI.en,{rHot:"HOT",rMeh:"MEH",reactNeedLogin:"Log in to rate this question"});
+Object.assign(UI.zh,{rHot:"有趣",rMeh:"无聊",reactNeedLogin:"登录后即可评价这道题"});
+Object.assign(UI.tw,{rHot:"有趣",rMeh:"無聊",reactNeedLogin:"登入後即可評價這道題"});
+Object.assign(UI.ja,{rHot:"神問",rMeh:"微妙",reactNeedLogin:"ログインするとこの問題を評価できます"});
+Object.assign(UI.fr,{rHot:"TOP",rMeh:"BOF",reactNeedLogin:"Connectez-vous pour noter cette question"});
+Object.assign(UI.it,{rHot:"TOP",rMeh:"NOIA",reactNeedLogin:"Accedi per valutare questa domanda"});
+Object.assign(UI.de,{rHot:"STARK",rMeh:"NAJA",reactNeedLogin:"Melde dich an, um diese Frage zu bewerten"});
+Object.assign(UI.es,{rHot:"TOP",rMeh:"MEH",reactNeedLogin:"Inicia sesión para valorar esta pregunta"});
 async function showReacts(){
   const bi=ROUND[idx]?ROUND[idx].bi:null; if(bi===null) return;
-  const m=await loadReacts(); const e=m[bi]||{h:0,m:0};
-  $("rhCnt").textContent=e.h||0; $("rmCnt").textContent=e.m||0;
-  const done=reacted.has(bi);
-  $("reactHot").disabled=done; $("reactMeh").disabled=done;
-  $("reactHot").classList.remove("reacted"); $("reactMeh").classList.remove("reacted");
   $("rhLabel").textContent=UI[LANG].rHot; $("rmLabel").textContent=UI[LANG].rMeh;
+  // 다음 문항으로 넘어가면 로그인 안내는 접는다
+  const need=$("reactNeed"); if(need) need.classList.add("hidden");
+  try{
+    const r=await fetch("/api/reactions?idx="+bi,{cache:"no-store"});
+    if(!r.ok) return;
+    const d=await r.json();
+    $("rhCnt").textContent=d.hot||0; $("rmCnt").textContent=d.meh||0;
+    if(d.mine) reacted.set(bi,d.mine);
+    const mine=reacted.get(bi)||null;
+    /* 바꿀 수 있게 열어 둔다. 서버가 예전 것을 빼고 새 것을 더하므로 숫자는 부풀지 않는다. */
+    $("reactHot").classList.toggle("reacted", mine==="hot");
+    $("reactMeh").classList.toggle("reacted", mine==="meh");
+    $("reactHot").disabled=false; $("reactMeh").disabled=false;
+  }catch(e){}
 }
 async function react(kind){
-  const bi=ROUND[idx].bi;
-  if(reacted.has(bi)) return;
-  reacted.add(bi); sfxNext();
-  const btn=kind==="h"?$("reactHot"):$("reactMeh");
-  btn.classList.add("reacted");
+  const bi=ROUND[idx]?ROUND[idx].bi:null; if(bi===null) return;
+  const k = kind==="h" ? "hot" : "meh";
+  if(reacted.get(bi)===k) return;
+  sfxNext();
   $("reactHot").disabled=true; $("reactMeh").disabled=true;
-  const cnt=kind==="h"?$("rhCnt"):$("rmCnt");
-  cnt.textContent=(parseInt(cnt.textContent,10)||0)+1; // 즉시 반영
   try{
-    const m=await loadReacts();
-    const e=m[bi]||{h:0,m:0}; e[kind]=(e[kind]||0)+1; m[bi]=e;
-    await sSet(QREACT_KEY,JSON.stringify(m));
+    const r=await fetch("/api/reactions",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({idx:bi,kind:k})
+    });
+    if(r.status===401){
+      /* 로그인해야 평가할 수 있다. 게임을 막지는 않고 안내만 띄운다. */
+      const e=$("reactNeed"); if(e){ e.textContent=UI[LANG].reactNeedLogin||""; e.classList.remove("hidden"); }
+      $("reactHot").disabled=false; $("reactMeh").disabled=false;
+      return;
+    }
+    if(r.ok){
+      const d=await r.json();
+      reacted.set(bi,d.mine);
+      $("rhCnt").textContent=d.hot||0; $("rmCnt").textContent=d.meh||0;
+      $("reactHot").classList.toggle("reacted", d.mine==="hot");
+      $("reactMeh").classList.toggle("reacted", d.mine==="meh");
+    }
   }catch(e){}
+  $("reactHot").disabled=false; $("reactMeh").disabled=false;
 }
 $("reactHot").addEventListener("click",()=>react("h"));
 $("reactMeh").addEventListener("click",()=>react("m"));
@@ -3161,25 +3204,39 @@ $("reactMeh").addEventListener("click",()=>react("m"));
 const _renderQuestion=renderQuestion;
 renderQuestion=function(){ _renderQuestion(); showReacts(); };
 
-/* OP ROOM: 리액션 랭킹 (핫 질문 / 정리 후보) */
-const _openAdmin=openAdmin;
+/* OP ROOM: 밸런스 조절 후보 - 노잼이 쌓인 문항만 서버가 골라 준다.
+   전부 내려받아 화면에서 줄 세우던 것을 그만두었다. 손볼 문항은 몇 개뿐인데
+   154문항을 매번 받을 이유가 없고, 무엇보다 "이미 손본 문항" 을 기억해야 한다. */
+const _openAdminR=openAdmin;
 openAdmin=async function(){
-  await _openAdmin();
+  await _openAdminR();
+  document.querySelectorAll("#vAdmin [data-reactpanel]").forEach(o=>o.remove());
+  const box=document.createElement("div");
+  box.setAttribute("data-reactpanel","1");
+  box.innerHTML='<div class="note" style="margin-top:14px">😑 밸런스 조절 후보</div><div class="playerlist" id="admReact">로딩 중...</div>';
+  $("btnAdmBack").parentNode.insertBefore(box,$("btnAdmBack"));
   try{
-    const m=await loadReacts();
-    const rows=Object.entries(m).map(([bi,e])=>({bi:+bi,h:e.h||0,mm:e.m||0}));
-    const hot=rows.filter(r=>r.h>0).sort((a,b)=>b.h-a.h).slice(0,5);
-    const meh=rows.filter(r=>r.mm>0).sort((a,b)=>b.mm-a.mm).slice(0,5);
-    const line=r=>'<span class="idea-line">🔥'+r.h+' 😑'+r.mm+' - '+esc((QBANK[r.bi]||{}).q||"?")+'</span>';
-    const extra=document.createElement("div");
-    extra.innerHTML='<div class="note" style="margin-top:14px">🔥 핫 질문 TOP5</div><div class="playerlist">'+(hot.length?hot.map(line).join(""):"데이터 없음")+'</div>'+
-                    '<div class="note" style="margin-top:14px">😑 노잼 신고 TOP5 - 교체 후보</div><div class="playerlist">'+(meh.length?meh.map(line).join(""):"데이터 없음")+'</div>';
-    $("admBugs").parentNode.insertBefore(extra,$("btnAdmBack"));
-    // 중복 삽입 방지: 기존 것 제거
-    const olds=document.querySelectorAll("#vAdmin [data-reactpanel]");
-    olds.forEach(o=>o.remove());
-    extra.setAttribute("data-reactpanel","1");
-  }catch(e){}
+    const r=await fetch("/api/reactions?flagged=1",{cache:"no-store"});
+    if(!r.ok){ $("admReact").textContent="불러오지 못했어요"; return; }
+    const rows=(await r.json()).rows||[];
+    if(!rows.length){ $("admReact").innerHTML='<div class="pl-row">손볼 문항 없음</div>'; return; }
+    $("admReact").innerHTML=rows.map(function(x){
+      return '<div class="pl-row"><span>😑'+x.meh+' 🔥'+x.hot+' - '+esc((QBANK[x.idx]||{}).q||"?")+'</span>'+
+             '<button class="mini-btn" data-resolve="'+x.idx+'">확인</button></div>';
+    }).join("");
+    /* 확인을 누르면 후보에서 내린다. 문항을 고쳤든 그냥 두기로 했든,
+       같은 문항이 매번 다시 올라오면 목록을 보지 않게 된다. */
+    $("admReact").querySelectorAll("[data-resolve]").forEach(function(b){
+      b.addEventListener("click",async function(){
+        b.disabled=true;
+        const ok=await fetch("/api/reactions",{
+          method:"PATCH",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({idx:+b.dataset.resolve})
+        }).then(x=>x.ok).catch(()=>false);
+        if(ok) b.closest(".pl-row").remove(); else b.disabled=false;
+      });
+    });
+  }catch(e){ $("admReact").textContent="불러오지 못했어요"; }
 };
 
 
@@ -3364,7 +3421,7 @@ $("ovGames").addEventListener("click",e=>{ if(e.target.id==="ovGames") closeOv()
 $("ovComm").addEventListener("click",e=>{ if(e.target.id==="ovComm") closeOv(); });
 
 /* ═══ 커뮤니티 윙 - 언어권별 노출 순서 + 관심도 수집 ═══ */
-const IKEY="arcade-interest-v1";
+/* 숫자는 /api/interest 가 들고 있다. 브라우저가 저장소를 통째로 되쓰지 못하게 옮겼다. */
 const _intDone=new Set();
 function buildCommStrip(){
   const u=UI[LANG]; if(!u.commCat) return;
@@ -3385,9 +3442,13 @@ async function openComm(fid){
     '<button class="int-btn" id="intBtn">'+(u.btnInterest||"")+'</button>'+
     '<div class="int-cnt" id="intCnt"></div>';
   $("ovComm").classList.remove("hidden"); document.body.classList.add("ov-open"); sfxNext();
-  let data={};
-  try{ const r=await window.storage.get(IKEY,true); if(r&&r.value) data=JSON.parse(r.value); }catch(e){}
-  const cnt=Object.values(data[fid]||{}).reduce((a,b)=>a+b,0);
+  /* 합계는 서버에서 받는다. 저장소 쪽 쓰기를 막아 두었기 때문이기도 하고,
+     읽고-고쳐-되쓰기를 브라우저가 하면 동시에 누른 사람의 표가 사라지기 때문이다. */
+  let cnt=0;
+  try{
+    const rc=await fetch("/api/interest",{cache:"no-store"});
+    if(rc.ok){ const dc=await rc.json(); cnt=(dc.counts||{})[fid]||0; }
+  }catch(e){}
   $("intCnt").textContent="♥ "+cnt.toLocaleString();
   const btn=$("intBtn");
   if(_intDone.has(fid)){ btn.disabled=true; btn.textContent=u.interestDone||btn.textContent; }
@@ -3396,12 +3457,11 @@ async function openComm(fid){
     _intDone.add(fid); btn.disabled=true; btn.textContent=u.interestDone||"✔";
     sfxClear();
     try{
-      const r=await window.storage.get(IKEY,true).catch(()=>null);
-      const d=(r&&r.value)?JSON.parse(r.value):{};
-      d[fid]=d[fid]||{}; d[fid][LANG]=(d[fid][LANG]||0)+1;
-      await window.storage.set(IKEY,JSON.stringify(d),true);
-      const c2=Object.values(d[fid]).reduce((a,b)=>a+b,0);
-      $("intCnt").textContent="♥ "+c2.toLocaleString();
+      const ri=await fetch("/api/interest",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({feature:fid,lang:LANG})
+      });
+      if(ri.ok){ const di=await ri.json(); $("intCnt").textContent="♥ "+(di.count||0).toLocaleString(); }
     }catch(e){}
   });
 }
@@ -3419,8 +3479,8 @@ if(typeof openAdmin==="function"){
     }
     box.innerHTML="로딩 중...";
     try{
-      const r=await window.storage.get(IKEY,true).catch(()=>null);
-      const d=(r&&r.value)?JSON.parse(r.value):{};
+      const ra=await fetch("/api/interest",{cache:"no-store"});
+      const d=ra.ok?((await ra.json()).byLang||{}):{};
       const rows=Object.entries(d).map(([fid,langs])=>{
         const tot=Object.values(langs).reduce((a,b)=>a+b,0);
         const det=Object.entries(langs).sort((a,b)=>b[1]-a[1]).map(([l,n])=>l.toUpperCase()+" "+n).join(" · ");
@@ -4546,7 +4606,7 @@ $("exitYes").addEventListener("click",async()=>{
       var r = await fetch("/api/rooms/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: room.code, text: text, lang: LANG })
+        body: JSON.stringify({ code: room.code, text: text, lang: LANG, name: (typeof myName==="string" ? myName : "") })
       });
       var d = await r.json().catch(function(){ return {}; });
       btn.disabled = false;
