@@ -792,6 +792,13 @@ body.ov-open{overflow:hidden;}
       <div class="playerlist" id="lobbyPlayers">참가자 대기 중...</div>
       <div class="note">JOINED <span id="lobbyCount" style="color:var(--yellow)">0</span> / <span id="lobbyCap" style="color:var(--yellow)">30</span></div>
       <button class="btn kr gray" id="btnReroll">질문 세트 다시 뽑기</button>
+      <div class="comm-head" id="chatHead">▼ 대기실 채팅 ▼</div>
+      <div class="playerlist" id="chatBox" style="max-height:150px"></div>
+      <div class="field" id="chatF"><input id="chatText" maxlength="80" placeholder="한마디"></div>
+      <button class="btn kr gray" id="btnChatSend">보내기</button>
+      <div class="note hidden" id="chatNeedLogin"></div>
+      <button class="btn kr hidden" id="btnChatLogin">로그인하러 가기 ▶</button>
+      <div class="err" id="chatErr"></div>
       <button class="btn" id="btnStartGame">GAME START</button>
       <div class="note" id="ntStart">시작하면 문항이 모든 참가자 화면에 동시에 뜹니다</div>
     </div>
@@ -812,6 +819,7 @@ body.ov-open{overflow:hidden;}
       <div class="logo" id="wtTitle" style="font-size:22px">입장 완료!</div>
       <div class="roomcode" id="waitCode" style="font-size:20px">----</div>
       <div class="playerlist" id="waitPlayers"></div>
+      <div id="chatSlotWait"></div>
       <div class="press" id="wtWait">호스트가 시작하기를 기다리는 중...</div>
     </div>
 
@@ -1843,6 +1851,7 @@ async function hostCreate(){
   POLL_FN=hostLobbyPoll; pollTimer=setInterval(hostLobbyPoll,2000); hostLobbyPoll();
 }
 async function hostLobbyPoll(){
+  if(typeof chatPoll==="function") chatPoll();
   const keys=await sList(jKey(room.code));
   const names=[];
   for(const k of keys.slice(0,60)){
@@ -1974,6 +1983,7 @@ async function playerJoin(){
   POLL_FN=playerPoll; pollTimer=setInterval(playerPoll,2000); playerPoll();
 }
 async function playerPoll(){
+  if(typeof chatPoll==="function") chatPoll();
   const raw=await sGet(stKey(room.code));
   if(!raw) return;
   let st; try{ st=JSON.parse(raw); }catch(e){ return; }
@@ -4438,6 +4448,181 @@ $("exitYes").addEventListener("click",async()=>{
       else apply("en");
     })
     .catch(function(){ /* 못 물어보면 원래 언어 그대로 둔다 */ });
+})();
+
+/* ═══ 대기실 채팅 ═══
+   기다리는 동안 할 게 없는 자리라, 로그인할 이유를 만들기에 가장 좋은 곳이다.
+
+   쓰기는 서버(/api/rooms/chat)만 한다. 브라우저가 저장소에 직접 쓰게 두면 로그인
+   없이 아무 이름으로 넣거나 대화를 통째로 덮어쓸 수 있다 - 게시판에서 실제로 그럴
+   수 있었다. 읽기는 열려 있어 방 폴링에 얹어 가져온다.
+
+   채팅 묶음은 하나뿐이고, 호스트 대기실과 참가자 대기 화면 사이를 옮겨 다닌다.
+   같은 id 를 두 벌 만들면 어느 쪽을 가리키는지 매번 따져야 한다. */
+(function(){
+  "use strict";
+
+  var CHAT_IDS = ["chatHead","chatBox","chatF","btnChatSend","chatNeedLogin","btnChatLogin","chatErr"];
+  var lastKey = "";
+
+  function moveTo(slotId){
+    var slot = document.getElementById(slotId);
+    if(!slot) return;
+    CHAT_IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) slot.appendChild(el);
+    });
+  }
+
+  function esc(s){
+    return String(s).replace(/[<>&]/g, function(c){
+      return { "<":"&lt;", ">":"&gt;", "&":"&amp;" }[c];
+    });
+  }
+
+  function render(list){
+    var box = document.getElementById("chatBox");
+    if(!box) return;
+    var u = UI[LANG] || {};
+    box.innerHTML = (list && list.length)
+      ? list.map(function(m){
+          return '<span class="idea-line"><span class="who">▪ ' + esc(m.n) + '</span> ' + esc(m.t) + '</span>';
+        }).join("")
+      : (u.chatEmpty || "");
+    // 새 말이 오면 아래로 붙는다. 보고 있던 자리보다 최신이 중요하다.
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function setLoggedIn(logged){
+    var u = UI[LANG] || {};
+    ["chatF","btnChatSend"].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.classList.toggle("hidden", !logged);
+    });
+    ["chatNeedLogin","btnChatLogin"].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.classList.toggle("hidden", logged);
+    });
+    if(!logged){
+      var n = document.getElementById("chatNeedLogin");
+      var b = document.getElementById("btnChatLogin");
+      if(n) n.textContent = u.chatNeedLogin || "";
+      if(b) b.textContent = u.bugGoLogin || "";
+    }
+  }
+
+  /** 방 폴링이 부른다. 대화 키를 읽어 화면에 그린다. */
+  window.chatPoll = async function(){
+    if(!room || !room.code) return;
+    setLoggedIn(!!USER);
+    try{
+      var raw = await sGet("abg2-" + room.code + "-chat");
+      if(raw === lastKey) return;      // 바뀐 게 없으면 다시 그리지 않는다
+      lastKey = raw;
+      var list = [];
+      try{ list = JSON.parse(raw) || []; }catch(e){}
+      render(list);
+    }catch(e){ /* 대화를 못 읽어도 게임은 계속돼야 한다 */ }
+  };
+
+  /** 화면이 바뀔 때 채팅을 그 자리로 옮긴다. */
+  window.chatAttach = function(view){
+    if(view === "vWait") moveTo("chatSlotWait");
+    lastKey = "";                      // 옮기면 비어 있으므로 다음 폴링에 다시 그린다
+    setLoggedIn(!!USER);
+  };
+
+  async function send(){
+    var input = document.getElementById("chatText");
+    var errBox = document.getElementById("chatErr");
+    var btn = document.getElementById("btnChatSend");
+    if(!input || !room || !room.code) return;
+    var text = input.value.trim();
+    if(!text) return;
+
+    btn.disabled = true;
+    errBox.textContent = "";
+    try{
+      var r = await fetch("/api/rooms/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: room.code, text: text, lang: LANG })
+      });
+      var d = await r.json().catch(function(){ return {}; });
+      btn.disabled = false;
+      if(r.status === 401){ setLoggedIn(false); return; }
+      if(r.status === 422){ errBox.textContent = (UI[LANG].modErr || "") + (d.reason ? " - " + d.reason : ""); return; }
+      if(!r.ok){ errBox.textContent = d.error || UI[LANG].saveFail; return; }
+      input.value = "";
+      if(typeof sfxSelect === "function") sfxSelect();
+      render(d.messages || []);
+      lastKey = JSON.stringify(d.messages || []);
+    }catch(e){
+      btn.disabled = false;
+      errBox.textContent = UI[LANG].saveFail;
+    }
+  }
+
+  document.addEventListener("click", function(e){
+    if(e.target && e.target.id === "btnChatSend") send();
+    if(e.target && e.target.id === "btnChatLogin"){
+      if(typeof sfxNext === "function") sfxNext();
+      document.getElementById("hudM").textContent = "PLAYER CARD";
+      show("vAuth");
+      updateAuthUI();
+    }
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && e.target && e.target.id === "chatText") send();
+  });
+
+  /* 방 화면으로 갈 때마다 채팅을 옮기고, 대기실을 벗어나면 숨긴다. */
+  var prevShow = show;
+  show = function(v){
+    prevShow(v);
+    var inLobby = (v === "vHostLobby" || v === "vWait");
+    CHAT_IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.style.display = inLobby ? "" : "none";
+    });
+    if(inLobby) chatAttach(v);
+  };
+})();
+
+/* ═══ 대기실 채팅 문구 (9개 언어) ═══ */
+(function(){
+  var T = {
+    ko:{head:"▼ 대기실 채팅 ▼",empty:"아직 대화가 없어요. 먼저 한마디 해보세요",ph:"한마디",send:"보내기",need:"로그인하면 대화할 수 있어요. 이름은 계정 이름으로 나갑니다."},
+    en:{head:"▼ LOBBY CHAT ▼",empty:"No messages yet. Say something first.",ph:"Say something",send:"SEND",need:"Log in to chat. Your account name is what shows."},
+    zh:{head:"▼ 房间聊天 ▼",empty:"还没有消息，先说点什么吧",ph:"说点什么",send:"发送",need:"登录后即可聊天。显示的是你的账号名。"},
+    tw:{head:"▼ 房間聊天 ▼",empty:"還沒有訊息，先說點什麼吧",ph:"說點什麼",send:"傳送",need:"登入後即可聊天。顯示的是你的帳號名稱。"},
+    ja:{head:"▼ ロビーチャット ▼",empty:"まだ発言がありません。最初のひとことをどうぞ",ph:"ひとこと",send:"送信",need:"ログインすると話せます。表示されるのはアカウント名です。"},
+    fr:{head:"▼ CHAT DU SALON ▼",empty:"Aucun message. Lancez la conversation.",ph:"Votre message",send:"ENVOYER",need:"Connectez-vous pour discuter. C'est votre nom de compte qui s'affiche."},
+    it:{head:"▼ CHAT DELLA STANZA ▼",empty:"Ancora nessun messaggio. Rompi il ghiaccio.",ph:"Scrivi qualcosa",send:"INVIA",need:"Accedi per chattare. Viene mostrato il nome del tuo account."},
+    de:{head:"▼ LOBBY-CHAT ▼",empty:"Noch keine Nachrichten. Fang du an.",ph:"Sag etwas",send:"SENDEN",need:"Melde dich an, um zu chatten. Angezeigt wird dein Kontoname."},
+    es:{head:"▼ CHAT DE LA SALA ▼",empty:"Aún no hay mensajes. Empieza tú.",ph:"Di algo",send:"ENVIAR",need:"Inicia sesión para chatear. Se muestra el nombre de tu cuenta."}
+  };
+  Object.keys(T).forEach(function(c){
+    if(!UI[c]) return;
+    UI[c].chatHead = T[c].head;
+    UI[c].chatEmpty = T[c].empty;
+    UI[c].chatPh = T[c].ph;
+    UI[c].chatSend = T[c].send;
+    UI[c].chatNeedLogin = T[c].need;
+  });
+  var prev = applyLang;
+  applyLang = function(){
+    prev();
+    var u = UI[LANG]; if(!u) return;
+    var set = function(id, v, attr){
+      var e = $(id); if(!e || !v) return;
+      if(attr) e.setAttribute(attr, v); else e.textContent = v;
+    };
+    set("chatHead", u.chatHead);
+    set("btnChatSend", u.chatSend);
+    set("chatText", u.chatPh, "placeholder");
+  };
+  applyLang();
 })();
 </script>
 <!-- 로딩 표시와 선택창. 원본 인라인 스크립트가 만든 UI/applyLang 을 이어받는다. -->

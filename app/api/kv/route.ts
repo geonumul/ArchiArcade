@@ -7,6 +7,7 @@ import {
   expiryFor,
   isAllowedKey,
   isAllowedPrefix,
+  isWritableKey,
 } from "@/lib/kv";
 
 export const runtime = "nodejs";
@@ -128,7 +129,8 @@ export async function POST(req: Request) {
 
   const key = typeof body.key === "string" ? body.key : "";
   const value = typeof body.value === "string" ? body.value : "";
-  if (!isAllowedKey(key)) {
+  // 쓰기는 더 좁다. 대기실 채팅처럼 읽기만 열어 둔 키가 있다.
+  if (!isWritableKey(key)) {
     return NextResponse.json({ error: "key not allowed" }, { status: 400 });
   }
   if (Buffer.byteLength(value, "utf8") > MAX_VALUE_BYTES) {
@@ -157,7 +159,7 @@ export async function DELETE(req: Request) {
   if (!rl.allowed) return tooMany(rl.retryAfterSec);
 
   const key = new URL(req.url).searchParams.get("key");
-  if (!key || !isAllowedKey(key)) {
+  if (!key || !isWritableKey(key)) {
     return NextResponse.json({ error: "key not allowed" }, { status: 400 });
   }
 

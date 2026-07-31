@@ -53,6 +53,20 @@ export function isAllowedKey(key: string): boolean {
 }
 
 /**
+ * 읽기는 되지만 브라우저가 직접 쓰지는 못하는 키.
+ *
+ * 대기실 채팅이 그렇다. 누구나 읽어야 화면에 뜨지만, 쓰기를 열어 두면 로그인하지
+ * 않은 사람이 아무 이름으로 넣거나 목록을 통째로 덮어쓸 수 있다. 게시판에서 실제로
+ * 그 일이 가능했다. 그래서 쓰기는 /api/rooms/chat 만 하고, 거기서 로그인과 검열을 본다.
+ */
+const WRITE_DENY: RegExp[] = [/^abg2-[A-Za-z0-9]{1,12}-chat$/];
+
+export function isWritableKey(key: string): boolean {
+  if (!isAllowedKey(key)) return false;
+  return !WRITE_DENY.some((re) => re.test(key));
+}
+
+/**
  * 접두사 조회는 키 하나를 읽는 것보다 비싸므로 더 좁게 받는다.
  * 원본이 접두사로 읽는 것은 방의 참가자 목록과 투표뿐이다.
  */
