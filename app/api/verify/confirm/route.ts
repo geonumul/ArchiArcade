@@ -66,11 +66,18 @@ export async function POST(req: Request) {
       email,
       schoolDomain: school.domain,
       schoolName: school.name,
+      schoolLocal: school.local ?? null,
       country: school.country,
       major,
     },
     // 재인증 시 학과가 바뀌었을 수 있다(전과·복수전공).
-    update: { major, schoolDomain: school.domain, schoolName: school.name, country: school.country },
+    update: {
+      major,
+      schoolDomain: school.domain,
+      schoolName: school.name,
+      schoolLocal: school.local ?? null,
+      country: school.country,
+    },
   });
 
   const badge = {

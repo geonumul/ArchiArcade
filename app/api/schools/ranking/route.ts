@@ -9,6 +9,7 @@ export const dynamic = "force-dynamic";
 interface Row {
   schoolDomain: string;
   schoolName: string;
+  schoolLocal: string | null;
   country: string;
   students: number;
   votes: number;
@@ -29,7 +30,7 @@ export async function GET(req: Request) {
   const prisma = db();
 
   const students = await prisma.studentVerification.groupBy({
-    by: ["schoolDomain", "schoolName", "country"],
+    by: ["schoolDomain", "schoolName", "schoolLocal", "country"],
     _count: { _all: true },
     where: country ? { country } : undefined,
   });
@@ -45,6 +46,7 @@ export async function GET(req: Request) {
     .map((s) => ({
       schoolDomain: s.schoolDomain,
       schoolName: s.schoolName,
+      schoolLocal: s.schoolLocal,
       country: s.country,
       students: s._count._all,
       votes: voteBy.get(s.schoolDomain) ?? 0,
@@ -59,6 +61,7 @@ export async function GET(req: Request) {
     ? {
         schoolDomain: badge.schoolDomain,
         schoolName: badge.schoolName,
+        schoolLocal: badge.schoolLocal ?? null,
         rank: rows.findIndex((r) => r.schoolDomain === badge.schoolDomain) + 1 || null,
       }
     : null;

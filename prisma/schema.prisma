@@ -143,7 +143,10 @@ model StudentVerification {
   email      String   @unique
   /// 집계 키. 서브도메인을 정규화한 대표 도메인이 들어간다.
   schoolDomain String
+  /// 영문 이름. 화면에서 크게 쓴다.
   schoolName   String
+  /// 현지어 이름. 영문 옆에 작게 붙인다. 출처가 없는 학교는 비어 있다.
+  schoolLocal  String?
   country      String
   major        String
   verifiedAt   DateTime @default(now())
