@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Cabinet } from "@/components/Cabinet";
 import { Picker } from "@/components/Picker";
+import { SchoolName } from "@/components/SchoolName";
 import { useSchoolLang, withLang } from "@/components/useSchoolLang";
 
 interface Row {
   schoolDomain: string;
+  /// 영문 이름. 크게 쓴다.
   schoolName: string;
+  /// 현지어 이름. 영문 옆에 작게 붙는다.
+  schoolLocal: string | null;
   country: string;
   students: number;
   votes: number;
@@ -17,6 +21,7 @@ interface Row {
 interface Mine {
   schoolDomain: string;
   schoolName: string;
+  schoolLocal: string | null;
   rank: number | null;
 }
 
@@ -78,7 +83,7 @@ export default function SchoolsPage() {
               className={"srow" + (mine?.schoolDomain === r.schoolDomain ? " me" : "")}
             >
               <span>
-                {i + 1}. {r.schoolName}
+                {i + 1}. <SchoolName name={r.schoolName} local={r.schoolLocal} size="small" />
                 <span className="sub">{r.country}</span>
               </span>
               <b>

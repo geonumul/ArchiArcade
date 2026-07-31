@@ -2,7 +2,16 @@ import SCHOOLS from "@/data/schools.json";
 
 export interface School {
   domain: string;
+  /// 영문 이름. 화면에서 크게 쓰는 쪽이다.
   name: string;
+  /**
+   * 현지어 이름. 영문 옆에 작게 붙인다.
+   *
+   * 영문만으로는 한국 학생이 자기 학교를 한눈에 못 찾고, 현지어만 쓰면 나라마다
+   * 다른 글자가 섞여 목록이 흐트러진다. 그래서 둘 다 두고 크기로 구분한다.
+   * 출처가 없으면 비어 있고, 그때는 영문만 보인다 - 지어내지 않는다.
+   */
+  local?: string;
   country: string;
 }
 
@@ -11,8 +20,14 @@ interface SuffixRule {
   country: string;
 }
 
+interface SchoolEntry {
+  name: string;
+  local?: string;
+  country: string;
+}
+
 const SUFFIX_RULES: SuffixRule[] = SCHOOLS.suffixRules;
-const KNOWN: Record<string, { name: string; country: string }> = SCHOOLS.domains;
+const KNOWN: Record<string, SchoolEntry> = SCHOOLS.domains;
 
 /// 무료·임시 메일은 학교 인증에 쓸 수 없다. 목록이 완전할 수는 없지만,
 /// 학술 도메인만 통과시키는 규칙 자체가 1차 방어선이라 여기는 보조 수단이다.
@@ -42,11 +57,13 @@ export function resolveSchool(email: string): School | null {
   if (!domain || DISPOSABLE.has(domain)) return null;
 
   const known = KNOWN[domain];
-  if (known) return { domain, name: known.name, country: known.country };
+  if (known) return { domain, name: known.name, local: known.local, country: known.country };
 
   // 서브도메인까지 허용한다 (arch.snu.ac.kr → snu.ac.kr)
   for (const [d, meta] of Object.entries(KNOWN)) {
-    if (domain.endsWith("." + d)) return { domain: d, name: meta.name, country: meta.country };
+    if (domain.endsWith("." + d)) {
+      return { domain: d, name: meta.name, local: meta.local, country: meta.country };
+    }
   }
 
   for (const rule of SUFFIX_RULES) {

@@ -14,7 +14,10 @@ const TTL_SEC = 60 * 60 * 24 * 180; // 180일
 
 export interface Badge {
   schoolDomain: string;
+  /// 영문 이름. 화면에서 크게 쓴다.
   schoolName: string;
+  /// 현지어 이름. 영문 옆에 작게 붙는다. 출처가 없으면 비어 있고 영문만 보인다.
+  schoolLocal?: string;
   country: string;
   major: string;
   /**

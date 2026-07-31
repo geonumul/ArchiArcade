@@ -6,6 +6,7 @@ import { MAJORS } from "@/lib/majors";
 import { majorFor } from "@/lib/i18n/school";
 import { Cabinet } from "@/components/Cabinet";
 import { Picker } from "@/components/Picker";
+import { SchoolName } from "@/components/SchoolName";
 import { useSchoolLang, withLang } from "@/components/useSchoolLang";
 
 interface AlumniRow {
@@ -30,7 +31,7 @@ export default function AlumniPage() {
   const { lang, t } = useSchoolLang();
 
   const [needVerify, setNeedVerify] = useState(false);
-  const [school, setSchool] = useState<{ name: string } | null>(null);
+  const [school, setSchool] = useState<{ name: string; local?: string | null } | null>(null);
   const [rows, setRows] = useState<AlumniRow[]>([]);
   const [major, setMajor] = useState<string>("");
   // "" = 전체 · student = 재학 · alumni = 졸업
@@ -153,7 +154,11 @@ export default function AlumniPage() {
   return (
     <Cabinet title={t.aTitle} hudRight="ALUMNI">
       <div className="note">
-        {school?.name ? `${school.name} · ` : ""}
+        {school?.name ? (
+          <>
+            <SchoolName name={school.name} local={school.local} /> ·{" "}
+          </>
+        ) : null}
         {t.aNote}
       </div>
 

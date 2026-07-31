@@ -6,11 +6,15 @@ import { MAJORS } from "@/lib/majors";
 import { majorFor } from "@/lib/i18n/school";
 import { Cabinet } from "@/components/Cabinet";
 import { Picker } from "@/components/Picker";
+import { SchoolName } from "@/components/SchoolName";
 import { useSchoolLang, withLang } from "@/components/useSchoolLang";
 
 interface Badge {
   schoolDomain: string;
+  /// 영문 이름. 크게 쓴다.
   schoolName: string;
+  /// 현지어 이름. 영문 옆에 작게 붙는다. 출처가 없는 학교는 비어 있다.
+  schoolLocal?: string | null;
   country: string;
   major: string;
 }
@@ -29,6 +33,19 @@ export default function VerifyPage() {
   const [devCode, setDevCode] = useState<string | null>(null);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  /**
+   * 재발송까지 남은 시간.
+   *
+   * 서버는 한 주소에 10분 동안 3번까지만 보낸다. 버튼을 계속 눌러 그 한도를 다 쓰고
+   * 나면 정작 필요할 때 못 보내므로, 화면에서도 한 번 더 텀을 둔다.
+   */
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [cooldown]);
 
   useEffect(() => {
     fetch("/api/verify/me")
@@ -99,6 +116,37 @@ export default function VerifyPage() {
     }
   }, [email, code, major, t]);
 
+  /**
+   * 코드를 다시 보낸다.
+   *
+   * 서버는 한 주소에 10분 동안 3번까지만 보내므로, 여기서도 30초 텀을 둔다.
+   * 버튼을 연타해 한도를 다 써 버리면 정작 필요할 때 못 받는다.
+   */
+  const resend = useCallback(async () => {
+    setErr("");
+    setBusy(true);
+    try {
+      const res = await fetch("/api/verify/request", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, major }),
+      });
+      const d = await res.json();
+      if (!res.ok) {
+        setErr(d.mailNotReady ? t.vMailSoon : (d.error ?? t.errNet));
+        return;
+      }
+      setDevCode(d.devCode ?? null);
+      setCode("");
+      setErr(t.vResent);
+      setCooldown(30);
+    } catch {
+      setErr(t.errNet);
+    } finally {
+      setBusy(false);
+    }
+  }, [email, major, t]);
+
   const reset = useCallback(async () => {
     await fetch("/api/verify/me", { method: "DELETE" });
     setBadge(null);
@@ -164,9 +212,16 @@ export default function VerifyPage() {
             />
           </div>
 
+          {/* 코드가 안 와서 그냥 나가는 사람이 실제로 있었다. 어디를 봐야 하는지
+              알려 주고, 다시 받을 길을 여기 둔다. */}
+          <div className="note" style={{ fontSize: 12, color: "var(--dim)" }}>{t.vSpam}</div>
+
           <div className="err">{err}</div>
           <button className="btn kr" disabled={busy || code.length !== 6} onClick={confirm}>
             {t.vConfirm}
+          </button>
+          <button className="btn kr gray" disabled={busy || cooldown > 0} onClick={resend}>
+            {cooldown > 0 ? t.vWait(cooldown) : t.vResend}
           </button>
           <button className="btn kr gray" onClick={() => setStep("form")}>
             {t.vRetry}
@@ -178,7 +233,7 @@ export default function VerifyPage() {
         <>
           <div className="scoreboard">
             <span className="lbl">SCHOOL</span>
-            <span className="val">{badge.schoolName}</span>
+            <span className="val"><SchoolName name={badge.schoolName} local={badge.schoolLocal} /></span>
             <br />
             <span className="lbl">MAJOR</span>
             <span className="val">{majorFor(badge.major, lang, MAJORS)}</span>

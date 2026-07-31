@@ -78,7 +78,7 @@ export async function GET(req: Request) {
     : null;
 
   return NextResponse.json({
-    school: { domain: badge.schoolDomain, name: badge.schoolName },
+    school: { domain: badge.schoolDomain, name: badge.schoolName, local: badge.schoolLocal ?? null },
     rows: rows.map((r) => ({
       id: r.id,
       // 이름을 비워 둔 채 공개한 사람은 null 로 내보낸다. "익명" 문구는 화면이
