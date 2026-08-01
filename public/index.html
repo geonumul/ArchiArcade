@@ -3901,32 +3901,10 @@ openAdmin=async function(){
   }catch(e){ $("admRounds").textContent="불러오지 못했어요"; }
 };
 
-/* OP ROOM - 내가 누구 정보를 열어 봤나.
-   법이 남기라고 해서 남기는 기록이지만(고시 제8조), 남기기만 하고 볼 수 없으면
-   점검 의무를 지킬 수가 없다. 월 1회 이상 훑어보게 되어 있다. */
-const _openAdminL=openAdmin;
-openAdmin=async function(){
-  await _openAdminL();
-  document.querySelectorAll("#vAdmin [data-alog]").forEach(o=>o.remove());
-  const wrap=document.createElement("div");
-  wrap.setAttribute("data-alog","1");
-  wrap.innerHTML='<div class="note" style="margin-top:14px">🔎 내가 열어 본 기록 (최근 30일)</div>'+
-                 '<div class="playerlist" id="admLog" style="max-height:180px">로딩 중...</div>';
-  $("btnAdmBack").parentNode.insertBefore(wrap,$("btnAdmBack"));
-  try{
-    const r=await fetch("/api/admin/access-log?days=30",{cache:"no-store"});
-    if(!r.ok){ $("admLog").textContent="불러오지 못했어요"; return; }
-    const d=await r.json();
-    const rows=d.rows||[];
-    if(!rows.length){ $("admLog").innerHTML='<div class="pl-row">기록 없음</div>'; return; }
-    $("admLog").innerHTML=rows.map(function(x){
-      const when=String(x.at||"").slice(5,16).replace("T"," ");
-      return '<div class="pl-row"><span>'+esc(when)+' '+esc(x.action)+'</span>'+
-             '<span style="color:var(--dim);font-size:11px">'+esc(x.subject)+'</span></div>';
-    }).join("")+(d.total>rows.length?'<div class="pl-row"><span style="color:var(--dim);font-size:11px">전체 '+d.total+'건 중 '+rows.length+'건</span></div>':"");
-  }catch(e){ $("admLog").textContent="불러오지 못했어요"; }
-};
-
+/* 접속기록은 계속 남지만 화면에는 띄우지 않는다.
+   남기는 것이 법이 요구하는 쪽이고(고시 제8조), 볼 일은 드물다. 관리자 화면을 열
+   때마다 자기가 눌렀던 것이 줄줄이 뜨면 정작 봐야 할 통계가 아래로 밀린다.
+   필요할 때는 /api/admin/access-log 로 본다. */
 /* ═══ 두 번째 카트리지: 이 건물 누가 설계했게 ═══
    밸런스게임은 정답이 없는 놀이라 한 판 하고 나면 남는 게 없다. 이건 맞고 틀림이
    있어서 다시 하게 되고, 하다 보면 건물 이름과 설계자가 붙는다 - 시험 기간에
