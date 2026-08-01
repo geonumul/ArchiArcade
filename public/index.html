@@ -975,6 +975,49 @@ body.ov-open{overflow:hidden;}
       <button class="btn" id="retryBtn">CONTINUE?</button>
     </div>
 
+    <!-- ── 방: 만들기·참가 ── -->
+    <div class="stack hidden" id="vArchqRoom">
+      <div class="logo" style="font-size:20px" id="aqrTitle">같이 하기</div>
+      <div class="note" id="aqrModeT"></div>
+      <div class="field"><label id="aqrPwL">방 비밀번호</label><input id="aqrPw" maxlength="16"></div>
+      <button class="btn kr" id="aqrMake">방 만들기</button>
+      <div class="note" style="margin-top:10px">- - -</div>
+      <div class="field"><label id="aqrCodeL">방 번호</label><input id="aqrCode" maxlength="8" inputmode="numeric"></div>
+      <div class="field"><label>&nbsp;</label><input id="aqrPw2" maxlength="16" placeholder=""></div>
+      <button class="btn kr gray" id="aqrJoinT">들어가기</button>
+      <div class="err" id="aqrErr"></div>
+      <button class="btn kr gray" id="aqrBackT">뒤로</button>
+    </div>
+
+    <!-- ── 방: 대기실 ── -->
+    <div class="stack hidden" id="vArchqLobby">
+      <div class="note">ROOM</div>
+      <div class="logo" id="aqlCode">----</div>
+      <div class="note" id="aqlMode"></div>
+      <div class="note" id="aqlCount"></div>
+      <div class="playerlist" id="aqlBoard" style="max-height:180px"></div>
+      <div class="note" id="aqlWait"></div>
+      <button class="btn hidden" id="aqlStart">시작</button>
+      <button class="btn kr gray" id="aqlLeave">나가기</button>
+    </div>
+
+    <!-- ── 방: 진행 ── -->
+    <div class="stack hidden" id="vArchqRoomPlay">
+      <div class="stage-head"><span class="stg" id="aqrStage"></span><span id="aqrScore">SCORE 0</span></div>
+      <div class="timerbar"><div class="timerfill" id="aqrBar"></div></div>
+      <div class="qbox"><div class="q" id="aqrQ">-</div><div class="npc" id="aqrHint">-</div></div>
+      <div class="aq-choices" id="aqrChoices"></div>
+      <div class="meta" id="aqrFeed" style="min-height:22px"></div>
+      <div class="meta" id="aqrWho" style="min-height:18px"></div>
+      <div class="playerlist" id="aqrBoard" style="max-height:150px"></div>
+    </div>
+
+    <!-- ── 방: 결과 ── -->
+    <div class="stack hidden" id="vArchqRoomEnd">
+      <div class="gameclear" id="aqreT">GAME CLEAR!</div>
+      <div class="playerlist" id="aqreBoard" style="max-height:240px"></div>
+      <button class="btn kr gray" id="aqreBack">오락실로 ←</button>
+    </div>
     <!-- ── 설계자 맞히기: 모드 고르기 ── -->
     <div class="stack hidden" id="vArchqMode">
       <div class="logo" style="font-size:20px" id="aqModeT">이 건물 누가 설계했게</div>
@@ -1717,7 +1760,7 @@ const APP_VER="1.7.0";
 const ROOM_TTL=24*3600*1000;            // 방 유효기간 24시간
 const $ = id => document.getElementById(id);
 const uid = Math.random().toString(36).slice(2,10);
-const VIEWS = ["vArcade","vTitle","vHostSetup","vHostLobby","vJoin","vWait","vQuiz","vEnd","vSuggest","vReport","vAuth","vForgot","vAdmin","vArchqMode","vArchq","vArchqEnd"];
+const VIEWS = ["vArcade","vTitle","vHostSetup","vHostLobby","vJoin","vWait","vQuiz","vEnd","vSuggest","vReport","vAuth","vForgot","vAdmin","vArchqMode","vArchq","vArchqEnd","vArchqRoom","vArchqLobby","vArchqRoomPlay","vArchqRoomEnd"];
 
 /* ── 보안 헬퍼 ── */
 // XSS 방지: 사용자 입력이 화면에 표시되기 전 이스케이프
@@ -4007,6 +4050,13 @@ function aqOpenModes(){
   go.textContent=u.aqGo||UI.ko.aqGo;
   go.addEventListener("click",function(){ aqStart(AQ_PICK); });
   box.appendChild(go);
+  /* 같이 하기. 고른 모드 그대로 방을 연다 - 방을 만들면서 모드를 또 고르게 하면
+     같은 것을 두 번 묻는 셈이다. */
+  const together=document.createElement("button");
+  together.className="btn kr gray";
+  together.textContent=u.aqrTitle||UI.ko.aqrTitle;
+  together.addEventListener("click",function(){ aqrOpen(AQ_PICK); });
+  box.appendChild(together);
   sfxNext(); $("hudM").textContent="WHO DESIGNED IT"; show("vArchqMode");
   aqLoadBoard(AQ_PICK);
 }
@@ -4203,6 +4253,231 @@ function aqRelang(){
     if(bank.arch[q.opts[n]]) b.textContent=aqName(bank.arch[q.opts[n]]);
   });
 }
+
+/* ═══ 설계자 맞히기 - 방에서 같이 하기 ═══
+   혼자 하면 점수가 남을 뿐이고, 같이 하면 누가 몇 개 맞혔는지가 그 자리에서 보인다.
+   설계실에서 옆자리끼리 하는 게 이 게임의 제일 쓸모 있는 쓰임이다.
+
+   문제는 서버가 뽑아 방에 넣어 둔다. 브라우저가 각자 뽑으면 같은 방에 앉아 서로 다른
+   문제를 푸는 셈이라 점수를 나란히 놓을 수가 없다.
+
+   진행도 서버가 넘긴다. 호스트의 브라우저에 맡기면 그 사람이 창을 닫는 순간 방이
+   그 문항에서 멈춘다. 여기서는 2초마다 상태를 물어보고 화면을 맞출 뿐이다. */
+let AQR={code:null,timer:null,seen:-1,last:null};
+
+function aqrStop(){ if(AQR.timer){ clearInterval(AQR.timer); AQR.timer=null; } }
+
+function aqrLeave(){
+  aqrStop(); AQR={code:null,timer:null,seen:-1,last:null};
+}
+
+/* 방 만들기·참가 화면. 둘을 한 화면에 두는 이유는 대개 한쪽이 만들고 나머지가 코드를
+   받아 들어오는 식이라, 오가며 헷갈릴 일이 없기 때문이다. */
+function aqrOpen(mode){
+  const u=UI[LANG];
+  if(!USER){
+    sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI();
+    $("auErr").textContent=u.aqNeed||UI.ko.aqNeed;
+    return;
+  }
+  $("aqrTitle").textContent=u.aqrTitle||UI.ko.aqrTitle;
+  $("aqrModeT").textContent=aqModeLabel(aqMode(mode||AQ_PICK));
+  $("aqrMake").textContent=u.aqrMake||UI.ko.aqrMake;
+  $("aqrJoinT").textContent=u.aqrJoin||UI.ko.aqrJoin;
+  $("aqrBackT").textContent=u.aqBackT||UI.ko.aqBackT;
+  $("aqrPwL").textContent=u.aqrPw||UI.ko.aqrPw;
+  $("aqrCodeL").textContent=u.aqrCode||UI.ko.aqrCode;
+  $("aqrErr").textContent="";
+  sfxNext(); $("hudM").textContent="ROOM"; show("vArchqRoom");
+}
+
+async function aqrCreate(){
+  const u=UI[LANG], err=$("aqrErr");
+  const pw=$("aqrPw").value.trim();
+  if(!pw){ err.textContent=u.aqrNeedPw||UI.ko.aqrNeedPw; return; }
+  err.textContent="...";
+  try{
+    const r=await fetch("/api/rooms/archq",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({pw:pw,mode:AQ_PICK,lang:LANG,name:USER.name})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok){ err.textContent=d.error||u.auErrNet; return; }
+    err.textContent="";
+    aqrEnter(d.code);
+  }catch(e){ err.textContent=u.auErrNet||""; }
+}
+
+async function aqrJoin(){
+  const u=UI[LANG], err=$("aqrErr");
+  const code=$("aqrCode").value.trim(), pw=$("aqrPw2").value.trim();
+  if(!code){ err.textContent=u.aqrNeedCode||UI.ko.aqrNeedCode; return; }
+  err.textContent="...";
+  try{
+    const r=await fetch("/api/rooms/archq/"+encodeURIComponent(code),{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({pw:pw,name:USER.name})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok){ err.textContent=d.error||u.auErrNet; return; }
+    err.textContent="";
+    aqrEnter(code);
+  }catch(e){ err.textContent=u.auErrNet||""; }
+}
+
+function aqrEnter(code){
+  AQR.code=code; AQR.seen=-1;
+  sfxClear(); $("hudM").textContent="ROOM "+code;
+  aqrPoll();
+  // 2초마다. 더 자주 물어봐도 사람이 답하는 속도보다 빠를 이유가 없다.
+  AQR.timer=setInterval(aqrPoll,2000);
+}
+
+async function aqrPoll(){
+  if(!AQR.code) return;
+  try{
+    const r=await fetch("/api/rooms/archq/"+encodeURIComponent(AQR.code),{cache:"no-store"});
+    if(r.status===404){ aqrDied(); return; }
+    if(!r.ok) return;
+    AQR.last=await r.json();
+    aqrRender(AQR.last);
+  }catch(e){}
+}
+
+function aqrDied(){
+  const u=UI[LANG];
+  aqrLeave();
+  alert(u.aqrGone||UI.ko.aqrGone);
+  aqOpenModes();
+}
+
+function aqrRender(d){
+  const u=UI[LANG];
+  if(d.ph==="lobby"){ aqrLobby(d); return; }
+  if(d.ph==="end"){ aqrEnd(d); return; }
+  aqrPlay(d);
+}
+
+function aqrLobby(d){
+  const u=UI[LANG];
+  show("vArchqLobby"); $("hudM").textContent="ROOM "+d.code;
+  $("aqlCode").textContent=d.code;
+  $("aqlMode").textContent=aqModeLabel(aqMode(d.mode));
+  $("aqlCount").textContent=(u.aqrPlayers||UI.ko.aqrPlayers).replace("{n}",d.players).replace("{m}",d.maxPlayers);
+  $("aqlWait").textContent=d.host?(u.aqrHostWait||UI.ko.aqrHostWait):(u.aqrGuestWait||UI.ko.aqrGuestWait);
+  $("aqlStart").classList.toggle("hidden",!d.host);
+  $("aqlStart").textContent=u.aqrStart||UI.ko.aqrStart;
+  $("aqlLeave").textContent=u.aqrLeave||UI.ko.aqrLeave;
+  $("aqlBoard").innerHTML=(d.board||[]).map(function(p){
+    return '<div class="pl-row"><span>'+esc(p.name)+'</span></div>';
+  }).join("")||'<div class="pl-row">'+esc(u.aqrEmpty||UI.ko.aqrEmpty)+'</div>';
+}
+
+function aqrPlay(d){
+  const u=UI[LANG], bank=window.ARCHQ;
+  show("vArchqRoomPlay"); $("hudM").textContent="ROOM "+d.code;
+  if(!d.question||!bank){ return; }
+
+  /* 같은 문항을 다시 그리지 않는다. 매번 그리면 2초마다 보기가 새로 만들어져서
+     누르려던 순간에 버튼이 갈리고, 고른 표시도 사라진다. */
+  if(AQR.seen!==d.question.i){
+    AQR.seen=d.question.i;
+    const b=bank.bld[d.question.b];
+    $("aqrQ").textContent=aqName(b);
+    const inC=aqIndex().byCountry[b.c]||new Set();
+    const share=d.question.opts.filter(function(a){ return inC.has(a); }).length;
+    $("aqrHint").textContent=b.y+(share>=2?" · "+b.c:"");
+    const box=$("aqrChoices"); box.innerHTML="";
+    d.question.opts.forEach(function(ai){
+      const btn=document.createElement("button");
+      btn.className="aq-c"; btn.textContent=aqName(bank.arch[ai]);
+      btn.addEventListener("click",function(){ aqrAnswer(d.question.i,ai,btn); });
+      box.appendChild(btn);
+    });
+    $("aqrFeed").textContent="";
+  }
+
+  $("aqrStage").textContent=d.secs? aqModeLabel(aqMode(d.mode))
+    : "Q "+(d.question.i+1)+" / "+d.total;
+  $("aqrScore").textContent="SCORE "+(d.me?d.me.score:0);
+
+  /* 몇 명이 답했는지 보여 준다. 같이 하는 재미의 절반이 "쟤 아직 안 눌렀네" 다.
+     타임어택은 각자 진도가 달라 뜻이 없으므로 서버가 비워 보낸다. */
+  $("aqrWho").textContent=(d.answeredCount!==null&&d.answeredCount!==undefined)
+    ? (u.aqrAnswered||UI.ko.aqrAnswered).replace("{n}",d.answeredCount).replace("{m}",d.players)
+    : "";
+
+  // 이미 답했으면 더 못 누른다. 서버도 막지만 화면에서 먼저 잠근다.
+  if(d.me&&d.me.waiting){
+    $("aqrChoices").querySelectorAll(".aq-c").forEach(function(b){ b.disabled=true; });
+  }
+
+  /* 지난 문항의 정답. 마감이 지나야 서버가 실어 주므로, 먼저 답한 사람이 정답을
+     미리 알고 옆에 알려주는 일이 없다. */
+  if(d.prev&&d.prev.right!==null&&d.prev.i===AQR.seen-1){
+    const name=aqName(bank.arch[d.prev.right]);
+    $("aqrFeed").textContent=(d.prev.ok?(u.aqRight||UI.ko.aqRight)
+      :(u.aqWrong||UI.ko.aqWrong)+" "+name);
+  }
+
+  // 남은 시간 막대. 문항 모드는 문항마다, 타임어택은 판 전체가 하나다.
+  const until=d.secs? d.endsAt : d.deadline;
+  const span=d.secs? d.secs*1000 : AQ_SEC*1000;
+  if(until){
+    const left=until-Date.now();
+    $("aqrBar").style.width=Math.max(0,Math.min(100,left/span*100))+"%";
+  }
+  $("aqrBoard").innerHTML=(d.board||[]).map(function(p,i){
+    return '<div class="pl-row"'+(p.me?' style="color:var(--yellow)"':'')+'>'+
+           '<span>'+(i+1)+'. '+esc(p.name)+'</span>'+
+           '<span style="font-size:11px">'+(u.aqSolved||UI.ko.aqSolved).replace("{n}",p.score)+'</span></div>';
+  }).join("");
+}
+
+async function aqrAnswer(qi,pick,btn){
+  $("aqrChoices").querySelectorAll(".aq-c").forEach(function(b){ b.disabled=true; });
+  if(btn) btn.classList.add("picked");
+  sfxSelect();
+  try{
+    await fetch("/api/rooms/archq/"+encodeURIComponent(AQR.code)+"/answer",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({questionIndex:qi,pick:pick})
+    });
+  }catch(e){}
+  aqrPoll();
+}
+
+function aqrEnd(d){
+  const u=UI[LANG];
+  aqrStop();
+  show("vArchqRoomEnd"); $("hudM").textContent="RESULT";
+  $("aqreT").textContent=u.aqClearT||"GAME CLEAR!";
+  $("aqreBack").textContent=u.aqBackT||UI.ko.aqBackT;
+  $("aqreBoard").innerHTML=(d.board||[]).map(function(p,i){
+    const medal=["🥇","🥈","🥉"][i]||(i+1)+".";
+    return '<div class="pl-row"'+(p.me?' style="color:var(--yellow)"':'')+'>'+
+           '<span>'+medal+' '+esc(p.name)+'</span>'+
+           '<span style="font-size:11px">'+(u.aqSolved||UI.ko.aqSolved).replace("{n}",p.score)+'</span></div>';
+  }).join("");
+}
+
+$("aqrMake").addEventListener("click",aqrCreate);
+$("aqrJoinT").addEventListener("click",aqrJoin);
+$("aqrBackT").addEventListener("click",function(){ aqrLeave(); aqOpenModes(); });
+$("aqlLeave").addEventListener("click",function(){ aqrLeave(); aqOpenModes(); });
+$("aqreBack").addEventListener("click",function(){ aqrLeave(); aqOpenModes(); });
+$("aqlStart").addEventListener("click",async function(){
+  const b=$("aqlStart"); b.disabled=true;
+  try{
+    await fetch("/api/rooms/archq/"+encodeURIComponent(AQR.code),{
+      method:"PATCH",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({action:"start"})
+    });
+    aqrPoll();
+  }catch(e){}
+  b.disabled=false;
+});
+
 $("cartArchq").addEventListener("click",aqOpenModes);
 $("aqRetry").addEventListener("click",aqOpenModes);
 /* 판 도중에 나가기. 기록은 올리지 않는다 - 중간에 그만둔 것을 최고 기록과 겨루게
@@ -4768,6 +5043,17 @@ Object.assign(UI.fr,{aqSolved:"{n} bonnes"});
 Object.assign(UI.it,{aqSolved:"{n} esatte"});
 Object.assign(UI.de,{aqSolved:"{n} richtig"});
 Object.assign(UI.es,{aqSolved:"{n} aciertos"});
+
+/* 방에서 같이 하기 문구. {n} 은 사람 수, {m} 은 정원이나 전체 인원. */
+Object.assign(UI.ko,{aqrTitle:"같이 하기",aqrPw:"방 비밀번호",aqrCode:"방 번호",aqrMake:"방 만들기",aqrJoin:"들어가기",aqrNeedPw:"비밀번호를 정해주세요",aqrNeedCode:"방 번호를 넣어주세요",aqrPlayers:"{n} / {m} 명",aqrHostWait:"사람이 모이면 시작을 누르세요",aqrGuestWait:"방장이 시작하기를 기다리는 중",aqrStart:"시작",aqrLeave:"나가기",aqrEmpty:"아직 아무도 없어요",aqrAnswered:"{n} / {m} 명 답함",aqrGone:"방이 사라졌어요"});
+Object.assign(UI.en,{aqrTitle:"PLAY TOGETHER",aqrPw:"Room password",aqrCode:"Room code",aqrMake:"Create room",aqrJoin:"Join",aqrNeedPw:"Set a password",aqrNeedCode:"Enter the room code",aqrPlayers:"{n} / {m}",aqrHostWait:"Press start when everyone is in",aqrGuestWait:"Waiting for the host to start",aqrStart:"START",aqrLeave:"Leave",aqrEmpty:"Nobody here yet",aqrAnswered:"{n} of {m} answered",aqrGone:"That room is gone"});
+Object.assign(UI.zh,{aqrTitle:"一起玩",aqrPw:"房间密码",aqrCode:"房间号",aqrMake:"创建房间",aqrJoin:"加入",aqrNeedPw:"请设置密码",aqrNeedCode:"请输入房间号",aqrPlayers:"{n} / {m} 人",aqrHostWait:"人到齐后按开始",aqrGuestWait:"等待房主开始",aqrStart:"开始",aqrLeave:"离开",aqrEmpty:"还没有人",aqrAnswered:"{n} / {m} 人已作答",aqrGone:"房间已不存在"});
+Object.assign(UI.tw,{aqrTitle:"一起玩",aqrPw:"房間密碼",aqrCode:"房間號",aqrMake:"建立房間",aqrJoin:"加入",aqrNeedPw:"請設定密碼",aqrNeedCode:"請輸入房間號",aqrPlayers:"{n} / {m} 人",aqrHostWait:"人到齊後按開始",aqrGuestWait:"等待房主開始",aqrStart:"開始",aqrLeave:"離開",aqrEmpty:"還沒有人",aqrAnswered:"{n} / {m} 人已作答",aqrGone:"房間已不存在"});
+Object.assign(UI.ja,{aqrTitle:"いっしょに",aqrPw:"ルームのパスワード",aqrCode:"ルーム番号",aqrMake:"ルームを作る",aqrJoin:"入る",aqrNeedPw:"パスワードを決めてください",aqrNeedCode:"ルーム番号を入れてください",aqrPlayers:"{n} / {m} 人",aqrHostWait:"そろったらスタートを押してください",aqrGuestWait:"ホストの開始を待っています",aqrStart:"スタート",aqrLeave:"退出",aqrEmpty:"まだ誰もいません",aqrAnswered:"{n} / {m} 人が回答",aqrGone:"ルームがありません"});
+Object.assign(UI.fr,{aqrTitle:"JOUER ENSEMBLE",aqrPw:"Mot de passe",aqrCode:"Code du salon",aqrMake:"Creer un salon",aqrJoin:"Rejoindre",aqrNeedPw:"Choisissez un mot de passe",aqrNeedCode:"Entrez le code du salon",aqrPlayers:"{n} / {m}",aqrHostWait:"Lancez quand tout le monde est la",aqrGuestWait:"En attente de l hote",aqrStart:"DEMARRER",aqrLeave:"Quitter",aqrEmpty:"Personne pour l instant",aqrAnswered:"{n} / {m} ont repondu",aqrGone:"Ce salon n existe plus"});
+Object.assign(UI.it,{aqrTitle:"GIOCA INSIEME",aqrPw:"Password della stanza",aqrCode:"Codice stanza",aqrMake:"Crea stanza",aqrJoin:"Entra",aqrNeedPw:"Scegli una password",aqrNeedCode:"Inserisci il codice",aqrPlayers:"{n} / {m}",aqrHostWait:"Avvia quando ci sono tutti",aqrGuestWait:"In attesa dell host",aqrStart:"AVVIA",aqrLeave:"Esci",aqrEmpty:"Ancora nessuno",aqrAnswered:"{n} / {m} hanno risposto",aqrGone:"La stanza non esiste piu"});
+Object.assign(UI.de,{aqrTitle:"ZUSAMMEN SPIELEN",aqrPw:"Raum-Passwort",aqrCode:"Raumcode",aqrMake:"Raum erstellen",aqrJoin:"Beitreten",aqrNeedPw:"Lege ein Passwort fest",aqrNeedCode:"Gib den Raumcode ein",aqrPlayers:"{n} / {m}",aqrHostWait:"Starte, wenn alle da sind",aqrGuestWait:"Warte auf den Host",aqrStart:"START",aqrLeave:"Verlassen",aqrEmpty:"Noch niemand da",aqrAnswered:"{n} / {m} haben geantwortet",aqrGone:"Diesen Raum gibt es nicht mehr"});
+Object.assign(UI.es,{aqrTitle:"JUGAR JUNTOS",aqrPw:"Contrasena de la sala",aqrCode:"Codigo de sala",aqrMake:"Crear sala",aqrJoin:"Entrar",aqrNeedPw:"Elige una contrasena",aqrNeedCode:"Escribe el codigo de sala",aqrPlayers:"{n} / {m}",aqrHostWait:"Empieza cuando esten todos",aqrGuestWait:"Esperando al anfitrion",aqrStart:"EMPEZAR",aqrLeave:"Salir",aqrEmpty:"Aun no hay nadie",aqrAnswered:"{n} / {m} han respondido",aqrGone:"Esa sala ya no existe"});
 
 /* 아이폰 무음 스위치 안내. 세션을 바꿔 무음 스위치와 무관해졌지만, 그래도
    안 들리는 사람에게 어디를 볼지 알려 주는 마지막 줄이다. */
