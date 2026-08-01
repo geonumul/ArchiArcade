@@ -112,7 +112,9 @@ export const SPONSOR_UI: Record<SponsorLang, SponsorStrings> = {
       {
         kind: "cartridge",
         name: "스폰서 카트리지",
-        desc: "오락실 화면 안에 카트리지 한 칸으로 들어갑니다. 배너가 아니라 게임기의 일부로 보이게 만듭니다.",
+        desc:
+          "오락실 화면 가장자리에 고정된 배너 자리입니다. 떠 있는 동안 계속 보이되, " +
+          "게임 위를 덮지 않습니다. 픽셀 아트 디렉션에 맞춰 게임기의 일부처럼 그려 드립니다.",
       },
       {
         kind: "room",
@@ -138,10 +140,11 @@ export const SPONSOR_UI: Record<SponsorLang, SponsorStrings> = {
 
     ruleTitle: "지키는 선",
     rule:
-      "학생 개인에게는 영원히 무료이고, 개인 플레이 화면에는 광고를 붙이지 않습니다. " +
-      "추적 스크립트도 심지 않습니다. 스폰서 자리는 조직 방과 지정된 카트리지 칸에만 " +
-      "들어갑니다. 이 원칙이 깨지면 사람들이 안 오고, 사람이 없으면 스폰서 자리도 값이 " +
-      "없어집니다. 광고주를 위해서도 지켜야 하는 선입니다.",
+      "학생에게는 영원히 무료입니다. 광고는 화면 가장자리에 고정된 배너 자리에만 " +
+      "들어갑니다 — 게임 위를 덮는 전면 광고, 소리가 나거나 저절로 움직이는 것, " +
+      "누르려는 곳을 가로채는 형태는 받지 않습니다. 새벽 세 시에 모형을 자르다 켠 " +
+      "화면을 방해하는 순간 사람들은 안 옵니다. 사람이 없으면 그 자리도 값이 없어지니, " +
+      "광고주를 위해서도 지켜야 하는 선입니다.",
 
     formTitle: "문의하기",
     fOrg: "회사 · 기관",
@@ -198,7 +201,9 @@ export const SPONSOR_UI: Record<SponsorLang, SponsorStrings> = {
       {
         kind: "cartridge",
         name: "Sponsor cartridge",
-        desc: "A cartridge slot inside the arcade screen. Not a banner — it is drawn as part of the machine.",
+        desc:
+          "A fixed banner slot at the edge of the arcade screen. Always in view while it runs, " +
+          "never on top of the game. Drawn in the same pixel-art direction so it reads as part of the machine.",
       },
       {
         kind: "room",
@@ -224,10 +229,11 @@ export const SPONSOR_UI: Record<SponsorLang, SponsorStrings> = {
 
     ruleTitle: "The line we hold",
     rule:
-      "It stays free for individual students forever, and no ads appear on personal play screens. " +
-      "No tracking scripts either. Sponsor placements live only in organisation rooms and the " +
-      "designated cartridge slot. If that line breaks, people stop coming — and with no audience " +
-      "the placement is worth nothing. This is a line worth holding for the advertiser too.",
+      "It stays free for students forever. Advertising lives only in a fixed banner slot at the " +
+      "edge of the screen — no interstitials over the game, nothing that makes noise or moves on " +
+      "its own, nothing that hijacks a tap. Interrupt someone cutting models at 3am and they stop " +
+      "coming back; with no audience the slot is worth nothing. This is a line worth holding for " +
+      "the advertiser too.",
 
     formTitle: "Get in touch",
     fOrg: "Company / organisation",
