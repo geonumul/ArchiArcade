@@ -425,6 +425,8 @@ model Report {
   createdAt DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// 이 글의 번역들. 원문이 지워지면 함께 사라진다.
+  translations ReportTranslation[]
 
   @@index([userId, createdAt])
   @@index([createdAt])
@@ -692,4 +694,25 @@ model ArchqCandidate {
   @@index([batch])
   @@index([shipped])
   @@index([c])
+}
+
+/**
+ * 게시글 번역 보관.
+ *
+ * 일본어로 보는 사람에게 한국어 글이 그대로 뜨면 무슨 말인지 모른다. 그렇다고 볼 때마다
+ * 번역을 부르면 돈이 나가고 느리다. 한 번 번역한 것은 여기 두고 다시 쓴다.
+ *
+ * 글은 고쳐지지 않고 지워지기만 하므로 번역이 낡을 일이 없다. 원문이 사라지면 번역도
+ * 함께 지운다.
+ */
+model ReportTranslation {
+  reportId String
+  /// 번역해 둔 언어. 원문 언어로는 만들지 않는다.
+  lang     String
+  body     String
+  madeAt   DateTime @default(now())
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@id([reportId, lang])
 }

@@ -276,6 +276,11 @@ body::after{
 /* 모드 고르기. 고른 것이 한눈에 보여야 한다 */
 .snd-hint{font-family:var(--kfont);font-size:10px;color:var(--dim);line-height:1.5;padding:6px 2px 0;max-width:180px;}
 /* 관리자가 지우는 X. 목록 한 줄 안에 들어가야 하므로 작다 */
+/* 출처 표시. 본문보다 작고 흐리게 - 읽는 것은 글이지 표시가 아니다 */
+.feed-from{
+  display:inline-block;font-family:var(--efont);font-size:8px;color:var(--shadow);
+  background:var(--dim);padding:1px 4px;margin-right:6px;vertical-align:1px;
+}
 .del-x{
   font-family:var(--efont);font-size:8px;color:var(--red);background:transparent;
   border:2px solid var(--red);padding:2px 5px;margin-right:8px;cursor:pointer;
@@ -2288,6 +2293,9 @@ async function pickChoice(choice){
 /* 두 게시판 모두 서버(/api/reports)에 있다. 예전 키는 쓰지 않으며 /api/kv 에서도
    막아 두었다 - 열어 두면 누구나 남의 글을 읽거나 목록을 통째로 지울 수 있다.
    실제로 게임 신청 목록은 아무나 빈 배열로 덮어쓸 수 있는 상태였다. */
+/* 피드에 붙는 출처 표시. 글자 그대로의 나라 이름이 아니라 그 언어를 짧게 나타낸다 -
+   "KO" 하나면 한국말로 쓴 글이라는 게 전해지고, 좁은 자리에도 들어간다. */
+const LANG_LABEL={ko:"한국",en:"EN",zh:"中文",tw:"中文",ja:"日本",fr:"FR",it:"IT",de:"DE",es:"ES"};
 const TP_ICON={"밸런스붕괴":"⚖️","새질문":"💡","개선":"✨"};
 let IDEA_ADMIN=false;
 async function loadIdeas(){
@@ -3195,6 +3203,7 @@ function updateAuthUI(){
   // 로그인 상태가 바뀌면 잠긴 카트리지도 같이 풀린다
   if(typeof aqCartLabel==="function") aqCartLabel();
   if(typeof refreshNick==="function") refreshNick();
+  if(typeof aqRelang==="function") aqRelang();
   $("auNameF").classList.toggle("hidden",logged);
   $("auPinF").classList.toggle("hidden",logged);
   $("auBtns").classList.toggle("hidden",logged);
@@ -3403,8 +3412,30 @@ async function refreshDock(){
        없이 비어 있었다. 조용히 죽는 종류라 아무도 눈치채지 못했다. */
     const ideas=((await loadIdeas()).rows||[]).slice(0,3);
     const bugs=((await loadBugs()).rows||[]).slice(0,3);
-    const lines=[...ideas.map(i=>'<span class="feed-line"><span class="who">💬 '+esc(i.authorName)+'</span> '+esc(i.body)+'</span>'),
-                 ...bugs.map(i=>'<span class="feed-line"><span class="who">'+(TP_ICON[i.kind]||"⚖️")+' '+esc(i.authorName)+'</span> '+esc(i.body)+'</span>')];
+    const all=[...ideas.map(i=>({i:i,icon:"💬"})),
+               ...bugs.map(i=>({i:i,icon:TP_ICON[i.kind]||"⚖️"}))];
+    /* 다른 언어로 쓰인 글은 옮겨서 보여 준다. 닉네임은 그대로 둔다 - 이름을 번역하면
+       그 사람을 못 알아보고, 게시판에서 부르던 이름과도 어긋난다.
+       어느 나라 말로 쓴 글인지는 작게 붙인다. 번역문만 있으면 누가 어디서 쓴 글인지
+       사라져서, 밤새는 사람이 전세계에 있다는 것이 안 보인다. */
+    const foreign=all.filter(x=>x.i.lang&&x.i.lang!==LANG).map(x=>x.i.id);
+    let tr={};
+    if(foreign.length){
+      try{
+        const r=await fetch("/api/translate",{
+          method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({ids:foreign,to:LANG})
+        });
+        if(r.ok) tr=await r.json();
+      }catch(e){}
+    }
+    const lines=all.map(function(x){
+      const i=x.i, moved=tr[i.id];
+      const tag=(i.lang&&i.lang!==LANG)
+        ? '<span class="feed-from">'+esc((LANG_LABEL[i.lang]||i.lang).toUpperCase())+'</span>' : "";
+      return '<span class="feed-line"><span class="who">'+x.icon+" "+esc(i.authorName)+'</span> '+
+             tag+esc(moved||i.body)+'</span>';
+    });
     $("dockFeed").innerHTML=lines.length?lines.join(""):UI[LANG].dkQuiet;
   }catch(e){}
 }
@@ -4086,6 +4117,32 @@ async function aqEnd(){
   }catch(e){}
 }
 
+
+/* 언어를 바꾸면 설계자 맞히기 화면도 따라 바뀌어야 한다.
+   applyLang 은 원래 화면들만 알고 있어서, 게임 안에서 언어를 바꾸면 문제도 보기도
+   한국어인 채로 남아 있었다.
+   다시 그리는 게 아니라 글자만 갈아 끼운다 - aqAsk 를 부르면 시계가 처음부터
+   다시 돌아서, 언어를 바꾸는 것만으로 시간을 벌 수 있게 된다. */
+function aqRelang(){
+  const u=UI[LANG], bank=window.ARCHQ;
+  if(!$("vArchqMode").classList.contains("hidden")){ aqOpenModes(); return; }
+  if(!$("vArchqEnd").classList.contains("hidden")){
+    $("aqClear").textContent=u.aqClearT||"GAME CLEAR!";
+    $("aqLblRight").textContent=u.aqLblR||UI.ko.aqLblR;
+    $("aqLblBest").textContent=u.aqLblB||UI.ko.aqLblB;
+    $("aqRetry").textContent=u.aqRetryT||UI.ko.aqRetryT;
+    $("aqBack").textContent=u.aqBackT||UI.ko.aqBackT;
+    return;
+  }
+  if($("vArchq").classList.contains("hidden")) return;
+  if(!AQ||!AQ.round||!AQ.round[AQ.i]||!bank) return;
+  const q=AQ.round[AQ.i];
+  $("aqStage").textContent=AQ.mode&&AQ.mode.secs? aqModeLabel(AQ.mode) : "Q "+(AQ.i+1)+" / "+AQ.round.length;
+  $("aqName").textContent=aqName(q.b);
+  $("aqChoices").querySelectorAll(".aq-c").forEach(function(b,n){
+    if(bank.arch[q.opts[n]]) b.textContent=aqName(bank.arch[q.opts[n]]);
+  });
+}
 $("cartArchq").addEventListener("click",aqOpenModes);
 $("aqRetry").addEventListener("click",aqOpenModes);
 /* 판 도중에 나가기. 기록은 올리지 않는다 - 중간에 그만둔 것을 최고 기록과 겨루게
