@@ -2344,6 +2344,9 @@ async function pickChoice(choice){
    쓰면 ENG 가 붙는다. */
 /* 두 글자 나라 코드를 세 글자로 바꾼다. 여기 없는 나라는 두 글자 그대로 나간다 -
    전 세계를 다 적어 둘 이유가 없고, US 나 GB 는 그대로도 알아본다. */
+/// 관리자 화면에서 쓰는 언어 이름. 코드로 두면 나라 표시와 헷갈린다.
+const LANG_NAME={ko:"한국어",en:"영어",zh:"중국어(간체)",tw:"중국어(번체)",ja:"일본어",
+  fr:"프랑스어",it:"이탈리아어",de:"독일어",es:"스페인어"};
 const COUNTRY_LABEL={KR:"KOR",JP:"JPN",CN:"CHN",TW:"TWN",US:"USA",GB:"UK",FR:"FRA",IT:"ITA",DE:"DEU",ES:"ESP",
   CA:"CAN",AU:"AUS",SG:"SGP",HK:"HK",VN:"VNM",TH:"THA",ID:"IDN",IN:"IND",PH:"PHL",MY:"MYS",NL:"NLD",CH:"CHE"};
 const LANG_LABEL={ko:"KOR",en:"ENG",zh:"CHN",tw:"TWN",ja:"JPN",fr:"FRA",it:"ITA",de:"DEU",es:"ESP"};
@@ -3826,7 +3829,7 @@ if(typeof openAdmin==="function"){
     await _openAdmin();
     let box=$("admInterest");
     if(!box){
-      const note=document.createElement("div"); note.className="note"; note.textContent="커뮤니티 기능 관심도 - 어느 언어권이 무엇을 원하는가";
+      const note=document.createElement("div"); note.className="note"; note.textContent="커뮤니티 기능 관심도 - 어느 언어로 보던 사람이 눌렀나 (나라 아님)";
       box=document.createElement("div"); box.className="playerlist"; box.id="admInterest"; box.style.maxHeight="150px";
       const back=$("btnAdmBack"); back.parentNode.insertBefore(note,back); back.parentNode.insertBefore(box,back);
     }
@@ -3836,7 +3839,10 @@ if(typeof openAdmin==="function"){
       const d=ra.ok?((await ra.json()).byLang||{}):{};
       const rows=Object.entries(d).map(([fid,langs])=>{
         const tot=Object.values(langs).reduce((a,b)=>a+b,0);
-        const det=Object.entries(langs).sort((a,b)=>b[1]-a[1]).map(([l,n])=>l.toUpperCase()+" "+n).join(" · ");
+        /* 언어 이름으로 적는다. KO·ES 처럼 코드로 두면 피드의 나라 표시(KOR·JPN)와
+           나란히 놓였을 때 나라로 읽힌다. 여기는 어느 언어로 보던 사람이 눌렀나다. */
+        const det=Object.entries(langs).sort((a,b)=>b[1]-a[1])
+          .map(([l,n])=>(LANG_NAME[l]||l.toUpperCase())+" "+n).join(" · ");
         return {fid:fid,tot:tot,det:det};
       }).sort((a,b)=>b.tot-a.tot);
       box.innerHTML=rows.length?rows.map(function(r){return '<div class="pl-row"><span>'+esc(r.fid)+' <b style="color:var(--yellow)">♥'+r.tot+'</b></span><span style="color:var(--dim);font-size:11px">'+esc(r.det)+'</span></div>';}).join(""):'<div class="pl-row">아직 데이터 없음</div>';
