@@ -27,10 +27,17 @@ interface Me {
   company: string | null;
 }
 
+/// 운영자에게만 오는 학교 목록. total 은 인증자 수, listed 는 그중 공개에 동의한 수.
+type AdminSchool = { domain: string; name: string; local: string | null; country: string; total: number; listed: number };
+
 export default function AlumniPage() {
   const { lang, t } = useSchoolLang();
 
   const [needVerify, setNeedVerify] = useState(false);
+  /* 운영자는 학교 인증 없이 전부 본다. 학교를 고르기 전에는 학교 목록만 받고,
+     고르면 그 학교 사람 전부를 받는다 - 공개하지 않은 사람도 포함한다. */
+  const [adminSchools, setAdminSchools] = useState<AdminSchool[] | null>(null);
+  const [pickedSchool, setPickedSchool] = useState<string>("");
   const [school, setSchool] = useState<{ name: string; local?: string | null } | null>(null);
   const [rows, setRows] = useState<AlumniRow[]>([]);
   const [major, setMajor] = useState<string>("");
@@ -53,13 +60,14 @@ export default function AlumniPage() {
   const [formReady, setFormReady] = useState(false);
 
   const load = useCallback(
-    async (m: string, st: string) => {
+    async (m: string, st: string, sc: string) => {
       setLoading(true);
       setErr("");
       try {
         const qs = new URLSearchParams();
         if (m) qs.set("major", m);
         if (st) qs.set("status", st);
+        if (sc) qs.set("school", sc);
         const q = qs.toString() ? `?${qs}` : "";
         const res = await fetch(`/api/alumni${q}`, { cache: "no-store" });
         const d = await res.json();
@@ -72,6 +80,13 @@ export default function AlumniPage() {
           return;
         }
         setNeedVerify(false);
+        /* 운영자가 학교를 고르지 않았으면 학교 목록이 온다. 명단이 아니라 고르는 화면이다. */
+        if (d.admin && d.schools) {
+          setAdminSchools(d.schools);
+          setRows([]);
+          return;
+        }
+        if (d.admin) setAdminSchools(null);
         setSchool(d.school);
         setRows(d.rows ?? []);
         setMe(d.me);
@@ -86,8 +101,8 @@ export default function AlumniPage() {
   );
 
   useEffect(() => {
-    load(major, statusFilter);
-  }, [major, statusFilter, load]);
+    load(major, statusFilter, pickedSchool);
+  }, [major, statusFilter, pickedSchool, load]);
 
   // 서버에서 내 설정을 처음 받은 시점에만 폼을 채운다 — 이후 입력을 덮어쓰지 않는다.
   useEffect(() => {
@@ -124,13 +139,39 @@ export default function AlumniPage() {
         return;
       }
       setSaved(true);
-      await load(major, statusFilter);
+      await load(major, statusFilter, pickedSchool);
     } catch {
       setErr(t.errNet);
     } finally {
       setBusy(false);
     }
-  }, [optIn, name, enrolled, year, company, major, statusFilter, load, t]);
+  }, [optIn, name, enrolled, year, company, major, statusFilter, pickedSchool, load, t]);
+
+  /* 운영자가 아직 학교를 고르지 않았다. 인증 안내가 아니라 고르는 화면을 보여 준다. */
+  if (adminSchools) {
+    return (
+      <Cabinet title={t.aTitle} hudRight="ALUMNI">
+        <div className="note">
+          인증자가 있는 학교 {adminSchools.length}곳. 학교를 고르면 그 학교 인증자가 모두 보입니다.
+        </div>
+        <div className="playerlist" style={{ maxHeight: 320 }}>
+          {adminSchools.map((s) => (
+            <div className="pl-row" key={s.domain}>
+              <button className="mini-btn" onClick={() => setPickedSchool(s.domain)}>
+                {s.name}
+              </button>
+              <span style={{ color: "var(--dim)", fontSize: 11 }}>
+                {s.total}명 · 공개 {s.listed}명
+              </span>
+            </div>
+          ))}
+        </div>
+        <Link className="btn kr gray" href={withLang("/", lang)}>
+          {t.back}
+        </Link>
+      </Cabinet>
+    );
+  }
 
   if (needVerify) {
     return (
