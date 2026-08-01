@@ -31,6 +31,27 @@ export type JoinResult =
   | { ok: true; playerCount: number; maxPlayers: number }
   | { ok: false; reason: "not_found" | "room_full" | "service_full"; playerCount?: number; maxPlayers?: number };
 
+/**
+ * 방 상태의 일부만 고치는 지시.
+ *
+ * 상태를 통째로 읽어 한 칸 고쳐 다시 쓰면, 같은 순간에 쓴 사람의 기록이 서로를 덮어
+ * 사라진다. 30명이 12초 안에 답하는 방에서는 반드시 일어나는 일이고, 사라진 답 하나는
+ * 그 사람의 점수가 틀리는 것으로 끝나지 않는다. "다 answered 하면 다음 문항" 이라는
+ * 진행 조건이 영원히 성립하지 않게 된다. 그래서 고칠 자리만 한 문장으로 고친다.
+ */
+export interface RoomStatePatch {
+  /// 최상위 키를 덮어쓴다. 진행 상태(q, dl, ph)처럼 방 전체가 공유하는 값이다.
+  set?: Record<string, unknown>;
+  /// state 아래 이 이름의 map 에 항목을 더한다. 이름은 서버가 정하는 상수여야 한다.
+  into?: string;
+  /// into 가 가리키는 map 에 더할 항목들.
+  add?: Record<string, unknown>;
+  /// add 의 키가 이미 있으면 아무것도 하지 않는다. 같은 문항에 두 번 답하는 것을 막는다.
+  onlyIfAbsent?: boolean;
+  /// 이 값들이 아직 그대로일 때만 고친다. 폴링 두 개가 같은 진행을 두 번 넘기지 못하게 한다.
+  expect?: Record<string, unknown>;
+}
+
 export interface PostRecord {
   id: number;
   board: string;
@@ -59,6 +80,8 @@ export interface Store {
   }): Promise<RoomRecord>;
   getRoom(code: string): Promise<RoomRecord | null>;
   setRoomState(code: string, state: unknown): Promise<void>;
+  /// 상태의 일부만 고친다. 조건에 걸려 아무것도 고치지 못했으면 false 를 돌려준다.
+  patchRoomState(code: string, patch: RoomStatePatch): Promise<boolean>;
   deleteRoom(code: string): Promise<void>;
   purgeExpiredRooms(): Promise<number>;
   /// 정원 검사와 인원 증가를 한 번에 처리한다. 두 사람이 마지막 한 자리에 동시에
@@ -83,6 +106,19 @@ export interface Store {
 
   reactQuestion(questionIdx: number, kind: "hot" | "meh"): Promise<{ hot: number; meh: number }>;
   bumpInterest(feature: string, lang: string): Promise<number>;
+}
+
+/**
+ * 상태 안의 map 이름 검사.
+ *
+ * 이 이름만은 파라미터가 아니라 SQL 문장에 그대로 박힌다. jsonb 경로는 값 자리에
+ * 넣을 수 없기 때문이다. 그래서 부르는 쪽이 서버가 정한 상수만 넘긴다는 약속에
+ * 기대지 않고, 여기서 형태를 좁혀 확인한다. 이 검사가 없으면 저장소 전체가
+ * 문자열 조합 SQL 이 된다.
+ */
+function stateField(name: string): string {
+  if (!/^[a-z][a-z0-9]{0,15}$/.test(name)) throw new Error(`상태 필드 이름이 올바르지 않아요: ${name}`);
+  return name;
 }
 
 // ── 메모리 백엔드 ────────────────────────────────────────────
@@ -167,6 +203,31 @@ class MemoryStore implements Store {
   async setRoomState(code: string, state: unknown) {
     const rec = memoryState().rooms.get(code);
     if (rec) rec.state = state;
+  }
+
+  async patchRoomState(code: string, patch: RoomStatePatch) {
+    const rec = memoryState().rooms.get(code);
+    if (!rec || rec.expiresAt.getTime() < Date.now()) return false;
+    const st: Record<string, unknown> =
+      rec.state && typeof rec.state === "object" ? { ...(rec.state as Record<string, unknown>) } : {};
+
+    // 자바스크립트는 한 번에 한 줄만 실행하므로 여기서는 경합이 없다. Postgres 쪽과
+    // 같은 결과를 내는 것만 맞추면 된다.
+    for (const [k, v] of Object.entries(patch.expect ?? {})) {
+      if (JSON.stringify(st[k]) !== JSON.stringify(v)) return false;
+    }
+    if (patch.into) {
+      const field = stateField(patch.into);
+      const cur: Record<string, unknown> = { ...((st[field] as Record<string, unknown>) ?? {}) };
+      if (patch.onlyIfAbsent) {
+        for (const k of Object.keys(patch.add ?? {})) if (cur[k] !== undefined) return false;
+      }
+      Object.assign(cur, patch.add ?? {});
+      st[field] = cur;
+    }
+    Object.assign(st, patch.set ?? {});
+    rec.state = st;
+    return true;
   }
 
   async deleteRoom(code: string) {
@@ -316,6 +377,42 @@ class PrismaStore implements Store {
 
   async setRoomState(code: string, state: unknown) {
     await prisma!.room.update({ where: { code }, data: { state: state as never } });
+  }
+
+  async patchRoomState(code: string, patch: RoomStatePatch) {
+    const field = patch.into ? stateField(patch.into) : null;
+
+    /* jsonb 의 || 는 두 오브젝트의 키를 합친다. 한 문장 안에서 일어나는 일이라 같은
+       순간에 들어온 다른 답을 지우지 않는다 - 서로 다른 키를 더하기 때문이다. */
+    const target = field
+      ? `jsonb_set("state", '{${field}}', COALESCE("state"->'${field}', '{}'::jsonb) || $2::jsonb, true)`
+      : `"state"`;
+
+    const params: unknown[] = [
+      code,
+      JSON.stringify(patch.add ?? {}),
+      JSON.stringify(patch.set ?? {}),
+      JSON.stringify(patch.expect ?? {}),
+    ];
+    const conds: string[] = [];
+    if (field && patch.onlyIfAbsent) {
+      for (const key of Object.keys(patch.add ?? {})) {
+        params.push(key);
+        conds.push(`AND "state" -> '${field}' -> $${params.length}::text IS NULL`);
+      }
+    }
+
+    const n = await prisma!.$executeRawUnsafe(
+      `UPDATE "Room"
+          SET "state" = ${target} || $3::jsonb,
+              "updatedAt" = NOW()
+        WHERE "code" = $1
+          AND "expiresAt" > NOW()
+          AND "state" @> $4::jsonb
+          ${conds.join("\n          ")}`,
+      ...params
+    );
+    return n > 0;
   }
 
   async deleteRoom(code: string) {
