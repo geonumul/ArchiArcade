@@ -5566,6 +5566,18 @@ Object.assign(UI.tw,{modErr:"AI判定此內容不適合釋出",modChecking:"AI�
     de:{icon:'🧰',t:'Ausrüstung für die Nachtschicht',d:'Was im Studio immer ausgeht - Schaumstoffplatten, Klingen, Transparentpapier - und wo es zu bekommen ist. Online oder im Laden nebenan.'},
     es:{icon:'🧰',t:'Equipo para trasnochar',d:'Lo que siempre se acaba en el taller - cartón pluma, cuchillas, papel vegetal - y dónde conseguirlo. En línea, o en una tienda a la que llegar esta noche.'}
   };
+  /* 이름을 바꾼 res. 아이콘도 벽돌(재료)에서 지구(커뮤니티)로 옮긴다. */
+  const RES={
+    ko:{icon:'🌐',t:'채널·커뮤니티 지도',d:'볼 만한 유튜브 채널과 나라별 건축 커뮤니티를 모아 둡니다. 어디서 무엇을 보고 배우는지, 나라별로 정리.'},
+    en:{icon:'🌐',t:'Channels & communities',d:'YouTube channels worth watching and architecture communities around the world, filed by country.'},
+    zh:{icon:'🌐',t:'频道·社群地图',d:'值得看的 YouTube 频道与各国建筑社群，按国家整理。'},
+    tw:{icon:'🌐',t:'頻道·社群地圖',d:'值得看的 YouTube 頻道與各國建築社群，按國家整理。'},
+    ja:{icon:'🌐',t:'チャンネル・コミュニティ',d:'見る価値のある YouTube チャンネルと各国の建築コミュニティを、国別に整理。'},
+    fr:{icon:'🌐',t:'Chaînes & communautés',d:"Les chaînes YouTube qui valent le détour et les communautés d'architecture, classées par pays."},
+    it:{icon:'🌐',t:'Canali e community',d:'Canali YouTube che vale la pena seguire e community di architettura, ordinati per paese.'},
+    de:{icon:'🌐',t:'Kanäle & Communities',d:'Sehenswerte YouTube-Kanäle und Architektur-Communities, nach Ländern sortiert.'},
+    es:{icon:'🌐',t:'Canales y comunidades',d:'Canales de YouTube que merecen la pena y comunidades de arquitectura, por país.'}
+  };
   /* 관리자에게만 뜨는 버튼. 나머지 사람에게는 이 문구가 쓰일 일이 없다. */
   const GO={ko:'보러가기 ▶',en:'Open ▶',zh:'去看看 ▶',tw:'去看看 ▶',ja:'見に行く ▶',
             fr:'Ouvrir ▶',it:'Apri ▶',de:'Öffnen ▶',es:'Abrir ▶'};
@@ -5573,10 +5585,12 @@ Object.assign(UI.tw,{modErr:"AI判定此內容不適合釋出",modChecking:"AI�
     const u=UI[l]; if(!u||!u.commCat) return;
     u.commCat.gear=CARD[l];
     u.commOpen=GO[l];
-    /* res(재료·리소스 추천)는 내린다 - 밤샘 장비와 하는 일이 겹쳐서, 나란히 두면
-       무엇이 다른지를 사용자가 판단해야 한다. 사전의 문구와 지금까지 모인 관심 수는
-       건드리지 않고 노출만 멈춘다. 다시 열 일이 생기면 이 한 줄만 되돌리면 된다. */
-    const order=(u.commOrder||['team','crit','res','match']).filter(x=>x!=='gear'&&x!=='res');
+    /* res 는 원래 '재료·리소스 추천' 이었다. 재료를 어디서 사느냐는 이제 밤샘 장비가
+       맡으므로, 그 부분을 떼고 채널·커뮤니티 쪽만 남긴 이름으로 바꾼다. 둘 다 두되
+       하는 일이 겹치지 않게 하는 것이지, 하나를 없애는 것이 아니다.
+       관심 수는 res 키 그대로 쌓이므로 지금까지 모인 숫자도 이어진다. */
+    if(u.commCat.res&&RES[l]) u.commCat.res=RES[l];
+    const order=(u.commOrder||['team','crit','res','match']).filter(x=>x!=='gear');
     u.commOrder = (l==='ko') ? ['gear'].concat(order) : order.concat(['gear']);
   });
 })();
