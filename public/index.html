@@ -5768,12 +5768,19 @@ $("exitYes").addEventListener("click",async()=>{
     }
   }
 
+  /** 지금 대화가 붙어 있는 방 코드.
+      밸런스 방은 전역 room 을 쓰고, 라이어게임 방은 여기에 자기 코드를 적는다.
+      room 을 덮어쓰지 않는 이유는 그 전역을 밸런스 게임이 곳곳에서 읽기 때문이다. */
+  window.chatCode = null;
+  function codeOf(){ return window.chatCode || (room && room.code) || null; }
+
   /** 방 폴링이 부른다. 대화 키를 읽어 화면에 그린다. */
   window.chatPoll = async function(){
-    if(!room || !room.code) return;
+    var code = codeOf();
+    if(!code) return;
     setLoggedIn(!!USER);
     try{
-      var raw = await sGet("abg2-" + room.code + "-chat");
+      var raw = await sGet("abg2-" + code + "-chat");
       if(raw === lastKey) return;      // 바뀐 게 없으면 다시 그리지 않는다
       lastKey = raw;
       var list = [];
@@ -5785,6 +5792,7 @@ $("exitYes").addEventListener("click",async()=>{
   /** 화면이 바뀔 때 채팅을 그 자리로 옮긴다. */
   window.chatAttach = function(view){
     if(view === "vWait") moveTo("chatSlotWait");
+    if(view === "vLiarLobby") moveTo("chatSlotLiar");
     lastKey = "";                      // 옮기면 비어 있으므로 다음 폴링에 다시 그린다
     setLoggedIn(!!USER);
   };
@@ -5793,7 +5801,8 @@ $("exitYes").addEventListener("click",async()=>{
     var input = document.getElementById("chatText");
     var errBox = document.getElementById("chatErr");
     var btn = document.getElementById("btnChatSend");
-    if(!input || !room || !room.code) return;
+    var code = codeOf();
+    if(!input || !code) return;
     var text = input.value.trim();
     if(!text) return;
 
@@ -5803,7 +5812,7 @@ $("exitYes").addEventListener("click",async()=>{
       var r = await fetch("/api/rooms/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: room.code, text: text, lang: LANG, name: (typeof myName==="string" ? myName : "") })
+        body: JSON.stringify({ code: code, text: text, lang: LANG, name: (typeof myName==="string" ? myName : "") })
       });
       var d = await r.json().catch(function(){ return {}; });
       btn.disabled = false;
