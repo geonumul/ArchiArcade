@@ -141,6 +141,12 @@ body::after{
 .field input::placeholder,.field textarea::placeholder{color:#6b7090;opacity:1;font-family:inherit;font-weight:700;}
 .field select option{background:var(--shadow);color:var(--ink);}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);}
+/* 대가성 문구. 파트너스 가이드 49쪽이 "작은 글씨" 와 "배경과 비슷한 색" 을 위반 사례로
+   드는 탓에, .note(12px/흐린색) 로 쓰면 안 된다. 본문과 끊어 보이게 상자로 두른다. */
+.disclose{
+  width:100%;font-size:15px;line-height:1.7;color:var(--yellow);text-align:left;
+  border:4px solid var(--yellow);background:var(--shadow);padding:12px;
+}
 /* 작은 링크 칩(장비 목록의 구매처). 버튼과 같은 문법이되 한 줄에 여러 개가 들어간다. */
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
 .chip{

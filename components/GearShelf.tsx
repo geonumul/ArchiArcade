@@ -71,7 +71,7 @@ export function GearShelf() {
     <Cabinet title={t.title} hudRight="GEAR">
       <div className="note">{t.intro}</div>
 
-      <div className="note" style={{ color: "var(--yellow)" }}>{t.disclosure}</div>
+      <div className="disclose">{t.disclosure}</div>
 
       {GEAR.map((g) => (
         <div key={g.id} className="field">
@@ -88,11 +88,17 @@ export function GearShelf() {
                 <div className="chips">
                   {STORES_BY_LANG[lang].map((id) => {
                     const store = STORES[id];
+                    /* 대시보드에서 뽑아 온 링크가 있으면 그것을 그대로 쓴다. 이미 태그가
+                       박혀 있어 손대면 오히려 깨진다. 없을 때만 검색 주소를 만든다. */
+                    const href =
+                      id === "coupang" && item.coupangLink
+                        ? item.coupangLink
+                        : store.search(text.keyword, item.id);
                     return (
                       <a
                         key={id}
                         className={store.paid ? "chip paid" : "chip"}
-                        href={store.search(text.keyword, item.id)}
+                        href={href}
                         target="_blank"
                         /* 제휴 링크는 sponsored 로 밝힌다. 검색엔진에 대고 숨기지 않는 것이
                            표시광고 규정과 같은 방향이라 따로 고민할 것이 없다. */
