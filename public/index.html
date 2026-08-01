@@ -3830,6 +3830,59 @@ openAdmin=async function(){
   }catch(e){ $("admFunnel").textContent="불러오지 못했어요"; }
 };
 
+
+/* OP ROOM - 어느 나라에서 들어와 얼마나 끝까지 갔나.
+   유입 경로만으로는 "들어와서 재미없어 나갔다" 가 안 보인다. 시작한 판 중 몇 개가
+   끝까지 갔는지, 평균 몇 문항에서 멈추는지가 문항을 손볼 근거가 된다.
+   나라를 함께 보는 것은 어느 언어권에서 유독 중간에 나가는지 알기 위해서다. */
+const _openAdminR2=openAdmin;
+openAdmin=async function(){
+  await _openAdminR2();
+  document.querySelectorAll("#vAdmin [data-rounds]").forEach(o=>o.remove());
+  const wrap=document.createElement("div");
+  wrap.setAttribute("data-rounds","1");
+  wrap.innerHTML='<div class="note" style="margin-top:14px">🌍 어느 나라에서, 끝까지 갔나 (최근 14일)</div>'+
+                 '<div class="playerlist" id="admRounds" style="max-height:180px">로딩 중...</div>';
+  $("btnAdmBack").parentNode.insertBefore(wrap,$("btnAdmBack"));
+  try{
+    const r=await fetch("/api/rounds?days=14",{cache:"no-store"});
+    if(!r.ok){ $("admRounds").textContent="불러오지 못했어요"; return; }
+    const rows=(await r.json()).rows||[];
+    if(!rows.length){ $("admRounds").innerHTML='<div class="pl-row">아직 데이터 없음</div>'; return; }
+    $("admRounds").innerHTML=rows.map(function(x){
+      const name=(COUNTRY_LABEL[x.country]||x.country||"?");
+      return '<div class="pl-row"><span>'+esc(name)+' · '+esc(x.game)+' <b style="color:var(--yellow)">'+x.started+'판</b></span>'+
+             '<span style="color:var(--dim);font-size:11px">완주 '+x.rate+'% · 평균 '+x.avgAnswered+'문항</span></div>';
+    }).join("");
+  }catch(e){ $("admRounds").textContent="불러오지 못했어요"; }
+};
+
+/* OP ROOM - 내가 누구 정보를 열어 봤나.
+   법이 남기라고 해서 남기는 기록이지만(고시 제8조), 남기기만 하고 볼 수 없으면
+   점검 의무를 지킬 수가 없다. 월 1회 이상 훑어보게 되어 있다. */
+const _openAdminL=openAdmin;
+openAdmin=async function(){
+  await _openAdminL();
+  document.querySelectorAll("#vAdmin [data-alog]").forEach(o=>o.remove());
+  const wrap=document.createElement("div");
+  wrap.setAttribute("data-alog","1");
+  wrap.innerHTML='<div class="note" style="margin-top:14px">🔎 내가 열어 본 기록 (최근 30일)</div>'+
+                 '<div class="playerlist" id="admLog" style="max-height:180px">로딩 중...</div>';
+  $("btnAdmBack").parentNode.insertBefore(wrap,$("btnAdmBack"));
+  try{
+    const r=await fetch("/api/admin/access-log?days=30",{cache:"no-store"});
+    if(!r.ok){ $("admLog").textContent="불러오지 못했어요"; return; }
+    const d=await r.json();
+    const rows=d.rows||[];
+    if(!rows.length){ $("admLog").innerHTML='<div class="pl-row">기록 없음</div>'; return; }
+    $("admLog").innerHTML=rows.map(function(x){
+      const when=String(x.at||"").slice(5,16).replace("T"," ");
+      return '<div class="pl-row"><span>'+esc(when)+' '+esc(x.action)+'</span>'+
+             '<span style="color:var(--dim);font-size:11px">'+esc(x.subject)+'</span></div>';
+    }).join("")+(d.total>rows.length?'<div class="pl-row"><span style="color:var(--dim);font-size:11px">전체 '+d.total+'건 중 '+rows.length+'건</span></div>':"");
+  }catch(e){ $("admLog").textContent="불러오지 못했어요"; }
+};
+
 /* ═══ 두 번째 카트리지: 이 건물 누가 설계했게 ═══
    밸런스게임은 정답이 없는 놀이라 한 판 하고 나면 남는 게 없다. 이건 맞고 틀림이
    있어서 다시 하게 되고, 하다 보면 건물 이름과 설계자가 붙는다 - 시험 기간에

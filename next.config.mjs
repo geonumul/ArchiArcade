@@ -2,6 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  /* 설계자 맞히기 방은 서버가 문제를 뽑고 채점하므로 문제 은행을 읽어야 한다. 그 은행은
+     화면이 쓰는 public/quiz-architect.js 하나뿐이고, 서버용 사본을 두면 언젠가 한쪽만
+     고쳐져 방이 낸 문제와 채점하는 정답이 어긋난다.
+     그런데 public/ 은 정적 자산으로만 배포되고 함수 번들에는 들어가지 않는다. import 가
+     아니라 fs 로 읽기 때문에 추적도 되지 않아, 여기에 적어 두지 않으면 로컬에서는 되고
+     배포하면 "문제를 불러오지 못했어요" 만 나온다. */
+  outputFileTracingIncludes: {
+    "/api/rooms/archq/**": ["./public/quiz-architect.js"],
+  },
+
   // 루트는 원본 index.html 을 그대로 내보낸다. 화면을 React 로 다시 그리면
   // 아무리 옮겨도 원본과 미세하게 어긋나기 때문에, 원본 자체를 서빙한다.
   // beforeFiles 라야 app/ 라우팅보다 먼저 잡힌다.

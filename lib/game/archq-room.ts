@@ -12,7 +12,7 @@
  *
  * 엔드포인트는 없다. app/api/rooms/archq/* 가 쓰는 라이브러리다.
  */
-import type { RoomStatePatch } from "@/lib/store";
+import { store, type RoomRecord, type RoomStatePatch } from "@/lib/store";
 import {
   ARCHQ_GRACE_MS,
   ARCHQ_MODES,
@@ -115,12 +115,26 @@ export function cursorOf(st: ArchqRoomState, userId: string): number {
   return n;
 }
 
-function tallyOf(st: ArchqRoomState, userId: string) {
+/**
+ * 어디까지가 이미 공개된 문항인가.
+ *
+ * 문항 모드에서 지금 열려 있는 문항은 여기 들어오지 않는다. 점수가 답하는 즉시 오르면
+ * 맞혔다는 사실이 그 자리에서 드러나고, 같은 방에 모여 하는 게임이라 그 한마디가
+ * 그대로 남에게 넘어간다. 그래서 점수도 마감 뒤에 함께 오른다.
+ *
+ * 타임어택은 각자 진도를 나가고 답한 즉시 정답을 보므로 가릴 것이 없다.
+ */
+function revealedUpTo(st: ArchqRoomState): number {
+  if (isTimed(st) || st.ph === "end") return st.deck.length;
+  return Math.min(st.q, st.deck.length);
+}
+
+function tallyOf(st: ArchqRoomState, userId: string, upTo: number) {
   let score = 0;
   let answered = 0;
   let ms = 0;
   let last = 0;
-  for (let i = 0; i < st.deck.length; i++) {
+  for (let i = 0; i < upTo; i++) {
     const a = st.ans[answerKey(i, userId)];
     if (!a) continue;
     answered++;
@@ -145,8 +159,9 @@ export function answeredNow(st: ArchqRoomState): string[] {
  * 끝나야 한다.
  */
 export function boardOf(st: ArchqRoomState, meId: string | null) {
+  const upTo = revealedUpTo(st);
   const rows = Object.entries(st.ps).map(([id, p]) => {
-    const t = tallyOf(st, id);
+    const t = tallyOf(st, id, upTo);
     return { id, name: p.n, score: t.score, answered: t.answered, ms: t.ms, me: id === meId };
   });
   rows.sort((x, y) => y.score - x.score || x.ms - y.ms || x.name.localeCompare(y.name));
@@ -195,6 +210,30 @@ export function applyPatch(st: ArchqRoomState, patch: RoomStatePatch): ArchqRoom
 }
 
 /**
+ * 방을 읽어 설계자 맞히기 방인지 확인한다.
+ *
+ * 밸런스 방과 같은 Room 표를 쓰므로, 코드만 보고 이쪽 규칙을 적용하면 남의 게임 상태를
+ * 이 게임의 규칙으로 고치게 된다. 그래서 두 곳 모두 game 표시를 먼저 본다.
+ */
+export async function loadArchqRoom(
+  code: string
+): Promise<{ room: RoomRecord; st: ArchqRoomState } | "missing" | "other"> {
+  const room = await store().getRoom(code);
+  if (!room) return "missing";
+  if (!isArchqState(room.state)) return "other";
+  return { room, st: room.state };
+}
+
+/// 밀린 진행을 넘긴다. 이미 다른 요청이 넘겼으면 그쪽이 쓴 상태를 다시 읽어 온다.
+export async function tickArchq(code: string, st: ArchqRoomState, now = Date.now()): Promise<ArchqRoomState> {
+  const patch = progressPatch(st, now);
+  if (!patch) return st;
+  if (await store().patchRoomState(code, patch)) return applyPatch(st, patch);
+  const fresh = await store().getRoom(code);
+  return fresh && isArchqState(fresh.state) ? fresh.state : st;
+}
+
+/**
  * 브라우저에게 보여 줄 수 있는 만큼만 추린다.
  *
  * 여기가 이 파일에서 가장 중요한 함수다. 상태를 그대로 내려보내면 네트워크 탭을 한 번
@@ -240,7 +279,7 @@ export function archqView(input: {
   if (!joined || !meId) return base;
 
   const cursor = cursorOf(st, meId);
-  const mine = tallyOf(st, meId);
+  const mine = tallyOf(st, meId, revealedUpTo(st));
   const cur = st.ph === "play" && cursor < st.deck.length ? st.deck[cursor] : null;
   const answeredCur = cur ? st.ans[answerKey(cursor, meId)] : undefined;
 

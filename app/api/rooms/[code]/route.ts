@@ -2,17 +2,37 @@ import { NextResponse } from "next/server";
 import { store } from "@/lib/store";
 import { verifyPassword } from "@/lib/auth";
 import { rateLimit, ipKey } from "@/lib/ratelimit";
+import { isArchqState } from "@/lib/game/archq-room";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 type Ctx = { params: Promise<{ code: string }> };
 
+/**
+ * 설계자 맞히기 방은 이 문을 쓰지 못하게 막는다.
+ *
+ * 두 게임이 같은 Room 표를 나눠 쓰기 때문에, 코드만 알면 이 주소로 그 방을 열어볼 수
+ * 있다. 그런데 여기 GET 은 state 를 통째로 돌려주고, 그 안에는 아직 내지 않은 문제와
+ * 보기 순서가 전부 들어 있다. 한 번 열어 보면 그 방의 점수는 뜻이 없어진다.
+ * PATCH 는 더한데, 상태를 통째로 덮어쓰므로 남의 판을 아무 값으로나 바꿀 수 있다.
+ *
+ * 그래서 이쪽 문은 닫고 /api/rooms/archq/[code] 로 보낸다. 거기서는 지금 문항 하나만
+ * 나가고, 진행을 바꾸는 것은 호스트만 할 수 있다.
+ */
+function archqDoor() {
+  return NextResponse.json(
+    { error: "이 방은 설계자 맞히기 방이에요", game: "archq", use: "/api/rooms/archq" },
+    { status: 409 }
+  );
+}
+
 /// 방 상태 조회. 비밀번호 해시는 절대 내보내지 않는다.
 export async function GET(_req: Request, { params }: Ctx) {
   const { code } = await params;
   const room = await store().getRoom(code);
   if (!room) return NextResponse.json({ error: "없거나 만료된 방이에요" }, { status: 404 });
+  if (isArchqState(room.state)) return archqDoor();
   return NextResponse.json({
     code: room.code,
     state: room.state,
@@ -47,6 +67,7 @@ export async function POST(req: Request, { params }: Ctx) {
 
   const room = await store().getRoom(code);
   if (!room) return NextResponse.json({ error: "없거나 만료된 방이에요" }, { status: 404 });
+  if (isArchqState(room.state)) return archqDoor();
 
   const pw = typeof body.pw === "string" ? body.pw : "";
   const { ok } = await verifyPassword(pw, room.pwHash);
@@ -106,6 +127,7 @@ export async function PATCH(req: Request, { params }: Ctx) {
   }
   const room = await store().getRoom(code);
   if (!room) return NextResponse.json({ error: "없거나 만료된 방이에요" }, { status: 404 });
+  if (isArchqState(room.state)) return archqDoor();
 
   await store().setRoomState(code, body.state ?? {});
   return NextResponse.json({ ok: true });
@@ -114,6 +136,8 @@ export async function PATCH(req: Request, { params }: Ctx) {
 /// 호스트가 방을 종료.
 export async function DELETE(_req: Request, { params }: Ctx) {
   const { code } = await params;
+  const room = await store().getRoom(code);
+  if (room && isArchqState(room.state)) return archqDoor();
   await store().deleteRoom(code);
   return NextResponse.json({ ok: true });
 }
