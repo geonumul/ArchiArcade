@@ -24,7 +24,15 @@ try {
 const BASE = process.argv[2] || "http://127.0.0.1:3100";
 const errors = [];
 const vc = new VirtualConsole();
-vc.on("jsdomError", (e) => errors.push("jsdomError: " + (e.stack || e.message || e)));
+/* jsdom 이 캔버스를 못 그린다는 알림은 페이지 잘못이 아니라 검사 도구의 한계다.
+   대기실 미니게임이 캔버스를 쓰므로 매번 나오는데, 이걸 오류로 세면 검사가 영영
+   빨간불이 되어 정작 진짜 오류가 묻힌다. */
+const JSDOM_CANVAS = "getContext() method: without installing the canvas";
+vc.on("jsdomError", (e) => {
+  const text = String(e.stack || e.message || e);
+  if (text.includes(JSDOM_CANVAS)) return;
+  errors.push("jsdomError: " + text);
+});
 vc.on("error", (...a) => errors.push("console.error: " + a.join(" ")));
 
 const html = await (await fetch(BASE + "/")).text();
@@ -104,6 +112,23 @@ console.log(`  ${opts === 4 ? "OK  " : "FAIL"}  보기가 4개 그려진다  (${
 console.log(`  ${uniqueOpts ? "OK  " : "FAIL"}  보기에 같은 이름이 두 번 나오지 않는다`);
 console.log(`        문제: "${$("aqName").textContent}"  힌트: "${$("aqHint").textContent}"`);
 if (!playing || opts !== 4 || !uniqueOpts) bad++;
+
+/* 대기실 미니게임. 기다리는 동안 할 것이 없으면 사람들이 나가 버리므로,
+   대기실이 열릴 때 실제로 붙는지 본다. */
+const hasRunner = typeof window.runnerStart === "function" && typeof window.runnerStop === "function";
+console.log(`  ${hasRunner ? "OK  " : "FAIL"}  대기실 미니게임이 실려 있다`);
+if (!hasRunner) bad++;
+const slots = ["runSlotLiar", "runSlotArchq"].filter((id) => $(id));
+console.log(`  ${slots.length === 2 ? "OK  " : "FAIL"}  대기실 두 곳에 자리가 있다  (${slots.length}곳)`);
+if (slots.length !== 2) bad++;
+if (hasRunner) {
+  /* jsdom 은 캔버스를 못 준다. 러너가 그때 조용히 빠지는지까지 여기서 확인된다 -
+     예외를 내면 아래 콘솔 오류 집계에 잡힌다. */
+  window.runnerStart("runSlotLiar");
+  await new Promise((r) => setTimeout(r, 300));
+  console.log("  OK    캔버스를 못 얻어도 대기실이 안 깨진다");
+  window.runnerStop();
+}
 
 /* 무음 파일이 실제로 받아지는지. 이게 404 면 아이폰 무음 스위치 문제가 그대로 남는데,
    화면에는 아무 표시도 나지 않아 알 길이 없다. */

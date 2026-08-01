@@ -288,6 +288,12 @@ body::after{
   border:2px solid var(--red);padding:2px 5px;margin-right:8px;cursor:pointer;
 }
 .del-x:disabled{opacity:.4;cursor:default;}
+/* 대기실 미니게임. 픽셀이 뭉개지지 않게 보간을 끈다 */
+.runner{
+  width:100%;max-width:340px;image-rendering:pixelated;
+  border:4px solid var(--border);box-shadow:0 4px 0 var(--shadow);
+  background:#1b1e36;touch-action:manipulation;cursor:pointer;
+}
 .aq-modes{display:flex;flex-direction:column;gap:8px;width:100%;}
 .aq-mode{
   font-family:var(--kfont);font-size:14px;color:var(--ink);text-align:left;
@@ -1004,6 +1010,8 @@ body.ov-open{overflow:hidden;}
       <div class="logo" id="llCode">----</div>
       <div class="note" id="llCount"></div>
       <div class="playerlist" id="llPlayers" style="max-height:140px"></div>
+      <div class="note" style="font-size:11px" id="llMini"></div>
+      <div id="runSlotLiar"></div>
       <div id="chatSlotLiar"></div>
       <div class="note" id="llWait"></div>
       <button class="btn hidden" id="llStart">시작</button>
@@ -1072,6 +1080,8 @@ body.ov-open{overflow:hidden;}
       <div class="note" id="aqlMode"></div>
       <div class="note" id="aqlCount"></div>
       <div class="playerlist" id="aqlBoard" style="max-height:180px"></div>
+      <div class="note" style="font-size:11px" id="aqlMini"></div>
+      <div id="runSlotArchq"></div>
       <div class="note" id="aqlWait"></div>
       <button class="btn hidden" id="aqlStart">시작</button>
       <button class="btn kr gray" id="aqlLeave">나가기</button>
@@ -4357,7 +4367,8 @@ let AQR={code:null,timer:null,seen:-1,last:null};
 function aqrStop(){ if(AQR.timer){ clearInterval(AQR.timer); AQR.timer=null; } }
 
 function aqrLeave(){
-  aqrStop(); AQR={code:null,timer:null,seen:-1,last:null};
+  aqrStop();
+  if(typeof runnerStop==="function") runnerStop(); AQR={code:null,timer:null,seen:-1,last:null};
 }
 
 /* 방 만들기·참가 화면. 둘을 한 화면에 두는 이유는 대개 한쪽이 만들고 나머지가 코드를
@@ -4451,6 +4462,8 @@ function aqrRender(d){
 function aqrLobby(d){
   const u=UI[LANG];
   show("vArchqLobby"); $("hudM").textContent="ROOM "+d.code;
+  $("aqlMini").textContent=u.runHow||UI.ko.runHow;
+  if(typeof runnerStart==="function") runnerStart("runSlotArchq");
   $("aqlCode").textContent=d.code;
   $("aqlMode").textContent=aqModeLabel(aqMode(d.mode));
   $("aqlCount").textContent=(u.aqrPlayers||UI.ko.aqrPlayers).replace("{n}",d.players).replace("{m}",d.maxPlayers);
@@ -4465,6 +4478,7 @@ function aqrLobby(d){
 
 function aqrPlay(d){
   const u=UI[LANG], bank=window.ARCHQ;
+  if(typeof runnerStop==="function") runnerStop();
   show("vArchqRoomPlay"); $("hudM").textContent="ROOM "+d.code;
   if(!d.question||!bank){ return; }
 
@@ -4591,6 +4605,7 @@ function lrStop() { if (LR.timer) { clearInterval(LR.timer); LR.timer = null; } 
 
 function lrLeave() {
   lrStop();
+  if (typeof runnerStop === "function") runnerStop();
   LR = { code: null, timer: null, phase: null, seen: -1 };
   window.chatCode = null;
 }
@@ -4723,6 +4738,9 @@ function lrLobby(d) {
     LR.phase = "lobby";
     show("vLiarLobby"); $("hudM").textContent = "ROOM " + d.code;
     if (typeof chatAttach === "function") chatAttach("vLiarLobby");
+    /* 기다리는 동안 할 것을 준다. 화면만 보고 있으면 나가 버린다. */
+    $("llMini").textContent = u.runHow || UI.ko.runHow;
+    if (typeof runnerStart === "function") runnerStart("runSlotLiar");
   }
   $("llCode").textContent = d.code;
   $("llCount").textContent = (u.lrGathering || UI.ko.lrGathering).replace("{n}", d.players).replace("{m}", d.need);
@@ -4742,6 +4760,7 @@ function lrPlay(d) {
   const u = UI[LANG], words = lrWords();
   if (LR.phase !== "play") {
     LR.phase = "play";
+    if (typeof runnerStop === "function") runnerStop();
     show("vLiarPlay"); $("hudM").textContent = "ROOM " + d.code;
     if (typeof chatAttach === "function") chatAttach("vLiarPlay");
   }
@@ -4891,6 +4910,157 @@ function lrCartLabel(){
   $("lrCartTag").textContent=USER?(u.aqPlay||"PLAY ▶"):(u.aqLock||UI.ko.aqLock);
   $("cartLiar").classList.toggle("gated",!USER);
 }
+
+/* ═══ 대기실 미니게임: 밤샘 러너 ═══
+   사람이 다 모일 때까지 대기실에서 할 일이 없다. 화면만 보고 있으면 나가 버린다.
+
+   달리기로 고른 이유가 있다. 테트리스나 벽돌깨기는 한 판이 길어서, 방이 시작될 때
+   하던 판을 버리거나 시작을 놓친다. 달리기는 언제 죽어도 되고 언제 다시 시작해도
+   되므로, 방이 시작되면 그냥 그만두면 된다.
+
+   캔버스 하나에 다 그린다. 화면 요소를 움직이면 다시 그릴 때마다 레이아웃이 다시
+   계산돼서, 폴링이 도는 대기실에서는 눈에 띄게 걸린다. */
+(function () {
+  const W = 320, H = 120;
+  const GROUND = H - 22;
+  let cv = null, ctx = null, raf = 0;
+  let on = false;
+
+  const S = {
+    x: 24, y: GROUND, vy: 0, run: 0,
+    obs: [], speed: 2.4, t: 0, score: 0, best: 0, dead: false,
+  };
+
+  try { S.best = parseInt(localStorage.getItem("aa-run-best") || "0", 10) || 0; } catch (e) { }
+
+  function reset() {
+    S.y = GROUND; S.vy = 0; S.obs = []; S.speed = 2.4; S.t = 0; S.score = 0; S.dead = false;
+  }
+
+  function jump() {
+    if (!on) return;
+    if (S.dead) { reset(); return; }
+    // 땅에 있을 때만. 공중에서 또 뛰면 장애물이 의미가 없어진다.
+    if (S.y >= GROUND) { S.vy = -6.2; sfxSelect(); }
+  }
+
+  function step() {
+    S.t++;
+    if (!S.dead) {
+      S.vy += 0.36;                       // 중력
+      S.y += S.vy;
+      if (S.y > GROUND) { S.y = GROUND; S.vy = 0; }
+      S.run = (S.run + 1) % 20;
+
+      // 장애물. 사이 간격을 속도에 맞춰 벌린다 - 빨라질수록 반응할 시간이 필요하다.
+      const gap = Math.max(48, 120 - S.speed * 8);
+      const last = S.obs.length ? S.obs[S.obs.length - 1].x : -999;
+      if (W - last > gap + Math.random() * 60) {
+        S.obs.push({ x: W + 8, h: 12 + Math.floor(Math.random() * 14) });
+      }
+      S.obs.forEach(function (o) { o.x -= S.speed; });
+      S.obs = S.obs.filter(function (o) { return o.x > -14; });
+
+      S.speed += 0.0015;                  // 서서히 빨라진다
+      S.score++;
+
+      // 부딪힘. 네모끼리 겹치는지만 본다.
+      const px = S.x, pw = 10, ph = 14;
+      for (const o of S.obs) {
+        if (px + pw > o.x && px < o.x + 10 && S.y > GROUND - o.h - ph + 12) {
+          S.dead = true;
+          sfxNext();
+          if (S.score > S.best) {
+            S.best = S.score;
+            try { localStorage.setItem("aa-run-best", String(S.best)); } catch (e) { }
+          }
+          break;
+        }
+      }
+    }
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+
+  function draw() {
+    const c = ctx;
+    if (!c) return;
+    c.fillStyle = "#1b1e36"; c.fillRect(0, 0, W, H);
+
+    // 바닥. 점선이 흘러가야 달리는 느낌이 난다.
+    c.fillStyle = "#565b86";
+    c.fillRect(0, GROUND + 14, W, 2);
+    for (let i = 0; i < W; i += 16) {
+      const x = (i - Math.floor(S.t * S.speed) % 16);
+      c.fillRect(x, GROUND + 19, 6, 2);
+    }
+
+    // 장애물 - 설계실이니까 모형 상자로 본다
+    c.fillStyle = "#ff5a5a";
+    S.obs.forEach(function (o) { c.fillRect(o.x, GROUND + 14 - o.h, 10, o.h); });
+
+    // 사람. 다리를 번갈아 그려 달리는 것처럼 보이게 한다.
+    c.fillStyle = S.dead ? "#8b90b8" : "#ffd23e";
+    c.fillRect(S.x, S.y, 10, 14);
+    if (!S.dead && S.y >= GROUND) {
+      c.fillRect(S.x + (S.run < 10 ? 0 : 6), S.y + 14, 4, 3);
+    } else {
+      c.fillRect(S.x + 3, S.y + 14, 4, 2);
+    }
+
+    c.fillStyle = "#8b90b8";
+    c.font = "9px monospace";
+    c.fillText(String(Math.floor(S.score / 5)).padStart(4, "0"), W - 34, 12);
+    c.fillText("BEST " + String(Math.floor(S.best / 5)), 6, 12);
+
+    if (S.dead) {
+      const u = UI[LANG] || {};
+      c.fillStyle = "#e8e6f0";
+      c.font = "10px monospace";
+      const msg = u.runAgain || UI.ko.runAgain;
+      c.fillText(msg, Math.max(4, (W - msg.length * 5.4) / 2), H / 2);
+    }
+  }
+
+  /** 대기실이 열릴 때 켠다. */
+  window.runnerStart = function (slotId) {
+    const slot = document.getElementById(slotId);
+    if (!slot) return;
+    if (!cv) {
+      cv = document.createElement("canvas");
+      cv.width = W; cv.height = H;
+      cv.className = "runner";
+      ctx = cv.getContext("2d");
+      /* 캔버스를 못 얻는 환경이 있다. 그때 그리려 들면 예외가 나고, 이 미니게임은
+         대기실 안에 있으므로 대기실 전체가 같이 죽는다. 심심함을 덜자고 넣은 것이
+         방을 못 쓰게 만들면 안 되므로 조용히 빠진다. */
+      if (!ctx) { cv = null; return; }
+      cv.addEventListener("pointerdown", function (e) { e.preventDefault(); jump(); });
+    }
+    if (cv.parentNode !== slot) slot.appendChild(cv);
+    if (on) return;
+    on = true; reset(); draw();
+    raf = requestAnimationFrame(step);
+  };
+
+  /** 방이 시작되거나 나가면 끈다. 안 끄면 화면 뒤에서 계속 돈다. */
+  window.runnerStop = function () {
+    on = false;
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  };
+
+  /* 스페이스바로도 뛴다. 대기실에서 채팅을 치는 중이면 안 뛰어야 한다 - 띄어쓰기가
+     점프가 되면 글을 쓸 수가 없다. */
+  document.addEventListener("keydown", function (e) {
+    if (e.code !== "Space" && e.key !== " ") return;
+    if (!on) return;
+    const t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+    e.preventDefault();
+    jump();
+  });
+})();
+
 $("cartLiar").addEventListener("click",lrOpen);
 lrCartLabel();
 
@@ -5492,6 +5662,17 @@ Object.assign(UI.fr,{lrNeedLogin:"Connectez-vous pour jouer ensemble",lrNoWords:
 Object.assign(UI.it,{lrNeedLogin:"Accedi per giocare insieme",lrNoWords:"Impossibile caricare le parole",lrHow:"Un giocatore riceve una parola diversa. Dopo dieci secondi sparisce - poi parlate come se la conosceste.",lrMatch:"Gioca con sconosciuti",lrMatchNote:"Parte quando si sono radunati quattro giocatori della tua lingua",lrNeedL:"Giocatori per iniziare",lrTalkL:"Tempo di discussione",lrNeedN:"{n} giocatori",lrTalkN:"{n} min",lrGathering:"{n} su {m}",lrWaiting:"Ancora {n} per iniziare",lrCanStart:"Si puo iniziare",lrPh_reveal:"PAROLA",lrPh_talk:"DISCUSSIONE",lrPh_vote:"VOTO",lrPh_guess:"INDOVINA",lrVoteT:"Scegli chi credi sia il bugiardo",lrVoted:"Voto dato. Si aspettano gli altri",lrGuessT:"Qual era la parola vera?",lrGuessWait:"Il bugiardo sta indovinando...",lrLiarWin:"Vince il bugiardo!",lrCrewWin:"Bugiardo scoperto!",lrLiar:"Bugiardo",lrWord:"Parola",lrCaught:"Il bugiardo e stato votato",lrEscaped:"Il bugiardo l ha scampata",lrGuessed:"Il bugiardo ha scelto: {w} - {r}",lrRight:"esatto",lrWrong:"sbagliato"});
 Object.assign(UI.de,{lrNeedLogin:"Melde dich an, um mitzuspielen",lrNoWords:"Begriffe konnten nicht geladen werden",lrHow:"Einer bekommt ein anderes Wort. Nach zehn Sekunden ist es weg - dann redet, als wuesstet ihr es.",lrMatch:"Mit Fremden spielen",lrMatchNote:"Startet, sobald vier Leute deiner Sprache da sind",lrNeedL:"Spieler zum Start",lrTalkL:"Redezeit",lrNeedN:"{n} Spieler",lrTalkN:"{n} Min",lrGathering:"{n} von {m}",lrWaiting:"Noch {n} bis zum Start",lrCanStart:"Kann losgehen",lrPh_reveal:"BEGRIFF",lrPh_talk:"REDEN",lrPh_vote:"ABSTIMMEN",lrPh_guess:"RATEN",lrVoteT:"Waehle, wen du fuer den Luegner haeltst",lrVoted:"Abgestimmt. Warten auf die anderen",lrGuessT:"Was war der echte Begriff?",lrGuessWait:"Der Luegner raet...",lrLiarWin:"Der Luegner gewinnt!",lrCrewWin:"Luegner erwischt!",lrLiar:"Luegner",lrWord:"Begriff",lrCaught:"Der Luegner wurde gewaehlt",lrEscaped:"Der Luegner ist entkommen",lrGuessed:"Der Luegner waehlte: {w} - {r}",lrRight:"richtig",lrWrong:"falsch"});
 Object.assign(UI.es,{lrNeedLogin:"Inicia sesion para jugar juntos",lrNoWords:"No se han podido cargar las palabras",lrHow:"Un jugador recibe una palabra distinta. A los diez segundos desaparece - luego hablad como si la supierais.",lrMatch:"Jugar con desconocidos",lrMatchNote:"Empieza cuando se junten cuatro jugadores de tu idioma",lrNeedL:"Jugadores para empezar",lrTalkL:"Tiempo de charla",lrNeedN:"{n} jugadores",lrTalkN:"{n} min",lrGathering:"{n} de {m}",lrWaiting:"Faltan {n} para empezar",lrCanStart:"Ya se puede empezar",lrPh_reveal:"PALABRA",lrPh_talk:"CHARLA",lrPh_vote:"VOTACION",lrPh_guess:"ADIVINAR",lrVoteT:"Elige a quien creas que es el mentiroso",lrVoted:"Votado. Esperando a los demas",lrGuessT:"Cual era la palabra real?",lrGuessWait:"El mentiroso esta adivinando...",lrLiarWin:"Gana el mentiroso!",lrCrewWin:"Mentiroso cazado!",lrLiar:"Mentiroso",lrWord:"Palabra",lrCaught:"El mentiroso fue votado",lrEscaped:"El mentiroso escapo",lrGuessed:"El mentiroso eligio: {w} - {r}",lrRight:"acierto",lrWrong:"fallo"});
+
+/* 대기실 미니게임 문구. */
+Object.assign(UI.ko,{runHow:"기다리는 동안 - 스페이스바나 화면을 눌러 뛰어넘기",runAgain:"다시 하려면 누르세요"});
+Object.assign(UI.en,{runHow:"While you wait - space or tap to jump",runAgain:"Tap to try again"});
+Object.assign(UI.zh,{runHow:"等待时 - 按空格或点击跳跃",runAgain:"点击再来一次"});
+Object.assign(UI.tw,{runHow:"等待時 - 按空白鍵或點擊跳躍",runAgain:"點擊再來一次"});
+Object.assign(UI.ja,{runHow:"待つあいだに - スペースか画面をタップでジャンプ",runAgain:"もう一度はタップ"});
+Object.assign(UI.fr,{runHow:"En attendant - espace ou tapez pour sauter",runAgain:"Touchez pour rejouer"});
+Object.assign(UI.it,{runHow:"Mentre aspetti - spazio o tocca per saltare",runAgain:"Tocca per riprovare"});
+Object.assign(UI.de,{runHow:"Waehrenddessen - Leertaste oder tippen zum Springen",runAgain:"Tippen fuer nochmal"});
+Object.assign(UI.es,{runHow:"Mientras esperas - espacio o toca para saltar",runAgain:"Toca para reintentar"});
 
 /* 아이폰 무음 스위치 안내. 세션을 바꿔 무음 스위치와 무관해졌지만, 그래도
    안 들리는 사람에게 어디를 볼지 알려 주는 마지막 줄이다. */
