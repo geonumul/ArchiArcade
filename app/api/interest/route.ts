@@ -24,14 +24,16 @@ export const dynamic = "force-dynamic";
  */
 
 const KEY = "arcade-interest-v1";
+/// 나라별 집계는 따로 둔다. 언어 집계를 덮어쓰면 지금까지 쌓인 것이 사라진다.
+const KEY_C = "arcade-interest-c-v1";
 /// 허브에 있는 커뮤니티 카드 네 개. 그 밖의 값은 받지 않는다.
 const FEATURES = ["team", "crit", "res", "match"] as const;
 
 type Counts = Record<string, Record<string, number>>;
 
-async function read(): Promise<Counts> {
+async function read(key = KEY): Promise<Counts> {
   if (!prisma) return {};
-  const row = await prisma.kv.findUnique({ where: { key: KEY } });
+  const row = await prisma.kv.findUnique({ where: { key } });
   if (!row) return {};
   try {
     const v = JSON.parse(row.value);
@@ -51,8 +53,8 @@ function totals(counts: Counts): Record<string, number> {
 
 export async function GET() {
   if (!hasDatabase) return NextResponse.json({ counts: {} });
-  const counts = await read();
-  return NextResponse.json({ counts: totals(counts), byLang: counts });
+  const [counts, byC] = await Promise.all([read(), read(KEY_C)]);
+  return NextResponse.json({ counts: totals(counts), byLang: counts, byCountry: byC });
 }
 
 export async function POST(req: Request) {
@@ -88,11 +90,30 @@ export async function POST(req: Request) {
   counts[feature] = counts[feature] ?? {};
   counts[feature][lang] = (Number(counts[feature][lang]) || 0) + 1;
 
+  /* 어느 나라에서 눌렀는지도 함께 센다. 언어만으로는 시장이 안 보인다 - 스페인어를
+     쓰는 나라가 스무 곳이 넘고, 한국 사람이 영어 화면으로 볼 수도 있다.
+     나라를 모르는 요청(사실상 로컬)은 나라 쪽에만 안 센다. 언어는 그대로 센다. */
+  const raw = req.headers.get("x-vercel-ip-country") ?? req.headers.get("cf-ipcountry") ?? "";
+  const country = /^[A-Za-z]{2}$/.test(raw) ? raw.toUpperCase() : null;
+  let byC: Counts | null = null;
+  if (country) {
+    byC = await read(KEY_C);
+    byC[feature] = byC[feature] ?? {};
+    byC[feature][country] = (Number(byC[feature][country]) || 0) + 1;
+  }
+
   await prisma.kv.upsert({
     where: { key: KEY },
     create: { key: KEY, value: JSON.stringify(counts) },
     update: { value: JSON.stringify(counts) },
   });
+  if (byC) {
+    await prisma.kv.upsert({
+      where: { key: KEY_C },
+      create: { key: KEY_C, value: JSON.stringify(byC) },
+      update: { value: JSON.stringify(byC) },
+    });
+  }
 
   return NextResponse.json({ ok: true, feature, count: totals(counts)[feature] ?? 0 });
 }

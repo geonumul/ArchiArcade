@@ -70,13 +70,14 @@ const WRITE_DENY: RegExp[] = [
    * 잃었고, Vote 표에서 되살려야 했다. 되살릴 수 있었던 건 운이 좋았던 것이다.
    *
    * 이제 늘리는 일만 서버가 한 문장으로 한다.
-   *   archbal-bank-v4    → /api/bank
-   *   arcade-stats-v1    → /api/stats
-   *   arcade-interest-v1 → /api/interest
+   *   archbal-bank-v4      → /api/bank
+   *   arcade-stats-v1      → /api/stats
+   *   arcade-interest-v1   → /api/interest  (언어별)
+   *   arcade-interest-c-v1 → /api/interest  (나라별)
    */
   /^archbal-bank-v\d+$/,
   /^arcade-stats-v\d+$/,
-  /^arcade-interest-v\d+$/,
+  /^arcade-interest-(c-)?v\d+$/,
 ];
 
 export function isWritableKey(key: string): boolean {

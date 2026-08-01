@@ -1075,7 +1075,7 @@ body.ov-open{overflow:hidden;}
      <div class="dock-body" id="dockUser">게스트 모드로 플레이 중.<br>로그인하면 전적과 칭호가 저장됩니다.</div>
    </div>
  </aside>
- <footer class="site-foot">© 2026 설계실 오락실 - ARCHI ARCADE · v1.5 · FONTS: GALMURI + PRESS START 2P (SIL OFL) · <a href="/privacy" target="_blank" rel="noopener" style="color:var(--dim)">개인정보 처리방침</a></footer>
+ <footer class="site-foot">© 2026 설계실 오락실 - ARCHI ARCADE · v1.5 · FONTS: GALMURI + PRESS START 2P (SIL OFL) · <a href="/privacy" target="_blank" rel="noopener" style="color:var(--dim)">개인정보 처리방침</a> · <a href="/sponsor" id="lnkSponsor" target="_blank" rel="noopener" style="color:var(--dim)">스폰서 · 제휴 문의 / SPONSORSHIP</a></footer>
 </div>
 
 <div class="ov hidden" id="ovGames">
@@ -3050,6 +3050,9 @@ function applyLang(){
     $("qtext").textContent=q.q; $("optAText").textContent=q.a; $("optBText").textContent=q.b;
     if($("resultBox").classList.contains("show")){ $("rnameA").textContent="A. "+q.a; $("rnameB").textContent="B. "+q.b; }
   }
+  // 스폰서 문의는 ko/en 두 벌뿐이라 사전에 넣지 않고 링크에 언어만 실어 보낸다.
+  // 그쪽에서 ko 가 아닌 언어는 영어로 받는다.
+  const sp=$("lnkSponsor"); if(sp) sp.href="/sponsor?lang="+encodeURIComponent(LANG);
   $("langBtn").textContent = "🌐 "+LANG.toUpperCase();
 }
 const LANG_META=[["ko","한국어"],["en","English"],["zh","简体中文"],["tw","繁體中文"],["ja","日本語"],["fr","Français"],["it","Italiano"],["de","Deutsch"],["es","Español"]];
@@ -3829,21 +3832,27 @@ if(typeof openAdmin==="function"){
     await _openAdmin();
     let box=$("admInterest");
     if(!box){
-      const note=document.createElement("div"); note.className="note"; note.textContent="커뮤니티 기능 관심도 - 어느 언어로 보던 사람이 눌렀나 (나라 아님)";
+      const note=document.createElement("div"); note.className="note"; note.textContent="커뮤니티 기능 관심도 - 나라 / 보던 언어";
       box=document.createElement("div"); box.className="playerlist"; box.id="admInterest"; box.style.maxHeight="150px";
       const back=$("btnAdmBack"); back.parentNode.insertBefore(note,back); back.parentNode.insertBefore(box,back);
     }
     box.innerHTML="로딩 중...";
     try{
       const ra=await fetch("/api/interest",{cache:"no-store"});
-      const d=ra.ok?((await ra.json()).byLang||{}):{};
+      const j=ra.ok?await ra.json():{};
+      const d=j.byLang||{}, dc=j.byCountry||{};
       const rows=Object.entries(d).map(([fid,langs])=>{
         const tot=Object.values(langs).reduce((a,b)=>a+b,0);
-        /* 언어 이름으로 적는다. KO·ES 처럼 코드로 두면 피드의 나라 표시(KOR·JPN)와
-           나란히 놓였을 때 나라로 읽힌다. 여기는 어느 언어로 보던 사람이 눌렀나다. */
-        const det=Object.entries(langs).sort((a,b)=>b[1]-a[1])
+        /* 나라와 언어를 함께 적는다. 나라는 시장을 말하고 언어는 무엇부터 번역할지를
+           말한다 - 스페인어를 쓰는 나라가 스무 곳 넘고, 한국 사람이 영어 화면으로
+           볼 수도 있어서 하나만으로는 어느 쪽도 정하기 어렵다.
+           언어를 이름으로 적는 것은 KO·ES 가 나라 표시(KOR·JPN)로 읽히기 때문이다. */
+        const cs=dc[fid]||{};
+        const cDet=Object.entries(cs).sort((a,b)=>b[1]-a[1])
+          .map(([c,n])=>(COUNTRY_LABEL[c]||c)+" "+n).join(" · ");
+        const lDet=Object.entries(langs).sort((a,b)=>b[1]-a[1])
           .map(([l,n])=>(LANG_NAME[l]||l.toUpperCase())+" "+n).join(" · ");
-        return {fid:fid,tot:tot,det:det};
+        return {fid:fid,tot:tot,det:(cDet? cDet+"  /  " : "")+lDet};
       }).sort((a,b)=>b.tot-a.tot);
       box.innerHTML=rows.length?rows.map(function(r){return '<div class="pl-row"><span>'+esc(r.fid)+' <b style="color:var(--yellow)">♥'+r.tot+'</b></span><span style="color:var(--dim);font-size:11px">'+esc(r.det)+'</span></div>';}).join(""):'<div class="pl-row">아직 데이터 없음</div>';
     }catch(e){ box.innerHTML='<div class="pl-row">로드 실패</div>'; }
