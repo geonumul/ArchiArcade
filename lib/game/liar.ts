@@ -205,3 +205,13 @@ export function liarView(input: {
       : null,
   };
 }
+
+/**
+ * 언어마다 "지금 사람을 모으는 중인 방" 을 가리키는 칸.
+ *
+ * 모르는 사람과 하기를 누를 때마다 방 목록을 통째로 훑으면, 방이 많아졌을 때 사람을
+ * 못 만나는 것보다 그쪽이 먼저 문제가 된다. 언어별로 한 칸만 보고 간다.
+ */
+export function liarWaitingKey(lang: string): string {
+  return "arcade-liarwait-" + lang;
+}
