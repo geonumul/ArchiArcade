@@ -26,8 +26,8 @@ export const dynamic = "force-dynamic";
 const KEY = "arcade-interest-v1";
 /// 나라별 집계는 따로 둔다. 언어 집계를 덮어쓰면 지금까지 쌓인 것이 사라진다.
 const KEY_C = "arcade-interest-c-v1";
-/// 허브에 있는 커뮤니티 카드 네 개. 그 밖의 값은 받지 않는다.
-const FEATURES = ["team", "crit", "res", "match"] as const;
+/// 허브에 있는 커뮤니티 카드 네 개, 그리고 아직 안 연 밤샘 장비(gear). 그 밖의 값은 받지 않는다.
+const FEATURES = ["team", "crit", "res", "match", "gear"] as const;
 
 type Counts = Record<string, Record<string, number>>;
 
