@@ -1075,7 +1075,7 @@ body.ov-open{overflow:hidden;}
      <div class="dock-body" id="dockUser">게스트 모드로 플레이 중.<br>로그인하면 전적과 칭호가 저장됩니다.</div>
    </div>
  </aside>
- <footer class="site-foot">© 2026 설계실 오락실 - ARCHI ARCADE · v1.5 · FONTS: GALMURI + PRESS START 2P (SIL OFL) · <a href="/privacy" target="_blank" rel="noopener" style="color:var(--dim)">개인정보 처리방침</a> · <a href="/sponsor" id="lnkSponsor" target="_blank" rel="noopener" style="color:var(--dim)">스폰서 · 제휴 문의 / SPONSORSHIP</a></footer>
+ <footer class="site-foot">© 2026 설계실 오락실 - ARCHI ARCADE · v1.5 · FONTS: GALMURI + PRESS START 2P (SIL OFL) · <a href="/privacy" target="_blank" rel="noopener" style="color:var(--dim)">개인정보 처리방침</a> · <a href="/gear" id="lnkGear" target="_blank" rel="noopener" style="color:var(--dim)">밤샘 장비 / GEAR</a> · <a href="/sponsor" id="lnkSponsor" target="_blank" rel="noopener" style="color:var(--dim)">스폰서 · 제휴 문의 / SPONSORSHIP</a></footer>
 </div>
 
 <div class="ov hidden" id="ovGames">
@@ -3053,6 +3053,7 @@ function applyLang(){
   // 스폰서 문의는 ko/en 두 벌뿐이라 사전에 넣지 않고 링크에 언어만 실어 보낸다.
   // 그쪽에서 ko 가 아닌 언어는 영어로 받는다.
   const sp=$("lnkSponsor"); if(sp) sp.href="/sponsor?lang="+encodeURIComponent(LANG);
+  const gr=$("lnkGear"); if(gr) gr.href="/gear?lang="+encodeURIComponent(LANG);
   $("langBtn").textContent = "🌐 "+LANG.toUpperCase();
 }
 const LANG_META=[["ko","한국어"],["en","English"],["zh","简体中文"],["tw","繁體中文"],["ja","日本語"],["fr","Français"],["it","Italiano"],["de","Deutsch"],["es","Español"]];
