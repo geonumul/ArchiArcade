@@ -3414,27 +3414,17 @@ async function refreshDock(){
     const bugs=((await loadBugs()).rows||[]).slice(0,3);
     const all=[...ideas.map(i=>({i:i,icon:"💬"})),
                ...bugs.map(i=>({i:i,icon:TP_ICON[i.kind]||"⚖️"}))];
-    /* 다른 언어로 쓰인 글은 옮겨서 보여 준다. 닉네임은 그대로 둔다 - 이름을 번역하면
-       그 사람을 못 알아보고, 게시판에서 부르던 이름과도 어긋난다.
-       어느 나라 말로 쓴 글인지는 작게 붙인다. 번역문만 있으면 누가 어디서 쓴 글인지
-       사라져서, 밤새는 사람이 전세계에 있다는 것이 안 보인다. */
-    const foreign=all.filter(x=>x.i.lang&&x.i.lang!==LANG).map(x=>x.i.id);
-    let tr={};
-    if(foreign.length){
-      try{
-        const r=await fetch("/api/translate",{
-          method:"POST",headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({ids:foreign,to:LANG})
-        });
-        if(r.ok) tr=await r.json();
-      }catch(e){}
-    }
+    /* 다른 언어로 쓰인 글에는 어느 나라 말인지 작게 붙인다. 번역은 하지 않는다 -
+       기계 번역을 붙이려면 글을 남의 서비스로 보내야 하고, 그러면 처리방침의
+       국외 이전 항목이 하나 더 늘어난다. 표시만으로도 밤새는 사람이 전세계에
+       있다는 것은 전해진다. */
+
     const lines=all.map(function(x){
-      const i=x.i, moved=tr[i.id];
+      const i=x.i;
       const tag=(i.lang&&i.lang!==LANG)
         ? '<span class="feed-from">'+esc((LANG_LABEL[i.lang]||i.lang).toUpperCase())+'</span>' : "";
       return '<span class="feed-line"><span class="who">'+x.icon+" "+esc(i.authorName)+'</span> '+
-             tag+esc(moved||i.body)+'</span>';
+             tag+esc(i.body)+'</span>';
     });
     $("dockFeed").innerHTML=lines.length?lines.join(""):UI[LANG].dkQuiet;
   }catch(e){}
