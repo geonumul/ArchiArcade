@@ -2346,11 +2346,6 @@ async function pickChoice(choice){
    전 세계를 다 적어 둘 이유가 없고, US 나 GB 는 그대로도 알아본다. */
 const COUNTRY_LABEL={KR:"KOR",JP:"JPN",CN:"CHN",TW:"TWN",US:"USA",GB:"UK",FR:"FRA",IT:"ITA",DE:"DEU",ES:"ESP",
   CA:"CAN",AU:"AUS",SG:"SGP",HK:"HK",VN:"VNM",TH:"THA",ID:"IDN",IN:"IND",PH:"PHL",MY:"MYS",NL:"NLD",CH:"CHE"};
-/// 내가 보고 있는 곳. 서버가 알려 주기 전에는 알 수 없으므로 비워 둔다.
-let MY_COUNTRY=null;
-(async function(){
-  try{ const r=await fetch("/api/geo",{cache:"no-store"}); if(r.ok) MY_COUNTRY=(await r.json()).country||null; }catch(e){}
-})();
 const LANG_LABEL={ko:"KOR",en:"ENG",zh:"CHN",tw:"TWN",ja:"JPN",fr:"FRA",it:"ITA",de:"DEU",es:"ESP"};
 const TP_ICON={"밸런스붕괴":"⚖️","새질문":"💡","개선":"✨"};
 let IDEA_ADMIN=false;
@@ -3478,11 +3473,13 @@ async function refreshDock(){
     const lines=all.map(function(x){
       const i=x.i;
       /* 나라를 알면 나라를, 모르면 그 글을 쓴 언어를 보여 준다. 옛 글에는 나라가
-         없고 VPN 뒤에서 쓴 글도 알 수 없다. 어느 쪽이든 읽는 사람에게 필요한 것은
-         "내가 못 읽는 이 글이 어디 것인가" 하나다. */
-      const from=(i.country&&COUNTRY_LABEL[i.country])||(i.country)||LANG_LABEL[i.lang]||i.lang;
-      const foreign=(i.country? i.country!==MY_COUNTRY : (i.lang&&i.lang!==LANG));
-      const tag=foreign? '<span class="feed-from">'+esc(String(from).toUpperCase())+'</span>' : "";
+         없고 VPN 뒤에서 쓴 글도 알 수 없다.
+
+         처음에는 내 나라와 다를 때만 붙였는데, 그러면 한국에서 한국 글만 보는 동안
+         표시가 아예 안 나와서 그런 기능이 있는 줄도 모른다. 늘 붙인다 - 어디서
+         왔는지가 이 줄에서 알고 싶은 것이고, 같은 나라인 것도 정보다. */
+      const from=(i.country&&COUNTRY_LABEL[i.country])||i.country||LANG_LABEL[i.lang]||i.lang;
+      const tag=from? '<span class="feed-from">'+esc(String(from).toUpperCase())+'</span>' : "";
       return '<span class="feed-line"><span class="who">'+x.icon+" "+esc(i.authorName)+'</span> '+
              tag+esc(i.body)+'</span>';
     });
@@ -3891,9 +3888,13 @@ openAdmin=async function(){
     const r=await fetch("/api/rounds?days=14",{cache:"no-store"});
     if(!r.ok){ $("admRounds").textContent="불러오지 못했어요"; return; }
     const rows=(await r.json()).rows||[];
+    const u=UI[LANG];
     if(!rows.length){ $("admRounds").innerHTML='<div class="pl-row">아직 데이터 없음</div>'; return; }
     $("admRounds").innerHTML=rows.map(function(x){
-      const name=(COUNTRY_LABEL[x.country]||x.country||"?");
+      /* ZZ 는 나라를 못 알아낸 것들이다. 코드를 그대로 보여 주면 보는 사람이
+         그런 나라가 있는 줄 안다. */
+      const name=x.country==="ZZ"? (u.cUnknown||UI.ko.cUnknown)
+                : (COUNTRY_LABEL[x.country]||x.country||"?");
       return '<div class="pl-row"><span>'+esc(name)+' · '+esc(x.game)+' <b style="color:var(--yellow)">'+x.started+'판</b></span>'+
              '<span style="color:var(--dim);font-size:11px">완주 '+x.rate+'% · 평균 '+x.avgAnswered+'문항</span></div>';
     }).join("");
@@ -5043,6 +5044,17 @@ Object.assign(UI.fr,{aqSolved:"{n} bonnes"});
 Object.assign(UI.it,{aqSolved:"{n} esatte"});
 Object.assign(UI.de,{aqSolved:"{n} richtig"});
 Object.assign(UI.es,{aqSolved:"{n} aciertos"});
+
+/* 나라를 못 알아낸 경우. 코드(ZZ)를 그대로 보여 주면 그런 나라가 있는 줄 안다. */
+Object.assign(UI.ko,{cUnknown:"알 수 없음"});
+Object.assign(UI.en,{cUnknown:"Unknown"});
+Object.assign(UI.zh,{cUnknown:"未知"});
+Object.assign(UI.tw,{cUnknown:"未知"});
+Object.assign(UI.ja,{cUnknown:"不明"});
+Object.assign(UI.fr,{cUnknown:"Inconnu"});
+Object.assign(UI.it,{cUnknown:"Sconosciuto"});
+Object.assign(UI.de,{cUnknown:"Unbekannt"});
+Object.assign(UI.es,{cUnknown:"Desconocido"});
 
 /* 방에서 같이 하기 문구. {n} 은 사람 수, {m} 은 정원이나 전체 인원. */
 Object.assign(UI.ko,{aqrTitle:"같이 하기",aqrPw:"방 비밀번호",aqrCode:"방 번호",aqrMake:"방 만들기",aqrJoin:"들어가기",aqrNeedPw:"비밀번호를 정해주세요",aqrNeedCode:"방 번호를 넣어주세요",aqrPlayers:"{n} / {m} 명",aqrHostWait:"사람이 모이면 시작을 누르세요",aqrGuestWait:"방장이 시작하기를 기다리는 중",aqrStart:"시작",aqrLeave:"나가기",aqrEmpty:"아직 아무도 없어요",aqrAnswered:"{n} / {m} 명 답함",aqrGone:"방이 사라졌어요"});
