@@ -33,11 +33,13 @@ function today(): string {
 /// 나라는 Vercel 이 헤더에 붙여 준다. 두 글자 밖은 받지 않는다 - 도시나 좌표는
 /// 애초에 받을 생각이 없고, 두 글자면 언어권을 보기에 충분하다.
 ///
-/// 못 알아낸 것을 빈 값으로 두면 집계 열쇠가 깨지므로 ZZ 로 모아 둔다. ISO 3166 에서
-/// 비워 둔 코드라 실제 나라와 겹치지 않는다. 로컬에서 부른 요청이 주로 여기 들어온다.
-function countryOf(req: Request): string {
+///
+/// 나라를 모르면 아예 세지 않는다. 배포 경계를 지나면 이 헤더는 늘 붙으므로, 없는
+/// 요청은 사실상 로컬에서 부른 것뿐이다. 예전에는 ZZ 로 모아 두었는데 그 줄은 아무
+/// 것도 말해 주지 않으면서 화면에서 자리만 차지했고, 자동 검사가 돌 때마다 늘었다.
+function countryOf(req: Request): string | null {
   const raw = req.headers.get("x-vercel-ip-country") ?? req.headers.get("cf-ipcountry") ?? "";
-  return /^[A-Za-z]{2}$/.test(raw) ? raw.toUpperCase() : "ZZ";
+  return /^[A-Za-z]{2}$/.test(raw) ? raw.toUpperCase() : null;
 }
 
 export async function POST(req: Request) {
@@ -63,7 +65,11 @@ export async function POST(req: Request) {
   const device = /Mobi|Android|iPhone|iPad/i.test(req.headers.get("user-agent") ?? "") ? "mobile" : "desktop";
   const answered = Math.max(0, Math.min(200, Number(body.answered) || 0));
 
-  const where = { day: today(), game, device, lang, country: countryOf(req) };
+  const country = countryOf(req);
+  // 나라를 모르는 요청은 집계하지 않는다. 위 주석 참고.
+  if (!country) return NextResponse.json({ ok: true });
+
+  const where = { day: today(), game, device, lang, country };
 
   /* 한 문장으로 올린다. 읽고-더하고-쓰기를 하면 동시에 끝난 두 판 중 하나가 사라진다.
      실제로 다른 키에서 그렇게 잃은 적이 있어서, 세는 것은 전부 이 방식으로 통일했다. */

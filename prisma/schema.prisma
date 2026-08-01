@@ -376,6 +376,38 @@ model ReportExport {
   @@index([year, scope])
 }
 
+/**
+ * 스폰서·제휴 문의함.
+ *
+ * 위 표들(Org, License, Sponsor, JobPost)은 계약이 성사된 다음의 이야기다. 그 앞에
+ * "관심 있는데요" 가 먼저 오는데, 받을 곳이 없으면 그 말은 그냥 사라진다.
+ *
+ * 메일로 흘려보내지 않고 줄을 먼저 남기는 이유가 있다. RESEND_API_KEY 가 비어 있거나
+ * Resend 가 잠깐 죽어 있으면 문의는 흔적도 없이 없어지는데, 문의 하나가 첫 계약일 수
+ * 있다. 그래서 저장이 먼저이고 발송은 그다음이다 - 발송이 실패해도 mailed=false 인
+ * 줄이 남아 나중에 찾아갈 수 있다.
+ *
+ * 답이 끝나면 지운다(처리방침 11번). handled 는 지우기 전까지의 표시일 뿐,
+ * 보관을 늘리는 근거가 아니다.
+ */
+model SponsorInquiry {
+  id      String @id @default(cuid())
+  org     String
+  contact String
+  email   String
+  /// cartridge | room | job | data | other — 수익 모델 네 갈래와 맞춰 둔다.
+  kind    String
+  message String
+  lang    String @default("ko")
+
+  /// 메일이 실제로 나갔는지. false 인 줄은 사람이 직접 확인해야 한다.
+  mailed    Boolean  @default(false)
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([handled, createdAt])
+}
+
 // ─────────────────────────────────────────────────────────────
 // 원본 index.html 이 쓰는 공용 키-값 저장소
 // ─────────────────────────────────────────────────────────────
