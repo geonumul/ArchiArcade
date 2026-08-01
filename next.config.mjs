@@ -10,6 +10,8 @@ const nextConfig = {
      배포하면 "문제를 불러오지 못했어요" 만 나온다. */
   outputFileTracingIncludes: {
     "/api/rooms/archq/**": ["./public/quiz-architect.js"],
+    // 라이어게임도 같다. 서버가 라이어를 정하고 가짜 단어를 골라 주므로 은행을 읽어야 한다.
+    "/api/rooms/liar/**": ["./public/liar-words.js"],
   },
 
   // 루트는 원본 index.html 을 그대로 내보낸다. 화면을 React 로 다시 그리면
