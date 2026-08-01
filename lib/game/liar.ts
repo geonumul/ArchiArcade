@@ -213,5 +213,5 @@ export function liarView(input: {
  * 못 만나는 것보다 그쪽이 먼저 문제가 된다. 언어별로 한 칸만 보고 간다.
  */
 export function liarWaitingKey(lang: string): string {
-  return ;
+  return "arcade-liarwait-" + lang;
 }
