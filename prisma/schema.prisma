@@ -422,6 +422,20 @@ model Report {
   kind      String
   body      String
   lang      String   @default("ko")
+  /**
+   * 글을 올린 곳의 나라. 두 글자만 둔다.
+   *
+   * 어느 나라 사람이 쓴 글인지 보여 주려고 받는다. 언어만으로는 어긋난다 - 한국
+   * 사람이 영어로 쓸 수도 있고, 영어권 사람이 한국어로 쓸 수도 있다.
+   *
+   * IP 로 알아내되 IP 자체는 저장하지 않는다. 나라 하나로는 누구인지 좁혀지지
+   * 않으므로 도시나 좌표까지 가지 않는다(최소수집). 여권상 국적이 아니라 그때
+   * 접속한 곳이라, 유학 중이면 그 나라가 뜬다 - 밤새는 사람이 어디에 있나를
+   * 보는 데는 그쪽이 오히려 맞다.
+   *
+   * 알 수 없으면 비워 둔다. 그때는 화면이 언어로 대신 표시한다.
+   */
+  country   String?
   createdAt DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -693,3 +707,4 @@ model ArchqCandidate {
   @@index([shipped])
   @@index([c])
 }
+

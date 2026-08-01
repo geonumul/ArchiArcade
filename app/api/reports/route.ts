@@ -84,7 +84,7 @@ export async function GET(req: Request) {
           me!.admin
           ? { board }
           : { board, userId: me!.id },
-    select: { id: true, authorName: true, kind: true, body: true, lang: true, createdAt: true, userId: true },
+    select: { id: true, authorName: true, kind: true, body: true, lang: true, country: true, createdAt: true, userId: true },
     orderBy: { createdAt: "desc" },
     take: PAGE,
   });
@@ -110,6 +110,7 @@ export async function GET(req: Request) {
       kind: r.kind,
       body: r.body,
       lang: r.lang,
+      country: r.country,
       createdAt: r.createdAt.toISOString(),
       // 지울 수 있는지 화면이 바로 알 수 있게 함께 내보낸다.
       mine: Boolean(me) && r.userId === me!.id,
@@ -158,8 +159,16 @@ export async function POST(req: Request) {
 
   const prisma = db();
   const row = await prisma.report.create({
-    data: { userId: me.id, board, authorName, kind, body, lang },
-    select: { id: true, authorName: true, kind: true, body: true, lang: true, createdAt: true },
+    data: {
+      userId: me.id, board, authorName, kind, body, lang,
+      /* 올린 곳의 나라. Vercel 이 헤더에 붙여 주므로 따로 물어보지 않는다.
+         두 글자가 아니면 버린다 - 알 수 없는 값을 넣느니 비워 두는 편이 낫다. */
+      country: (function(){
+        const c = req.headers.get("x-vercel-ip-country") ?? req.headers.get("cf-ipcountry") ?? "";
+        return /^[A-Za-z]{2}$/.test(c) ? c.toUpperCase() : null;
+      })(),
+    },
+    select: { id: true, authorName: true, kind: true, body: true, lang: true, country: true, createdAt: true },
   });
 
   return NextResponse.json({ ok: true, report: { ...row, createdAt: row.createdAt.toISOString(), mine: true } });

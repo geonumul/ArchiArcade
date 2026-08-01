@@ -276,6 +276,11 @@ body::after{
 /* 모드 고르기. 고른 것이 한눈에 보여야 한다 */
 .snd-hint{font-family:var(--kfont);font-size:10px;color:var(--dim);line-height:1.5;padding:6px 2px 0;max-width:180px;}
 /* 관리자가 지우는 X. 목록 한 줄 안에 들어가야 하므로 작다 */
+/* 출처 표시. 본문보다 작고 흐리게 - 읽는 것은 글이지 표시가 아니다 */
+.feed-from{
+  display:inline-block;font-family:var(--efont);font-size:8px;color:var(--shadow);
+  background:var(--dim);padding:1px 4px;margin-right:6px;vertical-align:1px;
+}
 .del-x{
   font-family:var(--efont);font-size:8px;color:var(--red);background:transparent;
   border:2px solid var(--red);padding:2px 5px;margin-right:8px;cursor:pointer;
@@ -2288,6 +2293,22 @@ async function pickChoice(choice){
 /* 두 게시판 모두 서버(/api/reports)에 있다. 예전 키는 쓰지 않으며 /api/kv 에서도
    막아 두었다 - 열어 두면 누구나 남의 글을 읽거나 목록을 통째로 지울 수 있다.
    실제로 게임 신청 목록은 아무나 빈 배열로 덮어쓸 수 있는 상태였다. */
+/* 피드에 붙는 출처 표시. 로마자 세 글자로 통일한다 - 어느 언어로 보고 있든 같은
+   모양이라, 일본어 화면에서 "한국" 이 뜨는 것보다 읽기 쉽다.
+
+   엄밀히는 국적이 아니라 그 글을 쓴 언어다. 국적은 받지 않고 앞으로도 받을 생각이
+   없어서(최소수집), 우리가 아는 것은 어느 언어로 썼는가뿐이다. 한국 사람이 영어로
+   쓰면 ENG 가 붙는다. */
+/* 두 글자 나라 코드를 세 글자로 바꾼다. 여기 없는 나라는 두 글자 그대로 나간다 -
+   전 세계를 다 적어 둘 이유가 없고, US 나 GB 는 그대로도 알아본다. */
+const COUNTRY_LABEL={KR:"KOR",JP:"JPN",CN:"CHN",TW:"TWN",US:"USA",GB:"UK",FR:"FRA",IT:"ITA",DE:"DEU",ES:"ESP",
+  CA:"CAN",AU:"AUS",SG:"SGP",HK:"HK",VN:"VNM",TH:"THA",ID:"IDN",IN:"IND",PH:"PHL",MY:"MYS",NL:"NLD",CH:"CHE"};
+/// 내가 보고 있는 곳. 서버가 알려 주기 전에는 알 수 없으므로 비워 둔다.
+let MY_COUNTRY=null;
+(async function(){
+  try{ const r=await fetch("/api/geo",{cache:"no-store"}); if(r.ok) MY_COUNTRY=(await r.json()).country||null; }catch(e){}
+})();
+const LANG_LABEL={ko:"KOR",en:"ENG",zh:"CHN",tw:"TWN",ja:"JPN",fr:"FRA",it:"ITA",de:"DEU",es:"ESP"};
 const TP_ICON={"밸런스붕괴":"⚖️","새질문":"💡","개선":"✨"};
 let IDEA_ADMIN=false;
 async function loadIdeas(){
@@ -3195,6 +3216,7 @@ function updateAuthUI(){
   // 로그인 상태가 바뀌면 잠긴 카트리지도 같이 풀린다
   if(typeof aqCartLabel==="function") aqCartLabel();
   if(typeof refreshNick==="function") refreshNick();
+  if(typeof aqRelang==="function") aqRelang();
   $("auNameF").classList.toggle("hidden",logged);
   $("auPinF").classList.toggle("hidden",logged);
   $("auBtns").classList.toggle("hidden",logged);
@@ -3403,8 +3425,24 @@ async function refreshDock(){
        없이 비어 있었다. 조용히 죽는 종류라 아무도 눈치채지 못했다. */
     const ideas=((await loadIdeas()).rows||[]).slice(0,3);
     const bugs=((await loadBugs()).rows||[]).slice(0,3);
-    const lines=[...ideas.map(i=>'<span class="feed-line"><span class="who">💬 '+esc(i.authorName)+'</span> '+esc(i.body)+'</span>'),
-                 ...bugs.map(i=>'<span class="feed-line"><span class="who">'+(TP_ICON[i.kind]||"⚖️")+' '+esc(i.authorName)+'</span> '+esc(i.body)+'</span>')];
+    const all=[...ideas.map(i=>({i:i,icon:"💬"})),
+               ...bugs.map(i=>({i:i,icon:TP_ICON[i.kind]||"⚖️"}))];
+    /* 다른 언어로 쓰인 글에는 어느 나라 말인지 작게 붙인다. 번역은 하지 않는다 -
+       기계 번역을 붙이려면 글을 남의 서비스로 보내야 하고, 그러면 처리방침의
+       국외 이전 항목이 하나 더 늘어난다. 표시만으로도 밤새는 사람이 전세계에
+       있다는 것은 전해진다. */
+
+    const lines=all.map(function(x){
+      const i=x.i;
+      /* 나라를 알면 나라를, 모르면 그 글을 쓴 언어를 보여 준다. 옛 글에는 나라가
+         없고 VPN 뒤에서 쓴 글도 알 수 없다. 어느 쪽이든 읽는 사람에게 필요한 것은
+         "내가 못 읽는 이 글이 어디 것인가" 하나다. */
+      const from=(i.country&&COUNTRY_LABEL[i.country])||(i.country)||LANG_LABEL[i.lang]||i.lang;
+      const foreign=(i.country? i.country!==MY_COUNTRY : (i.lang&&i.lang!==LANG));
+      const tag=foreign? '<span class="feed-from">'+esc(String(from).toUpperCase())+'</span>' : "";
+      return '<span class="feed-line"><span class="who">'+x.icon+" "+esc(i.authorName)+'</span> '+
+             tag+esc(i.body)+'</span>';
+    });
     $("dockFeed").innerHTML=lines.length?lines.join(""):UI[LANG].dkQuiet;
   }catch(e){}
 }
@@ -3934,19 +3972,19 @@ async function aqLoadBoard(mode){
     const isAdmin=!!d.admin;
     const rows=(d.rows||[]).map(function(x){
       // 문항 모드는 동점을 시간으로 가르므로 시간을 함께 보여 준다.
-      const detail=m.secs? "" : " · "+x.secs+"s";
+      const label=(u.aqSolved||UI.ko.aqSolved).replace("{n}",x.score);
       const del=(isAdmin&&x.userId)
         ? '<button class="del-x" data-delscore="'+esc(x.userId)+'">X</button>' : '';
       return '<div class="pl-row"'+(x.me?' style="color:var(--yellow)"':'')+'>'+
              '<span>'+del+x.rank+'. '+esc(x.name)+'</span>'+
-             '<span style="font-size:11px">'+x.score+detail+'</span></div>';
+             '<span style="font-size:11px">'+label+'</span></div>';
     }).join("");
     let mine="";
     if(d.mine&&!(d.rows||[]).some(function(x){return x.me;})){
       // 상위 20명 밖이면 자기 등수를 따로 붙여 준다. 없으면 다시 할 이유가 안 보인다.
       mine='<div class="pl-row" style="color:var(--yellow);border-top:2px solid #565b86">'+
            '<span>'+d.mine.rank+'. '+esc(USER?USER.name:"")+'</span>'+
-           '<span style="font-size:11px">'+d.mine.score+(m.secs?"":" · "+d.mine.secs+"s")+'</span></div>';
+           '<span style="font-size:11px">'+(u.aqSolved||UI.ko.aqSolved).replace("{n}",d.mine.score)+'</span></div>';
     }
     $("aqBoard").innerHTML=(rows||'<div class="pl-row">'+esc(u.aqBoardEmpty||UI.ko.aqBoardEmpty)+'</div>')+mine;
     $("aqBoard").querySelectorAll("[data-delscore]").forEach(function(b){
@@ -4086,6 +4124,32 @@ async function aqEnd(){
   }catch(e){}
 }
 
+
+/* 언어를 바꾸면 설계자 맞히기 화면도 따라 바뀌어야 한다.
+   applyLang 은 원래 화면들만 알고 있어서, 게임 안에서 언어를 바꾸면 문제도 보기도
+   한국어인 채로 남아 있었다.
+   다시 그리는 게 아니라 글자만 갈아 끼운다 - aqAsk 를 부르면 시계가 처음부터
+   다시 돌아서, 언어를 바꾸는 것만으로 시간을 벌 수 있게 된다. */
+function aqRelang(){
+  const u=UI[LANG], bank=window.ARCHQ;
+  if(!$("vArchqMode").classList.contains("hidden")){ aqOpenModes(); return; }
+  if(!$("vArchqEnd").classList.contains("hidden")){
+    $("aqClear").textContent=u.aqClearT||"GAME CLEAR!";
+    $("aqLblRight").textContent=u.aqLblR||UI.ko.aqLblR;
+    $("aqLblBest").textContent=u.aqLblB||UI.ko.aqLblB;
+    $("aqRetry").textContent=u.aqRetryT||UI.ko.aqRetryT;
+    $("aqBack").textContent=u.aqBackT||UI.ko.aqBackT;
+    return;
+  }
+  if($("vArchq").classList.contains("hidden")) return;
+  if(!AQ||!AQ.round||!AQ.round[AQ.i]||!bank) return;
+  const q=AQ.round[AQ.i];
+  $("aqStage").textContent=AQ.mode&&AQ.mode.secs? aqModeLabel(AQ.mode) : "Q "+(AQ.i+1)+" / "+AQ.round.length;
+  $("aqName").textContent=aqName(q.b);
+  $("aqChoices").querySelectorAll(".aq-c").forEach(function(b,n){
+    if(bank.arch[q.opts[n]]) b.textContent=aqName(bank.arch[q.opts[n]]);
+  });
+}
 $("cartArchq").addEventListener("click",aqOpenModes);
 $("aqRetry").addEventListener("click",aqOpenModes);
 /* 판 도중에 나가기. 기록은 올리지 않는다 - 중간에 그만둔 것을 최고 기록과 겨루게
@@ -4639,6 +4703,18 @@ Object.assign(UI.fr,{nickLabel:"Changer de pseudo",nickBtn:"Changer",nickNeedVer
 Object.assign(UI.it,{nickLabel:"Cambia nickname",nickBtn:"Cambia",nickNeedVerify:"Verifica la tua scuola per cambiare nickname.",nickDone:"Cambiato in {n}"});
 Object.assign(UI.de,{nickLabel:"Nickname aendern",nickBtn:"Aendern",nickNeedVerify:"Bestaetige deine Hochschule, um den Nickname zu aendern.",nickDone:"Geaendert zu {n}"});
 Object.assign(UI.es,{nickLabel:"Cambiar apodo",nickBtn:"Cambiar",nickNeedVerify:"Verifica tu escuela para cambiar de apodo.",nickDone:"Cambiado a {n}"});
+
+/* 순위표에 초 대신 몇 문제 맞혔는지만 적는다. 동점 순서는 서버가 시간으로 가르되
+   보는 사람이 알아야 할 값은 아니다. */
+Object.assign(UI.ko,{aqSolved:"{n}문제"});
+Object.assign(UI.en,{aqSolved:"{n} correct"});
+Object.assign(UI.zh,{aqSolved:"{n}题"});
+Object.assign(UI.tw,{aqSolved:"{n}題"});
+Object.assign(UI.ja,{aqSolved:"{n}問"});
+Object.assign(UI.fr,{aqSolved:"{n} bonnes"});
+Object.assign(UI.it,{aqSolved:"{n} esatte"});
+Object.assign(UI.de,{aqSolved:"{n} richtig"});
+Object.assign(UI.es,{aqSolved:"{n} aciertos"});
 
 /* 아이폰 무음 스위치 안내. 세션을 바꿔 무음 스위치와 무관해졌지만, 그래도
    안 들리는 사람에게 어디를 볼지 알려 주는 마지막 줄이다. */
