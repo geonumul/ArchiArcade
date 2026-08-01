@@ -288,6 +288,19 @@ body::after{
   border:2px solid var(--red);padding:2px 5px;margin-right:8px;cursor:pointer;
 }
 .del-x:disabled{opacity:.4;cursor:default;}
+/* 라이어게임 시작 화면의 두 갈래. 테두리로 묶어야 방 만들기와 들어가기가
+   모르는 사람과 하기와 같은 층위로 보이지 않는다 */
+.lr-way{
+  width:100%;border:4px solid var(--border);background:var(--panel2);
+  box-shadow:0 5px 0 var(--shadow);padding:14px 12px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.lr-way-t{
+  font-family:var(--efont);font-size:10px;color:var(--yellow);
+  text-shadow:2px 2px 0 var(--shadow);
+}
+.lr-sub{font-family:var(--kfont);font-size:12px;color:var(--dim);}
+
 /* 대기실 미니게임. 픽셀이 뭉개지지 않게 보간을 끈다 */
 .runner{
   width:100%;max-width:340px;image-rendering:pixelated;
@@ -987,19 +1000,29 @@ body.ov-open{overflow:hidden;}
     <div class="stack hidden" id="vLiarStart">
       <div class="logo" style="font-size:20px" id="lrTitle">설계실 라이어게임</div>
       <div class="note" id="lrHow"></div>
-      <button class="btn kr" id="lrMatch">모르는 사람과 하기</button>
-      <div class="note" style="font-size:11px" id="lrMatchNote"></div>
-      <div class="note" style="margin-top:10px">- - -</div>
-      <div class="field"><label id="lrPwL">방 비밀번호</label><input id="lrPw" maxlength="16" type="password"></div>
-      <div class="field"><label id="lrNeedL">시작 인원</label>
-        <div class="aq-modes" id="lrNeeds"></div></div>
-      <div class="field"><label id="lrTalkL">이야기 시간</label>
-        <div class="aq-modes" id="lrTalks"></div></div>
-      <button class="btn kr gray" id="lrMake">방 만들기</button>
-      <div class="note" style="margin-top:10px">- - -</div>
-      <div class="field"><label id="lrCodeL">방 번호</label><input id="lrCode" maxlength="8" inputmode="numeric"></div>
-      <div class="field"><label id="lrJoinPwL">방 비밀번호</label><input id="lrJoinPw" maxlength="16" type="password"></div>
-      <button class="btn kr gray" id="lrJoin">들어가기</button>
+      <!-- 첫째 갈래. 아무나와 바로 시작하는 쪽이라 위에 둔다 -->
+      <div class="lr-way">
+        <div class="lr-way-t" id="lrWay1"></div>
+        <button class="btn kr" id="lrMatch">모르는 사람과 하기</button>
+        <div class="note" style="font-size:11px" id="lrMatchNote"></div>
+      </div>
+
+      <!-- 둘째 갈래. 방을 만드는 것과 들어가는 것은 이 아래 두 가지 방법이다 -->
+      <div class="lr-way">
+        <div class="lr-way-t" id="lrWay2"></div>
+        <div class="lr-sub" id="lrSub1"></div>
+        <div class="field"><label id="lrPwL">방 비밀번호</label><input id="lrPw" maxlength="16" type="password"></div>
+        <div class="field"><label id="lrNeedL">시작 인원</label>
+          <div class="aq-modes" id="lrNeeds"></div></div>
+        <div class="field"><label id="lrTalkL">이야기 시간</label>
+          <div class="aq-modes" id="lrTalks"></div></div>
+        <button class="btn kr gray" id="lrMake">방 만들기</button>
+
+        <div class="lr-sub" id="lrSub2" style="margin-top:16px"></div>
+        <div class="field"><label id="lrCodeL">방 번호</label><input id="lrCode" maxlength="8" inputmode="numeric"></div>
+        <div class="field"><label id="lrJoinPwL">방 비밀번호</label><input id="lrJoinPw" maxlength="16" type="password"></div>
+        <button class="btn kr gray" id="lrJoin">들어가기</button>
+      </div>
       <div class="err" id="lrErr"></div>
       <button class="btn kr gray" id="lrBack">오락실로 ←</button>
     </div>
@@ -2750,7 +2773,7 @@ UI.fr={
   err:{"needPw": "Entre un mot de passe", "creating": "Création...", "noCode": "Aucun numéro libre - réessaie", "createFail": "Échec de création - réessaie plus tard", "code4": "Le numéro fait 4 chiffres", "checking": "Vérification...", "noRoom": "Cette salle n'existe pas", "badRead": "Impossible de lire la salle", "expired": "Salle expirée (plus de 24 h)", "badPw": "Mauvais mot de passe"},
   hubLogo:"L'ARCADE<br>DE L'ATELIER",
   marquee:"L'espace officiel de procrastination pour étudiants en archi épuisés ··· une petite partie tous ensemble, puis retour aux maquettes ··· de nouveaux jeux arrivent sans cesse ···",
-  cartNames:["LE GRAND<br>DILEMME ARCHI", "QUI A CONÇU<br>CE BÂTIMENT ?", "VOCAB ARCHI<br>QUIZ ÉCLAIR", "LOUP-GAROU<br>DE L'ATELIER", "CHERCHEZ<br>L'ERREUR DU PLAN", "TEST DU<br>SENS DE L'ÉCHELLE"],
+  cartNames:["LE GRAND<br>DILEMME ARCHI","QUI A CONÇU<br>CE BÂTIMENT ?","LOUP-GAROU<br>DE L'ATELIER","VOCAB ARCHI<br>QUIZ ÉCLAIR","CHERCHEZ<br>L'ERREUR DU PLAN","TEST DU<br>SENS DE L'ÉCHELLE"],
   sugName:"On met quoi dans la prochaine cartouche ?",
   sugSmall:"Propose un jeu et il devient candidat à la prochaine mise à jour",
   sugTag:"PROPOSER UN JEU ▶",
@@ -2849,7 +2872,7 @@ UI.it={
   err:{"needPw": "Inserisci una password", "creating": "Creazione...", "noCode": "Nessun numero libero - riprova", "createFail": "Creazione fallita - riprova più tardi", "code4": "Il numero ha 4 cifre", "checking": "Verifica...", "noRoom": "La stanza non esiste", "badRead": "Impossibile leggere la stanza", "expired": "Stanza scaduta (oltre 24 h)", "badPw": "Password errata"},
   hubLogo:"LA SALA GIOCHI<br>DELL'AULA STUDIO",
   marquee:"Lo spazio ufficiale di procrastinazione per studenti di architettura esausti ··· una partita tutti insieme, poi di nuovo ai plastici ··· nuovi giochi in arrivo ···",
-  cartNames:["IL GRANDE<br>DILEMMA ARCHI", "CHI HA PROGETTATO<br>QUESTO EDIFICIO?", "TERMINI ARCHI<br>QUIZ LAMPO", "LUPUS<br>DELL'AULA STUDIO", "TROVA L'ERRORE<br>NEL DISEGNO", "TEST DEL<br>SENSO DI SCALA"],
+  cartNames:["IL GRANDE<br>DILEMMA ARCHI","CHI HA PROGETTATO<br>QUESTO EDIFICIO?","LUPUS<br>DELL'AULA STUDIO","TERMINI ARCHI<br>QUIZ LAMPO","TROVA L'ERRORE<br>NEL DISEGNO","TEST DEL<br>SENSO DI SCALA"],
   sugName:"Cosa mettiamo nella prossima cartuccia?",
   sugSmall:"Proponi un gioco e diventa candidato al prossimo aggiornamento",
   sugTag:"PROPONI UN GIOCO ▶",
@@ -2948,7 +2971,7 @@ UI.de={
   err:{"needPw": "Gib ein Passwort ein", "creating": "Wird erstellt...", "noCode": "Keine freie Nummer - versuch's nochmal", "createFail": "Erstellen fehlgeschlagen - später erneut versuchen", "code4": "Die Nummer hat 4 Ziffern", "checking": "Prüfe...", "noRoom": "Diesen Raum gibt es nicht", "badRead": "Raum kann nicht gelesen werden", "expired": "Raum abgelaufen (über 24 h)", "badPw": "Falsches Passwort"},
   hubLogo:"DIE SPIELHALLE<br>IM ZEICHENSAAL",
   marquee:"Der offizielle Prokrastinationsraum für erschöpfte Architekturstudierende ··· eine Runde zusammen, dann zurück zu den Modellen ··· neue Spiele kommen laufend ···",
-  cartNames:["DAS GROSSE<br>ARCHI-DILEMMA", "WER HAT DAS<br>ENTWORFEN?", "ARCHI-BEGRIFFE<br>BLITZ-QUIZ", "WERWOLF IM<br>ZEICHENSAAL", "FINDE DEN<br>PLANFEHLER", "MASSSTABS-<br>GEFÜHL-TEST"],
+  cartNames:["DAS GROSSE<br>ARCHI-DILEMMA","WER HAT DAS<br>ENTWORFEN?","WERWOLF IM<br>ZEICHENSAAL","ARCHI-BEGRIFFE<br>BLITZ-QUIZ","FINDE DEN<br>PLANFEHLER","MASSSTABS-<br>GEFÜHL-TEST"],
   sugName:"Was kommt in die nächste Cartridge?",
   sugSmall:"Schlag ein Spiel vor und es wird Update-Kandidat",
   sugTag:"SPIEL VORSCHLAGEN ▶",
@@ -3047,7 +3070,7 @@ UI.es={
   err:{"needPw": "Escribe una contraseña", "creating": "Creando...", "noCode": "No hay números libres - inténtalo de nuevo", "createFail": "Fallo al crear - inténtalo más tarde", "code4": "El número tiene 4 cifras", "checking": "Comprobando...", "noRoom": "Esa sala no existe", "badRead": "No se puede leer la sala", "expired": "Sala caducada (más de 24 h)", "badPw": "Contraseña incorrecta"},
   hubLogo:"EL SALÓN RECREATIVO<br>DEL TALLER",
   marquee:"El espacio oficial de procrastinación para estudiantes de arquitectura agotados ··· una partida todos juntos y de vuelta a las maquetas ··· nuevos juegos en camino ···",
-  cartNames:["EL GRAN<br>DILEMA ARQUI", "¿QUIÉN DISEÑÓ<br>ESTE EDIFICIO?", "TÉRMINOS ARQUI<br>QUIZ RELÁMPAGO", "HOMBRE LOBO<br>DEL TALLER", "BUSCA EL ERROR<br>DEL PLANO", "TEST DEL<br>SENTIDO DE ESCALA"],
+  cartNames:["EL GRAN<br>DILEMA ARQUI","¿QUIÉN DISEÑÓ<br>ESTE EDIFICIO?","HOMBRE LOBO<br>DEL TALLER","TÉRMINOS ARQUI<br>QUIZ RELÁMPAGO","BUSCA EL ERROR<br>DEL PLANO","TEST DEL<br>SENTIDO DE ESCALA"],
   sugName:"¿Qué metemos en el próximo cartucho?",
   sugSmall:"Deja tu idea de juego y será candidata a la próxima actualización",
   sugTag:"PROPONER JUEGO ▶",
@@ -3187,7 +3210,7 @@ function nextTitleAt(plays){ for(const x of TITLES){ if(plays<x[0]) return x; } 
 Object.assign(UI.ko,{
   hubLogo:'설계실<br>오락실',
   marquee:'밤샘하다 지친 당신을 위한 설계실 공식 딴짓 공간 ··· 다 같이 모여서 한 판 하고 다시 모형 만들러 갑시다 ··· 새 게임은 계속 추가됩니다 ···',
-  cartNames:['건축학과<br>밸런스게임','이 건물<br>누가 설계했게','건축용어<br>스피드 퀴즈','설계실<br>라이어게임','도면<br>틀린그림찾기','스케일<br>감각 테스트'],
+  cartNames:["건축학과<br>밸런스게임","이 건물<br>누가 설계했게","설계실<br>라이어게임","건축용어<br>스피드 퀴즈","도면<br>틀린그림찾기","스케일<br>감각 테스트"],
   sugName:'다음 카트리지, 뭐 넣지?',sugSmall:'하고 싶은 게임을 남겨주면 다음 업데이트 후보가 됩니다',sugTag:'신청하러 가기 ▶',
   repName:'이 질문 밸런스 붕괴야!',repSmall:'안 맞는 질문 신고, 새 질문 아이디어, 더 재밌어질 제안 모두 환영',repTag:'공작소 입장 ▶',
   sgTitle:'게임 신청 보드',sgNote:'설계실에서 다 같이 하고 싶은 게임을 남겨주세요.<br>신청이 많은 게임부터 다음 카트리지로 제작됩니다!',
@@ -3208,7 +3231,7 @@ Object.assign(UI.ko,{
 Object.assign(UI.en,{
   hubLogo:'ARCHI<br>ARCADE',
   marquee:'The official procrastination arcade for exhausted architecture students ··· gather round, play one round, then back to your models ··· new games keep coming ···',
-  cartNames:['ARCHI<br>BALANCE GAME','GUESS THE<br>ARCHITECT','ARCHI TERMS<br>SPEED QUIZ','STUDIO<br>LIAR GAME','SPOT THE<br>DRAWING ERROR','SCALE<br>SENSE TEST'],
+  cartNames:["ARCHI<br>BALANCE GAME","GUESS THE<br>ARCHITECT","STUDIO<br>LIAR GAME","ARCHI TERMS<br>SPEED QUIZ","SPOT THE<br>DRAWING ERROR","SCALE<br>SENSE TEST"],
   sugName:'What goes in the next slot?',sugSmall:'Drop a game idea and it becomes an update candidate',sugTag:'SUGGEST A GAME ▶',
   repName:'This question is BROKEN!',repSmall:'Report unfair questions, pitch new ones, or suggest improvements',repTag:'ENTER WORKSHOP ▶',
   sgTitle:'GAME REQUEST BOARD',sgNote:'What should we all play in studio?<br>The most requested games get built first!',
@@ -3729,7 +3752,7 @@ UI.zh={
         : ['<b>B RANK · 甲方的最爱</b>','与大众的感觉同行的设计者。<br>业主一定会爱上你！'],
   hubLogo:'制图室<br>游戏厅',
   marquee:'为熬夜疲惫的你打造的制图室官方摸鱼空间 ··· 大家一起玩一局，再回去做模型吧 ··· 新游戏持续更新中 ···',
-  cartNames:['建筑系<br>二选一大战','这栋楼<br>谁设计的','建筑术语<br>速答竞赛','制图室<br>谁是卧底','图纸<br>找不同','比例<br>感觉测试'],
+  cartNames:["建筑系<br>二选一大战","这栋楼<br>谁设计的","制图室<br>谁是卧底","建筑术语<br>速答竞赛","图纸<br>找不同","比例<br>感觉测试"],
   sugName:'下一个卡带放什么？',sugSmall:'留下你想玩的游戏，就会成为更新候选',sugTag:'去申请 ▶',
   repName:'这道题不平衡！',repSmall:'欢迎举报不公平的题、提议新题、提出改进意见',repTag:'进入工坊 ▶',
   sgTitle:'游戏申请板',sgNote:'留下你想在制图室一起玩的游戏。<br>申请最多的游戏最先制作！',
@@ -3773,7 +3796,7 @@ UI.ja={
         : ['<b>B RANK · クライアントの恋人</b>','大衆の感覚と共に歩む設計者。<br>施主に愛されるタイプ！'],
   hubLogo:'製図室<br>ゲーセン',
   marquee:'徹夜で疲れたあなたのための製図室公式サボり空間 ··· みんなで一局やって、また模型作りに戻ろう ··· 新しいゲームは続々追加 ···',
-  cartNames:['建築学科<br>究極の二択','この建物<br>誰の設計？','建築用語<br>スピードクイズ','製図室<br>人狼ゲーム','図面<br>間違い探し','スケール<br>感覚テスト'],
+  cartNames:["建築学科<br>究極の二択","この建物<br>誰の設計？","製図室<br>人狼ゲーム","建築用語<br>スピードクイズ","図面<br>間違い探し","スケール<br>感覚テスト"],
   sugName:'次のカセット、何入れる？',sugSmall:'遊びたいゲームを残すと次のアップデート候補になります',sugTag:'リクエストへ ▶',
   repName:'この問題、バランス崩壊！',repSmall:'不公平な問題の報告、新しい問題の提案、改善アイデア大歓迎',repTag:'工房に入る ▶',
   sgTitle:'ゲームリクエスト板',sgNote:'製図室でみんなでやりたいゲームを残してください。<br>リクエストの多いゲームから制作します！',
@@ -3836,8 +3859,8 @@ applyLang();
 const GAMES=[
   {id:"balance",icon:"⚖️",play:true,open:"cartBalance"},
   {id:"guess",icon:"🏛️",play:true,open:"cartArchq"},
-  {id:"quiz",icon:"✏️"},
-  {id:"liar",icon:"🗿"},{id:"spot",icon:"🔍"},{id:"scale",icon:"📏"},
+  {id:"liar",icon:"🗿",play:true,open:"cartLiar"},
+  {id:"quiz",icon:"✏️"},{id:"spot",icon:"🔍"},{id:"scale",icon:"📏"},
   {id:"bingo",icon:"🎫"},{id:"chess",icon:"♟️"},{id:"mafia",icon:"🌙"}
 ];
 function openGames(){
@@ -3850,7 +3873,7 @@ function openGames(){
     r.className="gcat-row"+(g.play?"":" soon");
     /* 로그인해야 열리는 게임은 태그로 그렇다고 알려 준다. 눌러 보고서야 알게 되면
        속은 기분이 든다. 누르는 것은 막지 않는다 - 눌러야 왜 필요한지 말할 수 있다. */
-    const needLogin=g.open==="cartArchq"&&!USER;
+    const needLogin=(g.open==="cartArchq"||g.open==="cartLiar")&&!USER;
     const tag=g.play?(needLogin?(u.aqLock||UI.ko.aqLock):"PLAY ▶"):"SOON";
     r.innerHTML='<span class="gcat-icon">'+g.icon+'</span><span class="gcat-txt"><div class="gcat-name">'+pair[0]+'</div><div class="gcat-desc">'+pair[1]+'</div></span><span class="gcat-tag">'+tag+'</span>';
     if(g.play) r.addEventListener("click",()=>{ closeOv(); $(g.open).click(); });
@@ -4622,6 +4645,10 @@ function lrOpen() {
 
   $("lrTitle").textContent = (UI[LANG].cartNames && UI[LANG].cartNames[2] || UI.ko.cartNames[2]).replace(/<br\s*\/?>/g, " ");
   $("lrHow").textContent = u.lrHow || UI.ko.lrHow;
+  $("lrWay1").textContent = u.lrWay1 || UI.ko.lrWay1;
+  $("lrWay2").textContent = u.lrWay2 || UI.ko.lrWay2;
+  $("lrSub1").textContent = u.lrSub1 || UI.ko.lrSub1;
+  $("lrSub2").textContent = u.lrSub2 || UI.ko.lrSub2;
   $("lrMatch").textContent = u.lrMatch || UI.ko.lrMatch;
   $("lrMatchNote").textContent = u.lrMatchNote || UI.ko.lrMatchNote;
   $("lrPwL").textContent = u.aqrPw || UI.ko.aqrPw;
@@ -4654,12 +4681,18 @@ function lrOpen() {
   sfxNext(); $("hudM").textContent = "LIAR GAME"; show("vLiarStart");
 }
 
+/* 실패해도 반드시 무언가를 돌려준다. 예전에는 여기서 던지면 부르는 쪽에 잡는 곳이
+   없어 화면이 "..." 인 채로 굳었고, 사용자는 버튼이 고장 난 줄 알았다. */
 async function lrPost(url, body) {
-  const r = await fetch(url, {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
-  return { ok: r.ok, status: r.status, d: await r.json().catch(function () { return {}; }) };
+  try {
+    const r = await fetch(url, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    return { ok: r.ok, status: r.status, d: await r.json().catch(function () { return {}; }) };
+  } catch (e) {
+    return { ok: false, status: 0, d: {} };
+  }
 }
 
 async function lrMatch() {
@@ -5171,7 +5204,7 @@ $("btnGoVerify").addEventListener("click",()=>{
 /* ═══ 신규 기능 i18n (8개 언어) + 문화별 커뮤니티 노출 순서 ═══ */
 Object.assign(UI.ko,{
   moreGames:'더 많은<br>게임 보기', gcatT:'게임 카탈로그', gcatGhost:'다음 슬롯은 비어 있어요 - 하고 싶은 게임을 신청해 주세요!',
-  gameCat:[['건축학과 밸런스게임','설계실의 영원한 논쟁을 투표로 끝장내는 궁극의 2지선다'],['이 건물 누가 설계했게','건물 이름과 연도만 보고 설계자를 맞히는 퀴즈 - 10·20·30문항과 타임어택'],['건축용어 스피드 퀴즈','캔틸레버부터 코니스까지, 제한시간 안에 용어 맞히기'],['설계실 라이어게임','한 명만 다른 제시어를 받는다 - 설계실 눈치 게임'],['도면 틀린그림찾기','멀쩡해 보이는 도면 속 오류를 빨리 찾는 사람이 승리'],['스케일 감각 테스트','이 문, 몇 mm일까? 몸에 밴 스케일 감각 측정']],
+  gameCat:[["건축학과 밸런스게임","설계실의 영원한 논쟁을 투표로 끝장내는 궁극의 2지선다"],["이 건물 누가 설계했게","건물 이름과 연도만 보고 설계자를 맞히는 퀴즈 - 10·20·30문항과 타임어택"],["설계실 라이어게임","제시어가 10초 뒤 사라진다. 한 명만 다른 단어 - 4~12명, 모르는 사람과도 가능"],["건축용어 스피드 퀴즈","캔틸레버부터 코니스까지, 제한시간 안에 용어 맞히기"],["도면 틀린그림찾기","멀쩡해 보이는 도면 속 오류를 빨리 찾는 사람이 승리"],["스케일 감각 테스트","이 문, 몇 mm일까? 몸에 밴 스케일 감각 측정"]],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'오픈 준비 중 · 관심 등록 받는 중',
   btnInterest:'이 기능 원해요! ♥', interestDone:'등록 완료 ✔ 오픈되면 만나요',
   commOrder:['team','crit','res','match'],
@@ -5187,7 +5220,7 @@ Object.assign(UI.ko,{
 });
 Object.assign(UI.en,{
   moreGames:'SEE ALL<br>GAMES', gcatT:'GAME CATALOG', gcatGhost:'This slot is empty - request the game you want!',
-  gameCat:[['Archi Balance Game','The ultimate either/or that settles studio debates by global vote'],['Guess the Architect','Name the architect from the building and its year - 10, 20, 30 or time attack'],['Archi Terms Speed Quiz','From cantilever to cornice - beat the clock'],['Studio Liar Game','One player gets a different prompt - bluff your studio'],['Spot the Drawing Error','Find the hidden mistakes in a clean-looking drawing'],['Scale Sense Test','How many mm is that door? Test your body memory']],
+  gameCat:[["Archi Balance Game","The ultimate either/or that settles studio debates by global vote"],["Guess the Architect","Name the architect from the building and its year - 10, 20, 30 or time attack"],["Studio Liar Game","The keyword vanishes after ten seconds. One player has a different one - 4 to 12 players, strangers welcome"],["Archi Terms Speed Quiz","From cantilever to cornice - beat the clock"],["Spot the Drawing Error","Find the hidden mistakes in a clean-looking drawing"],["Scale Sense Test","How many mm is that door? Test your body memory"]],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'In prep · collecting interest',
   btnInterest:'I want this! ♥', interestDone:'Registered ✔ See you at launch',
   commOrder:['team','crit','match','res'],
@@ -5203,7 +5236,7 @@ Object.assign(UI.en,{
 });
 Object.assign(UI.zh,{
   moreGames:'查看<br>全部游戏', gcatT:'游戏目录', gcatGhost:'这个卡槽还空着-来申请你想玩的游戏吧！',
-  gameCat:[['建筑系二选一大战','用全球投票终结画室永恒争论的终极二选一'],['这栋楼谁设计的','只凭建筑名称和年份猜出建筑师 - 10·20·30题与计时赛'],['建筑术语速答竞赛','从悬挑到檐口，限时抢答'],['制图室谁是卧底','只有一人拿到不同题目-画室推理博弈'],['图纸找不同','谁先找出看似正常的图纸里的错误谁赢'],['比例感觉测试','这扇门多少毫米？测测刻进身体的比例感']],
+  gameCat:[["建筑系二选一大战","用全球投票终结画室永恒争论的终极二选一"],["这栋楼谁设计的","只凭建筑名称和年份猜出建筑师 - 10·20·30题与计时赛"],["制图室谁是卧底","题词十秒后消失。只有一人拿到不同的词 - 4~12人，也能和陌生人玩"],["建筑术语速答竞赛","从悬挑到檐口，限时抢答"],["图纸找不同","谁先找出看似正常的图纸里的错误谁赢"],["比例感觉测试","这扇门多少毫米？测测刻进身体的比例感"]],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'筹备中 · 收集心愿',
   btnInterest:'我想要这个！♥', interestDone:'已登记 ✔ 上线见',
   commOrder:['match','team','crit','res'],
@@ -5219,7 +5252,7 @@ Object.assign(UI.zh,{
 });
 Object.assign(UI.ja,{
   moreGames:'ゲームを<br>すべて見る', gcatT:'ゲームカタログ', gcatGhost:'このスロットは空きです-遊びたいゲームをリクエスト！',
-  gameCat:[['建築学科 究極の二択','製図室の永遠の論争を世界投票で決着させる二択'],['この建物 誰の設計？','建物名と竣工年だけで建築家を当てるクイズ - 10・20・30問とタイムアタック'],['建築用語スピードクイズ','キャンチからコーニスまで、制限時間内に即答'],['製図室人狼ゲーム','一人だけ違うお題-製図室の腹の探り合い'],['図面間違い探し','一見まともな図面のミスを早く見つけた人の勝ち'],['スケール感覚テスト','このドア、何mm？体に染みたスケール感を測定']],
+  gameCat:[["建築学科 究極の二択","製図室の永遠の論争を世界投票で決着させる二択"],["この建物 誰の設計？","建物名と竣工年だけで建築家を当てるクイズ - 10・20・30問とタイムアタック"],["製図室人狼ゲーム","題詞十秒後消失。只有一人拿到不同的詞 - 4~12人，也能和陌生人玩"],["建築用語スピードクイズ","キャンチからコーニスまで、制限時間内に即答"],["図面間違い探し","一見まともな図面のミスを早く見つけた人の勝ち"],["スケール感覚テスト","このドア、何mm？体に染みたスケール感を測定"]],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'準備中 · 興味登録受付中',
   btnInterest:'この機能ほしい！♥', interestDone:'登録完了 ✔ オープンでお会いしましょう',
   commOrder:['team','crit','match','res'],
@@ -5235,7 +5268,7 @@ Object.assign(UI.ja,{
 });
 Object.assign(UI.fr,{
   moreGames:'VOIR TOUS<br>LES JEUX', gcatT:'CATALOGUE DE JEUX', gcatGhost:'Ce slot est vide - demande le jeu de tes rêves !',
-  gameCat:[['Le Grand Dilemme Archi','Le duel ultime qui tranche les débats d\'atelier par vote mondial'],['Qui a conçu ce bâtiment ?','Devine l\'architecte d\'apres le batiment et son annee - 10, 20, 30 ou contre-la-montre'],['Vocab Archi Quiz Éclair','Du porte-à-faux à la corniche, réponds avant la fin du chrono'],['Loup-Garou de l\'Atelier','Un seul joueur reçoit une autre consigne - bluffe ton atelier'],['Cherchez l\'Erreur du Plan','Trouve les fautes cachées dans un plan d\'apparence propre'],['Test du Sens de l\'Échelle','Cette porte fait combien de mm ? Mesure ta mémoire du corps']],
+  gameCat:[["Le Grand Dilemme Archi","Le duel ultime qui tranche les débats d'atelier par vote mondial"],["Qui a conçu ce bâtiment ?","Devine l'architecte d'apres le batiment et son annee - 10, 20, 30 ou contre-la-montre"],["Loup-Garou de l'Atelier","お題は十秒で消える。一人だけ違う言葉 - 4~12人、知らない人とも"],["Vocab Archi Quiz Éclair","Du porte-à-faux à la corniche, réponds avant la fin du chrono"],["Cherchez l'Erreur du Plan","Trouve les fautes cachées dans un plan d'apparence propre"],["Test du Sens de l'Échelle","Cette porte fait combien de mm ? Mesure ta mémoire du corps"]],
   commHead:'▼ COMMUNAUTÉ · OUVERTURE PROCHAINE ▼', commSoonTag:'En préparation · intérêts comptés',
   btnInterest:'Je veux ça ! ♥', interestDone:'Enregistré ✔ À l\'ouverture !',
   commOrder:['team','match','crit','res'],
@@ -5251,7 +5284,7 @@ Object.assign(UI.fr,{
 });
 Object.assign(UI.it,{
   moreGames:'VEDI TUTTI<br>I GIOCHI', gcatT:'CATALOGO GIOCHI', gcatGhost:'Questo slot è vuoto - richiedi il gioco che vuoi!',
-  gameCat:[['Il Grande Dilemma Archi','Il duello definitivo che chiude i dibattiti d\'aula col voto mondiale'],['Chi ha progettato questo edificio?','Indovina l\'architetto dal nome et dall\'anno - 10, 20, 30 o sfida a tempo'],['Termini Archi Quiz Lampo','Dallo sbalzo al cornicione, rispondi prima del gong'],['Lupus dell\'Aula Studio','Un solo giocatore riceve un tema diverso - bluffa i colleghi'],['Trova l\'Errore nel Disegno','Scova gli errori nascosti in una tavola all\'apparenza pulita'],['Test del Senso di Scala','Quanti mm è quella porta? Misura la memoria del corpo']],
+  gameCat:[["Il Grande Dilemma Archi","Il duello definitivo che chiude i dibattiti d'aula col voto mondiale"],["Chi ha progettato questo edificio?","Indovina l'architetto dal nome et dall'anno - 10, 20, 30 o sfida a tempo"],["Lupus dell'Aula Studio","Le mot disparait au bout de dix secondes. Un joueur en a un autre - 4 a 12 joueurs, inconnus bienvenus"],["Termini Archi Quiz Lampo","Dallo sbalzo al cornicione, rispondi prima del gong"],["Trova l'Errore nel Disegno","Scova gli errori nascosti in una tavola all'apparenza pulita"],["Test del Senso di Scala","Quanti mm è quella porta? Misura la memoria del corpo"]],
   commHead:'▼ COMMUNITY · APERTURA IN ARRIVO ▼', commSoonTag:'In preparazione · interesse in raccolta',
   btnInterest:'Lo voglio! ♥', interestDone:'Registrato ✔ Ci vediamo all\'apertura',
   commOrder:['team','match','crit','res'],
@@ -5267,7 +5300,7 @@ Object.assign(UI.it,{
 });
 Object.assign(UI.de,{
   moreGames:'ALLE SPIELE<br>ANSEHEN', gcatT:'SPIELKATALOG', gcatGhost:'Dieser Slot ist frei - wünsch dir dein Spiel!',
-  gameCat:[['Das Große Archi-Dilemma','Das ultimative Entweder-oder, das Saal-Debatten per Weltabstimmung beendet'],['Wer hat das entworfen?','Errate den Architekten aus Gebaeude und Baujahr - 10, 20, 30 oder Zeitrennen'],['Archi-Begriffe Blitz-Quiz','Vom Kragarm bis zum Gesims - gegen die Uhr'],['Werwolf im Zeichensaal','Nur einer bekommt eine andere Aufgabe - bluffe deinen Saal'],['Finde den Planfehler','Wer die versteckten Fehler im sauberen Plan zuerst findet, gewinnt'],['Maßstabsgefühl-Test','Wie viele mm hat diese Tür? Teste dein Körpergedächtnis']],
+  gameCat:[["Das Große Archi-Dilemma","Das ultimative Entweder-oder, das Saal-Debatten per Weltabstimmung beendet"],["Wer hat das entworfen?","Errate den Architekten aus Gebaeude und Baujahr - 10, 20, 30 oder Zeitrennen"],["Werwolf im Zeichensaal","La parola sparisce dopo dieci secondi. Un giocatore ne ha unaltra - da 4 a 12, anche con sconosciuti"],["Archi-Begriffe Blitz-Quiz","Vom Kragarm bis zum Gesims - gegen die Uhr"],["Finde den Planfehler","Wer die versteckten Fehler im sauberen Plan zuerst findet, gewinnt"],["Maßstabsgefühl-Test","Wie viele mm hat diese Tür? Teste dein Körpergedächtnis"]],
   commHead:'▼ COMMUNITY · ERÖFFNUNG BALD ▼', commSoonTag:'In Vorbereitung · Interesse wird gezählt',
   btnInterest:'Will ich haben! ♥', interestDone:'Registriert ✔ Bis zur Eröffnung',
   commOrder:['team','res','crit','match'],
@@ -5283,7 +5316,7 @@ Object.assign(UI.de,{
 });
 Object.assign(UI.es,{
   moreGames:'VER TODOS<br>LOS JUEGOS', gcatT:'CATÁLOGO DE JUEGOS', gcatGhost:'Este hueco está vacío - ¡pide el juego que quieras!',
-  gameCat:[['El Gran Dilema Arqui','El duelo definitivo que zanja los debates del taller por voto mundial'],['¿Quién diseñó este edificio?','Adivina el arquitecto por el edificio y su ano - 10, 20, 30 o contrarreloj'],['Términos Arqui Quiz Relámpago','Del voladizo a la cornisa, responde contra el reloj'],['Hombre Lobo del Taller','Solo uno recibe otra consigna - farolea a tu taller'],['Busca el Error del Plano','Gana quien antes encuentre los fallos ocultos de un plano impecable'],['Test del Sentido de Escala','¿Cuántos mm tiene esa puerta? Mide tu memoria corporal']],
+  gameCat:[["El Gran Dilema Arqui","El duelo definitivo que zanja los debates del taller por voto mundial"],["¿Quién diseñó este edificio?","Adivina el arquitecto por el edificio y su ano - 10, 20, 30 o contrarreloj"],["Hombre Lobo del Taller","Der Begriff verschwindet nach zehn Sekunden. Einer hat einen anderen - 4 bis 12 Spieler, auch mit Fremden"],["Términos Arqui Quiz Relámpago","Del voladizo a la cornisa, responde contra el reloj"],["Busca el Error del Plano","Gana quien antes encuentre los fallos ocultos de un plano impecable"],["Test del Sentido de Escala","¿Cuántos mm tiene esa puerta? Mide tu memoria corporal"]],
   commHead:'▼ COMUNIDAD · APERTURA PRÓXIMA ▼', commSoonTag:'En preparación · registrando interés',
   btnInterest:'¡Lo quiero! ♥', interestDone:'Registrado ✔ Nos vemos en la apertura',
   commOrder:['match','team','crit','res'],
@@ -5515,7 +5548,7 @@ UI.tw={
         : ['<b>B RANK · 甲方的最愛</b>','與大眾的感覺同行的設計者。<br>業主一定會愛上你！'],
   hubLogo:'製圖室<br>遊戲廳',
   marquee:'為熬夜疲憊的你打造的製圖室官方摸魚空間 ··· 大家一起玩一局，再回去做模型吧 ··· 新遊戲持續更新中 ···',
-  cartNames:['建築系<br>二選一大戰','這棟樓<br>誰設計的','建築術語<br>速答競賽','製圖室<br>誰是臥底','圖紙<br>找不同','比例<br>感覺測試'],
+  cartNames:["建築系<br>二選一大戰","這棟樓<br>誰設計的","製圖室<br>誰是臥底","建築術語<br>速答競賽","圖紙<br>找不同","比例<br>感覺測試"],
   sugName:'下一個卡帶放什麼？',sugSmall:'留下你想玩的遊戲，就會成為更新候選',sugTag:'去申請 ▶',
   repName:'這道題不平衡！',repSmall:'歡迎舉報不公平的題、提議新題、提出改進意見',repTag:'進入工坊 ▶',
   sgTitle:'遊戲申請板',sgNote:'留下你想在製圖室一起玩的遊戲。<br>申請最多的遊戲最先製作！',
@@ -5674,6 +5707,17 @@ Object.assign(UI.it,{runHow:"Mentre aspetti - spazio o tocca per saltare",runAga
 Object.assign(UI.de,{runHow:"Waehrenddessen - Leertaste oder tippen zum Springen",runAgain:"Tippen fuer nochmal"});
 Object.assign(UI.es,{runHow:"Mientras esperas - espacio o toca para saltar",runAgain:"Toca para reintentar"});
 
+/* 시작 화면 두 갈래. 방 만들기와 들어가기는 아는 사람끼리 하기 아래에 붙는다. */
+Object.assign(UI.ko,{lrWay1:"아무나와 바로",lrWay2:"아는 사람끼리",lrSub1:"1. 방을 만들고 번호를 알려주세요",lrSub2:"2. 또는 받은 번호로 들어가세요"});
+Object.assign(UI.en,{lrWay1:"JUMP RIGHT IN",lrWay2:"WITH FRIENDS",lrSub1:"1. Make a room and share the code",lrSub2:"2. Or enter a code you were given"});
+Object.assign(UI.zh,{lrWay1:"直接开始",lrWay2:"和朋友一起",lrSub1:"1. 创建房间并把房号告诉朋友",lrSub2:"2. 或输入别人给你的房号"});
+Object.assign(UI.tw,{lrWay1:"直接開始",lrWay2:"和朋友一起",lrSub1:"1. 建立房間並把房號告訴朋友",lrSub2:"2. 或輸入別人給你的房號"});
+Object.assign(UI.ja,{lrWay1:"すぐ始める",lrWay2:"友だちと",lrSub1:"1. ルームを作って番号を教える",lrSub2:"2. または番号を入れて入る"});
+Object.assign(UI.fr,{lrWay1:"COMMENCER TOUT DE SUITE",lrWay2:"ENTRE AMIS",lrSub1:"1. Creez un salon et donnez le code",lrSub2:"2. Ou entrez un code recu"});
+Object.assign(UI.it,{lrWay1:"INIZIA SUBITO",lrWay2:"CON GLI AMICI",lrSub1:"1. Crea una stanza e passa il codice",lrSub2:"2. Oppure inserisci un codice ricevuto"});
+Object.assign(UI.de,{lrWay1:"SOFORT LOSLEGEN",lrWay2:"MIT FREUNDEN",lrSub1:"1. Raum erstellen und Code weitergeben",lrSub2:"2. Oder einen erhaltenen Code eingeben"});
+Object.assign(UI.es,{lrWay1:"EMPEZAR YA",lrWay2:"CON AMIGOS",lrSub1:"1. Crea una sala y pasa el codigo",lrSub2:"2. O escribe un codigo que te han dado"});
+
 /* 아이폰 무음 스위치 안내. 세션을 바꿔 무음 스위치와 무관해졌지만, 그래도
    안 들리는 사람에게 어디를 볼지 알려 주는 마지막 줄이다. */
 Object.assign(UI.ko,{sndHint:"소리가 안 나면 측면 무음 스위치와 볼륨을 확인해주세요."});
@@ -5708,7 +5752,7 @@ Object.assign(UI.es,{aqName:"QUIÉN LO<br>PROYECTÓ",aqPlay:"JUGAR ▶",aqLock:"
 Object.assign(UI.tw,{phHostPw:"例：1234",phJoinCode:"例：7842",phJoinName:"例：通宵戰神",phSgName:"例：製圖室幽靈",phSgText:"例：猜名建築剪影",phBgName:"例：工坊坊主",phBgText:"例：這題A必勝，太無聊了"});
 Object.assign(UI.tw,{
   moreGames:'檢視<br>全部遊戲', gcatT:'遊戲目錄', gcatGhost:'這個卡槽還空著-來申請你想玩的遊戲吧！',
-  gameCat:[['建築系二選一大戰','用全球投票終結畫室永恆爭論的終極二選一'],['這棟樓誰設計的','只憑建築名稱和年份猜出建築師 - 10·20·30題與計時賽'],['建築術語速答競賽','從懸挑到簷口，限時搶答'],['製圖室誰是臥底','只有一人拿到不同題目-畫室推理博弈'],['圖紙找不同','誰先找出看似正常的圖紙裡的錯誤誰贏'],['比例感覺測試','這扇門多少毫米？測測刻進身體的比例感']],
+  gameCat:[["建築系二選一大戰","用全球投票終結畫室永恆爭論的終極二選一"],["這棟樓誰設計的","只憑建築名稱和年份猜出建築師 - 10·20·30題與計時賽"],["製圖室誰是臥底","La palabra desaparece a los diez segundos. Un jugador tiene otra - de 4 a 12, tambien con desconocidos"],["建築術語速答競賽","從懸挑到簷口，限時搶答"],["圖紙找不同","誰先找出看似正常的圖紙裡的錯誤誰贏"],["比例感覺測試","這扇門多少毫米？測測刻進身體的比例感"]],
   commHead:'▼ COMMUNITY · OPENING SOON ▼', commSoonTag:'籌備中 · 收集心願',
   btnInterest:'我想要這個！♥', interestDone:'已登記 ✔ 上線見',
   commOrder:['match','team','crit','res'],
