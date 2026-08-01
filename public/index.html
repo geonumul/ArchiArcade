@@ -34,6 +34,8 @@
 <script src="/arcade-bridge.js"></script>
 <!-- 두 번째 카트리지의 문제 은행. 이 파일이 없어도 나머지 화면은 그대로 돌아간다. -->
 <script src="/quiz-architect.js" defer></script>
+<!-- 라이어게임 제시어. 없어도 나머지 화면은 그대로 돌아간다. -->
+<script src="/liar-words.js" defer></script>
 <!-- 로딩 표시·선택창 — 원본 <style> 은 그대로 두고 새 규칙만 따로 싣는다. -->
 <link rel="stylesheet" href="/arcade-ui.css">
 <style>
@@ -667,11 +669,11 @@ body.ov-open{overflow:hidden;}
           <span class="cart-name" id="aqCartName">이 건물<br>누가 설계했게</span>
           <span class="cart-tag" id="aqCartTag">PLAY ▶</span>
         </button>
-        <div class="cart locked">
-          <span class="cart-icon">✏️</span>
-          <span class="cart-name">건축용어<br>스피드 퀴즈</span>
-          <span class="cart-tag">COMING SOON</span>
-        </div>
+        <button class="cart" id="cartLiar">
+          <span class="cart-icon">🗿</span>
+          <span class="cart-name" id="lrCartName">설계실<br>라이어게임</span>
+          <span class="cart-tag" id="lrCartTag">PLAY ▶</span>
+        </button>
         <button class="cart more" id="cartMore">
           <span class="cart-icon">🕹️</span>
           <span class="cart-name" id="moreName">더 많은<br>게임 보기</span>
@@ -975,6 +977,80 @@ body.ov-open{overflow:hidden;}
       <button class="btn" id="retryBtn">CONTINUE?</button>
     </div>
 
+    <!-- ── 라이어게임: 시작 화면 ── -->
+    <div class="stack hidden" id="vLiarStart">
+      <div class="logo" style="font-size:20px" id="lrTitle">설계실 라이어게임</div>
+      <div class="note" id="lrHow"></div>
+      <button class="btn kr" id="lrMatch">모르는 사람과 하기</button>
+      <div class="note" style="font-size:11px" id="lrMatchNote"></div>
+      <div class="note" style="margin-top:10px">- - -</div>
+      <div class="field"><label id="lrPwL">방 비밀번호</label><input id="lrPw" maxlength="16"></div>
+      <div class="field"><label id="lrNeedL">시작 인원</label>
+        <div class="aq-modes" id="lrNeeds"></div></div>
+      <div class="field"><label id="lrTalkL">이야기 시간</label>
+        <div class="aq-modes" id="lrTalks"></div></div>
+      <button class="btn kr gray" id="lrMake">방 만들기</button>
+      <div class="note" style="margin-top:10px">- - -</div>
+      <div class="field"><label id="lrCodeL">방 번호</label><input id="lrCode" maxlength="8" inputmode="numeric"></div>
+      <div class="field"><label>&nbsp;</label><input id="lrJoinPw" maxlength="16"></div>
+      <button class="btn kr gray" id="lrJoin">들어가기</button>
+      <div class="err" id="lrErr"></div>
+      <button class="btn kr gray" id="lrBack">오락실로 ←</button>
+    </div>
+
+    <!-- ── 라이어게임: 대기실. 사람이 찰 때까지 여기서 이야기하며 기다린다 ── -->
+    <div class="stack hidden" id="vLiarLobby">
+      <div class="note">ROOM</div>
+      <div class="logo" id="llCode">----</div>
+      <div class="note" id="llCount"></div>
+      <div class="playerlist" id="llPlayers" style="max-height:140px"></div>
+      <div id="chatSlotLiar"></div>
+      <div class="note" id="llWait"></div>
+      <button class="btn hidden" id="llStart">시작</button>
+      <button class="btn kr gray" id="llLeave">나가기</button>
+    </div>
+
+    <!-- ── 라이어게임: 제시어 · 대화 · 지목 ── -->
+    <div class="stack hidden" id="vLiarPlay">
+      <div class="stage-head"><span class="stg" id="lpPhase"></span><span id="lpLeft"></span></div>
+      <div class="timerbar"><div class="timerfill" id="lpBar"></div></div>
+
+      <!-- 제시어. 10초만 보인다. 자기 것만 내려온다 -->
+      <div class="qbox hidden" id="lpWordBox">
+        <div class="npc" id="lpCat"></div>
+        <div class="q" id="lpWord">-</div>
+        <div class="npc" id="lpDesc"></div>
+      </div>
+
+      <div id="chatSlotLiarPlay"></div>
+
+      <!-- 지목. 자기는 못 고른다 -->
+      <div class="hidden" id="lpVoteBox">
+        <div class="note" id="lpVoteT"></div>
+        <div class="aq-modes" id="lpVotes"></div>
+      </div>
+
+      <!-- 라이어가 제시어를 맞히는 자리 -->
+      <div class="hidden" id="lpGuessBox">
+        <div class="note" id="lpGuessT"></div>
+        <div class="aq-modes" id="lpGuesses"></div>
+      </div>
+
+      <div class="playerlist" id="lpPlayers" style="max-height:120px"></div>
+      <div class="meta" id="lpMsg" style="min-height:20px"></div>
+    </div>
+
+    <!-- ── 라이어게임: 결과 ── -->
+    <div class="stack hidden" id="vLiarEnd">
+      <div class="gameclear" id="leT">GAME CLEAR!</div>
+      <div class="scoreboard">
+        <div><span class="lbl" id="leLblLiar">라이어</span><span class="val" id="leLiar">-</span></div>
+        <div style="clear:both"><span class="lbl" id="leLblWord">제시어</span><span class="val" id="leWord">-</span></div>
+      </div>
+      <div class="rank" id="leVerdict"></div>
+      <div class="playerlist" id="leVotes" style="max-height:180px"></div>
+      <button class="btn kr gray" id="leBack">오락실로 ←</button>
+    </div>
     <!-- ── 방: 만들기·참가 ── -->
     <div class="stack hidden" id="vArchqRoom">
       <div class="logo" style="font-size:20px" id="aqrTitle">같이 하기</div>
@@ -1760,7 +1836,7 @@ const APP_VER="1.7.0";
 const ROOM_TTL=24*3600*1000;            // 방 유효기간 24시간
 const $ = id => document.getElementById(id);
 const uid = Math.random().toString(36).slice(2,10);
-const VIEWS = ["vArcade","vTitle","vHostSetup","vHostLobby","vJoin","vWait","vQuiz","vEnd","vSuggest","vReport","vAuth","vForgot","vAdmin","vArchqMode","vArchq","vArchqEnd","vArchqRoom","vArchqLobby","vArchqRoomPlay","vArchqRoomEnd"];
+const VIEWS = ["vArcade","vTitle","vHostSetup","vHostLobby","vJoin","vWait","vQuiz","vEnd","vSuggest","vReport","vAuth","vForgot","vAdmin","vArchqMode","vArchq","vArchqEnd","vArchqRoom","vArchqLobby","vArchqRoomPlay","vArchqRoomEnd","vLiarStart","vLiarLobby","vLiarPlay","vLiarEnd"];
 
 /* ── 보안 헬퍼 ── */
 // XSS 방지: 사용자 입력이 화면에 표시되기 전 이스케이프
@@ -3150,6 +3226,7 @@ applyLang=function(){
   if(u.commHead) $("commTitle").textContent=u.commHead;
   if(typeof buildCommStrip==="function") buildCommStrip();
   if(typeof aqCartLabel==="function") aqCartLabel();
+  if(typeof lrCartLabel==="function") lrCartLabel();
   // 아이폰 안내는 띄워 둔 경우에만 따라 바꾼다
   const sh=$("sndHint");
   if(sh&&!sh.classList.contains("hidden")) sh.textContent=u.sndHint||UI.ko.sndHint;
@@ -3260,6 +3337,7 @@ function updateAuthUI(){
   const logged=!!USER;
   // 로그인 상태가 바뀌면 잠긴 카트리지도 같이 풀린다
   if(typeof aqCartLabel==="function") aqCartLabel();
+  if(typeof lrCartLabel==="function") lrCartLabel();
   if(typeof refreshNick==="function") refreshNick();
   if(typeof aqRelang==="function") aqRelang();
   $("auNameF").classList.toggle("hidden",logged);
@@ -4473,6 +4551,331 @@ $("aqlStart").addEventListener("click",async function(){
   b.disabled=false;
 });
 
+
+/* ═══ 설계실 라이어게임 ═══
+   다들 같은 제시어를 받는데 한 명만 다른 단어를 받는다. 제시어는 10초 뒤 사라지고,
+   그 뒤로는 각자 아는 척하며 이야기한다.
+
+   화면은 서버가 준 상태를 그대로 그린다. 누가 라이어인지도, 남은 시간이 얼마인지도
+   여기서 정하지 않는다 - 정하게 두면 개발자 도구로 다 보이고 시간도 늘려 잡을 수 있다.
+
+   대화는 방마다 있는 채팅 위젯을 그대로 쓴다. 대기실과 진행 화면 두 곳으로 옮겨 다닌다. */
+let LR = { code: null, timer: null, phase: null, seen: -1 };
+let LR_NEED = 6;
+let LR_TALK = 180;
+
+function lrWords() {
+  const b = window.LIARWORDS;
+  if (!b) return [];
+  return b[LANG] && b[LANG].length ? b[LANG] : (b.ko || []);
+}
+
+function lrStop() { if (LR.timer) { clearInterval(LR.timer); LR.timer = null; } }
+
+function lrLeave() {
+  lrStop();
+  LR = { code: null, timer: null, phase: null, seen: -1 };
+  window.chatCode = null;
+}
+
+/* 시작 화면. 모르는 사람과 할지, 방을 열지, 번호로 들어갈지 셋 중 하나다. */
+function lrOpen() {
+  const u = UI[LANG];
+  if (!USER) {
+    sfxNext(); $("hudM").textContent = "PLAYER CARD"; show("vAuth"); updateAuthUI();
+    $("auErr").textContent = u.lrNeedLogin || UI.ko.lrNeedLogin;
+    return;
+  }
+  if (!lrWords().length) { alert(u.lrNoWords || UI.ko.lrNoWords); return; }
+
+  $("lrTitle").textContent = (UI[LANG].cartNames && UI[LANG].cartNames[2] || UI.ko.cartNames[2]).replace(/<br\s*\/?>/g, " ");
+  $("lrHow").textContent = u.lrHow || UI.ko.lrHow;
+  $("lrMatch").textContent = u.lrMatch || UI.ko.lrMatch;
+  $("lrMatchNote").textContent = u.lrMatchNote || UI.ko.lrMatchNote;
+  $("lrPwL").textContent = u.aqrPw || UI.ko.aqrPw;
+  $("lrNeedL").textContent = u.lrNeedL || UI.ko.lrNeedL;
+  $("lrTalkL").textContent = u.lrTalkL || UI.ko.lrTalkL;
+  $("lrMake").textContent = u.aqrMake || UI.ko.aqrMake;
+  $("lrCodeL").textContent = u.aqrCode || UI.ko.aqrCode;
+  $("lrJoin").textContent = u.aqrJoin || UI.ko.aqrJoin;
+  $("lrBack").textContent = u.aqBackT || UI.ko.aqBackT;
+  $("lrErr").textContent = "";
+
+  const needs = $("lrNeeds"); needs.innerHTML = "";
+  [4, 5, 6, 8, 10, 12].forEach(function (n) {
+    const b = document.createElement("button");
+    b.className = "aq-mode" + (n === LR_NEED ? " cur" : "");
+    b.textContent = (u.lrNeedN || UI.ko.lrNeedN).replace("{n}", n);
+    b.addEventListener("click", function () { sfxSelect(); LR_NEED = n; lrOpen(); });
+    needs.appendChild(b);
+  });
+  const talks = $("lrTalks"); talks.innerHTML = "";
+  [120, 180, 300].forEach(function (t) {
+    const b = document.createElement("button");
+    b.className = "aq-mode" + (t === LR_TALK ? " cur" : "");
+    b.textContent = (u.lrTalkN || UI.ko.lrTalkN).replace("{n}", t / 60);
+    b.addEventListener("click", function () { sfxSelect(); LR_TALK = t; lrOpen(); });
+    talks.appendChild(b);
+  });
+
+  sfxNext(); $("hudM").textContent = "LIAR GAME"; show("vLiarStart");
+}
+
+async function lrPost(url, body) {
+  const r = await fetch(url, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  return { ok: r.ok, status: r.status, d: await r.json().catch(function () { return {}; }) };
+}
+
+async function lrMatch() {
+  const u = UI[LANG], err = $("lrErr");
+  err.textContent = "...";
+  const r = await lrPost("/api/rooms/liar?match", { lang: LANG, name: USER.name });
+  if (!r.ok) { err.textContent = r.d.error || u.auErrNet; return; }
+  err.textContent = "";
+  /* 이미 있는 방으로 보내진 경우에는 입장 절차가 따로 필요하다. 방을 새로 연 사람은
+     만들면서 들어가 있으므로 그냥 폴링만 시작하면 된다. */
+  if (!r.d.made) {
+    const j = await lrPost("/api/rooms/liar/" + encodeURIComponent(r.d.code), { pw: "public", name: USER.name });
+    if (!j.ok) { err.textContent = j.d.error || u.auErrNet; return; }
+  }
+  lrEnter(r.d.code);
+}
+
+async function lrCreate() {
+  const u = UI[LANG], err = $("lrErr");
+  const pw = $("lrPw").value.trim();
+  if (!pw) { err.textContent = u.aqrNeedPw || UI.ko.aqrNeedPw; return; }
+  err.textContent = "...";
+  const r = await lrPost("/api/rooms/liar", { pw: pw, need: LR_NEED, talk: LR_TALK, lang: LANG, name: USER.name });
+  if (!r.ok) { err.textContent = r.d.error || u.auErrNet; return; }
+  err.textContent = "";
+  lrEnter(r.d.code);
+}
+
+async function lrJoin() {
+  const u = UI[LANG], err = $("lrErr");
+  const code = $("lrCode").value.trim(), pw = $("lrJoinPw").value.trim();
+  if (!code) { err.textContent = u.aqrNeedCode || UI.ko.aqrNeedCode; return; }
+  err.textContent = "...";
+  const r = await lrPost("/api/rooms/liar/" + encodeURIComponent(code), { pw: pw, name: USER.name });
+  if (!r.ok) { err.textContent = r.d.error || u.auErrNet; return; }
+  err.textContent = "";
+  lrEnter(code);
+}
+
+function lrEnter(code) {
+  LR.code = code; LR.phase = null; LR.seen = -1;
+  window.chatCode = code;
+  sfxClear();
+  lrPoll();
+  // 2초마다. 사람이 말하는 속도보다 빠르게 물어볼 이유가 없다.
+  LR.timer = setInterval(lrPoll, 2000);
+}
+
+async function lrPoll() {
+  if (!LR.code) return;
+  try {
+    const r = await fetch("/api/rooms/liar/" + encodeURIComponent(LR.code), { cache: "no-store" });
+    if (r.status === 404) { lrDied(); return; }
+    if (!r.ok) return;
+    lrRender(await r.json());
+    if (typeof chatPoll === "function") chatPoll();
+  } catch (e) { }
+}
+
+function lrDied() {
+  const u = UI[LANG];
+  lrLeave();
+  alert(u.aqrGone || UI.ko.aqrGone);
+  show("vArcade"); $("hudM").textContent = "ARCADE";
+}
+
+function lrRender(d) {
+  if (d.ph === "lobby") { lrLobby(d); return; }
+  if (d.ph === "result") { lrEnd(d); return; }
+  lrPlay(d);
+}
+
+function lrLobby(d) {
+  const u = UI[LANG];
+  if (LR.phase !== "lobby") {
+    LR.phase = "lobby";
+    show("vLiarLobby"); $("hudM").textContent = "ROOM " + d.code;
+    if (typeof chatAttach === "function") chatAttach("vLiarLobby");
+  }
+  $("llCode").textContent = d.code;
+  $("llCount").textContent = (u.lrGathering || UI.ko.lrGathering).replace("{n}", d.players).replace("{m}", d.need);
+  $("llPlayers").innerHTML = (d.roster || []).map(function (p) {
+    return '<div class="pl-row"><span>' + (p.me ? "▶ " : "") + esc(p.name) + "</span></div>";
+  }).join("");
+  const enough = d.players >= d.need;
+  $("llStart").classList.toggle("hidden", !d.host || !enough);
+  $("llStart").textContent = u.aqrStart || UI.ko.aqrStart;
+  $("llLeave").textContent = u.aqrLeave || UI.ko.aqrLeave;
+  $("llWait").textContent = enough
+    ? (d.host ? (u.lrCanStart || UI.ko.lrCanStart) : (u.aqrGuestWait || UI.ko.aqrGuestWait))
+    : (u.lrWaiting || UI.ko.lrWaiting).replace("{n}", d.need - d.players);
+}
+
+function lrPlay(d) {
+  const u = UI[LANG], words = lrWords();
+  if (LR.phase !== "play") {
+    LR.phase = "play";
+    show("vLiarPlay"); $("hudM").textContent = "ROOM " + d.code;
+    if (typeof chatAttach === "function") chatAttach("vLiarPlay");
+  }
+
+  /* 서버가 그 사람이 볼 글자만 보내 준다. 예전에는 제시어 번호를 받아 화면이 진짜와
+     가짜 중에 골랐는데, 그러면 라이어가 그 번호로 은행에서 진짜 단어를 그대로 읽을 수
+     있었다. 맞히기가 무조건 성공하는 구조였다. */
+  const word = d.word || null;
+
+  $("lpPhase").textContent = (u["lrPh_" + d.ph] || d.ph).toUpperCase();
+  $("lpWordBox").classList.toggle("hidden", d.ph !== "reveal");
+  if (d.ph === "reveal" && word) {
+    $("lpCat").textContent = word.c;
+    $("lpWord").textContent = word.w;
+    $("lpDesc").textContent = word.d;
+  }
+
+  // 남은 시간. 서버가 준 끝나는 시각을 보고 그린다.
+  if (d.until) {
+    const span = d.ph === "reveal" ? 10000 : d.ph === "talk" ? d.talk * 1000 : d.ph === "vote" ? 45000 : 30000;
+    const left = d.until - Date.now();
+    $("lpBar").style.width = Math.max(0, Math.min(100, left / span * 100)) + "%";
+    $("lpLeft").textContent = Math.max(0, Math.ceil(left / 1000)) + "s";
+  } else {
+    $("lpBar").style.width = "0%"; $("lpLeft").textContent = "";
+  }
+
+  // 지목
+  const voting = d.ph === "vote";
+  $("lpVoteBox").classList.toggle("hidden", !voting);
+  if (voting && LR.seen !== 1) {
+    LR.seen = 1;
+    $("lpVoteT").textContent = u.lrVoteT || UI.ko.lrVoteT;
+    const box = $("lpVotes"); box.innerHTML = "";
+    (d.roster || []).filter(function (p) { return !p.me; }).forEach(function (p) {
+      const b = document.createElement("button");
+      b.className = "aq-mode";
+      b.textContent = p.name;
+      b.addEventListener("click", function () { lrVote(p.id); });
+      box.appendChild(b);
+    });
+  }
+  if (voting && d.voted) {
+    $("lpVotes").querySelectorAll(".aq-mode").forEach(function (b) { b.disabled = true; });
+    $("lpMsg").textContent = u.lrVoted || UI.ko.lrVoted;
+  }
+
+  /* 맞히기. 라이어에게만 보인다. 나머지는 기다린다 - 여기서 목록을 보여 주면
+     라이어가 아닌 사람도 진짜 제시어가 뭐였는지 후보로 좁혀 버린다. */
+  const guessing = d.ph === "guess" && d.imLiar;
+  $("lpGuessBox").classList.toggle("hidden", !guessing);
+  if (guessing && LR.seen !== 2) {
+    LR.seen = 2;
+    $("lpGuessT").textContent = u.lrGuessT || UI.ko.lrGuessT;
+    const box = $("lpGuesses"); box.innerHTML = "";
+    /* 후보도 서버가 골라 보낸다. 화면이 고르면 그 코드가 진짜 답을 알아야 하고,
+       그러면 개발자 도구로 그대로 보인다. */
+    (d.candidates || []).forEach(function (c) {
+      const b = document.createElement("button");
+      b.className = "aq-mode";
+      b.textContent = c.w;
+      b.addEventListener("click", function () { lrGuess(c.i); });
+      box.appendChild(b);
+    });
+  }
+  if (d.ph === "guess" && !d.imLiar) $("lpMsg").textContent = u.lrGuessWait || UI.ko.lrGuessWait;
+  if (d.ph === "talk") $("lpMsg").textContent = "";
+
+  $("lpPlayers").innerHTML = (d.roster || []).map(function (p) {
+    return '<div class="pl-row"' + (p.me ? ' style="color:var(--yellow)"' : "") + ">" +
+      "<span>" + esc(p.name) + "</span>" +
+      '<span style="font-size:11px;color:var(--dim)">' + (p.voted ? "✓" : "") + "</span></div>";
+  }).join("");
+}
+
+async function lrVote(target) {
+  $("lpVotes").querySelectorAll(".aq-mode").forEach(function (b) { b.disabled = true; });
+  sfxSelect();
+  await fetch("/api/rooms/liar/" + encodeURIComponent(LR.code), {
+    method: "PATCH", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "vote", target: target })
+  }).catch(function () { });
+  lrPoll();
+}
+
+async function lrGuess(wi) {
+  $("lpGuesses").querySelectorAll(".aq-mode").forEach(function (b) { b.disabled = true; });
+  sfxSelect();
+  await fetch("/api/rooms/liar/" + encodeURIComponent(LR.code), {
+    method: "PATCH", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "guess", guess: wi })
+  }).catch(function () { });
+  lrPoll();
+}
+
+function lrEnd(d) {
+  const u = UI[LANG], words = lrWords();
+  lrStop();
+  show("vLiarEnd"); $("hudM").textContent = "RESULT";
+  const r = d.result || {};
+  const word = words[r.word];
+  $("leT").textContent = r.liarWon ? (u.lrLiarWin || UI.ko.lrLiarWin) : (u.lrCrewWin || UI.ko.lrCrewWin);
+  $("leLblLiar").textContent = u.lrLiar || UI.ko.lrLiar;
+  $("leLblWord").textContent = u.lrWord || UI.ko.lrWord;
+  $("leLiar").textContent = r.liarName || "?";
+  $("leWord").textContent = word ? word.w : "?";
+  $("leBack").textContent = u.aqBackT || UI.ko.aqBackT;
+
+  const lines = [];
+  lines.push(r.caught ? (u.lrCaught || UI.ko.lrCaught) : (u.lrEscaped || UI.ko.lrEscaped));
+  if (r.caught) {
+    const g = r.guess !== null && r.guess !== undefined ? words[r.guess] : null;
+    lines.push((u.lrGuessed || UI.ko.lrGuessed)
+      .replace("{w}", g ? g.w : "-")
+      .replace("{r}", r.guess === r.word ? (u.lrRight || UI.ko.lrRight) : (u.lrWrong || UI.ko.lrWrong)));
+  }
+  $("leVerdict").innerHTML = lines.map(esc).join("<br>");
+
+  // 누가 누구를 지목했는지는 여기서 처음 공개된다.
+  const names = {};
+  (d.roster || []).forEach(function (p) { names[p.id] = p.name; });
+  $("leVotes").innerHTML = Object.entries(r.votes || {}).map(function (kv) {
+    return '<div class="pl-row"><span>' + esc(names[kv[0]] || "?") + "</span>" +
+      '<span style="font-size:11px;color:var(--dim)">→ ' + esc(names[kv[1]] || "?") + "</span></div>";
+  }).join("") || '<div class="pl-row">-</div>';
+}
+
+$("lrMatch").addEventListener("click", lrMatch);
+$("lrMake").addEventListener("click", lrCreate);
+$("lrJoin").addEventListener("click", lrJoin);
+$("lrBack").addEventListener("click", function () { lrLeave(); sfxNext(); $("hudM").textContent = "ARCADE"; show("vArcade"); });
+$("llLeave").addEventListener("click", function () { lrLeave(); sfxNext(); $("hudM").textContent = "ARCADE"; show("vArcade"); });
+$("leBack").addEventListener("click", function () { lrLeave(); sfxNext(); $("hudM").textContent = "ARCADE"; show("vArcade"); });
+$("llStart").addEventListener("click", async function () {
+  const b = $("llStart"); b.disabled = true;
+  await fetch("/api/rooms/liar/" + encodeURIComponent(LR.code), {
+    method: "PATCH", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "start" })
+  }).catch(function () { });
+  b.disabled = false;
+  lrPoll();
+});
+
+/* 메인 화면 카트리지. 이름은 applyLang 이 cartNames 로 맞춰 주므로 태그만 본다. */
+function lrCartLabel(){
+  const u=UI[LANG];
+  $("lrCartTag").textContent=USER?(u.aqPlay||"PLAY ▶"):(u.aqLock||UI.ko.aqLock);
+  $("cartLiar").classList.toggle("gated",!USER);
+}
+$("cartLiar").addEventListener("click",lrOpen);
+lrCartLabel();
+
 $("cartArchq").addEventListener("click",aqOpenModes);
 $("aqRetry").addEventListener("click",aqOpenModes);
 /* 판 도중에 나가기. 기록은 올리지 않는다 - 중간에 그만둔 것을 최고 기록과 겨루게
@@ -5060,6 +5463,17 @@ Object.assign(UI.fr,{aqrTitle:"JOUER ENSEMBLE",aqrPw:"Mot de passe",aqrCode:"Cod
 Object.assign(UI.it,{aqrTitle:"GIOCA INSIEME",aqrPw:"Password della stanza",aqrCode:"Codice stanza",aqrMake:"Crea stanza",aqrJoin:"Entra",aqrNeedPw:"Scegli una password",aqrNeedCode:"Inserisci il codice",aqrPlayers:"{n} / {m}",aqrHostWait:"Avvia quando ci sono tutti",aqrGuestWait:"In attesa dell host",aqrStart:"AVVIA",aqrLeave:"Esci",aqrEmpty:"Ancora nessuno",aqrAnswered:"{n} / {m} hanno risposto",aqrGone:"La stanza non esiste piu"});
 Object.assign(UI.de,{aqrTitle:"ZUSAMMEN SPIELEN",aqrPw:"Raum-Passwort",aqrCode:"Raumcode",aqrMake:"Raum erstellen",aqrJoin:"Beitreten",aqrNeedPw:"Lege ein Passwort fest",aqrNeedCode:"Gib den Raumcode ein",aqrPlayers:"{n} / {m}",aqrHostWait:"Starte, wenn alle da sind",aqrGuestWait:"Warte auf den Host",aqrStart:"START",aqrLeave:"Verlassen",aqrEmpty:"Noch niemand da",aqrAnswered:"{n} / {m} haben geantwortet",aqrGone:"Diesen Raum gibt es nicht mehr"});
 Object.assign(UI.es,{aqrTitle:"JUGAR JUNTOS",aqrPw:"Contrasena de la sala",aqrCode:"Codigo de sala",aqrMake:"Crear sala",aqrJoin:"Entrar",aqrNeedPw:"Elige una contrasena",aqrNeedCode:"Escribe el codigo de sala",aqrPlayers:"{n} / {m}",aqrHostWait:"Empieza cuando esten todos",aqrGuestWait:"Esperando al anfitrion",aqrStart:"EMPEZAR",aqrLeave:"Salir",aqrEmpty:"Aun no hay nadie",aqrAnswered:"{n} / {m} han respondido",aqrGone:"Esa sala ya no existe"});
+
+/* 라이어게임 문구. {n} 은 사람 수나 분, {w} 는 고른 단어, {r} 은 맞았는지. */
+Object.assign(UI.ko,{lrNeedLogin:"로그인하면 같이 할 수 있어요",lrNoWords:"제시어를 불러오지 못했어요",lrHow:"한 명만 다른 단어를 받습니다. 10초 뒤 제시어가 사라지면, 아는 척하며 이야기하세요.",lrMatch:"모르는 사람과 하기",lrMatchNote:"같은 언어를 쓰는 사람 4명이 모이면 시작합니다",lrNeedL:"시작 인원",lrTalkL:"이야기 시간",lrNeedN:"{n}명",lrTalkN:"{n}분",lrGathering:"{n} / {m} 명 모였어요",lrWaiting:"{n}명만 더 오면 시작해요",lrCanStart:"이제 시작할 수 있어요",lrPh_reveal:"제시어",lrPh_talk:"이야기",lrPh_vote:"지목",lrPh_guess:"맞히기",lrVoteT:"라이어라고 생각하는 사람을 고르세요",lrVoted:"지목했어요. 다른 사람을 기다립니다",lrGuessT:"진짜 제시어는 무엇이었을까요?",lrGuessWait:"라이어가 제시어를 맞히는 중...",lrLiarWin:"라이어 승!",lrCrewWin:"라이어를 잡았다!",lrLiar:"라이어",lrWord:"제시어",lrCaught:"라이어가 지목당했습니다",lrEscaped:"라이어가 빠져나갔습니다",lrGuessed:"라이어가 고른 답: {w} - {r}",lrRight:"정답",lrWrong:"오답"});
+Object.assign(UI.en,{lrNeedLogin:"Log in to play together",lrNoWords:"Could not load the keywords",lrHow:"One player gets a different word. After ten seconds it disappears - then talk as if you know it.",lrMatch:"Play with strangers",lrMatchNote:"Starts once four people in your language have gathered",lrNeedL:"Players to start",lrTalkL:"Talking time",lrNeedN:"{n} players",lrTalkN:"{n} min",lrGathering:"{n} of {m} here",lrWaiting:"{n} more to start",lrCanStart:"Ready to start",lrPh_reveal:"KEYWORD",lrPh_talk:"TALK",lrPh_vote:"VOTE",lrPh_guess:"GUESS",lrVoteT:"Pick who you think is the liar",lrVoted:"Voted. Waiting for the others",lrGuessT:"What was the real keyword?",lrGuessWait:"The liar is guessing...",lrLiarWin:"The liar wins!",lrCrewWin:"The liar is caught!",lrLiar:"Liar",lrWord:"Keyword",lrCaught:"The liar was voted out",lrEscaped:"The liar got away",lrGuessed:"The liar picked: {w} - {r}",lrRight:"correct",lrWrong:"wrong"});
+Object.assign(UI.zh,{lrNeedLogin:"登录后即可一起玩",lrNoWords:"无法加载题词",lrHow:"只有一个人拿到不同的词。十秒后题词消失，然后装作知道它来聊天。",lrMatch:"和陌生人一起玩",lrMatchNote:"同语言的四个人凑齐后开始",lrNeedL:"开始人数",lrTalkL:"聊天时间",lrNeedN:"{n}人",lrTalkN:"{n}分钟",lrGathering:"已到 {n} / {m} 人",lrWaiting:"再来 {n} 人就能开始",lrCanStart:"现在可以开始了",lrPh_reveal:"题词",lrPh_talk:"聊天",lrPh_vote:"指认",lrPh_guess:"猜词",lrVoteT:"选出你认为是卧底的人",lrVoted:"已指认。等待其他人",lrGuessT:"真正的题词是什么?",lrGuessWait:"卧底正在猜...",lrLiarWin:"卧底获胜!",lrCrewWin:"抓住卧底了!",lrLiar:"卧底",lrWord:"题词",lrCaught:"卧底被指认出来了",lrEscaped:"卧底逃脱了",lrGuessed:"卧底选的是: {w} - {r}",lrRight:"正确",lrWrong:"错误"});
+Object.assign(UI.tw,{lrNeedLogin:"登入後即可一起玩",lrNoWords:"無法載入題詞",lrHow:"只有一個人拿到不同的詞。十秒後題詞消失，然後裝作知道它來聊天。",lrMatch:"和陌生人一起玩",lrMatchNote:"同語言的四個人湊齊後開始",lrNeedL:"開始人數",lrTalkL:"聊天時間",lrNeedN:"{n}人",lrTalkN:"{n}分鐘",lrGathering:"已到 {n} / {m} 人",lrWaiting:"再來 {n} 人就能開始",lrCanStart:"現在可以開始了",lrPh_reveal:"題詞",lrPh_talk:"聊天",lrPh_vote:"指認",lrPh_guess:"猜詞",lrVoteT:"選出你認為是臥底的人",lrVoted:"已指認。等待其他人",lrGuessT:"真正的題詞是什麼?",lrGuessWait:"臥底正在猜...",lrLiarWin:"臥底獲勝!",lrCrewWin:"抓住臥底了!",lrLiar:"臥底",lrWord:"題詞",lrCaught:"臥底被指認出來了",lrEscaped:"臥底逃脫了",lrGuessed:"臥底選的是: {w} - {r}",lrRight:"正確",lrWrong:"錯誤"});
+Object.assign(UI.ja,{lrNeedLogin:"ログインすると一緒に遊べます",lrNoWords:"お題を読み込めませんでした",lrHow:"一人だけ違う言葉をもらいます。十秒でお題が消えたら、知っているふりをして話してください。",lrMatch:"知らない人と遊ぶ",lrMatchNote:"同じ言語の四人が集まると始まります",lrNeedL:"開始人数",lrTalkL:"話す時間",lrNeedN:"{n}人",lrTalkN:"{n}分",lrGathering:"{n} / {m} 人",lrWaiting:"あと{n}人で始まります",lrCanStart:"もう始められます",lrPh_reveal:"お題",lrPh_talk:"会話",lrPh_vote:"指名",lrPh_guess:"推理",lrVoteT:"ライアーだと思う人を選んでください",lrVoted:"指名しました。他の人を待っています",lrGuessT:"本当のお題は何だったでしょう?",lrGuessWait:"ライアーが当てています...",lrLiarWin:"ライアーの勝ち!",lrCrewWin:"ライアーを捕まえた!",lrLiar:"ライアー",lrWord:"お題",lrCaught:"ライアーが指名されました",lrEscaped:"ライアーが逃げ切りました",lrGuessed:"ライアーが選んだ答え: {w} - {r}",lrRight:"正解",lrWrong:"不正解"});
+Object.assign(UI.fr,{lrNeedLogin:"Connectez-vous pour jouer ensemble",lrNoWords:"Impossible de charger les mots",lrHow:"Un joueur recoit un mot different. Au bout de dix secondes il disparait - ensuite, parlez comme si vous le connaissiez.",lrMatch:"Jouer avec des inconnus",lrMatchNote:"Demarre des que quatre joueurs de votre langue sont la",lrNeedL:"Joueurs pour demarrer",lrTalkL:"Temps de discussion",lrNeedN:"{n} joueurs",lrTalkN:"{n} min",lrGathering:"{n} sur {m}",lrWaiting:"Encore {n} pour commencer",lrCanStart:"On peut commencer",lrPh_reveal:"MOT",lrPh_talk:"DISCUSSION",lrPh_vote:"VOTE",lrPh_guess:"DEVINETTE",lrVoteT:"Designez celui que vous croyez menteur",lrVoted:"Vote enregistre. On attend les autres",lrGuessT:"Quel etait le vrai mot?",lrGuessWait:"Le menteur cherche...",lrLiarWin:"Le menteur gagne!",lrCrewWin:"Le menteur est demasque!",lrLiar:"Menteur",lrWord:"Mot",lrCaught:"Le menteur a ete designe",lrEscaped:"Le menteur s en est sorti",lrGuessed:"Le menteur a choisi: {w} - {r}",lrRight:"juste",lrWrong:"faux"});
+Object.assign(UI.it,{lrNeedLogin:"Accedi per giocare insieme",lrNoWords:"Impossibile caricare le parole",lrHow:"Un giocatore riceve una parola diversa. Dopo dieci secondi sparisce - poi parlate come se la conosceste.",lrMatch:"Gioca con sconosciuti",lrMatchNote:"Parte quando si sono radunati quattro giocatori della tua lingua",lrNeedL:"Giocatori per iniziare",lrTalkL:"Tempo di discussione",lrNeedN:"{n} giocatori",lrTalkN:"{n} min",lrGathering:"{n} su {m}",lrWaiting:"Ancora {n} per iniziare",lrCanStart:"Si puo iniziare",lrPh_reveal:"PAROLA",lrPh_talk:"DISCUSSIONE",lrPh_vote:"VOTO",lrPh_guess:"INDOVINA",lrVoteT:"Scegli chi credi sia il bugiardo",lrVoted:"Voto dato. Si aspettano gli altri",lrGuessT:"Qual era la parola vera?",lrGuessWait:"Il bugiardo sta indovinando...",lrLiarWin:"Vince il bugiardo!",lrCrewWin:"Bugiardo scoperto!",lrLiar:"Bugiardo",lrWord:"Parola",lrCaught:"Il bugiardo e stato votato",lrEscaped:"Il bugiardo l ha scampata",lrGuessed:"Il bugiardo ha scelto: {w} - {r}",lrRight:"esatto",lrWrong:"sbagliato"});
+Object.assign(UI.de,{lrNeedLogin:"Melde dich an, um mitzuspielen",lrNoWords:"Begriffe konnten nicht geladen werden",lrHow:"Einer bekommt ein anderes Wort. Nach zehn Sekunden ist es weg - dann redet, als wuesstet ihr es.",lrMatch:"Mit Fremden spielen",lrMatchNote:"Startet, sobald vier Leute deiner Sprache da sind",lrNeedL:"Spieler zum Start",lrTalkL:"Redezeit",lrNeedN:"{n} Spieler",lrTalkN:"{n} Min",lrGathering:"{n} von {m}",lrWaiting:"Noch {n} bis zum Start",lrCanStart:"Kann losgehen",lrPh_reveal:"BEGRIFF",lrPh_talk:"REDEN",lrPh_vote:"ABSTIMMEN",lrPh_guess:"RATEN",lrVoteT:"Waehle, wen du fuer den Luegner haeltst",lrVoted:"Abgestimmt. Warten auf die anderen",lrGuessT:"Was war der echte Begriff?",lrGuessWait:"Der Luegner raet...",lrLiarWin:"Der Luegner gewinnt!",lrCrewWin:"Luegner erwischt!",lrLiar:"Luegner",lrWord:"Begriff",lrCaught:"Der Luegner wurde gewaehlt",lrEscaped:"Der Luegner ist entkommen",lrGuessed:"Der Luegner waehlte: {w} - {r}",lrRight:"richtig",lrWrong:"falsch"});
+Object.assign(UI.es,{lrNeedLogin:"Inicia sesion para jugar juntos",lrNoWords:"No se han podido cargar las palabras",lrHow:"Un jugador recibe una palabra distinta. A los diez segundos desaparece - luego hablad como si la supierais.",lrMatch:"Jugar con desconocidos",lrMatchNote:"Empieza cuando se junten cuatro jugadores de tu idioma",lrNeedL:"Jugadores para empezar",lrTalkL:"Tiempo de charla",lrNeedN:"{n} jugadores",lrTalkN:"{n} min",lrGathering:"{n} de {m}",lrWaiting:"Faltan {n} para empezar",lrCanStart:"Ya se puede empezar",lrPh_reveal:"PALABRA",lrPh_talk:"CHARLA",lrPh_vote:"VOTACION",lrPh_guess:"ADIVINAR",lrVoteT:"Elige a quien creas que es el mentiroso",lrVoted:"Votado. Esperando a los demas",lrGuessT:"Cual era la palabra real?",lrGuessWait:"El mentiroso esta adivinando...",lrLiarWin:"Gana el mentiroso!",lrCrewWin:"Mentiroso cazado!",lrLiar:"Mentiroso",lrWord:"Palabra",lrCaught:"El mentiroso fue votado",lrEscaped:"El mentiroso escapo",lrGuessed:"El mentiroso eligio: {w} - {r}",lrRight:"acierto",lrWrong:"fallo"});
 
 /* 아이폰 무음 스위치 안내. 세션을 바꿔 무음 스위치와 무관해졌지만, 그래도
    안 들리는 사람에게 어디를 볼지 알려 주는 마지막 줄이다. */
@@ -5793,6 +6207,7 @@ $("exitYes").addEventListener("click",async()=>{
   window.chatAttach = function(view){
     if(view === "vWait") moveTo("chatSlotWait");
     if(view === "vLiarLobby") moveTo("chatSlotLiar");
+    if(view === "vLiarPlay") moveTo("chatSlotLiarPlay");
     lastKey = "";                      // 옮기면 비어 있으므로 다음 폴링에 다시 그린다
     setLoggedIn(!!USER);
   };

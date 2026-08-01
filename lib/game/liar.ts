@@ -152,6 +152,16 @@ export function liarView(input: {
   maxPlayers: number;
   hostId: string | null;
   meId: string | null;
+  /**
+   * 그 사람이 볼 글자를 만들어 준다.
+   *
+   * 처음에는 제시어 번호를 그대로 내려보내고 화면이 진짜와 가짜 중에 골랐다. 그러면
+   * 라이어가 그 번호로 은행에서 진짜 단어를 그대로 읽을 수 있다 - 맞히기가 무조건
+   * 성공하는 구조였다. 번호가 아니라 글자를 보낸다.
+   */
+  wordFor?: (wi: number, isLiar: boolean) => { w: string; c: string; d: string } | null;
+  /// 라이어가 고를 후보. 진짜 답 하나에 아무거나 섞어 서버가 만든다.
+  candidates?: (wi: number) => Array<{ i: number; w: string }>;
 }) {
   const { st, meId } = input;
   const joined = Boolean(meId && st.ps[meId]);
@@ -187,10 +197,14 @@ export function liarView(input: {
 
   return {
     ...base,
-    /// 내가 받은 제시어. 라이어에게는 가짜가 간다. 무엇이 가짜인지는 알려주지 않는다.
-    myWord: st.ph === "lobby" ? null : st.wi,
+    /* 내가 볼 제시어. 글자만 내려간다 - 번호를 주면 라이어가 은행에서 진짜 단어를
+       찾아 읽을 수 있고, 그러면 맞히기가 무조건 성공한다. */
+    word: st.ph === "lobby" || !input.wordFor ? null : input.wordFor(st.wi, meId === st.liar),
     /// 내가 라이어인가. 본인에게만 알려 준다.
     imLiar: st.ph === "lobby" ? false : meId === st.liar,
+    /// 맞히기 후보. 라이어에게만, 그 단계에서만 내려간다.
+    candidates:
+      st.ph === "guess" && meId === st.liar && input.candidates ? input.candidates(st.wi) : null,
     roster,
     voted: st.votes[meId] ?? null,
     result: done

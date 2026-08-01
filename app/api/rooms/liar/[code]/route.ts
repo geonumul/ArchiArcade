@@ -78,7 +78,12 @@ async function advance(code: string, st: LiarState): Promise<LiarState> {
   return ok ? { ...st, ...next, ts: now } : st;
 }
 
+/// 맞히기 후보 개수. 90개를 다 늘어놓으면 고를 수가 없고, 너무 적으면 찍어서 맞는다.
+const GUESS_CHOICES = 5;
+
 function view(st: LiarState, room: RoomRecord, meId: string | null) {
+  const bank = liarBank();
+  const words = bank ? liarWords(bank, st.lang) : [];
   return liarView({
     st,
     code: room.code,
@@ -86,6 +91,28 @@ function view(st: LiarState, room: RoomRecord, meId: string | null) {
     maxPlayers: room.maxPlayers,
     hostId: room.hostId,
     meId,
+    /* 그 사람이 볼 글자만 만든다. 라이어에게는 가짜와 가짜 설명이, 나머지에게는 진짜가
+       간다. 분류는 모두에게 같은 것이 가야 이야기의 틀이 하나로 잡힌다. */
+    wordFor: (wi, isLiar) => {
+      const e = words[wi];
+      if (!e) return null;
+      return { w: isLiar ? e.f : e.w, c: e.c, d: (isLiar ? e.df : e.d) ?? "" };
+    },
+    /* 후보는 서버가 고른다. 화면이 고르면 목록을 만드는 코드가 진짜 답을 알아야 하고,
+       그러면 개발자 도구로 그대로 보인다. 진짜 답 하나에 아무거나 섞어 자리를 흩는다. */
+    candidates: (wi) => {
+      const rest = words.map((_, i) => i).filter((i) => i !== wi);
+      for (let i = rest.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rest[i], rest[j]] = [rest[j], rest[i]];
+      }
+      const pick = [wi, ...rest.slice(0, GUESS_CHOICES - 1)];
+      for (let i = pick.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pick[i], pick[j]] = [pick[j], pick[i]];
+      }
+      return pick.map((i) => ({ i, w: words[i].w }));
+    },
   });
 }
 
