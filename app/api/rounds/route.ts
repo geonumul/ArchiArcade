@@ -32,6 +32,9 @@ function today(): string {
 
 /// 나라는 Vercel 이 헤더에 붙여 준다. 두 글자 밖은 받지 않는다 - 도시나 좌표는
 /// 애초에 받을 생각이 없고, 두 글자면 언어권을 보기에 충분하다.
+///
+/// 못 알아낸 것을 빈 값으로 두면 집계 열쇠가 깨지므로 ZZ 로 모아 둔다. ISO 3166 에서
+/// 비워 둔 코드라 실제 나라와 겹치지 않는다. 로컬에서 부른 요청이 주로 여기 들어온다.
 function countryOf(req: Request): string {
   const raw = req.headers.get("x-vercel-ip-country") ?? req.headers.get("cf-ipcountry") ?? "";
   return /^[A-Za-z]{2}$/.test(raw) ? raw.toUpperCase() : "ZZ";
