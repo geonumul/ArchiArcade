@@ -132,13 +132,15 @@ body::after{
 .stack{display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;}
 .field{width:100%;text-align:left;}
 .field label{display:block;font-size:12px;color:var(--dim);margin-bottom:6px;letter-spacing:1px;}
-.field input,.field select{
+.field input,.field select,.field textarea{
   width:100%;font-family:var(--kfont);font-weight:700;font-size:16px;color:var(--ink);
   background:var(--shadow);border:4px solid var(--border);padding:12px;outline:none;
 }
-.field input::placeholder{color:#6b7090;opacity:1;font-family:inherit;font-weight:700;}
+/* 여러 줄을 받는 칸(스폰서 문의). 세로로만 늘려야 4px 보더 상자가 캐비닛 밖으로 안 나간다. */
+.field textarea{resize:vertical;line-height:1.7;min-height:120px;}
+.field input::placeholder,.field textarea::placeholder{color:#6b7090;opacity:1;font-family:inherit;font-weight:700;}
 .field select option{background:var(--shadow);color:var(--ink);}
-.field input:focus,.field select:focus{border-color:var(--blue);}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);}
 .err{font-size:13px;color:var(--red);min-height:18px;}
 .note{text-wrap:pretty;font-size:12px;color:var(--dim);line-height:1.8;}
 
