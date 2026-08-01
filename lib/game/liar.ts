@@ -18,8 +18,13 @@
 /// 상태 형식 번호. 모양을 바꾸면 올린다. 살아 있는 방은 옛 모양으로 끝까지 간다.
 export const LIAR_STATE_V = 1;
 
-/// 제시어가 화면에 머무는 시간. 외울 만하되 적어 둘 새는 없어야 한다.
-export const LIAR_REVEAL_MS = 3000;
+/// 제시어가 화면에 머무는 시간.
+///
+/// 처음에는 3초로 잡았는데, 단어만 있으면 몰라도 설명까지 읽으려면 그 안에 안 된다.
+/// 설명을 못 읽고 넘어가면 아는 척할 거리가 없어 그대로 굳어 버린다. 10초면 읽고
+/// 한 번 더 볼 만하되, 받아 적고 앉아 있을 만큼 길지는 않다.
+/// 줄어드는 것을 화면에 보여 준다 - 언제 사라지는지 모르면 읽다 말고 놓친다.
+export const LIAR_REVEAL_MS = 10_000;
 /// 이야기 시간. 방장이 고른다.
 export const LIAR_TALK_CHOICES = [120, 180, 300] as const;
 /// 지목 시간.
@@ -31,6 +36,11 @@ export const LIAR_GUESS_MS = 30_000;
 /// 한 사람이 말할 틈이 없다.
 export const LIAR_MIN = 4;
 export const LIAR_MAX = 12;
+
+/// 모르는 사람과 하는 방은 넷으로 고정한다. 고를 수 있게 하면 여덟 명짜리 방을
+/// 열어 놓고 아무도 안 와서 계속 기다리게 되는데, 처음 온 사람은 그게 자기 선택
+/// 때문인 줄 모른다. 넷은 사람이 가장 빨리 차는 수다.
+export const LIAR_MATCH_NEED = 4;
 
 export interface LiarPlayer {
   /// 방에서 쓰는 이름.
