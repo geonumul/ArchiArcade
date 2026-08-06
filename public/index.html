@@ -741,10 +741,15 @@ body.ov-open{overflow:hidden;}
         <input type="checkbox" id="auMkt">
         <span id="auMktT">(선택) 새 게임 소식을 메일로 받을게요</span>
       </label>
+      <!-- 코드가 맞을 때까지는 계정이 만들어지지 않는다 - 가입 이메일이 실제로
+           본인 것인지 확인하는 절차다. -->
+      <div class="field hidden" id="auCodeF"><label id="auCodeL">인증 코드 (6자리)</label><input id="auCode" maxlength="6" inputmode="numeric" autocomplete="one-time-code" style="text-align:center;letter-spacing:8px;font-size:22px"></div>
+      <div class="note hidden" id="auDev"></div>
       <div class="err" id="auErr"></div>
       <div class="next-wrap" id="auBtns">
         <button class="btn kr" id="btnLogin">로그인</button>
         <button class="btn kr hidden" id="btnRegister">가입하기</button>
+        <button class="btn kr hidden" id="btnRegisterConfirm">코드 확인하고 가입하기 ▶</button>
       </div>
       <button class="btn kr gray" id="btnForgot" style="font-size:13px">비밀번호를 잊었어요</button>
       <div class="scoreboard hidden" id="auCard"></div>
@@ -3341,10 +3346,26 @@ async function doRegister(){
   if(p!==p2){ $("auErr").textContent=UI[LANG].auErrPw2; return; }
   $("auErr").textContent="...";
   const r=await authPost("/api/auth/register",{name:n,email:em,pw:p,locale:LANG,marketing:$("auMkt").checked});
+  if(!r.ok){ $("auErr").textContent=(r.d.mailNotReady?UI[LANG].auMailSoon:r.d.error)||UI[LANG].auErrNet; return; }
+  // 계정은 아직 안 만들어졌다 - 메일로 받은 코드를 확인해야 끝난다.
+  $("auErr").textContent="";
+  $("auCodeF").classList.remove("hidden");
+  $("btnRegister").classList.add("hidden");
+  $("btnRegisterConfirm").classList.remove("hidden");
+  if(r.d.devCode){ $("auDev").classList.remove("hidden"); $("auDev").textContent=UI[LANG].fgDev+" "+r.d.devCode; }
+  sfxNext();
+}
+async function doRegisterConfirm(){
+  const em=$("auEmail").value.trim(), c=$("auCode").value;
+  if(c.length!==6){ $("auErr").textContent=UI[LANG].fgErrCode; return; }
+  $("auErr").textContent="...";
+  const r=await authPost("/api/auth/register/confirm",{email:em,code:c});
   if(!r.ok){ $("auErr").textContent=r.d.error||UI[LANG].auErrNet; return; }
   setUser(r.d.user, r.d.schoolEmail);
   track("signup");
-  sfxClear(); $("auErr").textContent=""; $("auPin").value=""; $("auPw2").value="";
+  sfxClear(); $("auErr").textContent=""; $("auPin").value=""; $("auPw2").value=""; $("auCode").value="";
+  $("auCodeF").classList.add("hidden"); $("auDev").classList.add("hidden");
+  $("btnRegisterConfirm").classList.add("hidden");
   updateAuthUI(); refreshDock();
 }
 async function doLogin(){
@@ -3446,6 +3467,8 @@ $("btnNick").addEventListener("click",async function(){
 $("authBtn").addEventListener("click",()=>{ sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI(); });
 $("btnLogin").addEventListener("click",doLogin);
 $("btnRegister").addEventListener("click",doRegister);
+$("btnRegisterConfirm").addEventListener("click",doRegisterConfirm);
+$("auCode").addEventListener("input",()=>{ $("auCode").value=$("auCode").value.replace(/\D/g,"").slice(0,6); });
 $("btnLogout").addEventListener("click",async()=>{
   sfxNext();
   // 쿠키는 서버만 지울 수 있다(httpOnly). 실패해도 화면에서는 로그아웃시킨다.
@@ -5129,6 +5152,9 @@ function setAuthMode(m){
   $("btnRegister").classList.toggle("hidden",m!=="register");
   // 비밀번호 찾기는 로그인 탭에서만 의미가 있다.
   $("btnForgot").classList.toggle("hidden",m!=="login");
+  // 탭을 바꾸면 진행 중이던 코드 확인 단계는 처음으로 되돌린다.
+  $("auCodeF").classList.add("hidden"); $("auDev").classList.add("hidden");
+  $("btnRegisterConfirm").classList.add("hidden");
   $("auErr").textContent="";
 }
 $("tabLogin").addEventListener("click",()=>{ sfxNext(); setAuthMode("login"); });
@@ -6154,7 +6180,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'코드 받기 ▶',fgConfirm:'비밀번호 바꾸기 ▶',fgBack:'← 돌아가기',
         fgDev:'개발 모드 - 코드:',fgErrCode:'6자리를 입력해주세요',
         fgDone:'비밀번호를 바꿨어요. 새 비밀번호로 로그인해주세요',
-        fgMailSoon:'비밀번호 찾기는 메일 발송 준비가 끝나면 열립니다'},
+        fgMailSoon:'비밀번호 찾기는 메일 발송 준비가 끝나면 열립니다',
+        auCodeConfirm:'코드 확인하고 가입하기 ▶',auMailSoon:'회원가입은 메일 발송 준비가 끝나면 열립니다'},
     en:{auEmail:'EMAIL (used to recover your password)',auErrEmail:'Check the email format',
         auDesc:'Nickname, email and password keep your record and title.<br>You can play everything without an account.',
         hint:s=>'That is a '+s+' address! Verify it for a badge and the school ranking.',
@@ -6164,7 +6191,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'SEND CODE ▶',fgConfirm:'CHANGE PASSWORD ▶',fgBack:'← BACK',
         fgDev:'Dev mode - code:',fgErrCode:'Enter all 6 digits',
         fgDone:'Password changed. Log in with the new one.',
-        fgMailSoon:'Password reset opens once email sending is ready'},
+        fgMailSoon:'Password reset opens once email sending is ready',
+        auCodeConfirm:'CONFIRM CODE ▶',auMailSoon:'Sign-up opens once email sending is ready'},
     zh:{auEmail:'邮箱（用于找回密码）',auErrEmail:'请检查邮箱格式',
         auDesc:'用昵称、邮箱和密码保存战绩与称号。<br>不登录也能玩所有游戏。',
         hint:s=>'这是'+s+'的邮箱！认证后可获得徽章并参与学校排名。',
@@ -6174,7 +6202,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'获取验证码 ▶',fgConfirm:'修改密码 ▶',fgBack:'← 返回',
         fgDev:'开发模式 - 验证码：',fgErrCode:'请输入6位数字',
         fgDone:'密码已修改，请用新密码登录。',
-        fgMailSoon:'找回密码将在邮件发送准备就绪后开放'},
+        fgMailSoon:'找回密码将在邮件发送准备就绪后开放',
+        auCodeConfirm:'确认验证码并注册 ▶',auMailSoon:'注册将在邮件发送准备就绪后开放'},
     tw:{auEmail:'信箱（用於找回密碼）',auErrEmail:'請檢查信箱格式',
         auDesc:'用暱稱、信箱和密碼保存戰績與稱號。<br>不登入也能玩所有遊戲。',
         hint:s=>'這是'+s+'的信箱！認證後可取得徽章並參與學校排名。',
@@ -6184,7 +6213,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'取得驗證碼 ▶',fgConfirm:'修改密碼 ▶',fgBack:'← 返回',
         fgDev:'開發模式 - 驗證碼：',fgErrCode:'請輸入6位數字',
         fgDone:'密碼已修改，請用新密碼登入。',
-        fgMailSoon:'找回密碼將在郵件寄送準備就緒後開放'},
+        fgMailSoon:'找回密碼將在郵件寄送準備就緒後開放',
+        auCodeConfirm:'確認驗證碼並註冊 ▶',auMailSoon:'註冊將在郵件寄送準備就緒後開放'},
     ja:{auEmail:'メール（パスワード再設定に使います）',auErrEmail:'メールの形式を確認してください',
         auDesc:'ニックネーム・メール・パスワードで戦績と称号を保存します。<br>ログインなしでも全部遊べます。',
         hint:s=>s+'のメールですね！認証するとバッジと学校ランキングに参加できます。',
@@ -6194,7 +6224,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'コードを受け取る ▶',fgConfirm:'パスワードを変更 ▶',fgBack:'← 戻る',
         fgDev:'開発モード - コード：',fgErrCode:'6桁を入力してください',
         fgDone:'パスワードを変更しました。新しいパスワードでログインしてください。',
-        fgMailSoon:'パスワード再設定はメール送信の準備が整い次第オープンします'},
+        fgMailSoon:'パスワード再設定はメール送信の準備が整い次第オープンします',
+        auCodeConfirm:'コードを確認して登録 ▶',auMailSoon:'登録はメール送信の準備が整い次第オープンします'},
     fr:{auEmail:'E-MAIL (pour récupérer votre mot de passe)',auErrEmail:"Vérifiez le format de l'e-mail",
         auDesc:'Pseudo, e-mail et mot de passe conservent votre score et votre titre.<br>Tout est jouable sans compte.',
         hint:s=>"C'est une adresse "+s+" ! Vérifiez-la pour un badge et le classement.",
@@ -6204,7 +6235,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'RECEVOIR LE CODE ▶',fgConfirm:'CHANGER ▶',fgBack:'← RETOUR',
         fgDev:'Mode dev - code :',fgErrCode:'Saisissez les 6 chiffres',
         fgDone:'Mot de passe changé. Connectez-vous avec le nouveau.',
-        fgMailSoon:"La réinitialisation ouvrira dès que l'envoi d'e-mails sera prêt"},
+        fgMailSoon:"La réinitialisation ouvrira dès que l'envoi d'e-mails sera prêt",
+        auCodeConfirm:'CONFIRMER LE CODE ▶',auMailSoon:"L'inscription ouvrira dès que l'envoi d'e-mails sera prêt"},
     it:{auEmail:'E-MAIL (per recuperare la password)',auErrEmail:"Controlla il formato dell'e-mail",
         auDesc:'Nickname, e-mail e password conservano record e titolo.<br>Puoi giocare a tutto senza account.',
         hint:s=>"È un indirizzo "+s+"! Verificalo per il badge e la classifica.",
@@ -6214,7 +6246,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'RICEVI IL CODICE ▶',fgConfirm:'CAMBIA PASSWORD ▶',fgBack:'← INDIETRO',
         fgDev:'Modalità dev - codice:',fgErrCode:'Inserisci tutte le 6 cifre',
         fgDone:'Password cambiata. Accedi con quella nuova.',
-        fgMailSoon:"Il reimpostare aprirà appena l'invio e-mail sarà pronto"},
+        fgMailSoon:"Il reimpostare aprirà appena l'invio e-mail sarà pronto",
+        auCodeConfirm:'CONFERMA CODICE ▶',auMailSoon:"La registrazione aprirà appena l'invio e-mail sarà pronto"},
     de:{auEmail:'E-MAIL (für die Passwort-Wiederherstellung)',auErrEmail:'Bitte E-Mail-Format prüfen',
         auDesc:'Nickname, E-Mail und Passwort sichern Statistik und Titel.<br>Alles ist auch ohne Konto spielbar.',
         hint:s=>'Das ist eine '+s+'-Adresse! Verifiziere sie für Abzeichen und Rangliste.',
@@ -6224,7 +6257,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'CODE ANFORDERN ▶',fgConfirm:'PASSWORT ÄNDERN ▶',fgBack:'← ZURÜCK',
         fgDev:'Dev-Modus - Code:',fgErrCode:'Bitte alle 6 Stellen eingeben',
         fgDone:'Passwort geändert. Melde dich mit dem neuen an.',
-        fgMailSoon:'Das Zurücksetzen öffnet, sobald der E-Mail-Versand bereit ist'},
+        fgMailSoon:'Das Zurücksetzen öffnet, sobald der E-Mail-Versand bereit ist',
+        auCodeConfirm:'CODE BESTÄTIGEN ▶',auMailSoon:'Die Registrierung öffnet, sobald der E-Mail-Versand bereit ist'},
     es:{auEmail:'CORREO (para recuperar la contraseña)',auErrEmail:'Revisa el formato del correo',
         auDesc:'Apodo, correo y contraseña guardan tu historial y título.<br>Puedes jugar a todo sin cuenta.',
         hint:s=>'¡Es una dirección de '+s+'! Verifícala para la insignia y el ranking.',
@@ -6234,7 +6268,8 @@ $("exitYes").addEventListener("click",async()=>{
         fgSend:'RECIBIR CÓDIGO ▶',fgConfirm:'CAMBIAR CONTRASEÑA ▶',fgBack:'← ATRÁS',
         fgDev:'Modo dev - código:',fgErrCode:'Introduce los 6 dígitos',
         fgDone:'Contraseña cambiada. Entra con la nueva.',
-        fgMailSoon:'El restablecimiento se abrirá cuando el envío de correo esté listo'}
+        fgMailSoon:'El restablecimiento se abrirá cuando el envío de correo esté listo',
+        auCodeConfirm:'CONFIRMAR CÓDIGO ▶',auMailSoon:'El registro se abrirá cuando el envío de correo esté listo'}
   };
 
   Object.keys(T).forEach(c=>{
@@ -6245,7 +6280,8 @@ $("exitYes").addEventListener("click",async()=>{
       auSchoolHint:t.hint, auGoVerify:t.goVerify, btnForgot:t.forgot,
       fgTitle:t.fgTitle, fgDesc:t.fgDesc, fgEmailL:t.fgEmail, fgCodeL:t.fgCode, fgPwL:t.fgPw,
       btnFgSend:t.fgSend, btnFgConfirm:t.fgConfirm, btnFgBack:t.fgBack,
-      fgDev:t.fgDev, fgErrCode:t.fgErrCode, fgDone:t.fgDone, fgMailSoon:t.fgMailSoon
+      fgDev:t.fgDev, fgErrCode:t.fgErrCode, fgDone:t.fgDone, fgMailSoon:t.fgMailSoon,
+      auCodeL:t.fgCode, btnRegisterConfirm:t.auCodeConfirm, auMailSoon:t.auMailSoon
     });
   });
 
@@ -6257,6 +6293,7 @@ $("exitYes").addEventListener("click",async()=>{
     set("auEmailL",u.auEmailL); set("btnForgot",u.btnForgot);
     set("fgTitle",u.fgTitle); set("fgEmailL",u.fgEmailL); set("fgCodeL",u.fgCodeL); set("fgPwL",u.fgPwL);
     set("btnFgSend",u.btnFgSend); set("btnFgConfirm",u.btnFgConfirm); set("btnFgBack",u.btnFgBack);
+    set("auCodeL",u.auCodeL); set("btnRegisterConfirm",u.btnRegisterConfirm);
     const fd=$("fgDesc"); if(fd&&u.fgDesc) fd.innerHTML=u.fgDesc;
     renderSchoolHint();
   };

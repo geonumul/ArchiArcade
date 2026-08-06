@@ -33,6 +33,18 @@ export async function sendVerificationCode(to: string, code: string, schoolName:
   ].join("\n"), code);
 }
 
+/// 가입 인증 코드. 계정을 만들기 전에 그 메일을 실제로 받는지 확인하는 용도다.
+export async function sendRegisterCode(to: string, code: string, name: string): Promise<MailResult> {
+  return sendCode(to, "ARCHI ARCADE 가입 인증 코드", [
+    `인증 코드: ${code}`,
+    "",
+    `닉네임 "${name}" 로 가입을 완료하려면 이 코드를 입력하세요.`,
+    "코드는 10분 뒤 만료됩니다.",
+    "",
+    "본인이 요청하지 않았다면 이 메일은 무시하셔도 됩니다.",
+  ].join("\n"), code);
+}
+
 /// 비밀번호 재설정 코드. 계정 이름을 함께 적어, 남의 계정 메일을 받았을 때 알아챌 수 있게 한다.
 export async function sendPasswordResetCode(to: string, code: string, name: string): Promise<MailResult> {
   return sendCode(to, "ARCHI ARCADE 비밀번호 재설정 코드", [
