@@ -3876,9 +3876,10 @@ applyLang();
 
 /* ═══ 게임 카탈로그 모달 ═══ */
 /* play:true 면 목록에서 바로 들어갈 수 있다. open 은 어느 카트리지를 누를지.
-   설계자 맞히기는 로그인해야 열리는데, 그 판단은 카트리지 쪽(aqStart)이 하므로
-   여기서는 그냥 같은 버튼을 누르기만 하면 된다 - 잠금 규칙이 두 곳에 생기면
-   한쪽만 고치는 일이 반드시 생긴다. */
+   라이어 게임은 로그인해야 열리는데, 그 판단은 카트리지 쪽이 하므로 여기서는
+   그냥 같은 버튼을 누르기만 하면 된다 - 잠금 규칙이 두 곳에 생기면 한쪽만
+   고치는 일이 반드시 생긴다. 설계자 맞히기는 혼자 하는 판이면 로그인 없이도
+   바로 열린다 - 순위표에 기록만 안 남을 뿐이다. */
 const GAMES=[
   {id:"balance",icon:"⚖️",play:true,open:"cartBalance"},
   {id:"guess",icon:"🏛️",play:true,open:"cartArchq"},
@@ -3896,7 +3897,7 @@ function openGames(){
     r.className="gcat-row"+(g.play?"":" soon");
     /* 로그인해야 열리는 게임은 태그로 그렇다고 알려 준다. 눌러 보고서야 알게 되면
        속은 기분이 든다. 누르는 것은 막지 않는다 - 눌러야 왜 필요한지 말할 수 있다. */
-    const needLogin=(g.open==="cartArchq"||g.open==="cartLiar")&&!USER;
+    const needLogin=g.open==="cartLiar"&&!USER;
     const tag=g.play?(needLogin?(u.aqLock||UI.ko.aqLock):"PLAY ▶"):"SOON";
     r.innerHTML='<span class="gcat-icon">'+g.icon+'</span><span class="gcat-txt"><div class="gcat-name">'+pair[0]+'</div><div class="gcat-desc">'+pair[1]+'</div></span><span class="gcat-tag">'+tag+'</span>';
     if(g.play) r.addEventListener("click",()=>{ closeOv(); $(g.open).click(); });
@@ -4087,13 +4088,12 @@ let AQ={round:[],i:0,score:0,timer:null,left:0,log:[]};
 function aqName(o){ return o[LANG]||o.la; }
 function aqShuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-/* 카트리지 이름은 applyLang 이 cartNames 로 이미 맞춰 준다. 여기서는 태그만 - 로그인
-   여부에 따라 PLAY 와 로그인 필요가 갈린다. 잠긴 것처럼 보이되 눌리기는 해야 한다.
-   눌러야 왜 잠겼는지 알려 줄 수 있다. */
+/* 카트리지 이름은 applyLang 이 cartNames 로 이미 맞춰 준다. 여기서는 태그만 -
+   혼자 하는 판은 로그인 없이도 바로 들어간다. */
 function aqCartLabel(){
   const u=UI[LANG];
-  $("aqCartTag").textContent=USER?(u.aqPlay||"PLAY ▶"):(u.aqLock||UI.ko.aqLock);
-  $("cartArchq").classList.toggle("gated",!USER);
+  $("aqCartTag").textContent=u.aqPlay||"PLAY ▶";
+  $("cartArchq").classList.remove("gated");
 }
 
 /* 어느 설계자가 어느 나라·어느 시대에서 일했는지를 은행에서 미리 뽑아 둔다.
@@ -4174,11 +4174,6 @@ function aqModeLabel(m){
 let AQ_PICK="q10";
 function aqOpenModes(){
   const u=UI[LANG];
-  if(!USER){
-    sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI();
-    $("auErr").textContent=u.aqNeed||UI.ko.aqNeed;
-    return;
-  }
   $("aqModeT").textContent=(UI[LANG].cartNames&&UI[LANG].cartNames[1]||UI.ko.cartNames[1]).replace(/<br\s*\/?>/g," ");
   $("aqModeN").textContent=u.aqModeNote||UI.ko.aqModeNote;
   $("aqModeBack").textContent=u.aqBackT||UI.ko.aqBackT;
@@ -4251,13 +4246,6 @@ async function aqLoadBoard(mode){
 
 function aqStart(modeId){
   const u=UI[LANG];
-  if(!USER){
-    /* 막아 두기만 하면 그냥 나간다. 왜 로그인이 필요한지 한 줄 말하고 로그인
-       화면으로 보낸다. */
-    sfxNext(); $("hudM").textContent="PLAYER CARD"; show("vAuth"); updateAuthUI();
-    $("auErr").textContent=u.aqNeed||UI.ko.aqNeed;
-    return;
-  }
   const m=aqMode(modeId||AQ_PICK);
   /* 타임어택은 몇 문항을 풀지 미리 알 수 없으므로 넉넉히 뽑아 둔다. 60초에
      한 문항 3초로 잡아도 스무 개면 충분하지만, 빠른 사람을 막지 않게 여유를 둔다. */

@@ -68,8 +68,9 @@ const checks = [
   ["게임 화면이 있다", !!$("vArchq") && !!$("vArchqEnd")],
   ["성향 카드 자리가 있다", !!$("profCard")],
   ["리액션 로그인 안내가 있다", !!$("reactNeed")],
-  ["로그인 전에는 태그가 PLAY 가 아니다", $("aqCartTag") && $("aqCartTag").textContent !== "PLAY ▶"],
-  ["잠긴 표시(gated)가 붙었다", $("cartArchq") && $("cartArchq").className.includes("gated")],
+  // 설계자 맞히기는 혼자 하는 판이면 로그인 없이도 바로 열린다 - 순위표에만 안 남는다.
+  ["로그인 전에도 태그가 PLAY 다", $("aqCartTag") && $("aqCartTag").textContent === "PLAY ▶"],
+  ["잠긴 표시(gated)가 안 붙는다", $("cartArchq") && !$("cartArchq").className.includes("gated")],
 ];
 
 let bad = 0;
@@ -78,17 +79,14 @@ for (const [label, ok] of checks) {
   console.log(`  ${ok ? "OK  " : "FAIL"}  ${label}`);
 }
 
-// 실제로 한 판 돌려 본다 - 로그인 안 한 상태라 로그인 화면으로 가야 한다
+// 실제로 한 판 돌려 본다 - 로그인 안 해도 모드 화면으로 바로 가야 한다
 $("cartArchq").dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
 await new Promise((r) => setTimeout(r, 200));
-const wentToAuth = !$("vAuth").classList.contains("hidden");
-console.log(`  ${wentToAuth ? "OK  " : "FAIL"}  로그인 안 하고 누르면 로그인 화면으로 간다`);
-if (!wentToAuth) bad++;
-const nudge = $("auErr").textContent;
-console.log(`        안내문: "${nudge}"`);
-if (!nudge) bad++;
+const onModesAnon = !$("vArchqMode").classList.contains("hidden");
+console.log(`  ${onModesAnon ? "OK  " : "FAIL"}  로그인 안 해도 모드 화면으로 바로 간다`);
+if (!onModesAnon) bad++;
 
-// 로그인한 척하면 모드 고르는 화면이 나와야 한다
+// 로그인해도 똑같이 모드 고르는 화면이 나와야 한다 (같이 하기 쪽만 여전히 로그인이 필요하다)
 /* USER 는 let 이라 window 에 없다. 함수 선언은 window 에 올라오므로 setUser 를 쓴다. */
 window.setUser({ name: "tester", email: "t@example.com", plays: 0, minorPicks: 0 });
 $("cartArchq").dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
